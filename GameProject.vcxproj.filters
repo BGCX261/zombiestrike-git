@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Wrappers">
+      <UniqueIdentifier>{155382aa-81fe-462c-8937-d0fb948402d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wrappers\Core">
+      <UniqueIdentifier>{b35a0a80-bc33-4efb-b491-f2ae27ae4c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wrappers\Events &amp; Messages">
+      <UniqueIdentifier>{d4747ecd-27ba-43f4-9391-338b7f32ab4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wrappers\Utilities">
+      <UniqueIdentifier>{fad81faa-f52f-4ba1-b93a-94b2371af72d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App Core">
+      <UniqueIdentifier>{812e3129-9a7e-4450-99bc-1e01f18981cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game States">
+      <UniqueIdentifier>{929c6766-a868-4f4b-9f78-8d866d1af800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Miscellaneous">
+      <UniqueIdentifier>{a6f3d672-41c0-4c8e-9e79-d20b19dac98f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Messages">
+      <UniqueIdentifier>{d6e8ca7b-ee70-4a39-87fa-824cbdb12d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{22834ec1-2e35-4889-9967-c139c5467e8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tile System">
+      <UniqueIdentifier>{a1d8e8cc-f042-4100-aff7-c1ec4fed2bdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI System">
+      <UniqueIdentifier>{66bcfbc4-2776-4f6c-8c1b-c3d969f95b99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation System">
+      <UniqueIdentifier>{962b816d-41b1-4683-8b8d-ca4e9437387b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{0a074639-1a38-4b50-9bc5-6637ff088edc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Base Classes">
+      <UniqueIdentifier>{eebbccd4-786e-4275-8c8b-2ee18407cad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Player">
+      <UniqueIdentifier>{d2e298ab-3cb7-42ec-a7f9-d20210be9d2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Enemies">
+      <UniqueIdentifier>{4d9dfe3b-e161-437b-a886-1e0098e58480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Environment">
+      <UniqueIdentifier>{7c10acfb-eddc-4a7d-a60b-329e56ce1ba4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wrappers\Utilities\TinyXML">
+      <UniqueIdentifier>{a52cf86f-5b60-4349-8d40-0a1c4a4c1ed8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SGD Wrappers\SGD_AudioManager.cpp">
+      <Filter>Wrappers\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SGD Wrappers\SGD_GraphicsManager.cpp">
+      <Filter>Wrappers\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SGD Wrappers\SGD_InputManager.cpp">
+      <Filter>Wrappers\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SGD Wrappers\SGD_Event.cpp">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="SGD Wrappers\SGD_EventManager.cpp">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="SGD Wrappers\SGD_Listener.cpp">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="SGD Wrappers\SGD_Message.cpp">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="SGD Wrappers\SGD_MessageManager.cpp">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="SGD Wrappers\SGD_Geometry.cpp">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Game.cpp">
+      <Filter>App Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WinMain.cpp">
+      <Filter>App Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameplayState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MainMenuState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreditsState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HowToPlayState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LoseGameState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\OptionsState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WinGameState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Animation.cpp">
+      <Filter>Animation System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AnimationManager.cpp">
+      <Filter>Animation System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PauseState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PickSaveSlotState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateBulletMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DestroyObjectMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BitmapFont.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HUD.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BehaviorManager.cpp">
+      <Filter>AI System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PlayerController.cpp">
+      <Filter>AI System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameCamera.cpp">
+      <Filter>App Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Map.cpp">
+      <Filter>Tile System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MapManager.cpp">
+      <Filter>Tile System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BaseObject.cpp">
+      <Filter>Objects\Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MovingObject.cpp">
+      <Filter>Objects\Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Player.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="source\tinystr.cpp">
+      <Filter>Wrappers\Utilities\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="source\tinyxml.cpp">
+      <Filter>Wrappers\Utilities\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="source\tinyxmlerror.cpp">
+      <Filter>Wrappers\Utilities\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="source\tinyxmlparser.cpp">
+      <Filter>Wrappers\Utilities\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Timer.cpp">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PickUp.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\EntityManager.cpp">
+      <Filter>Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Bullet.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AlertBehavior.cpp">
+      <Filter>AI System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PatrolBehavior.cpp">
+      <Filter>AI System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RotateTowardsBehavior.cpp">
+      <Filter>AI System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RunToBehavior.cpp">
+      <Filter>AI System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WaitBehavior.cpp">
+      <Filter>AI System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Turret.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Zombie.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\EnvironmentalObject.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
+      <Filter>Wrappers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_GraphicsManager.h">
+      <Filter>Wrappers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_InputManager.h">
+      <Filter>Wrappers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_Event.h">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_EventManager.h">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_Listener.h">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_Message.h">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_MessageManager.h">
+      <Filter>Wrappers\Events &amp; Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_Color.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_Declarations.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_Geometry.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_Handle.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_HandleManager.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_HandleManager.hpp">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_Key.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD Wrappers\SGD_String.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Game.h">
+      <Filter>App Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GameplayState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\IGameState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\MainMenuState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\MessageID.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreditsState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\HowToPlayState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LoseGameState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\OptionsState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\WinGameState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Animation.h">
+      <Filter>Animation System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AnimationManager.h">
+      <Filter>Animation System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AnimTimeStamp.h">
+      <Filter>Animation System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Frame.h">
+      <Filter>Animation System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PauseState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PickSaveSlotState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateBulletMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DestroyObjectMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\BitmapFont.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="source\HUD.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="source\BaseBehavior.h">
+      <Filter>AI System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\BehaviorManager.h">
+      <Filter>AI System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PlayerController.h">
+      <Filter>AI System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GameCamera.h">
+      <Filter>App Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Map.h">
+      <Filter>Tile System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\MapManager.h">
+      <Filter>Tile System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\BaseObject.h">
+      <Filter>Objects\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source\IBase.h">
+      <Filter>Objects\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source\MovingObject.h">
+      <Filter>Objects\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GamerProfile.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Player.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="source\tinystr.h">
+      <Filter>Wrappers\Utilities\TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="source\tinyxml.h">
+      <Filter>Wrappers\Utilities\TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="source\DynArray.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Graph.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SLList.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Timer.h">
+      <Filter>Wrappers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PickUp.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\EntityManager.h">
+      <Filter>Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Bullet.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AlertBehavior.h">
+      <Filter>AI System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PatrolBehavior.h">
+      <Filter>AI System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RotateTowardsBehavior.h">
+      <Filter>AI System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RunToBehavior.h">
+      <Filter>AI System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\WaitBehavior.h">
+      <Filter>AI System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Turret.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Zombie.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\EnvironmentalObject.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="OptionsVolumes.txt" />
+  </ItemGroup>
+</Project>

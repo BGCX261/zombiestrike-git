@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level filename="tset.png">
+	<world_info width="64" height="64" worldWidth="24" worldHeight="24" tileSet="tset.png">		<tile_list>
+		<tile_info rposx="192" rposy="0" posX="0" posY="0" />
+		<tile_info rposx="192" rposy="0" posX="0" posY="64" />
+		<tile_info rposx="192" rposy="0" posX="0" posY="128" />
+		<tile_info rposx="192" rposy="0" posX="0" posY="192" />
+		<tile_info rposx="192" rposy="0" posX="0" posY="256" />
+		<tile_info rposx="192" rposy="0" posX="0" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="0" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="0" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="0" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="0" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="0" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="0" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="0" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="0" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="0" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="0" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="64" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="64" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="64" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="64" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="64" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="64" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="64" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="64" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="64" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="64" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="64" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="64" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="64" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="64" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="64" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="64" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="128" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="128" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="128" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="128" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="128" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="128" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="128" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="128" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="128" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="128" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="128" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="128" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="128" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="128" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="128" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="128" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="192" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="192" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="192" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="192" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="192" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="192" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="192" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="192" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="192" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="192" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="192" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="192" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="192" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="192" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="192" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="192" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="256" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="256" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="256" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="256" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="256" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="256" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="256" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="256" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="256" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="256" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="256" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="256" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="256" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="256" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="256" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="256" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="320" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="320" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="320" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="320" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="320" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="320" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="320" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="320" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="320" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="320" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="320" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="320" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="320" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="320" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="320" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="320" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="384" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="384" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="384" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="384" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="384" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="384" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="384" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="384" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="384" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="384" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="384" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="384" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="384" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="384" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="384" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="384" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="448" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="448" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="448" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="448" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="448" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="448" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="448" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="448" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="448" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="448" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="448" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="448" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="448" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="448" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="448" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="448" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="512" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="512" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="512" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="512" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="512" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="512" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="512" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="512" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="512" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="512" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="512" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="512" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="512" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="512" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="512" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="512" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="576" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="576" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="576" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="576" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="576" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="576" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="576" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="576" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="576" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="576" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="576" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="576" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="576" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="576" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="576" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="576" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="640" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="640" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="640" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="640" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="640" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="640" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="640" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="640" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="640" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="640" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="640" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="640" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="640" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="640" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="640" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="640" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="704" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="704" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="704" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="704" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="704" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="704" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="704" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="704" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="704" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="704" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="704" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="704" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="704" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="704" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="704" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="704" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="768" posY="0" />
+		<tile_info rposx="64" rposy="64" posX="768" posY="64" />
+		<tile_info rposx="64" rposy="64" posX="768" posY="128" />
+		<tile_info rposx="64" rposy="64" posX="768" posY="192" />
+		<tile_info rposx="64" rposy="64" posX="768" posY="256" />
+		<tile_info rposx="64" rposy="64" posX="768" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="768" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="768" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="768" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="768" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="768" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="768" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="768" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="768" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="768" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="768" posY="960" />
+		<tile_info rposx="192" rposy="0" posX="832" posY="0" />
+		<tile_info rposx="192" rposy="0" posX="832" posY="64" />
+		<tile_info rposx="192" rposy="0" posX="832" posY="128" />
+		<tile_info rposx="192" rposy="0" posX="832" posY="192" />
+		<tile_info rposx="192" rposy="0" posX="832" posY="256" />
+		<tile_info rposx="192" rposy="0" posX="832" posY="320" />
+		<tile_info rposx="192" rposy="0" posX="832" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="832" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="832" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="832" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="832" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="832" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="832" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="832" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="832" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="832" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="896" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="960" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="1024" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="1088" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="1152" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="1216" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="1280" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="1344" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="1408" posY="960" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="0" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="64" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="128" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="192" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="256" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="320" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="384" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="448" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="512" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="576" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="640" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="704" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="768" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="832" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="896" />
+		<tile_info rposx="0" rposy="0" posX="1472" posY="960" />
+	</tile_list>
+	<collsion_list>
+		<collision_tile posx="0" posy="0" type="0" />
+		<collision_tile posx="1" posy="0" type="0" />
+		<collision_tile posx="3" posy="0" type="0" />
+		<collision_tile posx="4" posy="0" type="0" />
+		<collision_tile posx="5" posy="0" type="0" />
+		<collision_tile posx="6" posy="0" type="0" />
+		<collision_tile posx="7" posy="0" type="0" />
+		<collision_tile posx="9" posy="0" type="0" />
+		<collision_tile posx="10" posy="0" type="0" />
+		<collision_tile posx="11" posy="0" type="0" />
+		<collision_tile posx="12" posy="0" type="0" />
+		<collision_tile posx="13" posy="0" type="0" />
+		<collision_tile posx="13" posy="1" type="0" />
+		<collision_tile posx="13" posy="2" type="0" />
+		<collision_tile posx="13" posy="3" type="0" />
+		<collision_tile posx="13" posy="4" type="0" />
+		<collision_tile posx="13" posy="5" type="0" />
+		<collision_tile posx="13" posy="6" type="0" />
+		<collision_tile posx="11" posy="6" type="0" />
+		<collision_tile posx="10" posy="6" type="0" />
+		<collision_tile posx="9" posy="6" type="0" />
+		<collision_tile posx="8" posy="6" type="0" />
+		<collision_tile posx="7" posy="6" type="0" />
+		<collision_tile posx="5" posy="6" type="0" />
+		<collision_tile posx="3" posy="6" type="0" />
+		<collision_tile posx="1" posy="6" type="0" />
+		<collision_tile posx="0" posy="6" type="0" />
+		<collision_tile posx="0" posy="5" type="0" />
+		<collision_tile posx="0" posy="4" type="0" />
+		<collision_tile posx="0" posy="3" type="0" />
+		<collision_tile posx="0" posy="2" type="0" />
+		<collision_tile posx="0" posy="1" type="0" />
+		<collision_tile posx="2" posy="0" type="0" />
+		<collision_tile posx="8" posy="0" type="0" />
+		<collision_tile posx="6" posy="6" type="0" />
+		<collision_tile posx="4" posy="6" type="0" />
+		<collision_tile posx="2" posy="6" type="0" />
+		<collision_tile posx="12" posy="6" type="0" />
+		<collision_tile posx="3" posy="1" type="1" />
+		<collision_tile posx="6" posy="2" type="1" />
+		<collision_tile posx="9" posy="3" type="1" />
+	</collsion_list>
+	<graph_list>
+		<node_info posX="5" posY="2" index="0">		</node_info>
+		<node_info posX="1" posY="3" index="1">		</node_info>
+		<node_info posX="7" posY="4" index="2">		</node_info>
+		<node_info posX="8" posY="1" index="3">		</node_info>
+		<node_info posX="12" posY="2" index="4">		</node_info>
+		<node_info posX="11" posY="4" index="5">		</node_info>
+	</graph_list>
+	<objects_list>
+		<object_info id="1" posx="3" posy="4" />
+	</objects_list>
+</world_info></Level>

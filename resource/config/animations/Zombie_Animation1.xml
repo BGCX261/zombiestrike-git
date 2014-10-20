@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation looping="0">Zombie_01.png<Frame sx="0" sy="0" sw="128" sh="128" cx="20" cy="82" cw="109" ch="128" px="58" py="109" rx="58" ry="109" duration="0.25">NONE</Frame><Sheet path="C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo2\starter_point\Code\resource\graphics\Zombie_01.png" /></Animation>
+</Animations>

@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F471A53C-84A8-4364-943F-4A0961280132}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>GameProject</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="SGD Project Properties.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="SGD Project Properties.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="SGD Wrappers\SGD_AudioManager.cpp" />
+    <ClCompile Include="SGD Wrappers\SGD_Event.cpp" />
+    <ClCompile Include="SGD Wrappers\SGD_EventManager.cpp" />
+    <ClCompile Include="SGD Wrappers\SGD_Geometry.cpp" />
+    <ClCompile Include="SGD Wrappers\SGD_GraphicsManager.cpp" />
+    <ClCompile Include="SGD Wrappers\SGD_InputManager.cpp" />
+    <ClCompile Include="SGD Wrappers\SGD_Listener.cpp" />
+    <ClCompile Include="SGD Wrappers\SGD_Message.cpp" />
+    <ClCompile Include="SGD Wrappers\SGD_MessageManager.cpp" />
+    <ClCompile Include="source\AlertBehavior.cpp" />
+    <ClCompile Include="source\Animation.cpp" />
+    <ClCompile Include="source\AnimationManager.cpp" />
+    <ClCompile Include="source\BaseObject.cpp" />
+    <ClCompile Include="source\BehaviorManager.cpp" />
+    <ClCompile Include="source\BitmapFont.cpp" />
+    <ClCompile Include="source\Bullet.cpp" />
+    <ClCompile Include="source\CreateBulletMessage.cpp" />
+    <ClCompile Include="source\CreditsState.cpp" />
+    <ClCompile Include="source\DestroyObjectMessage.cpp" />
+    <ClCompile Include="source\EntityManager.cpp" />
+    <ClCompile Include="source\EnvironmentalObject.cpp" />
+    <ClCompile Include="source\Game.cpp" />
+    <ClCompile Include="source\GameCamera.cpp" />
+    <ClCompile Include="source\GameplayState.cpp" />
+    <ClCompile Include="source\HowToPlayState.cpp" />
+    <ClCompile Include="source\HUD.cpp" />
+    <ClCompile Include="source\LoseGameState.cpp" />
+    <ClCompile Include="source\MainMenuState.cpp" />
+    <ClCompile Include="source\Map.cpp" />
+    <ClCompile Include="source\MapManager.cpp" />
+    <ClCompile Include="source\MovingObject.cpp" />
+    <ClCompile Include="source\OptionsState.cpp" />
+    <ClCompile Include="source\PatrolBehavior.cpp" />
+    <ClCompile Include="source\PauseState.cpp" />
+    <ClCompile Include="source\PickSaveSlotState.cpp" />
+    <ClCompile Include="source\PickUp.cpp" />
+    <ClCompile Include="source\Player.cpp" />
+    <ClCompile Include="source\PlayerController.cpp" />
+    <ClCompile Include="source\RotateTowardsBehavior.cpp" />
+    <ClCompile Include="source\RunToBehavior.cpp" />
+    <ClCompile Include="source\Timer.cpp" />
+    <ClCompile Include="source\tinystr.cpp" />
+    <ClCompile Include="source\tinyxml.cpp" />
+    <ClCompile Include="source\tinyxmlerror.cpp" />
+    <ClCompile Include="source\tinyxmlparser.cpp" />
+    <ClCompile Include="source\Turret.cpp" />
+    <ClCompile Include="source\WaitBehavior.cpp" />
+    <ClCompile Include="source\WinGameState.cpp" />
+    <ClCompile Include="source\WinMain.cpp" />
+    <ClCompile Include="source\Zombie.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
+    <ClInclude Include="SGD Wrappers\SGD_Color.h" />
+    <ClInclude Include="SGD Wrappers\SGD_Declarations.h" />
+    <ClInclude Include="SGD Wrappers\SGD_Event.h" />
+    <ClInclude Include="SGD Wrappers\SGD_EventManager.h" />
+    <ClInclude Include="SGD Wrappers\SGD_Geometry.h" />
+    <ClInclude Include="SGD Wrappers\SGD_GraphicsManager.h" />
+    <ClInclude Include="SGD Wrappers\SGD_Handle.h" />
+    <ClInclude Include="SGD Wrappers\SGD_HandleManager.h" />
+    <ClInclude Include="SGD Wrappers\SGD_HandleManager.hpp" />
+    <ClInclude Include="SGD Wrappers\SGD_InputManager.h" />
+    <ClInclude Include="SGD Wrappers\SGD_Key.h" />
+    <ClInclude Include="SGD Wrappers\SGD_Listener.h" />
+    <ClInclude Include="SGD Wrappers\SGD_Message.h" />
+    <ClInclude Include="SGD Wrappers\SGD_MessageManager.h" />
+    <ClInclude Include="SGD Wrappers\SGD_String.h" />
+    <ClInclude Include="source\AlertBehavior.h" />
+    <ClInclude Include="source\Animation.h" />
+    <ClInclude Include="source\AnimationManager.h" />
+    <ClInclude Include="source\AnimTimeStamp.h" />
+    <ClInclude Include="source\BaseBehavior.h" />
+    <ClInclude Include="source\BaseObject.h" />
+    <ClInclude Include="source\BehaviorManager.h" />
+    <ClInclude Include="source\BitmapFont.h" />
+    <ClInclude Include="source\Bullet.h" />
+    <ClInclude Include="source\CreateBulletMessage.h" />
+    <ClInclude Include="source\CreditsState.h" />
+    <ClInclude Include="source\DestroyObjectMessage.h" />
+    <ClInclude Include="source\DynArray.h" />
+    <ClInclude Include="source\EntityManager.h" />
+    <ClInclude Include="source\EnvironmentalObject.h" />
+    <ClInclude Include="source\Frame.h" />
+    <ClInclude Include="source\Game.h" />
+    <ClInclude Include="source\GameCamera.h" />
+    <ClInclude Include="source\GameplayState.h" />
+    <ClInclude Include="source\GamerProfile.h" />
+    <ClInclude Include="source\Graph.h" />
+    <ClInclude Include="source\HowToPlayState.h" />
+    <ClInclude Include="source\HUD.h" />
+    <ClInclude Include="source\IBase.h" />
+    <ClInclude Include="source\IGameState.h" />
+    <ClInclude Include="source\LoseGameState.h" />
+    <ClInclude Include="source\MainMenuState.h" />
+    <ClInclude Include="source\Map.h" />
+    <ClInclude Include="source\MapManager.h" />
+    <ClInclude Include="source\MessageID.h" />
+    <ClInclude Include="source\MovingObject.h" />
+    <ClInclude Include="source\OptionsState.h" />
+    <ClInclude Include="source\PatrolBehavior.h" />
+    <ClInclude Include="source\PauseState.h" />
+    <ClInclude Include="source\PickSaveSlotState.h" />
+    <ClInclude Include="source\PickUp.h" />
+    <ClInclude Include="source\Player.h" />
+    <ClInclude Include="source\PlayerController.h" />
+    <ClInclude Include="source\RotateTowardsBehavior.h" />
+    <ClInclude Include="source\RunToBehavior.h" />
+    <ClInclude Include="source\SLList.h" />
+    <ClInclude Include="source\Timer.h" />
+    <ClInclude Include="source\tinystr.h" />
+    <ClInclude Include="source\tinyxml.h" />
+    <ClInclude Include="source\Turret.h" />
+    <ClInclude Include="source\WaitBehavior.h" />
+    <ClInclude Include="source\WinGameState.h" />
+    <ClInclude Include="source\Zombie.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="OptionsVolumes.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,47 @@
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\Practice\AnimEditor\att1\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Form1.resources
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\Practice\AnimEditor\att1\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Properties.Resources.resources
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\Practice\AnimEditor\att1\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.csproj.GenerateResource.Cache
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\Practice\AnimEditor\att1\AnimationEditor\AnimationEditor\AnimationEditor.exe.config
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\Practice\AnimEditor\att1\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.exe
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\Practice\AnimEditor\att1\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\Practice\AnimEditor\att1\AnimationEditor\AnimationEditor\AnimationEditor.exe
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\Practice\AnimEditor\att1\AnimationEditor\AnimationEditor\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\Practice\AnimEditor\att1\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.csprojResolveAssemblyReference.cache
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo4\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Form1.resources
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo4\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Properties.Resources.resources
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo4\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.csproj.GenerateResource.Cache
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo4\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.exe.config
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo4\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.exe
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo4\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo4\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.exe
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo4\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo5\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.exe.config
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo5\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.exe
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo5\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo5\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.csprojResolveAssemblyReference.cache
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo5\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Form1.resources
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo5\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Properties.Resources.resources
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo5\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.csproj.GenerateResource.Cache
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo5\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.exe
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo5\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\SilentStrike Repo\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.exe.config
+C:\Users\fullsail\Desktop\SilentStrike Repo\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.exe
+C:\Users\fullsail\Desktop\SilentStrike Repo\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\SilentStrike Repo\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.csprojResolveAssemblyReference.cache
+C:\Users\fullsail\Desktop\SilentStrike Repo\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Form1.resources
+C:\Users\fullsail\Desktop\SilentStrike Repo\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Properties.Resources.resources
+C:\Users\fullsail\Desktop\SilentStrike Repo\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.csproj.GenerateResource.Cache
+C:\Users\fullsail\Desktop\SilentStrike Repo\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.exe
+C:\Users\fullsail\Desktop\SilentStrike Repo\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo8\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.csprojResolveAssemblyReference.cache
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo8\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Form1.resources
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo8\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.Properties.Resources.resources
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo8\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.csproj.GenerateResource.Cache
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo8\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.exe.config
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo8\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.exe
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo8\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo8\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.exe
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo8\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.pdb
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo13\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\AnimationEditor.exe.config
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo13\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.exe
+C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo13\silent-strike\Tools\SS-AnimationEditor\AnimationEditor\AnimationEditor\obj\Debug\AnimationEditor.pdb
