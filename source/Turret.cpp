@@ -2,7 +2,10 @@
 #include "BehaviorManager.h"
 #include "BaseBehavior.h"
 #include "GameplayState.h"
-#include "CreateBulletMessage.h"
+
+#include "CreateARifleBullet.h"
+
+
 #include "BaseObject.h"
 #include "Player.h"
 #include "../SGD Wrappers/SGD_Event.h"
@@ -91,7 +94,7 @@ void Turret::RetrieveBehavior(std::string name)
 /*virtual*/ void Turret::Attack() /*override*/
 {
 	m_tShotTimer.AddTime(0.1f);
-	CreateBulletMessage* pMsg = new CreateBulletMessage(this);
+	CreateARifleBullet* pMsg = new CreateARifleBullet(this);
 	pMsg->QueueMessage();
 	pMsg = nullptr;
 }

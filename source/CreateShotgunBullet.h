@@ -1,17 +1,17 @@
 #pragma once
 #include "..\SGD Wrappers\SGD_Message.h"
 
-class Player;
+class MovingObject;
 
 class CreateShotgunBullet : public SGD::Message
 {
 public:
-	CreateShotgunBullet(Player*);
+	CreateShotgunBullet(MovingObject*);
 	virtual ~CreateShotgunBullet();
 
-	Player* GetOwner(void) const { return m_pOwner; }
+	MovingObject* GetOwner(void) const { return m_pOwner; }
 
 private:
-	Player* m_pOwner = nullptr;
+	MovingObject* m_pOwner = nullptr;
 };
 

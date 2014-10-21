@@ -1,9 +1,9 @@
 #include "CreateShotgunBullet.h"
 #include "MessageID.h"
 
-#include "Player.h"
+#include "MovingObject.h"
 
-CreateShotgunBullet::CreateShotgunBullet(Player* owner) : Message(MessageID::MSG_CREATE_BULLET)
+CreateShotgunBullet::CreateShotgunBullet(MovingObject* owner) : Message(MessageID::MSG_CREATE_SHTGN_BLT)
 {
 	m_pOwner = owner;
 	m_pOwner->AddRef();

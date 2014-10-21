@@ -17,7 +17,11 @@
 #include "../SGD Wrappers/SGD_Message.h"
 #include "MessageID.h"
 #include "DestroyObjectMessage.h"
-#include "CreateBulletMessage.h"
+#include "CreatePistolBullet.h"
+#include "CreateShotgunBullet.h"
+#include "CreateARifleBullet.h"
+#include "CreateSniperBullet.h"
+
 
 #include "BitmapFont.h"
 
@@ -331,14 +335,27 @@
 		break;
 
 
-		case MessageID::MSG_CREATE_BULLET:
+		case MessageID::MSG_CREATE_PSTL_BLT:
 		{
-			const CreateBulletMessage* pCreateBulletMsg = dynamic_cast<const CreateBulletMessage*>(pMsg);
+			const CreatePistolBullet* pCreateBulletMsg = dynamic_cast<const CreatePistolBullet*>(pMsg);
 			GameplayState::GetInstance()->CreateBullet(pCreateBulletMsg->GetOwner());
 		}
 		break;
-	
-	
+		case MessageID::MSG_CREATE_SHTGN_BLT:
+		{
+
+		}
+			break;
+		case MessageID::MSG_CREATE_ASSRFLE_BLT:
+		{
+
+		}
+			break;
+		case MessageID::MSG_CREATE_SNPR_BLT:
+		{
+
+		}
+			break;
 	}
 
 /* Restore previous warning levels */

@@ -1,6 +1,5 @@
 #include "Weapon.h"
 #include "Player.h"
-#include "CreateBulletMessage.h"
 
 Weapon::Weapon()
 {
@@ -24,18 +23,18 @@ Weapon::~Weapon()
 
 void Weapon::Fire(float dt)
 {
-	if (currAmmo > 0)
-	{
-		//create bullet message
-		CreateBulletMessage* pMsg = new CreateBulletMessage(this);
-		pMsg->QueueMessage();
-		pMsg = nullptr;
+	//if (currAmmo > 0)
+	//{
+	//	//create bullet message
+	//	CreateBulletMessage* pMsg = new CreateBulletMessage(m_pOwner);
+	//	pMsg->QueueMessage();
+	//	pMsg = nullptr;
 
-		recoilTimer.AddTime(recoilTime);
-		currAmmo--; 
-		if (currAmmo == 0)
-			reloadTimer.AddTime(reloadTime);
-	}
+	//	recoilTimer.AddTime(recoilTime);
+	//	currAmmo--; 
+	//	if (currAmmo == 0)
+	//		reloadTimer.AddTime(reloadTime);
+	//}
 
 }
 void Weapon::SetOwner(Player* owner)

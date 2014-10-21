@@ -19,3 +19,8 @@ AssaultRifle::AssaultRifle()
 AssaultRifle::~AssaultRifle()
 {
 }
+
+void AssaultRifle::Fire(float dt)
+{
+
+}

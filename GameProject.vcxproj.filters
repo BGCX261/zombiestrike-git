@@ -16,9 +16,6 @@
     <Filter Include="App Core">
       <UniqueIdentifier>{812e3129-9a7e-4450-99bc-1e01f18981cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game States">
-      <UniqueIdentifier>{929c6766-a868-4f4b-9f78-8d866d1af800}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Miscellaneous">
       <UniqueIdentifier>{a6f3d672-41c0-4c8e-9e79-d20b19dac98f}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,12 @@
     </Filter>
     <Filter Include="Wrappers\Utilities\TinyXML">
       <UniqueIdentifier>{a52cf86f-5b60-4349-8d40-0a1c4a4c1ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons">
+      <UniqueIdentifier>{7efb67d4-d97c-4652-8987-697ebaf7eb7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game States">
+      <UniqueIdentifier>{929c6766-a868-4f4b-9f78-8d866d1af800}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="source\PickSaveSlotState.cpp">
       <Filter>Game States</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CreateBulletMessage.cpp">
-      <Filter>Messages</Filter>
     </ClCompile>
     <ClCompile Include="source\DestroyObjectMessage.cpp">
       <Filter>Messages</Filter>
@@ -206,6 +206,33 @@
     </ClCompile>
     <ClCompile Include="source\EnvironmentalObject.cpp">
       <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Pistol.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Shotgun.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Sniper.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Weapon.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AssaultRifle.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateShotgunBullet.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreatePistolBullet.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateSniperBullet.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateARifleBullet.cpp">
+      <Filter>Messages</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -305,9 +332,6 @@
     <ClInclude Include="source\PickSaveSlotState.h">
       <Filter>Game States</Filter>
     </ClInclude>
-    <ClInclude Include="source\CreateBulletMessage.h">
-      <Filter>Messages</Filter>
-    </ClInclude>
     <ClInclude Include="source\DestroyObjectMessage.h">
       <Filter>Messages</Filter>
     </ClInclude>
@@ -400,6 +424,33 @@
     </ClInclude>
     <ClInclude Include="source\EnvironmentalObject.h">
       <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Pistol.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Shotgun.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Sniper.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Weapon.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AssaultRifle.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateShotgunBullet.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreatePistolBullet.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateSniperBullet.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateARifleBullet.h">
+      <Filter>Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
