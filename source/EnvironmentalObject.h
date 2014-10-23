@@ -3,9 +3,12 @@
 #include "../SGD Wrappers/SGD_Listener.h"
 class EnvironmentalObject : public BaseObject, public SGD::Listener
 {
+protected:
 
 	int type = OBJ_BASE;
 	std::string event;
+	bool isActive = false;
+
 public:
 	EnvironmentalObject();
 	virtual ~EnvironmentalObject();

@@ -169,7 +169,9 @@
 	delete m_pEntities;
 	m_pEntities = nullptr;
 
-	m_pPlayer->Release();
+	if (m_pPlayer != nullptr)
+		m_pPlayer->Release();
+
 	m_pPlayer = nullptr;
 
 
@@ -210,6 +212,7 @@
 	/**********************************************************/
 	// Player Died!
 	/**********************************************************/
+	/*
 	int numframes = AnimationManager::GetInstance()->GetAnimation("playerDeath")->GetFrames().size();
 	numframes--;
 
@@ -219,6 +222,7 @@
 		msg.SendEventNow();
 		Game::GetInstance()->AddState(LoseGameState::GetInstance());
 	}
+	*/
 
 
 
@@ -233,6 +237,10 @@
 //	- update game entities
 /*virtual*/ void GameplayState::Update( float dt )
 {
+	if (m_pPlayer == nullptr)
+		return;
+
+
 	if (m_pPlayer->isLevelCompleted() == false)
 	{
 		// Update the entities
@@ -291,6 +299,12 @@
 
 	float tops	= 475;
 	float lefts	= 435;
+
+
+
+	if (m_pPlayer == nullptr)
+		return;
+
 
 	SGD::Rectangle energyRect = { left, top, left + m_pPlayer->GetAttributes()->m_fCurrEnergy / m_pPlayer->GetAttributes()->m_fMaxEnergy * 150, top + 25 };
 	pGraphics->DrawRectangle(energyRect, { 0, 0, 255 });

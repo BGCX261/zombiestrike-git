@@ -234,6 +234,15 @@
     <ClCompile Include="source\CreateARifleBullet.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="source\BarbedWire.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LandMine.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SandBag.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -451,6 +460,15 @@
     </ClInclude>
     <ClInclude Include="source\CreateARifleBullet.h">
       <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\BarbedWire.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LandMine.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SandBag.h">
+      <Filter>Objects\Environment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
