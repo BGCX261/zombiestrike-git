@@ -228,12 +228,14 @@
     <ClCompile Include="source\CreatePistolBullet.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
-    <ClCompile Include="source\CreateSniperBullet.cpp">
-      <Filter>Messages</Filter>
-    </ClCompile>
     <ClCompile Include="source\CreateARifleBullet.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="source\CreateSniperBullet.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FlameThrower.cpp" />
+    <ClCompile Include="source\CreateFlameBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -446,12 +448,14 @@
     <ClInclude Include="source\CreatePistolBullet.h">
       <Filter>Messages</Filter>
     </ClInclude>
-    <ClInclude Include="source\CreateSniperBullet.h">
-      <Filter>Messages</Filter>
-    </ClInclude>
     <ClInclude Include="source\CreateARifleBullet.h">
       <Filter>Messages</Filter>
     </ClInclude>
+    <ClInclude Include="source\CreateSniperBullet.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FlameThrower.h" />
+    <ClInclude Include="source\CreateFlameBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />

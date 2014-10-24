@@ -1,41 +1,38 @@
-#include "Shotgun.h"
+#include "FlameThrower.h"
 #include "MovingObject.h"
-#include "CreateShotgunBullet.h"
+#include "CreateFlameBullet.h"
 
-Shotgun::Shotgun(MovingObject* owner)
+FlameThrower::FlameThrower(MovingObject* owner) : Listener(this)
 {
-
-	type = SHOTGUN;
+	type = FLAME_THROWER;
 	reloadTime = 4.0f;
-	currAmmo = 6;
-	magSize = 6;
-	ammoCapactity = 24;
-	recoilTime = 1.0f;
-	bulletSpread = 15.0f;
+	currAmmo = 200;
+	magSize = 200;
+	ammoCapactity = 500;
+	recoilTime = .01f;
+	bulletSpread = 5.0f;
 	damage = 50.0f;
-	speed = 700.0f;
-	lifeTime = 400.0f;
+	speed = 500.0f;
+	lifeTime = 700.0f;
 	m_pOwner = owner;
 	owner->AddRef();
-	
 }
 
 
-Shotgun::~Shotgun()
+FlameThrower::~FlameThrower()
 {
 	m_pOwner->Release();
 	m_pOwner = nullptr;
 }
 
-
-void Shotgun::Fire(float dt)
+void FlameThrower::Fire(float dt)
 {
 	if (currAmmo > 0)
 	{
 		//create bullet message
 		if (recoilTimer.GetTime() == 0)
 		{
-			CreateShotgunBullet* pMsg = new CreateShotgunBullet(this);
+			CreateFlameBullet* pMsg = new CreateFlameBullet(this);
 			pMsg->QueueMessage();
 			pMsg = nullptr;
 

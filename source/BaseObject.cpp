@@ -24,8 +24,8 @@ BaseObject::~BaseObject()
 		m_ptPosition.y 
 		
 		- GameplayState::GetInstance()->GetCamera()->GetPosition().y);
-
-	return SGD::Rectangle(renderPos - SGD::Size(collisionRect.right - collisionRect.left, collisionRect.bottom - collisionRect.top) *0.5f, SGD::Size(collisionRect.right - collisionRect.left, collisionRect.bottom - collisionRect.top));
+	SGD::Rectangle rect = SGD::Rectangle(renderPos - SGD::Size(collisionRect.right - collisionRect.left, collisionRect.bottom - collisionRect.top) *0.5f, SGD::Size(collisionRect.right - collisionRect.left, collisionRect.bottom - collisionRect.top));
+	return rect;
 	
 
 	//return SGD::Rectangle(renderPos - m_szSize / 2, m_szSize);
@@ -40,7 +40,7 @@ BaseObject::~BaseObject()
 	//
 	//SGD::Rectangle rect = SGD::Rectangle(renderPos - m_szSize / 2, m_szSize);
 	////rect.Offset(GameplayState::GetInstance()->GetCamera()->GetPosition().x, GameplayState::GetInstance()->GetCamera()->GetPosition().y);
-	SGD::GraphicsManager::GetInstance()->DrawRectangle(GetRect() , SGD::Color(0, 0, 0, 0), SGD::Color(255, 0, 0, 0));
+	//SGD::GraphicsManager::GetInstance()->DrawRectangle(GetRect() , SGD::Color(0, 0, 0, 0), SGD::Color(255, 0, 0, 0));
 
 }
 void BaseObject::Update(float dt)

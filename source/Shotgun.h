@@ -3,7 +3,9 @@
 class Shotgun : public Weapon
 {
 public:
-	Shotgun();
+	Shotgun(MovingObject* owner = nullptr);
 	virtual ~Shotgun();
+	virtual void Fire(float dt) override;
+
 };
 

@@ -2,19 +2,19 @@
 #include "..\SGD Wrappers\SGD_Message.h"
 
 
-class MovingObject;
+class Weapon;
 
 class CreateSniperBullet : public SGD::Message
 {
 public:
 
-	CreateSniperBullet(MovingObject*);
+	CreateSniperBullet(Weapon*);
 	virtual ~CreateSniperBullet();
 
-	MovingObject* GetOwner(void) const { return m_pOwner; }
+	Weapon* GetOwner(void) const { return m_pOwner; }
 
 private:
-	MovingObject* m_pOwner = nullptr;
+	Weapon* m_pOwner = nullptr;
 
 };
 

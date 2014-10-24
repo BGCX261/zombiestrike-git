@@ -2,20 +2,21 @@
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "Timer.h"
 
-class Player;
+class MovingObject;
 
 class Weapon
 {
 
 protected:
 
-	enum Type { PISTOL, SHOTGUN, ASSUALT_RIFLE, SNIPER, NONE};
+	enum Type { PISTOL, SHOTGUN, ASSUALT_RIFLE, SNIPER, FLAME_THROWER, NONE};
 
 	int type = NONE;
 	int currAmmo = 0;
 	int magSize = 0;
 	int ammoCapactity = 0;
 	int penetratingPower = 0;
+	float bulletSpread = 0.0f;
 	float recoilTime = 0.0f;
 	float reloadTime = 0.0f;
 	float damage = 0.0f;
@@ -23,12 +24,15 @@ protected:
 	float lifeTime = 0.0f;
 	Timer reloadTimer;
 	Timer recoilTimer;
-	Player* m_pOwner = nullptr;
+	MovingObject* m_pOwner = nullptr;
+	
 
 
 
 public:
+	
 	Weapon();
+
 	virtual ~Weapon();
 
 	virtual void Fire(float dt);
@@ -44,9 +48,10 @@ public:
 	float GetDamage(void) const { return damage; }
 	float GetSpeed(void) const { return speed; }
 	float GetLifeTime(void) const { return lifeTime; }
+	float GetBulletSpread(void) const { return bulletSpread; }
 	Timer GetReloadTimer(void) const { return reloadTimer; }
 	Timer GetRecoilTimer(void) const { return recoilTimer; }
-	Player* GetOwner(void) const { return m_pOwner; }
+	MovingObject* GetOwner(void) const { return m_pOwner; }
 
 	void SetType(int _type)  { type = _type; }
 	void SetMagSize(int _magSize)  { magSize = _magSize; }
@@ -56,7 +61,8 @@ public:
 	void SetDamage(float _damage)  { damage = _damage; }
 	void SetSpeed(float _speed)  { speed = _speed; }
 	void SetLifeTime(float _lifeTime)  { lifeTime = _lifeTime; }
-	void SetOwner(Player* owner);
+	void SetBulletSpread(float _bulletSpread) { bulletSpread = _bulletSpread; }
+	void SetOwner(MovingObject* owner);
 
 };
 

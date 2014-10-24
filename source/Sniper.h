@@ -3,7 +3,7 @@
 class Sniper : public Weapon
 {
 public:
-	Sniper();
+	Sniper(MovingObject* owner = nullptr);
 	virtual ~Sniper();
 };
 

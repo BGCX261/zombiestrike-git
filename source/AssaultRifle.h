@@ -3,7 +3,7 @@
 class AssaultRifle : public Weapon
 {
 public:
-	AssaultRifle();
+	AssaultRifle(MovingObject* owner = nullptr);
 	virtual ~AssaultRifle();
 	virtual void Fire(float dt) override;
 };

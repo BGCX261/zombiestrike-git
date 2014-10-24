@@ -98,6 +98,7 @@
     <ClCompile Include="source\BitmapFont.cpp" />
     <ClCompile Include="source\Bullet.cpp" />
     <ClCompile Include="source\CreateARifleBullet.cpp" />
+    <ClCompile Include="source\CreateFlameBullet.cpp" />
     <ClCompile Include="source\CreatePistolBullet.cpp" />
     <ClCompile Include="source\CreateShotgunBullet.cpp" />
     <ClCompile Include="source\CreateSniperBullet.cpp" />
@@ -105,6 +106,7 @@
     <ClCompile Include="source\DestroyObjectMessage.cpp" />
     <ClCompile Include="source\EntityManager.cpp" />
     <ClCompile Include="source\EnvironmentalObject.cpp" />
+    <ClCompile Include="source\FlameThrower.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\GameCamera.cpp" />
     <ClCompile Include="source\GameplayState.cpp" />
@@ -167,6 +169,7 @@
     <ClInclude Include="source\BitmapFont.h" />
     <ClInclude Include="source\Bullet.h" />
     <ClInclude Include="source\CreateARifleBullet.h" />
+    <ClInclude Include="source\CreateFlameBullet.h" />
     <ClInclude Include="source\CreatePistolBullet.h" />
     <ClInclude Include="source\CreateShotgunBullet.h" />
     <ClInclude Include="source\CreateSniperBullet.h" />
@@ -175,6 +178,7 @@
     <ClInclude Include="source\DynArray.h" />
     <ClInclude Include="source\EntityManager.h" />
     <ClInclude Include="source\EnvironmentalObject.h" />
+    <ClInclude Include="source\FlameThrower.h" />
     <ClInclude Include="source\Frame.h" />
     <ClInclude Include="source\Game.h" />
     <ClInclude Include="source\GameCamera.h" />

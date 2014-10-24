@@ -1,13 +1,15 @@
 #include "Weapon.h"
-#include "Player.h"
+#include "MovingObject.h"
 
 Weapon::Weapon()
 {
+
 }
 
 
 Weapon::~Weapon()
 {
+	
 }
  void Weapon::Update(float dt)
 {
@@ -17,7 +19,7 @@ Weapon::~Weapon()
 		 if (reloadTimer.Update(dt))
 			 currAmmo = magSize;
 	 }
-
+	 
 
 }
 
@@ -37,7 +39,7 @@ void Weapon::Fire(float dt)
 	//}
 
 }
-void Weapon::SetOwner(Player* owner)
+void Weapon::SetOwner(MovingObject* owner)
 {
 	if (m_pOwner != nullptr)
 	{
