@@ -3,7 +3,8 @@
 class Pistol : public Weapon
 {
 public:
-	Pistol();
+	Pistol(MovingObject* owner = nullptr);
 	virtual ~Pistol();
+	virtual void Fire(float dt) override;
 };
 

@@ -93,8 +93,8 @@ void Turret::RetrieveBehavior(std::string name)
 
 /*virtual*/ void Turret::Attack() /*override*/
 {
-	m_tShotTimer.AddTime(0.1f);
-	CreateARifleBullet* pMsg = new CreateARifleBullet(this);
-	pMsg->QueueMessage();
-	pMsg = nullptr;
+	//m_tShotTimer.AddTime(0.1f);
+	//CreateARifleBullet* pMsg = new CreateARifleBullet(this);
+	//pMsg->QueueMessage();
+	//pMsg = nullptr;
 }

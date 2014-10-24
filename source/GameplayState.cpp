@@ -21,6 +21,7 @@
 #include "CreateShotgunBullet.h"
 #include "CreateARifleBullet.h"
 #include "CreateSniperBullet.h"
+#include "CreateFlameBullet.h"
 
 
 #include "BitmapFont.h"
@@ -29,10 +30,11 @@
 #include "BaseObject.h"
 #include "MovingObject.h"
 #include "Player.h"
-#include "Zombie.h"
+//#include "Zombie.h"
 #include "Turret.h"
 #include "Bullet.h"
 #include "PickUp.h"
+#include "Weapon.h"
 
 #include "BehaviorManager.h"
 #include "AnimationManager.h"
@@ -90,6 +92,10 @@
 
 	// player animations
 	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
+	pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
+	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
+
+
 
 
 	// enemy animations
@@ -100,7 +106,7 @@
 	// other animations
 	pAnimationManager->Load("resource/config/animations/Turret_Animation.xml",		"turret");
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
-	//pAnimationManager->Load("resource/config/animations/Bullet.xml",				"bullet");
+
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
 
 
@@ -123,10 +129,10 @@
 
 
 	// Create the main entities
-	Player* pPlayer = nullptr;// CreatePlayer();
-	//m_pEntities->AddEntity(pPlayer, EntityBucket::BUCKET_PLAYER);
-	//pPlayer->Release();
-	//pPlayer = nullptr;
+
+	m_pPlayer = CreatePlayer();
+	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
+	
 
 
 }
@@ -213,17 +219,16 @@
 	/**********************************************************/
 	// Player Died!
 	/**********************************************************/
-	/*
-	int numframes = AnimationManager::GetInstance()->GetAnimation("playerDeath")->GetFrames().size();
-	numframes--;
+	//int numframes = AnimationManager::GetInstance()->GetAnimation("playerDeath")->GetFrames().size();
+	//numframes--;
 
-	if (m_pPlayer->GetAnimation() == "playerDeath" && m_pPlayer->GetAnimationStamp().m_nCurrFrame == numframes)
-	{
-		SGD::Event msg("PAUSE");
-		msg.SendEventNow();
-		Game::GetInstance()->AddState(LoseGameState::GetInstance());
-	}
-	*/
+	//if (m_pPlayer->GetAnimation() == "playerDeath" && m_pPlayer->GetAnimationStamp().m_nCurrFrame == numframes)
+	//{
+	//	SGD::Event msg("PAUSE");
+	//	msg.SendEventNow();
+	//	Game::GetInstance()->AddState(LoseGameState::GetInstance());
+	//}
+	
 
 
 
@@ -238,11 +243,8 @@
 //	- update game entities
 /*virtual*/ void GameplayState::Update( float dt )
 {
-	if (m_pPlayer == nullptr)
-		return;
-
-
-	if (m_pPlayer->isLevelCompleted() == false)
+	Player* player = dynamic_cast<Player*>(m_pPlayer);
+	if (player->isLevelCompleted() == false)
 	{
 		// Update the entities
 		m_pEntities->UpdateAll(dt);
@@ -268,7 +270,7 @@
 
 
 		// Update the Map Manager
-		MapManager::GetInstance()->Update(dt);
+	//	MapManager::GetInstance()->Update(dt);
 	}
 	else
 	{
@@ -301,18 +303,12 @@
 	float tops	= 475;
 	float lefts	= 435;
 
-
-
-	if (m_pPlayer == nullptr)
-		return;
-
-
-	SGD::Rectangle energyRect = { left, top, left + m_pPlayer->GetAttributes()->m_fCurrEnergy / m_pPlayer->GetAttributes()->m_fMaxEnergy * 150, top + 25 };
+	/*SGD::Rectangle energyRect = { left, top, left + m_pPlayer->GetAttributes()->m_fCurrEnergy / m_pPlayer->GetAttributes()->m_fMaxEnergy * 150, top + 25 };
 	pGraphics->DrawRectangle(energyRect, { 0, 0, 255 });
 
 	SGD::Rectangle staminaRect = { lefts, tops, lefts + m_pPlayer->GetAttributes()->m_fCurrStamina / m_pPlayer->GetAttributes()->m_fMaxStamina * 150, tops + 25 };
 	pGraphics->DrawRectangle(staminaRect, { 0, 255, 0 });
-
+*/
 }
 
 
@@ -358,19 +354,29 @@
 		break;
 		case MessageID::MSG_CREATE_SHTGN_BLT:
 		{
-
+			const CreateShotgunBullet* pCreateBulletMsg = dynamic_cast<const CreateShotgunBullet*>(pMsg);
+			GameplayState::GetInstance()->CreateShotGunBullet(pCreateBulletMsg->GetOwner());
 		}
 			break;
 		case MessageID::MSG_CREATE_ASSRFLE_BLT:
 		{
-
+			const CreateARifleBullet* pCreateBulletMsg = dynamic_cast<const CreateARifleBullet*>(pMsg);
+			GameplayState::GetInstance()->CreateBullet(pCreateBulletMsg->GetOwner());
 		}
 			break;
 		case MessageID::MSG_CREATE_SNPR_BLT:
 		{
-
+			const CreateSniperBullet* pCreateBulletMsg = dynamic_cast<const CreateSniperBullet*>(pMsg);
+			GameplayState::GetInstance()->CreateSnipeBullet(pCreateBulletMsg->GetOwner());
 		}
 			break;
+		case MessageID::MSG_CREATE_FLAME:
+		{
+			const CreateFlameBullet* pCreateBulletMsg = dynamic_cast<const CreateFlameBullet*>(pMsg);
+			GameplayState::GetInstance()->CreateFireBullet(pCreateBulletMsg->GetOwner());
+		}
+			break;
+
 	}
 
 /* Restore previous warning levels */
@@ -388,23 +394,24 @@ BaseObject* GameplayState::CreatePlayer( void )
 	player->SetRotation(0.0f);
 	player->SetMoveSpeed(180.0f);
 	player->RetrieveBehavior("playerController");
+	player->SetAnimation("player");
 	return player;
 }
 
 void GameplayState::CreateZombie( SGD::Point pos, Player* player )
 {
-	Zombie* zombie = new Zombie;
+	//Zombie* zombie = new Zombie;
 
-	zombie->SetPosition(pos);
-	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
-	zombie->SetMoveSpeed(180.0f);
-	zombie->SetTarget(player);
-	zombie->RetrieveBehavior("runTo");
+	//zombie->SetPosition(pos);
+	//zombie->SetRotation(0.0f);
+	//zombie->SetAnimation("zombie1");
+	//zombie->SetMoveSpeed(180.0f);
+	//zombie->SetTarget(player);
+	//zombie->RetrieveBehavior("runTo");
 
-	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
-	zombie->Release();
-	zombie = nullptr;
+	//m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
+	//zombie->Release();
+	//zombie = nullptr;
 }
 
 void GameplayState::CreatePickUp( int type, SGD::Point pos )
@@ -447,16 +454,105 @@ void GameplayState::CreateTurret( SGD::Point pos, float rotation )
 	turret = nullptr;
 }
 
-void GameplayState::CreateBullet(MovingObject* owner)
+void GameplayState::CreateBullet(Weapon* owner)
+{
+	
+		Bullet* bullet = new Bullet;
+		bullet->SetOwner(owner->GetOwner());
+		bullet->SetPosition(owner->GetOwner()->GetPosition());
+		SGD::Vector direction = owner->GetOwner()->GetDirection();
+		float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
+
+		direction.Rotate(angle);
+
+		bullet->SetDirection(direction);
+		bullet->SetRotation(owner->GetOwner()->GetRotation());
+
+		bullet->SetVelocity(direction * owner->GetSpeed());
+		bullet->SetAnimation("bullet");
+
+		m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+		bullet->Release();
+		bullet = nullptr;
+	
+	
+}
+void GameplayState::CreateFireBullet(Weapon* owner)
+{
+	
+		Bullet* bullet = new Bullet;
+		bullet->SetOwner(owner->GetOwner());
+		bullet->SetPosition(owner->GetOwner()->GetPosition());
+		SGD::Vector direction = owner->GetOwner()->GetDirection();
+		float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
+
+		direction.Rotate(angle);
+
+		bullet->SetDirection(direction);
+		bullet->SetRotation(owner->GetOwner()->GetRotation());
+
+		bullet->SetVelocity(direction * owner->GetSpeed());
+		bullet->SetAnimation("flameThrowerRound");
+
+		m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+		bullet->Release();
+		bullet = nullptr;
+	
+
+}
+void GameplayState::CreateShotGunBullet(Weapon* owner)
+{
+	for (unsigned int i = 0; i < 10; i++)
+	{
+		Bullet* bullet = new Bullet;
+		bullet->SetOwner(owner->GetOwner());
+		bullet->SetPosition(owner->GetOwner()->GetPosition());
+		SGD::Vector direction = owner->GetOwner()->GetDirection();
+		float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
+
+		direction.Rotate(angle);
+
+		bullet->SetDirection(direction);
+		bullet->SetRotation(owner->GetOwner()->GetRotation());
+
+		bullet->SetVelocity(direction * owner->GetSpeed());
+		bullet->SetAnimation("bullet");
+
+		m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+		bullet->Release();
+		bullet = nullptr;
+	}
+}
+void GameplayState::CreateARBullet(Weapon* owner)
 {
 	Bullet* bullet = new Bullet;
-	bullet->SetRotation(owner->GetRotation());
-	bullet->SetOwner(owner);
-	bullet->SetPosition(owner->GetPosition());
-	bullet->SetDirection(owner->GetDirection());
-	bullet->SetVelocity(owner->GetDirection() * 800.0f);
-	bullet->SetAnimation("bullet");
+	bullet->SetRotation(owner->GetOwner()->GetRotation());
+	bullet->SetOwner(owner->GetOwner());
+	bullet->SetPosition(owner->GetOwner()->GetPosition());
+	SGD::Vector direction = owner->GetOwner()->GetDirection();
+	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
 	
+	bullet->SetDirection(direction);
+	bullet->SetVelocity(direction * owner->GetSpeed());
+	bullet->SetAnimation("bullet");
+
+	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+	bullet->Release();
+	bullet = nullptr;
+}
+void GameplayState::CreateSnipeBullet(Weapon* owner)
+{
+	Bullet* bullet = new Bullet;
+	bullet->SetRotation(owner->GetOwner()->GetRotation());
+	bullet->SetOwner(owner->GetOwner());
+	bullet->SetPosition(owner->GetOwner()->GetPosition());
+	SGD::Vector direction = owner->GetOwner()->GetDirection();
+	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+
+	bullet->SetDirection(direction);
+	bullet->SetVelocity(direction * owner->GetSpeed());
+	bullet->SetAnimation("bullet");
+
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();
 	bullet = nullptr;
