@@ -94,6 +94,8 @@
 	// player animations
 	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
 	pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
+	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
+
 
 
 

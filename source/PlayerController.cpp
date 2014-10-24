@@ -147,7 +147,7 @@ PlayerController::~PlayerController()
 
 	if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
 	{
-		m_Player->flameThrower->Fire(dt);
+		m_Player->shotgun->Fire(dt);
 	}
 
 	// player activates an ability
