@@ -243,6 +243,12 @@
     <ClCompile Include="source\SandBag.cpp">
       <Filter>Objects\Environment</Filter>
     </ClCompile>
+    <ClCompile Include="source\WeaponManager.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FlameThrower.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -469,6 +475,12 @@
     </ClInclude>
     <ClInclude Include="source\SandBag.h">
       <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\WeaponManager.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FlameThrower.h">
+      <Filter>Weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

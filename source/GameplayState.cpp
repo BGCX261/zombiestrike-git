@@ -88,7 +88,6 @@
 	SGD::InputManager*		pInput				= SGD::InputManager::GetInstance();
 	AnimationManager*		pAnimationManager	= AnimationManager::GetInstance();
 
-
 	// player animations
 	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
 
@@ -113,6 +112,8 @@
 	playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
+
+	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/hudweapons.png");
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
 
 
@@ -425,7 +426,7 @@ void GameplayState::CreatePickUp( int type, SGD::Point pos )
 
 	default:
 		break;
-	}
+	}	
 
 
 	m_pEntities->AddEntity(pickup, EntityBucket::BUCKET_PICKUPS);

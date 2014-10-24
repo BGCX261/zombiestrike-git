@@ -44,5 +44,5 @@ void HUD::Render(void)
 	float	screenheight	= Game::GetInstance()->GetScreenHeight();
 
 	//pGraphics->DrawTextureSection(m_hBackgroundImage, { 1.5f, screenheight - 112.0f }, SGD::Rectangle(4.0f, 694.0f, 708.0f, 806.0f));
-	pGraphics->DrawTexture(m_hBackgroundImage, { 1.5f, screenheight - 112.0f });
+	//pGraphics->DrawTexture(m_hBackgroundImage, { 1.5f, screenheight - 112.0f });
 }

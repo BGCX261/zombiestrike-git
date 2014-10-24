@@ -106,6 +106,7 @@
     <ClCompile Include="source\DestroyObjectMessage.cpp" />
     <ClCompile Include="source\EntityManager.cpp" />
     <ClCompile Include="source\EnvironmentalObject.cpp" />
+    <ClCompile Include="source\FlameThrower.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\GameCamera.cpp" />
     <ClCompile Include="source\GameplayState.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="source\Turret.cpp" />
     <ClCompile Include="source\WaitBehavior.cpp" />
     <ClCompile Include="source\Weapon.cpp" />
+    <ClCompile Include="source\WeaponManager.cpp" />
     <ClCompile Include="source\WinGameState.cpp" />
     <ClCompile Include="source\WinMain.cpp" />
     <ClCompile Include="source\Zombie.cpp" />
@@ -179,6 +181,7 @@
     <ClInclude Include="source\DynArray.h" />
     <ClInclude Include="source\EntityManager.h" />
     <ClInclude Include="source\EnvironmentalObject.h" />
+    <ClInclude Include="source\FlameThrower.h" />
     <ClInclude Include="source\Frame.h" />
     <ClInclude Include="source\Game.h" />
     <ClInclude Include="source\GameCamera.h" />
@@ -216,6 +219,7 @@
     <ClInclude Include="source\Turret.h" />
     <ClInclude Include="source\WaitBehavior.h" />
     <ClInclude Include="source\Weapon.h" />
+    <ClInclude Include="source\WeaponManager.h" />
     <ClInclude Include="source\WinGameState.h" />
     <ClInclude Include="source\Zombie.h" />
   </ItemGroup>

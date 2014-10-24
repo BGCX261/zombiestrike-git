@@ -21,6 +21,8 @@ protected:
 	float damage = 0.0f;
 	float speed = 0.0f;
 	float lifeTime = 0.0f;
+	bool m_bIsEquipped = false;
+	bool m_bIsObtained = false;
 	Timer reloadTimer;
 	Timer recoilTimer;
 	Player* m_pOwner = nullptr;
@@ -34,7 +36,7 @@ public:
 	virtual void Fire(float dt);
 	virtual void Update(float dt);
 
-
+	//Accessors
 	int GetType(void) const { return type; }
 	int GetMagSize(void) const { return magSize; }
 	int GetAmmoCap(void) const { return ammoCapactity; }
@@ -44,10 +46,12 @@ public:
 	float GetDamage(void) const { return damage; }
 	float GetSpeed(void) const { return speed; }
 	float GetLifeTime(void) const { return lifeTime; }
+	bool GetObtained() { return m_bIsObtained; }
 	Timer GetReloadTimer(void) const { return reloadTimer; }
 	Timer GetRecoilTimer(void) const { return recoilTimer; }
 	Player* GetOwner(void) const { return m_pOwner; }
 
+	//Mutators
 	void SetType(int _type)  { type = _type; }
 	void SetMagSize(int _magSize)  { magSize = _magSize; }
 	void SetAmmoCap(int _ammoCap)  { ammoCapactity = _ammoCap; }
@@ -57,6 +61,8 @@ public:
 	void SetSpeed(float _speed)  { speed = _speed; }
 	void SetLifeTime(float _lifeTime)  { lifeTime = _lifeTime; }
 	void SetOwner(Player* owner);
+	void SetEquipped(bool isEquipped) { isEquipped = m_bIsEquipped; }
+	void SetObtained(bool isObtained) { isObtained = m_bIsObtained; }
 
 };
 
