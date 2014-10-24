@@ -30,7 +30,7 @@
 #include "BaseObject.h"
 #include "MovingObject.h"
 #include "Player.h"
-#include "Zombie.h"
+//#include "Zombie.h"
 #include "Turret.h"
 #include "Bullet.h"
 #include "PickUp.h"
@@ -393,7 +393,7 @@ BaseObject* GameplayState::CreatePlayer( void )
 
 void GameplayState::CreateZombie( SGD::Point pos, Player* player )
 {
-	Zombie* zombie = new Zombie;
+	/*Zombie* zombie = new Zombie;
 
 	zombie->SetPosition(pos);
 	zombie->SetRotation(0.0f);
@@ -404,7 +404,7 @@ void GameplayState::CreateZombie( SGD::Point pos, Player* player )
 
 	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
 	zombie->Release();
-	zombie = nullptr;
+	zombie = nullptr;*/
 }
 
 void GameplayState::CreatePickUp( int type, SGD::Point pos )

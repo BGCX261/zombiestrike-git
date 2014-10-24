@@ -139,7 +139,6 @@
     <ClCompile Include="source\Weapon.cpp" />
     <ClCompile Include="source\WinGameState.cpp" />
     <ClCompile Include="source\WinMain.cpp" />
-    <ClCompile Include="source\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
@@ -215,7 +214,6 @@
     <ClInclude Include="source\WaitBehavior.h" />
     <ClInclude Include="source\Weapon.h" />
     <ClInclude Include="source\WinGameState.h" />
-    <ClInclude Include="source\Zombie.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
