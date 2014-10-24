@@ -1,13 +1,12 @@
 #pragma once
 #include "..\SGD Wrappers\SGD_Message.h"
-
 class Weapon;
 
-class CreateShotgunBullet : public SGD::Message
+class CreateFlameBullet : public SGD::Message
 {
 public:
-	CreateShotgunBullet(Weapon*);
-	virtual ~CreateShotgunBullet();
+	CreateFlameBullet(Weapon*);
+	virtual ~CreateFlameBullet();
 
 	Weapon* GetOwner(void) const { return m_pOwner; }
 

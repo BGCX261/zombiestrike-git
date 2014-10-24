@@ -12,6 +12,7 @@
 class BaseBehavior;
 class HAudio;
 class HVoice;
+class Weapon;
 
 
 //struct GamerProfile
@@ -52,6 +53,15 @@ class Player : public MovingObject, public SGD::Listener
 {
 	GamerProfile	profile;
 	Attributes		m_Attributes;
+
+	Weapon* pistol = nullptr;
+	Weapon* shotgun = nullptr;
+	Weapon* arifle = nullptr;
+	Weapon* sniper = nullptr;
+	Weapon* flameThrower = nullptr;
+
+
+
 
 	unsigned int	m_unCurrAbility		= 0;
 	bool			m_bIsSprinting		= false;
