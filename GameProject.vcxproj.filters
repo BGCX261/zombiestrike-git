@@ -201,9 +201,6 @@
     <ClCompile Include="source\Turret.cpp">
       <Filter>Objects\Environment</Filter>
     </ClCompile>
-    <ClCompile Include="source\Zombie.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="source\EnvironmentalObject.cpp">
       <Filter>Objects\Environment</Filter>
     </ClCompile>
@@ -429,9 +426,6 @@
     </ClInclude>
     <ClInclude Include="source\Turret.h">
       <Filter>Objects\Environment</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Zombie.h">
-      <Filter>Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="source\EnvironmentalObject.h">
       <Filter>Objects\Environment</Filter>

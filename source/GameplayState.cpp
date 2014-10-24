@@ -30,7 +30,7 @@
 #include "BaseObject.h"
 #include "MovingObject.h"
 #include "Player.h"
-#include "Zombie.h"
+//#include "Zombie.h"
 #include "Turret.h"
 #include "Bullet.h"
 #include "PickUp.h"
@@ -225,7 +225,7 @@
 	//	msg.SendEventNow();
 	//	Game::GetInstance()->AddState(LoseGameState::GetInstance());
 	//}
-	*/
+	
 
 
 
@@ -397,18 +397,18 @@ BaseObject* GameplayState::CreatePlayer( void )
 
 void GameplayState::CreateZombie( SGD::Point pos, Player* player )
 {
-	Zombie* zombie = new Zombie;
+	//Zombie* zombie = new Zombie;
 
-	zombie->SetPosition(pos);
-	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
-	zombie->SetMoveSpeed(180.0f);
-	zombie->SetTarget(player);
-	zombie->RetrieveBehavior("runTo");
+	//zombie->SetPosition(pos);
+	//zombie->SetRotation(0.0f);
+	//zombie->SetAnimation("zombie1");
+	//zombie->SetMoveSpeed(180.0f);
+	//zombie->SetTarget(player);
+	//zombie->RetrieveBehavior("runTo");
 
-	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
-	zombie->Release();
-	zombie = nullptr;
+	//m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
+	//zombie->Release();
+	//zombie = nullptr;
 }
 
 void GameplayState::CreatePickUp( int type, SGD::Point pos )
