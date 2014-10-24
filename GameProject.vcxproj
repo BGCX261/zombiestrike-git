@@ -93,6 +93,7 @@
     <ClCompile Include="source\Animation.cpp" />
     <ClCompile Include="source\AnimationManager.cpp" />
     <ClCompile Include="source\AssaultRifle.cpp" />
+    <ClCompile Include="source\BarbedWire.cpp" />
     <ClCompile Include="source\BaseObject.cpp" />
     <ClCompile Include="source\BehaviorManager.cpp" />
     <ClCompile Include="source\BitmapFont.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="source\GameplayState.cpp" />
     <ClCompile Include="source\HowToPlayState.cpp" />
     <ClCompile Include="source\HUD.cpp" />
+    <ClCompile Include="source\LandMine.cpp" />
     <ClCompile Include="source\LoseGameState.cpp" />
     <ClCompile Include="source\MainMenuState.cpp" />
     <ClCompile Include="source\Map.cpp" />
@@ -127,6 +129,7 @@
     <ClCompile Include="source\PlayerController.cpp" />
     <ClCompile Include="source\RotateTowardsBehavior.cpp" />
     <ClCompile Include="source\RunToBehavior.cpp" />
+    <ClCompile Include="source\SandBag.cpp" />
     <ClCompile Include="source\Shotgun.cpp" />
     <ClCompile Include="source\Sniper.cpp" />
     <ClCompile Include="source\Timer.cpp" />
@@ -163,6 +166,7 @@
     <ClInclude Include="source\AnimationManager.h" />
     <ClInclude Include="source\AnimTimeStamp.h" />
     <ClInclude Include="source\AssaultRifle.h" />
+    <ClInclude Include="source\BarbedWire.h" />
     <ClInclude Include="source\BaseBehavior.h" />
     <ClInclude Include="source\BaseObject.h" />
     <ClInclude Include="source\BehaviorManager.h" />
@@ -189,6 +193,7 @@
     <ClInclude Include="source\HUD.h" />
     <ClInclude Include="source\IBase.h" />
     <ClInclude Include="source\IGameState.h" />
+    <ClInclude Include="source\LandMine.h" />
     <ClInclude Include="source\LoseGameState.h" />
     <ClInclude Include="source\MainMenuState.h" />
     <ClInclude Include="source\Map.h" />
@@ -205,6 +210,7 @@
     <ClInclude Include="source\PlayerController.h" />
     <ClInclude Include="source\RotateTowardsBehavior.h" />
     <ClInclude Include="source\RunToBehavior.h" />
+    <ClInclude Include="source\SandBag.h" />
     <ClInclude Include="source\Shotgun.h" />
     <ClInclude Include="source\SLList.h" />
     <ClInclude Include="source\Sniper.h" />

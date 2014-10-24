@@ -105,7 +105,7 @@
 	// other animations
 	pAnimationManager->Load("resource/config/animations/Turret_Animation.xml",		"turret");
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
-	pAnimationManager->Load("resource/config/animations/Bullet.xml",				"bullet");
+
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
 
 
@@ -126,6 +126,7 @@
 
 
 	// Create the main entities
+
 	m_pPlayer = CreatePlayer();
 	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
 	
@@ -172,7 +173,9 @@
 	delete m_pEntities;
 	m_pEntities = nullptr;
 
-	m_pPlayer->Release();
+	if (m_pPlayer != nullptr)
+		m_pPlayer->Release();
+
 	m_pPlayer = nullptr;
 
 
@@ -222,6 +225,7 @@
 	//	msg.SendEventNow();
 	//	Game::GetInstance()->AddState(LoseGameState::GetInstance());
 	//}
+	*/
 
 
 
