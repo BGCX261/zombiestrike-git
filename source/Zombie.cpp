@@ -51,7 +51,7 @@ void Zombie::RetrieveBehavior(std::string name)
 
 /*virtual*/ void Zombie::HandleCollision(const IBase* pOther)
 {
-	if (pOther->GetType() == OBJ_BULLET)
+	if (pOther->GetType())
 	{
 		const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
 
