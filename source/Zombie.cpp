@@ -6,6 +6,7 @@
 #include "BaseBehavior.h"
 #include "AnimationManager.h"
 #include "Bullet.h"
+#include "DestroyObjectMessage.h"
 
 
 
@@ -31,7 +32,9 @@ void Zombie::Update(float dt)
 	}
 	else
 	{
-
+		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+		dMsg->QueueMessage();
+		dMsg = nullptr;
 	}
 	
 }
@@ -51,7 +54,7 @@ void Zombie::RetrieveBehavior(std::string name)
 
 /*virtual*/ void Zombie::HandleCollision(const IBase* pOther)
 {
-	if (pOther->GetType())
+	if (pOther->GetType() == OBJ_BULLET)
 	{
 		const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
 
@@ -61,4 +64,5 @@ void Zombie::RetrieveBehavior(std::string name)
 			isAlive = false;
 		}
 	}
+
 }

@@ -269,7 +269,7 @@ void Player::Render()
 {
 	switch (pOther->GetType())
 	{
-	case ObjectType::OBJ_ZOMBIE:
+	case ObjectType::OBJ_SLOW_ZOMBIE:
 		m_bIsAlive = false;
 		break;
 

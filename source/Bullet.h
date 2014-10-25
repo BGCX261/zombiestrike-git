@@ -42,6 +42,7 @@ private:
 	int penetratingPower = 0;
 
 
+
 	friend class BaseBehavior;
 
 
