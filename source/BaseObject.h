@@ -23,6 +23,7 @@ public:
 
 	BaseObject() = default;
 	~BaseObject();
+	~BaseObject();
 
 
 	virtual void			Update			(float elapsedTime)	 override;

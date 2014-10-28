@@ -30,7 +30,7 @@
 #include "BaseObject.h"
 #include "MovingObject.h"
 #include "Player.h"
-//#include "Zombie.h"
+
 #include "Turret.h"
 #include "Bullet.h"
 #include "PickUp.h"
@@ -94,6 +94,8 @@
 	// player animations
 	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
 	pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
+	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
+
 
 
 
@@ -105,7 +107,7 @@
 	// other animations
 	pAnimationManager->Load("resource/config/animations/Turret_Animation.xml",		"turret");
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
-	pAnimationManager->Load("resource/config/animations/Bullet.xml",				"bullet");
+
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
 
 
@@ -126,6 +128,7 @@
 
 
 	// Create the main entities
+
 	m_pPlayer = CreatePlayer();
 	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
 	
@@ -172,7 +175,9 @@
 	delete m_pEntities;
 	m_pEntities = nullptr;
 
-	m_pPlayer->Release();
+	if (m_pPlayer != nullptr)
+		m_pPlayer->Release();
+
 	m_pPlayer = nullptr;
 
 
@@ -222,6 +227,7 @@
 	//	msg.SendEventNow();
 	//	Game::GetInstance()->AddState(LoseGameState::GetInstance());
 	//}
+	
 
 
 
@@ -393,18 +399,17 @@ BaseObject* GameplayState::CreatePlayer( void )
 
 void GameplayState::CreateZombie( SGD::Point pos, Player* player )
 {
-	/*Zombie* zombie = new Zombie;
 
-	zombie->SetPosition(pos);
-	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
-	zombie->SetMoveSpeed(180.0f);
-	zombie->SetTarget(player);
-	zombie->RetrieveBehavior("runTo");
+	//zombie->SetPosition(pos);
+	//zombie->SetRotation(0.0f);
+	//zombie->SetAnimation("zombie1");
+	//zombie->SetMoveSpeed(180.0f);
+	//zombie->SetTarget(player);
+	//zombie->RetrieveBehavior("runTo");
 
 	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
 	zombie->Release();
-	zombie = nullptr;*/
+	zombie = nullptr;
 }
 
 void GameplayState::CreatePickUp( int type, SGD::Point pos )

@@ -19,21 +19,7 @@ FastZombie::~FastZombie()
 {
 	
 }
-void FastZombie::Update(float dt)
-{
-	if (isAlive)
-	{
-		if (currBehavior != nullptr)
-			currBehavior->Update(dt, this, { 0, 0 });
-	}
-	else
-	{
-		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
-		dMsg->QueueMessage();
-		dMsg = nullptr;
-	}
 
-}
 
 
 /*virtual*/ void FastZombie::HandleEvent(const SGD::Event* pEvent)
@@ -41,17 +27,3 @@ void FastZombie::Update(float dt)
 
 }
 
-/*virtual*/ void FastZombie::HandleCollision(const IBase* pOther)
-{
-	if (pOther->GetType() == OBJ_BULLET)
-	{
-		const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
-
-		health -= bullet->GetDamage();
-		if (health <= 0.0f)
-		{
-			isAlive = false;
-		}
-	}
-
-}

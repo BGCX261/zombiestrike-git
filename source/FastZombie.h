@@ -6,11 +6,11 @@ public:
 	FastZombie();
 	virtual ~FastZombie();
 
-	virtual void Update(float);
+	
 
 	virtual int GetType(void) const override { return OBJ_FAST_ZOMBIE; }
 	virtual void HandleEvent(const SGD::Event* pEvent) override;
-	virtual void HandleCollision(const IBase* pOther) override;
+
 
 };
 

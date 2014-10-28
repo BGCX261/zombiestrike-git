@@ -1,7 +1,9 @@
 #pragma once
 #include "Zombie.h"
-class FatZombie :
-	public Zombie
+
+class Weapon;
+
+class FatZombie : public Zombie
 {
 public:
 	FatZombie();
@@ -11,7 +13,10 @@ public:
 
 	virtual int GetType(void) const override { return OBJ_FAT_ZOMBIE; }
 	virtual void HandleEvent(const SGD::Event* pEvent) override;
-	virtual void HandleCollision(const IBase* pOther) override;
+
+private:
+
+	Weapon* pukeBlaster = nullptr;
 
 };
 

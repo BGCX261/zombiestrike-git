@@ -27,7 +27,7 @@ void FatZombie::Update(float dt)
 	if (isAlive)
 	{
 		if (currBehavior != nullptr)
-			currBehavior->Update(dt, this, { 0, 0 });
+			currBehavior->Update(dt, this, m_pTarget->GetPosition());
 	}
 	else
 	{
@@ -44,17 +44,3 @@ void FatZombie::Update(float dt)
 
 }
 
-/*virtual*/ void FatZombie::HandleCollision(const IBase* pOther)
-{
-	if (pOther->GetType() == OBJ_BULLET)
-	{
-		const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
-
-		health -= bullet->GetDamage();
-		if (health <= 0.0f)
-		{
-			isAlive = false;
-		}
-	}
-
-}

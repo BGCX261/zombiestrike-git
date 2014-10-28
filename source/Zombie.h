@@ -22,9 +22,12 @@ public:
 
 	void SetHealth(float _health) { health = _health; }
 	void SetDamage(float _damage) { damage = _damage; }
+	void SetTarget(BaseObject* target);
+	void RetrieveBehavior(std::string name);
 
 protected:
 
+	BaseObject* m_pTarget = nullptr;
 	BaseBehavior* currBehavior = nullptr;
 	float health = 100.0f;
 	float damage = 2.0f;
@@ -33,6 +36,5 @@ protected:
 
 	friend class BaseBehavior;
 
-	void RetrieveBehavior(std::string name);
 };
 

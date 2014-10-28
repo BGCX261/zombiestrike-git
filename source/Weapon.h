@@ -14,6 +14,7 @@ protected:
 	int type = NONE;
 	int currAmmo = 0;
 	int magSize = 0;
+	int totalAmmo = 0;
 	int ammoCapactity = 0;
 	int penetratingPower = 0;
 	float bulletSpread = 0.0f;
@@ -49,10 +50,12 @@ public:
 	float GetSpeed(void) const { return speed; }
 	float GetLifeTime(void) const { return lifeTime; }
 	float GetBulletSpread(void) const { return bulletSpread; }
+	int GetTotalAmmo(void) const { return totalAmmo; }
 	Timer GetReloadTimer(void) const { return reloadTimer; }
 	Timer GetRecoilTimer(void) const { return recoilTimer; }
 	MovingObject* GetOwner(void) const { return m_pOwner; }
 
+	void AddAmmo(int addedAmmo) { totalAmmo += addedAmmo; }
 	void SetType(int _type)  { type = _type; }
 	void SetMagSize(int _magSize)  { magSize = _magSize; }
 	void SetAmmoCap(int _ammoCap)  { ammoCapactity = _ammoCap; }

@@ -145,7 +145,7 @@ PlayerController::~PlayerController()
 		m_Player->m_unCurrAbility = 3;
 
 
-	if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
+	if ((pInput->IsKeyPressed(SGD::Key::MouseLeft) == true))
 	{
 		m_Player->flameThrower->Fire(dt);
 	}
