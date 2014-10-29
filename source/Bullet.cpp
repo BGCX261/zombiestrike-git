@@ -16,7 +16,7 @@ Bullet::~Bullet()
 /*virtual*/ void Bullet::Update(float dt) /*override*/
 {
 	MovingObject::Update(dt);
-	lifeTime -= m_vtVelocity.ComputeLength() * dt;
+//	lifeTime -= m_vtVelocity.ComputeLength() * dt;
 
 	if (IsDead() || lifeTime < 0)
 	{
@@ -29,13 +29,15 @@ Bullet::~Bullet()
 /*virtual*/ void Bullet::HandleCollision(const IBase* pOther)	/*override*/
 {
 	// player
-	if (pOther->GetType())
+	if (pOther->GetType() == OBJ_SLOW_ZOMBIE ||
+		pOther->GetType() == OBJ_FAST_ZOMBIE || 
+		pOther->GetType() == OBJ_FAT_ZOMBIE || 
+		pOther->GetType() == OBJ_TANK_ZOMBIE || 
+		pOther->GetType() == OBJ_EXPLODING_ZOMBIE )
 	{
 		if (GetOwner() != pOther)
 		{
-			SGD::Event* msg = new SGD::Event{"HIT"};
-			msg->QueueEvent((Player*)pOther);
-			msg = nullptr;
+			
 			
 			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 			dMsg->QueueMessage();

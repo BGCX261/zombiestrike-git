@@ -23,8 +23,8 @@ Shotgun::Shotgun(MovingObject* owner)
 
 Shotgun::~Shotgun()
 {
-	m_pOwner->Release();
-	m_pOwner = nullptr;
+	//m_pOwner->Release();
+	//m_pOwner = nullptr;
 }
 
 
