@@ -11,7 +11,6 @@
 #define NUM_LEVELS 6
 using namespace std;
 class BaseObject;
-class SpawnDoor;
 class EntityManager;
 class Player;
 class EnemyUnit;
@@ -38,7 +37,7 @@ public:
 
 	static MapManager * GetInstance(void);
 
-	BaseObject*				LoadLevel		( GamerProfile& currProfile, EntityManager*, vector<SGD::Rectangle*>& FOVCollidables, Graph<SGD::Point*>& navGraph );
+	BaseObject*				LoadLevel		( GamerProfile& currProfile, EntityManager* );
 	void					UnloadLevel		(void);
 
 	virtual void			Render			(void)							override;
@@ -58,7 +57,14 @@ public:
 
 
 	Player* CreatePlayer(int type, SGD::Point pos, EntityManager*);
-	void CreateEnvironment(int type, SGD::Point pos, vector<SGD::Rectangle*>& FOVCollidables, EntityManager* entities, const char* event = nullptr);
+	void CreateLandMine(SGD::Point pos,  EntityManager* entities);
+	void CreateSandBags(SGD::Point pos, EntityManager* entities);
+	void CreateBarbedWire(SGD::Point pos, EntityManager* entities);
+	void CreateEnvironment(SGD::Point pos, EntityManager* entities);
+	void CreateSpawner(SGD::Point pos, EntityManager* entities);
+
+
+
 
 };
 

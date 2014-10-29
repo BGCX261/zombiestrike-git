@@ -269,13 +269,12 @@ void Player::Render()
 {
 	switch (pOther->GetType())
 	{
-	case ObjectType::OBJ_ZOMBIE:
-		m_bIsAlive = false;
+	case ObjectType::OBJ_SLOW_ZOMBIE:
+	//_bIsAlive = false;
 		break;
 
 	case ObjectType::OBJ_TURRET:
 	case ObjectType::OBJ_BULLET:
-	case ObjectType::OBJ_POWERCORE:
 	case ObjectType::OBJ_WALL:
 	case ObjectType::OBJ_DOOR:
 		MovingObject::HandleCollision(pOther);

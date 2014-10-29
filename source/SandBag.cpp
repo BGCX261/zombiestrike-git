@@ -1,12 +1,12 @@
 #include "SandBag.h"
-
+#include "Game.h"
 
 SandBag::SandBag()
 {
 	this->SetType(ObjectType::OBJ_SANDBAG);
 	this->SetAnimation("sandbag");
 
-	m_fCurrHP = m_fMaxHP = 100.0f;
+	m_fCurrHP = m_fMaxHP = 250.0f;
 }
 
 SandBag::~SandBag()
@@ -38,10 +38,12 @@ void SandBag::HandleCollision( const IBase* pOther )
 
 
 	// zombie collision
-	if (pOther->GetType() == ObjectType::OBJ_ZOMBIE)
+	if (pOther->GetType() == ObjectType::OBJ_SLOW_ZOMBIE ||
+		pOther->GetType() == ObjectType::OBJ_FAST_ZOMBIE||
+		pOther->GetType() == ObjectType::OBJ_FAT_ZOMBIE)
 	{
 		// lower HP by zombie damage
-		m_fCurrHP -= 1.0f;
+		m_fCurrHP -= 10.0f * Game::GetInstance()->DeltaTime();
 
 
 		// dead

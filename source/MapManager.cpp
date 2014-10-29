@@ -1,26 +1,16 @@
 #include "MapManager.h"
 #include "Map.h"
-
+#include "SpawnManager.h"
 #include <fstream>
 #include "BaseObject.h"
 #include "../TinyXML/tinyxml.h"
 #include "GameplayState.h"
 #include "Game.h"
 #include "Player.h"
-//#include "Guard.h"
-//#include "Officer.h"
-//#include "Worker.h"
-//#include "Turret.h"
-//#include "SecurityCamera.h"
-//#include "SpawnDoor.h"
-//#include "PickUp.h"
-//#include "EnvironmentalObject.h"
-//#include "Computer.h"
-//#include "KeyPad.h"
-//#include "AlarmButton.h"
-//#include "Door.h"
-//#include "Shadow.h"
-
+#include "BarbedWire.h"
+#include "SandBag.h"
+#include "LandMine.h"
+#include "Spawner.h"
 #include "EntityManager.h"
 //#include "../resource/config/"
 
@@ -36,7 +26,7 @@ enum EntityBucket {  BUCKET_ENEMIES, BUCKET_PLAYER, BUCKET_ENVIRO, BUCKET_BULLET
 	return &sInstance;
 }
 
-BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pEntities, vector<SGD::Rectangle*>& FOVCollidables, Graph<SGD::Point*>& navGraph)
+BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pEntities)
 {
 	//EntityManager* m_pEntities = new EntityManager;
 	Player* player;
@@ -59,15 +49,17 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 	SGD::HTexture tSetBG;
 	std::string filePath;
 
-	int homeNode, alarmNode;
+	LoadLevelPaths();
+	
 
-	SGD::Point m_ptCheckPtStart;
-
-	if (doc.LoadFile(levels[currProfile.LevelsComplete].c_str()) == false)
+	/*if (doc.LoadFile(levels[currProfile.LevelsComplete].c_str()) == false)
+	{
+		return nullptr;
+	}*/
+	if (doc.LoadFile(levels[0].c_str()) == false)
 	{
 		return nullptr;
 	}
-
 	TiXmlElement * root = doc.RootElement();
 	if (root == nullptr)
 	{
@@ -139,14 +131,7 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 
 		temp.renderPos.x = (float)rectPosX;
 		temp.renderPos.y = (float)rectPosY;
-		/*
-			tStruct.pTiles.SetTilePos({ tPos.x, tPos.y });
-			tStruct.layers.AddRectPos(rPos);
-			tStruct.layers.AddTilePos({ tPos.x, tPos.y});
-			tStruct.layers.AddTiles(tStruct.pTiles);
-			tStruct.pTiles.SetCollisionRect(tPos.x, tPos.y, tPos.x + tileWidth, tPos.y + tileHeight);
-			tStruct.pTiles.AddCollisionRect(tStruct.pTiles.GetCollisionRect());
-		*/
+		
 
 
 		tStruct.layers.m_vTiles[posY / tileHeight][posX / tileWidth] = temp;
@@ -164,75 +149,60 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 		collisionInfo->Attribute("posY", &posY);
 		collisionInfo->Attribute("type", &tileid);
 
-		string Event1;
-
-		const char * NameandEvents = collisionInfo->GetText();
-		if (NameandEvents != nullptr)
-		{
-			std::string events = NameandEvents;
-			size_t startIndex = events.find_first_of((char)'//');
-			std::string tileEvents = events.substr(0, startIndex);
-			Event1 = tileEvents;
-			if (Event1 == "CHECKPOINT")
-				m_ptCheckPtStart = { (float)posX * tileWidth, (float)posY * tileHeight };
-		}
-
-
-		if (tileid == 0)
-			CreateEnvironment(BaseObject::OBJ_WALL, { (float)posX * tileWidth, (float)posY * tileHeight }, FOVCollidables, m_pEntities, Event1.c_str());
-		else
-			CreateEnvironment(BaseObject::OBJ_TRIGGER, { (float)posX * tileWidth, (float)posY * tileHeight }, FOVCollidables, m_pEntities, Event1.c_str());
+		CreateEnvironment({ (float)posX * tileWidth, (float)posY * tileHeight } ,m_pEntities);
 
 
 		collisionInfo = collisionInfo->NextSiblingElement("collision_tile");
 	}
 
-
-
+	//Currently unneeded pathfinding stuff
+#if 0
 	TiXmlElement * graphList = root->FirstChildElement("graph_list");
 	TiXmlElement * nodeInfo = graphList->FirstChildElement("node_info");
 
 	while (nodeInfo != nullptr)
 	{
-		int numEdges = 0;
-		int edge;
+	int numEdges = 0;
+	int edge;
 
-		std::string edgeNode;
+	std::string edgeNode;
 
-		nodeInfo->Attribute("posX", &posX);
-		nodeInfo->Attribute("posY", &posY);
-		nodeInfo->Attribute("index", &tileid);
-		nodeInfo->Attribute("numEdges", &numEdges);
-		const char* tagCheck = nodeInfo->GetText();
-		if (tagCheck != nullptr)
-		{
-			string tag = tagCheck;
-			if (tag == "alarm")
-				alarmNode = tileid;
-			if (tag == "home")
-				homeNode = tileid;
-		}
-
-
-		SGD::Point* temp = new SGD::Point((float)posX * tileWidth + (tileWidth *0.5f), (float)posY * tileHeight + (tileHeight *0.5f));
-		navGraph.addVertex(temp);
-
-
-		for (int currEdge = 0; currEdge < numEdges; currEdge++)
-		{
-			edgeNode = "edge";
-			edgeNode += std::to_string(currEdge);
-			nodeInfo->Attribute(edgeNode.c_str(), &edge);
-			if (navGraph.size() == 0)
-				break;
-			else
-				navGraph[navGraph.size() - 1].addEdge(edge);
-		}
-
-		nodeInfo = nodeInfo->NextSiblingElement("node_info");
+	nodeInfo->Attribute("posX", &posX);
+	nodeInfo->Attribute("posY", &posY);
+	nodeInfo->Attribute("index", &tileid);
+	nodeInfo->Attribute("numEdges", &numEdges);
+	const char* tagCheck = nodeInfo->GetText();
+	if (tagCheck != nullptr)
+	{
+	string tag = tagCheck;
+	if (tag == "alarm")
+	alarmNode = tileid;
+	if (tag == "home")
+	homeNode = tileid;
 	}
 
 
+	SGD::Point* temp = new SGD::Point((float)posX * tileWidth + (tileWidth *0.5f), (float)posY * tileHeight + (tileHeight *0.5f));
+	navGraph.addVertex(temp);
+
+
+	for (int currEdge = 0; currEdge < numEdges; currEdge++)
+	{
+	edgeNode = "edge";
+	edgeNode += std::to_string(currEdge);
+	nodeInfo->Attribute(edgeNode.c_str(), &edge);
+	if (navGraph.size() == 0)
+	break;
+	else
+	navGraph[navGraph.size() - 1].addEdge(edge);
+	}
+
+	nodeInfo = nodeInfo->NextSiblingElement("node_info");
+	}
+	
+ // 
+#endif
+	
 
 	TiXmlElement * objectList = root->FirstChildElement("objects_list");
 	TiXmlElement * objectInfo = objectList->FirstChildElement("object_info");
@@ -266,41 +236,22 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 			waypoints.push_back(index);
 		}
 
-		//Depending on the object type, Take in events made
-		switch (tileid)
-		{
-			case BaseObject::OBJ_TURRET:
-			{
-				std::string events = NameandEvents;
-				size_t startIndex = events.find_first_of((char)'//');
-				std::string tileEvents = events.substr(startIndex + 1, events.length());
-				Event1 = tileEvents;
-			}
-			break;
-
-
-			case BaseObject::OBJ_DOOR:
-			{
-				std::string events = NameandEvents;
-				size_t startIndex = events.find_first_of((char)'//');
-				std::string tileEvents = events.substr(startIndex + 1, events.length());
-				startIndex = tileEvents.find_first_of((char)'//');
-				Event1 = tileEvents.substr(0, startIndex);
-				Event2 = tileEvents.substr(startIndex + 1, tileEvents.length());
-			}
-			break;
-
-		};
+		
 
 
 		switch (tileid)
 		{
-			case BaseObject::OBJ_TURRET:
-				//CreateEnemy(tileid, homeNode, alarmNode, startState, { (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities, player, navGraph, FOVCollidables, waypoints, Event1.c_str());
+			case BaseObject::OBJ_SANDBAG:
+				CreateSandBags({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
 				break;
-			
-			case BaseObject::OBJ_POWERCORE:
-				//CreatePickUp(tileid, { (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+			case BaseObject::OBJ_BARBEDWIRE:
+				CreateBarbedWire({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+				break;
+			case BaseObject::OBJ_LANDMINE:
+				CreateLandMine({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+				break;
+			case BaseObject::OBJ_SPAWNER:
+				CreateSpawner({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
 				break;
 		};
 
@@ -309,21 +260,12 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 
 	}
 
-	/*for (unsigned int currRect = 0; currRect < tStruct.pTiles.GetRectVec().size(); currRect++)
-	{
-	if (tStruct.layers.GetTiles()[currRect].GetTileID() == 16)
-	FOVCollidables.push_back(new SGD::Rectangle(tStruct.pTiles.GetRectVec()[currRect]));
-
-
-	}*/
+	
 
 
 	//Player* player = dynamic_cast<Player*>(m_pPlayer);
 
-	if (currProfile.CheckPointReached == true)
-	{
-		player->SetPosition(m_ptCheckPtStart);
-	}
+	
 
 	tileTexture = pGraphics->LoadTexture(tStruct.map.GetTilePath().c_str());
 
@@ -365,8 +307,8 @@ void MapManager::Update(float elapsedTime)
 
 	startCol = (int)cameraRect.left / (int)tStruct.tileSize.width;
 	startRow = (int)cameraRect.top / (int)tStruct.tileSize.height;
-	endCol = ((int)Game::GetInstance()->GetScreenWidth() + cameraRect.left) / (int)tStruct.tileSize.width;
-	endRow = ((int)Game::GetInstance()->GetScreenHeight() + cameraRect.top) / (int)tStruct.tileSize.height;
+	endCol = (int)(Game::GetInstance()->GetScreenWidth() + cameraRect.left) / (int)tStruct.tileSize.width;
+	endRow = (int)(Game::GetInstance()->GetScreenHeight() + cameraRect.top) / (int)tStruct.tileSize.height;
 	endRow++;
 	endCol++;
 	if (startCol < 0)
@@ -378,14 +320,14 @@ void MapManager::Update(float elapsedTime)
 	{
 		startRow = 0;
 	}
-	if (endCol > tStruct.map.GetMapWidth())
+	if (endCol > (int)tStruct.map.GetMapWidth())
 	{
-		endCol = tStruct.map.GetMapWidth();
+		endCol = (int)tStruct.map.GetMapWidth();
 	}
 
-	if (endRow > tStruct.map.GetMapHeight())
+	if (endRow > (int)tStruct.map.GetMapHeight())
 	{
-		endRow = tStruct.map.GetMapHeight();
+		endRow = (int)tStruct.map.GetMapHeight();
 	}
 }
 
@@ -420,42 +362,63 @@ Player* MapManager::CreatePlayer(int type, SGD::Point pos, EntityManager* entiti
 
 	return player;
 }
-void MapManager::CreateEnvironment(int type, SGD::Point pos, vector<SGD::Rectangle*>& FOVCollidables, EntityManager* entities, const char* event)
+
+void MapManager::CreateLandMine(SGD::Point pos, EntityManager* entities)
 {
-	/*
+	LandMine* landmine = new LandMine;
+	landmine->SetPosition(pos);
+	entities->AddEntity(landmine, BUCKET_ENVIRO);
+	landmine->Release();
+	landmine = nullptr;
+	
+}
+void MapManager::CreateSandBags(SGD::Point pos, EntityManager* entities)
+{
+	SandBag* sandbag = new SandBag;
+	sandbag->SetPosition(pos);
+	entities->AddEntity(sandbag, BUCKET_ENVIRO);
+	sandbag->Release();
+	sandbag = nullptr;
+}
+void MapManager::CreateBarbedWire(SGD::Point pos, EntityManager* entities)
+{
+	BarbedWire* barbedWire = new BarbedWire;
+	barbedWire->SetPosition(pos);
+	entities->AddEntity(barbedWire, BUCKET_ENVIRO);
+	barbedWire->Release();
+	barbedWire = nullptr;
+}
+
+void MapManager::CreateSpawner(SGD::Point pos, EntityManager* entities)
+{
+	Spawner* spawnPoint = new Spawner;
+	spawnPoint->SetPosition(pos);
+	SpawnManager::GetInstance()->GetSpawnVector().push_back(spawnPoint);
+	entities->AddEntity(spawnPoint, BUCKET_NONCOLLIDABLE);
+
+	spawnPoint->Release();
+	spawnPoint = nullptr;
+
+}
+
+void MapManager::CreateEnvironment(SGD::Point pos, EntityManager* entities)
+{
+	
 	EnvironmentalObject* object = new EnvironmentalObject;
 	object->SetPosition(pos);
-	if (event != nullptr)
-	{
-		if (type == BaseObject::OBJ_WALL && event == "PlayerOnly")
-		{
-			object->SetType(BaseObject::OBJ_PLAYERCOLLISION);
-		}
-		else
-		{
-			object->RegisterForEvent(event);
-			object->SetEvent(event);
-			object->SetType(type);
-		}
-		
-	}
-		
+	object->SetSize({ 32, 32 });
 	
-	object->SetSize({ 64, 64 });
-	SGD::Rectangle* collider = new SGD::Rectangle(object->GetRect());
-
-	FOVCollidables.push_back(collider);
 	entities->AddEntity(object, BUCKET_ENVIRO);
 	object->Release();
 	object = nullptr;
-	*/
+	
 
 }
 
 
 void  MapManager::LoadLevelPaths(void)
 {
-	ifstream fin("resource/config/levels/levelPaths.txt", std::ios::out);
+	ifstream fin("resource/config/levels/levelPaths.txt", std::ios::in);
 
 	if (fin.is_open())
 	{
