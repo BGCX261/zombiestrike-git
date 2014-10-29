@@ -7,16 +7,18 @@ protected:
 
 	int type = OBJ_BASE;
 	std::string event;
-	bool isActive = false;
+	bool isActive = true;
 
 public:
 	EnvironmentalObject();
 	virtual ~EnvironmentalObject();
 	virtual void Render(void) {}
-	virtual SGD::Rectangle GetRect(void) const;
+//	virtual SGD::Rectangle GetRect(void) const;
 	virtual int GetType(void) const { return type; }
 	virtual void HandleCollision(const IBase* pOther) override;
-	
+	bool IsActive(void) const { return isActive; }
+
+	void SetActive(bool state) { isActive = state; }
 
 	void SetType(int newType) { type = newType; }
 	void SetEvent(std::string str_Event) { event = str_Event; }

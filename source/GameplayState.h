@@ -111,4 +111,8 @@ private:
 	// World size
 	SGD::Size				m_szWorldSize		= { 1024, 768 };
 
+
+	//Textures
+	SGD::HTexture	m_hReticleImage = SGD::INVALID_HANDLE;
+
 };

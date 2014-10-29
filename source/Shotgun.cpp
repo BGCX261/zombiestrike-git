@@ -17,6 +17,7 @@ Shotgun::Shotgun(MovingObject* owner)
 	lifeTime = 400.0f;
 	m_pOwner = owner;
 	owner->AddRef();
+
 	
 }
 

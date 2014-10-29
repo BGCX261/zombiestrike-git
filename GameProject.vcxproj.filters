@@ -58,6 +58,9 @@
     <Filter Include="Game States">
       <UniqueIdentifier>{929c6766-a868-4f4b-9f78-8d866d1af800}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Spawn System">
+      <UniqueIdentifier>{795ccc67-7355-475d-a38f-7e53ca9ec7c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SGD Wrappers\SGD_AudioManager.cpp">
@@ -231,8 +234,6 @@
     <ClCompile Include="source\CreateSniperBullet.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
-    <ClCompile Include="source\FlameThrower.cpp" />
-    <ClCompile Include="source\CreateFlameBullet.cpp" />
     <ClCompile Include="source\ExplodingZombie.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
@@ -247,6 +248,42 @@
     </ClCompile>
     <ClCompile Include="source\Zombie.cpp">
       <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LandMine.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SandBag.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BarbedWire.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateExplodingZombieMsg.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateFastZombieMsg.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateFatZombieMsg.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateFlameBullet.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateTankZombieMsg.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateZombieMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FlameThrower.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Spawner.cpp">
+      <Filter>Spawn System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SpawnManager.cpp">
+      <Filter>Spawn System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,9 +440,6 @@
     <ClInclude Include="source\SLList.h">
       <Filter>Wrappers\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="source\Timer.h">
-      <Filter>Wrappers\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="source\PickUp.h">
       <Filter>Objects\Environment</Filter>
     </ClInclude>
@@ -463,8 +497,6 @@
     <ClInclude Include="source\CreateSniperBullet.h">
       <Filter>Messages</Filter>
     </ClInclude>
-    <ClInclude Include="source\FlameThrower.h" />
-    <ClInclude Include="source\CreateFlameBullet.h" />
     <ClInclude Include="source\ExplodingZombie.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
@@ -479,6 +511,45 @@
     </ClInclude>
     <ClInclude Include="source\Zombie.h">
       <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LandMine.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SandBag.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\BarbedWire.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateExplodingZombieMsg.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateFastZombieMsg.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateFatZombieMsg.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateFlameBullet.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateTankZombieMsg.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateZombieMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FlameThrower.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Spawner.h">
+      <Filter>Spawn System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SpawnManager.h">
+      <Filter>Spawn System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ShopStructures.h">
+      <Filter>Tile System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

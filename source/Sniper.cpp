@@ -15,6 +15,7 @@ Sniper::Sniper(MovingObject* owner)
 	lifeTime = 1000.0f;
 	m_pOwner = owner;
 	owner->AddRef();
+
 }
 
 

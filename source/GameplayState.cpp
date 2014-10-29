@@ -108,14 +108,23 @@
 	// player animations
 	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
 	pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
+	pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
+	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
+	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
+
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
 
-
+	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/crosshair.png");
 
 
 	// enemy animations
-	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "zombie1");
-	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "zombie2");
+	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
+	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
+	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
+	pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
+
+	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+
 
 
 	// other animations
@@ -301,7 +310,7 @@
 /*virtual*/ void GameplayState::Render( void )
 {
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
-
+	
 
 	// Draw background
 	MapManager::GetInstance()->Render();
@@ -324,6 +333,12 @@
 	SGD::Rectangle staminaRect = { lefts, tops, lefts + m_pPlayer->GetAttributes()->m_fCurrStamina / m_pPlayer->GetAttributes()->m_fMaxStamina * 150, tops + 25 };
 	pGraphics->DrawRectangle(staminaRect, { 0, 255, 0 });
 */
+	// Draw the reticle
+	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+	float		retscale = 0.8f;
+
+	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
+	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
 }
 
 
@@ -499,6 +514,7 @@ void GameplayState::CreateBullet(Weapon* owner)
 
 		bullet->SetDirection(direction);
 		bullet->SetRotation(owner->GetOwner()->GetRotation());
+		bullet->SetDamage(owner->GetDamage());
 
 		bullet->SetVelocity(direction * owner->GetSpeed());
 		bullet->SetAnimation("bullet");
@@ -546,6 +562,7 @@ void GameplayState::CreateShotGunBullet(Weapon* owner)
 
 		bullet->SetDirection(direction);
 		bullet->SetRotation(owner->GetOwner()->GetRotation());
+		bullet->SetDamage(owner->GetDamage());
 
 		bullet->SetVelocity(direction * owner->GetSpeed());
 		bullet->SetAnimation("bullet");
@@ -567,6 +584,7 @@ void GameplayState::CreateARBullet(Weapon* owner)
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
+	bullet->SetDamage(owner->GetDamage());
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();
@@ -580,7 +598,7 @@ void GameplayState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetPosition(owner->GetOwner()->GetPosition());
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
 	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
-
+	bullet->SetDamage(owner->GetDamage());
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
@@ -595,7 +613,7 @@ void	GameplayState::CreateZombie(Spawner* owner)
 	Zombie* zombie = new Zombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+	zombie->SetAnimation("slowZombie");
 	zombie->SetMoveSpeed(64.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");
@@ -609,7 +627,7 @@ void			GameplayState::CreateFatZombie(Spawner* owner)
 	FatZombie* zombie = new FatZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+	zombie->SetAnimation("fatZombie");
 	zombie->SetMoveSpeed(32.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");
@@ -623,7 +641,7 @@ void			GameplayState::CreateFastZombie(Spawner* owner)
 	FastZombie* zombie = new FastZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+	zombie->SetAnimation("fastZombie");
 	zombie->SetMoveSpeed(96.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");
@@ -638,7 +656,7 @@ void			GameplayState::CreateExplodingZombie(Spawner* owner)
 	ExplodingZombie* zombie = new ExplodingZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+	zombie->SetAnimation("explodingZombie");
 	zombie->SetMoveSpeed(64.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");
@@ -652,7 +670,7 @@ void			GameplayState::CreateTankZombie(Spawner* owner)
 	TankZombie* zombie = new TankZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+	zombie->SetAnimation("tankZombie");
 	zombie->SetMoveSpeed(32.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");

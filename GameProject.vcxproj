@@ -230,6 +230,7 @@
     <ClInclude Include="source\RotateTowardsBehavior.h" />
     <ClInclude Include="source\RunToBehavior.h" />
     <ClInclude Include="source\SandBag.h" />
+    <ClInclude Include="source\ShopStructures.h" />
     <ClInclude Include="source\Shotgun.h" />
     <ClInclude Include="source\SLList.h" />
     <ClInclude Include="source\Sniper.h" />

@@ -17,7 +17,7 @@
 #include "AssaultRifle.h"
 #include "Sniper.h"
 #include "FlameThrower.h"
-
+#include "EnvironmentalObject.h"
 
 
 
@@ -272,18 +272,18 @@ void Player::Render()
 	case ObjectType::OBJ_SLOW_ZOMBIE:
 	//_bIsAlive = false;
 		break;
-
-	case ObjectType::OBJ_TURRET:
-	case ObjectType::OBJ_BULLET:
-	case ObjectType::OBJ_WALL:
-	case ObjectType::OBJ_DOOR:
-		MovingObject::HandleCollision(pOther);
+	case OBJ_BARBEDWIRE:
+	case OBJ_SANDBAG:
+	{
+		const EnvironmentalObject* temp = dynamic_cast<const EnvironmentalObject*>(pOther);
+		if (temp->IsActive())
+			MovingObject::HandleCollision(pOther);
+	}
 		break;
 
-	case ObjectType::OBJ_TRIGGER:
-	case ObjectType::OBJ_IGNORE:
-	case ObjectType::OBJ_PLAYERCOLLISION:
-		break;
+
+	
+
 	}
 }
 

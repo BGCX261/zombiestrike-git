@@ -16,6 +16,7 @@ FlameThrower::FlameThrower(MovingObject* owner) : Listener(this)
 	lifeTime = 700.0f;
 	m_pOwner = owner;
 	owner->AddRef();
+
 }
 
 

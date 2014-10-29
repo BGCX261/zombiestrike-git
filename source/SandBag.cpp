@@ -28,6 +28,7 @@ void SandBag::Render( void )
 		return;
 
 
+
 	BaseObject::Render();
 }
 
