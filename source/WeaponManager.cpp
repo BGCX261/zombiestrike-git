@@ -4,6 +4,7 @@
 #include "Shotgun.h"
 #include "Sniper.h"
 #include "FlameThrower.h"
+#include "P90.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
@@ -11,34 +12,143 @@
 #include "GameplayState.h"
 #include "Game.h"
 
-#include <cassert>
+#include "BitmapFont.h"
 
-vector<Weapon*> SelectWeapon(int index);
+#include <cassert>
+#include <sstream>
+
+using namespace std;
+
+/*static*/ WeaponManager* WeaponManager::GetInstance(void)
+{
+	static WeaponManager s_Instance;
+	return &s_Instance;
+}
 
 void WeaponManager::Initialize()
 {
 	m_hHudWpn = &GameplayState::GetInstance()->m_hHudWpn;
 
+	for (unsigned int i = 0; i < 4; i++)
+	{
+		drawIndex[i] = i;
+	}
+	
 	AddWeapons(CreatePistol());
 	AddWeapons(CreateShotgun());
+	AddWeapons(CreateP90());
 	AddWeapons(CreateAssaultRifle());
 	AddWeapons(CreateSniper());
-	AddWeapons(CreateFlameThrower());
+	
+	//AddWeapons(CreateFlameThrower());
 
-	curIndex = 2;
+	curIndex = 0;
 }
 
 void WeaponManager::Render()
 {
 	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
 
-	if (m_vWeapons[curIndex]->GetType() == Type::ASSUALT_RIFLE)
-	{
-		SGD::Rectangle arRect = SetImageRect(300, 300, 0, 1);
+	const BitmapFont * bFont = Game::GetInstance()->GetFont();
 
-		pGraphics->DrawTextureSection(*m_hHudWpn, { Game::GetInstance()->GetScreenWidth() - 300.0f, Game::GetInstance()->GetScreenHeight() - 300.0f },
-			arRect);
+	SGD::Rectangle equipRect = { Game::GetInstance()->GetScreenWidth() - 275.0f, Game::GetInstance()->GetScreenHeight() - 150.0f, Game::GetInstance()->GetScreenWidth() - 10, Game::GetInstance()->GetScreenHeight() - 10 };
+
+	pGraphics->DrawRectangle(equipRect, { 255, 255, 255 }, { 0, 0, 255 });
+
+	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
+	{
+		if (m_vWeapons[curIndex]->GetType() == m_vWeapons[i]->GetType() && m_vWeapons[curIndex]->GetObtained() == true)
+		{
+			pGraphics->DrawTextureSection(*m_hHudWpn, { Game::GetInstance()->GetScreenWidth() - 150.0f, Game::GetInstance()->GetScreenHeight() - 150.0f },
+				m_vWeapons[curIndex]->GetRenderRect(), {}, {}, {}, { .5f, .5f });
+
+			stringstream magSize;
+			magSize << m_vWeapons[curIndex]->GetMagSize() << "|";
+
+			SGD::Point magPos = { equipRect.left + 10, equipRect.bottom - 50 };
+			SGD::Point ammoPos = { equipRect.left + 71, equipRect.bottom - 50 };
+
+			if (m_vWeapons[curIndex]->GetMagSize() < 10)
+			{
+				magPos.x = equipRect.left + 28;
+			}
+
+			bFont->Draw(magSize.str().c_str(), magPos, 1.0f, { 0, 0, 0 });
+
+			stringstream ammoCap;
+			ammoCap << m_vWeapons[curIndex]->GetAmmoCap();
+
+			if (m_vWeapons[curIndex]->GetAmmoCap() < 10)
+			{
+				ammoPos.x = equipRect.left + 58;
+			}
+
+			else if (m_vWeapons[curIndex]->GetAmmoCap() < 100)
+			{
+				ammoPos.x = equipRect.left + 68;
+			}
+
+			else
+			{
+				ammoPos.x = equipRect.left + 71;
+			}
+
+			bFont->Draw(ammoCap.str().c_str(), ammoPos, 1.0f, { 0, 0, 0 });
+		}
 	}
+
+	int size = 75;
+	float sWidth = Game::GetInstance()->GetScreenWidth() / 2 - size * 2 - 50;
+	float sHeight = Game::GetInstance()->GetScreenHeight() - 10;
+
+
+	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
+	{		
+		SGD::Rectangle unEquip = { sWidth + size*i, sHeight - 75, sWidth + size*i + size, sHeight };
+		pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255});
+
+		if (m_vWeapons[i]->GetObtained() == true)
+		{
+			SGD::Rectangle imageRect = m_vWeapons[i]->GetRenderRect();
+
+			if (m_vWeapons[i]->GetType() == m_vWeapons[curIndex]->GetType())
+			{
+				pGraphics->DrawTextureSection(*m_hHudWpn, { sWidth + size*i, sHeight - size },
+					imageRect, {}, {}, {}, { .25f, .25f });
+			}
+
+			else
+			{
+				pGraphics->DrawTextureSection(*m_hHudWpn, { sWidth + size*i, sHeight - size },
+					imageRect, {}, {}, {}, { .25f, .25f });
+				pGraphics->DrawRectangle({ sWidth + size*i, sHeight - size, sWidth + size*i + size, sHeight }, { 175, 0, 0, 0 });
+			}
+		}
+
+		stringstream drawIndex;
+		drawIndex << i + 1;
+
+		bFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, .5f, { 150, 155, 155 });
+
+	}
+
+	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
+	{
+		SGD::Rectangle unEquip = { sWidth + size*i, sHeight - 75, sWidth + size*i + size, sHeight };
+
+		if (m_vWeapons[i]->GetType() == m_vWeapons[curIndex]->GetType())
+		{
+			pGraphics->DrawRectangle({ sWidth + size*i, sHeight - size, sWidth + size*i + size, sHeight }, { 0, 0, 0, 0 }, { 0, 100, 0 },6);
+		}
+
+		stringstream drawIndex;
+		drawIndex << i + 1;
+		
+		bFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5}, .5f, { 150, 155, 155 });
+	}
+
+	
+
 }
 
 void WeaponManager::Input()
@@ -53,6 +163,11 @@ void WeaponManager::Input()
 		{
 			curIndex = m_vWeapons.size() - 1;
 		}
+
+		//for (unsigned int i = 0; i < 4; i++)
+		//{
+		//	drawIndex[i]--;
+		//}
 
 		while (m_vWeapons[curIndex]->GetObtained() != true)
 		{
@@ -89,11 +204,24 @@ void WeaponManager::Input()
 void WeaponManager::Update(float dt)
 {
 	Input();
+
+	for (unsigned int i = 0; i < 4; i++)
+	{
+		if (drawIndex[i])
+		{
+
+		}
+	}
 }
 
 void WeaponManager::Exit()
 {
+	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
+	{
+		m_vWeapons.pop_back();
+	}
 
+	m_vWeapons.clear();
 }
 
 void WeaponManager::SelectWeapon(int index)
@@ -113,6 +241,11 @@ Weapon * WeaponManager::CreateAssaultRifle()
 {
 	AssaultRifle * ar = new AssaultRifle();
 
+	ar->SetObtained(true);
+	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
+	ar->SetMagSize(30);
+	ar->SetAmmoCap(150);
+
 	return ar;
 }
 
@@ -121,6 +254,9 @@ Weapon * WeaponManager::CreatePistol()
 	Pistol * pistol = new Pistol();
 
 	pistol->SetObtained(true);
+	pistol->SetRenderRect(SetImageRect(300, 300, 1, 3));
+	pistol->SetMagSize(10);
+	pistol->SetAmmoCap(50);
 
 	return pistol;
 }
@@ -129,12 +265,22 @@ Weapon * WeaponManager::CreateShotgun()
 {
 	Shotgun * shotty = new Shotgun();
 
+	shotty->SetObtained(true);
+	shotty->SetRenderRect(SetImageRect(300, 300, 0, 2));
+	shotty->SetMagSize(6);
+	shotty->SetAmmoCap(24);
+
 	return shotty;
 }
 
 Weapon * WeaponManager::CreateSniper()
 {
 	Sniper * snip = new Sniper();
+
+	snip->SetObtained(true);
+	snip->SetRenderRect(SetImageRect(300, 300, 4, 0));
+	snip->SetMagSize(8);
+	snip->SetAmmoCap(16);
 
 	return snip;
 }
@@ -145,6 +291,19 @@ Weapon * WeaponManager::CreateFlameThrower()
 
 	return ft;
 }
+
+Weapon * WeaponManager::CreateP90()
+{
+	P90 * p90 = new P90();
+
+	p90->SetObtained(true);
+	p90->SetRenderRect(SetImageRect(300, 300, 3, 0));
+	p90->SetMagSize(32);
+	p90->SetAmmoCap(96);
+
+	return p90;
+}
+
 
 SGD::Rectangle WeaponManager::SetImageRect(float width, float height, unsigned int row, unsigned int col)
 {

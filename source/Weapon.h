@@ -9,7 +9,10 @@ class Weapon
 
 protected:
 
-	enum Type { PISTOL, SHOTGUN, ASSUALT_RIFLE, SNIPER, NONE};
+	enum Type { PISTOL, SMG, SHOTGUN, ASSUALT_RIFLE, SPECIAL, NONE};
+	enum Gun {GLOCK, REVOLVER, MAC10, TECH9, SP90 , SAWN, PUMP, AUTO, M16, LMG, AK47, GLAUNCHER, MINIGUN, FTHROWER};
+
+	SGD::Rectangle m_rRenderRect;
 
 	int type = NONE;
 	int currAmmo = 0;
@@ -21,7 +24,7 @@ protected:
 	float damage = 0.0f;
 	float speed = 0.0f;
 	float lifeTime = 0.0f;
-	bool m_bIsEquipped = false;
+	bool m_bIsAutomatic = false;
 	bool m_bIsObtained = false;
 	Timer reloadTimer;
 	Timer recoilTimer;
@@ -37,6 +40,7 @@ public:
 	virtual void Update(float dt);
 
 	//Accessors
+	SGD::Rectangle GetRenderRect() { return m_rRenderRect; }
 	int GetType(void) const { return type; }
 	int GetMagSize(void) const { return magSize; }
 	int GetAmmoCap(void) const { return ammoCapactity; }
@@ -47,11 +51,14 @@ public:
 	float GetSpeed(void) const { return speed; }
 	float GetLifeTime(void) const { return lifeTime; }
 	bool GetObtained() { return m_bIsObtained; }
+	bool GetAutomatic() { return m_bIsAutomatic; }
 	Timer GetReloadTimer(void) const { return reloadTimer; }
 	Timer GetRecoilTimer(void) const { return recoilTimer; }
 	Player* GetOwner(void) const { return m_pOwner; }
 
 	//Mutators
+
+	void SetRenderRect(SGD::Rectangle rRect) { m_rRenderRect = rRect; }
 	void SetType(int _type)  { type = _type; }
 	void SetMagSize(int _magSize)  { magSize = _magSize; }
 	void SetAmmoCap(int _ammoCap)  { ammoCapactity = _ammoCap; }
@@ -61,8 +68,8 @@ public:
 	void SetSpeed(float _speed)  { speed = _speed; }
 	void SetLifeTime(float _lifeTime)  { lifeTime = _lifeTime; }
 	void SetOwner(Player* owner);
-	void SetEquipped(bool isEquipped) { isEquipped = m_bIsEquipped; }
-	void SetObtained(bool isObtained) { isObtained = m_bIsObtained; }
+	void SetEquipped(bool isEquipped) { m_bIsAutomatic = isEquipped ; }
+	void SetObtained(bool isObtained) { m_bIsObtained = isObtained; }
 
 };
 

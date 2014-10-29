@@ -22,6 +22,7 @@
 #include "CreateARifleBullet.h"
 #include "CreateSniperBullet.h"
 
+#include "WeaponManager.h"
 
 #include "BitmapFont.h"
 
@@ -71,6 +72,8 @@
 	SGD::EventManager::GetInstance()->Initialize();
 	SGD::MessageManager::GetInstance()->Initialize( &MessageProc );
 
+	
+	
 
 	// Allocate the Entity Manager
 	m_pEntities = new EntityManager;
@@ -116,6 +119,7 @@
 	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/hudweapons.png");
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
 
+	WeaponManager::GetInstance()->Initialize();
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
@@ -123,8 +127,8 @@
 
 
 	// Create the main entities
-	Player* pPlayer = nullptr;// CreatePlayer();
-	//m_pEntities->AddEntity(pPlayer, EntityBucket::BUCKET_PLAYER);
+	//m_pPlayer = CreatePlayer();
+	//m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
 	//pPlayer->Release();
 	//pPlayer = nullptr;
 
@@ -208,7 +212,7 @@
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 	}
 
-
+	//WeaponManager::GetInstance()->Input();
 
 	/**********************************************************/
 	// Player Died!
@@ -238,6 +242,11 @@
 //	- update game entities
 /*virtual*/ void GameplayState::Update( float dt )
 {
+
+	Player* pPlayer = nullptr;// CreatePlayer();
+
+	WeaponManager::GetInstance()->Update(dt);
+
 	if (m_pPlayer == nullptr)
 		return;
 
@@ -246,7 +255,6 @@
 	{
 		// Update the entities
 		m_pEntities->UpdateAll(dt);
-
 
 		// Check collisions
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENEMIES);
@@ -265,7 +273,6 @@
 		// Process the events & messages
 		SGD::EventManager::GetInstance()->Update();
 		SGD::MessageManager::GetInstance()->Update();
-
 
 		// Update the Map Manager
 		MapManager::GetInstance()->Update(dt);
@@ -301,7 +308,7 @@
 	float tops	= 475;
 	float lefts	= 435;
 
-
+	WeaponManager::GetInstance()->Render();
 
 	if (m_pPlayer == nullptr)
 		return;
@@ -312,6 +319,8 @@
 
 	SGD::Rectangle staminaRect = { lefts, tops, lefts + m_pPlayer->GetAttributes()->m_fCurrStamina / m_pPlayer->GetAttributes()->m_fMaxStamina * 150, tops + 25 };
 	pGraphics->DrawRectangle(staminaRect, { 0, 255, 0 });
+
+	
 
 }
 

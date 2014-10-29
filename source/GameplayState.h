@@ -57,7 +57,6 @@ public:
 	void			CreateTurret	( SGD::Point pos, float rotation );
 	void			CreateBullet	( MovingObject* owner );
 
-
 	/**********************************************************/
 	// Assets
 	SGD::HAudio playerDeath			= SGD::INVALID_HANDLE;

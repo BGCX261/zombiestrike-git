@@ -7,16 +7,20 @@
 using namespace std;
 
 class WeaponManager : public Weapon
-{
+{   
+
 	vector<Weapon*> m_vWeapons;
 
 	int curIndex;
-
+	int drawIndex[4];
+	
 	SGD::HTexture * m_hHudWpn = nullptr;
 
 public:
 	WeaponManager() = default;
 	virtual ~WeaponManager() = default;
+
+	static WeaponManager* GetInstance(void);
 
 	////Accessors////
 	//Returns weapon vector
@@ -50,7 +54,7 @@ public:
 	Weapon * CreateShotgun();
 	Weapon * CreateSniper();
 	Weapon * CreateFlameThrower();
-
+	Weapon * CreateP90();
 
 };
 

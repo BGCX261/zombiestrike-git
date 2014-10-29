@@ -119,6 +119,7 @@
     <ClCompile Include="source\MapManager.cpp" />
     <ClCompile Include="source\MovingObject.cpp" />
     <ClCompile Include="source\OptionsState.cpp" />
+    <ClCompile Include="source\P90.cpp" />
     <ClCompile Include="source\PatrolBehavior.cpp" />
     <ClCompile Include="source\PauseState.cpp" />
     <ClCompile Include="source\PickSaveSlotState.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="source\MessageID.h" />
     <ClInclude Include="source\MovingObject.h" />
     <ClInclude Include="source\OptionsState.h" />
+    <ClInclude Include="source\P90.h" />
     <ClInclude Include="source\PatrolBehavior.h" />
     <ClInclude Include="source\PauseState.h" />
     <ClInclude Include="source\PickSaveSlotState.h" />
