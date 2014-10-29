@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include "MovingObject.h"
+#include "Weapon.h"
 #include "..\SGD Wrappers\SGD_InputManager.h"
 #include "DestroyObjectMessage.h"
 #include "Player.h"
@@ -47,8 +48,8 @@ PlayerController::~PlayerController()
 	
 
 
-	std::string animation = "";
-	animation = m_Player->m_bIsAlive == true ? m_Player->animation.m_strCurrAnimation : "playerDeath";
+//	std::string animation = "";
+	//animation = m_Player->m_bIsAlive == true ? m_Player->animation.m_strCurrAnimation : "playerDeath";
 
 
 	// player is walking(playerWalk) OR running(playerRun)
@@ -59,12 +60,12 @@ PlayerController::~PlayerController()
 			if (m_Player->m_Attributes.m_fCurrStamina > 0)
 			{
 				m_Player->m_bIsSprinting = true;
-				animation = "playerRun";
+				//animation = "playerRun";
 			}
 			else
 			{
 				m_Player->m_bIsSprinting = false;
-				animation = "playerWalk";
+			//	animation = "playerWalk";
 			}
 
 		}
@@ -72,7 +73,7 @@ PlayerController::~PlayerController()
 	else if ((pInput->IsKeyDown(SGD::Key::Shift) == false || pInput->IsButtonDown(0, 6) == false) && m_Player->m_bMoving == true && m_Player->m_bIsAlive == true)
 	{
 		m_Player->m_bIsSprinting = false;
-		animation = "playerWalk";
+	//	animation = "playerWalk";
 	} 
 
 
@@ -129,7 +130,7 @@ PlayerController::~PlayerController()
 	// player not moving
 	if (pInput->IsKeyDown(SGD::Key::W) == false && pInput->IsKeyDown(SGD::Key::A) == false && pInput->IsKeyDown(SGD::Key::S) == false && pInput->IsKeyDown(SGD::Key::D) == false)
 	{
-		animation = "playerIdle";
+		//animation = "playerIdle";
 		m_Player->m_bMoving = false;
 	}
 
@@ -144,6 +145,10 @@ PlayerController::~PlayerController()
 		m_Player->m_unCurrAbility = 3;
 
 
+	if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
+	{
+		m_Player->flameThrower->Fire(dt);
+	}
 
 	// player activates an ability
 	if ((pInput->IsKeyPressed(SGD::Key::Space) == true || pInput->IsButtonPressed(0, 0) == true) && m_Player->m_bIsAlive == true)
@@ -219,7 +224,7 @@ PlayerController::~PlayerController()
 			m_Player->SetVoice(pAudio->PlayAudio(*death, false)); //voice = pAudio->PlayAudio(*alarmSound, true);
 		pAudio->SetVoiceVolume(m_Player->GetVoice());
 
-		animation = "playerDeath";
+	//	animation = "playerDeath";
 		m_Player->SetVelocity({ 0, 0 });
 		m_Player->m_bMoving = false;
 		m_Player->m_bIsAlive = false;
@@ -230,25 +235,25 @@ PlayerController::~PlayerController()
 	if ((pInput->IsAnyKeyDown() == false || m_Player->m_bMoving == false) && m_Player->m_bIsAlive == true)
 	{
 		m_Player->SetVelocity({ 0, 0 });
-		animation = "playerIdle";
+	//	animation = "playerIdle";
 		m_Player->m_bMoving = false;
 	}
 
 	else if ((pInput->IsAnyKeyDown() == false || m_Player->m_bMoving == false) && m_Player->m_bIsAlive == false)
 	{
 		m_Player->SetVelocity({ 0, 0 });
-		animation = "playerDeath";
+	//	animation = "playerDeath";
 		m_Player->m_bMoving = false;
 	}
 
 
 
 
-	if (m_Player->GetAnimation() != animation)
-	{
-		m_Player->SetAnimation(animation);
-	}
-	
+	//if (m_Player->GetAnimation() != animation)
+	//{
+	//	m_Player->SetAnimation(animation);
+	//}
+	//
 
 
 	return true;

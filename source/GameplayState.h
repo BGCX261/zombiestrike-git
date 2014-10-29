@@ -12,8 +12,8 @@
 /**************************************************************/
 // Forward class declaration
 class BaseObject;
-class MovingObject;
-class Player;
+class Weapon;
+class Spawner;
 class EntityManager;
 class BehaviorManager;
 class AnimationManager;
@@ -52,10 +52,23 @@ public:
 	/**********************************************************/
 	// Factory Methods:
 	BaseObject*		CreatePlayer	( void );
-	void			CreateZombie	( SGD::Point pos, Player* player );
+	void			CreateZombie	(Spawner* owner );
+	void			CreateFatZombie(Spawner* owner);
+	void			CreateFastZombie(Spawner* owner);
+	void			CreateExplodingZombie(Spawner* owner);
+	void			CreateTankZombie(Spawner* owner);
+
+
 	void			CreatePickUp	( int type, SGD::Point pos );
 	void			CreateTurret	( SGD::Point pos, float rotation );
-	void			CreateBullet	( MovingObject* owner );
+	void			CreateBullet	( Weapon* owner );
+	void			CreateShotGunBullet	(Weapon* owner);
+	void			CreateARBullet	(Weapon* owner);
+	void			CreateSnipeBullet	(Weapon* owner);
+	void			CreateFireBullet(Weapon* owner);
+	
+
+
 
 	/**********************************************************/
 	// Assets
@@ -89,7 +102,7 @@ private:
 	AnimationManager*		m_pAnimManager		= nullptr;
 
 	//BaseObject*				m_pPlayer			= nullptr;
-	Player*					m_pPlayer			= nullptr;
+	BaseObject*					m_pPlayer			= nullptr;
 	GameCamera				camera;
 
 

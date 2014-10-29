@@ -56,7 +56,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	srand( (unsigned int)time( nullptr ) );
 	rand();
 
-	
+	ShowCursor(false);
 	// Initialize the wrappers
 	if( SGD::AudioManager::GetInstance()->Initialize() == false 
 		|| SGD::GraphicsManager::GetInstance()->Initialize( false ) == false
@@ -259,14 +259,14 @@ void Game::LoadProfiles( void )
 		if (fin.is_open())
 		{
 			getline(fin, profiles[i - 1].path);
-			fin >> profiles[i - 1].MaxEnergy;
+			/*fin >> profiles[i - 1].MaxEnergy;
 			fin >> profiles[i - 1].MaxStamina;
 			fin >> profiles[i - 1].CamoMultiplier;
 			fin >> profiles[i - 1].SpeedMultiplier;
 			fin >> profiles[i - 1].RadarMultiplier;
 			fin >> profiles[i - 1].LevelsComplete;
 			fin >> profiles[i - 1].m_bHasKey;
-			fin >> profiles[i - 1].CheckPointReached;
+			fin >> profiles[i - 1].CheckPointReached;*/
 			fin.close();
 		}
 	}
@@ -300,7 +300,7 @@ void Game::CreateProfiles()
 
 
 	// Add the company and game information
-	pathtowrite += "\\GoldNuggetGames\\SilentStrike\\";
+	pathtowrite += "\\GoldNuggetGames\\ZombieStrike\\";
 
 
 	// Create our directory
@@ -319,14 +319,14 @@ void Game::CreateProfiles()
 			{
 				fout << filePath << '\n';
 
-				fout << profiles[i - 1].MaxEnergy << '\n';
+				/*fout << profiles[i - 1].MaxEnergy << '\n';
 				fout << profiles[i - 1].MaxStamina << '\n';
 				fout << profiles[i - 1].CamoMultiplier << '\n';
 				fout << profiles[i - 1].SpeedMultiplier << '\n';
 				fout << profiles[i - 1].RadarMultiplier << '\n';
 				fout << profiles[i - 1].LevelsComplete << '\n';
 				fout << profiles[i - 1].m_bHasKey << '\n';
-				fout << profiles[i - 1].CheckPointReached;
+				fout << profiles[i - 1].CheckPointReached;*/
 				fout.close();
 			}
 		}

@@ -1,5 +1,5 @@
 #include "BarbedWire.h"
-
+#include "../SGD Wrappers/SGD_Event.h"
 
 BarbedWire::BarbedWire()
 {
@@ -40,9 +40,14 @@ void BarbedWire::HandleCollision( const IBase* pOther )
 
 
 	// zombie collision
-	if (pOther->GetType() == ObjectType::OBJ_ZOMBIE)
+	if (pOther->GetType() == ObjectType::OBJ_SLOW_ZOMBIE || 
+		pOther->GetType() == ObjectType::OBJ_FAST_ZOMBIE || 
+		pOther->GetType() == ObjectType::OBJ_FAT_ZOMBIE )
 	{
 		// lower zombie HP by damage
+		SGD::Event* msg = new SGD::Event("BARBWIRE");
+		msg->QueueEvent(pOther);
+		msg = nullptr;
 
 	}
 

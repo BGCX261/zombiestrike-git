@@ -2,12 +2,13 @@
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "Timer.h"
 
-class Player;
+class MovingObject;
 
 class Weapon
 {
 
 protected:
+
 
 	enum Type { PISTOL, SMG, SHOTGUN, ASSUALT_RIFLE, SPECIAL, NONE};
 	enum Gun {GLOCK, REVOLVER, MAC10, TECH9, SP90 , SAWN, PUMP, AUTO, M16, LMG, AK47, GLAUNCHER, MINIGUN, FTHROWER};
@@ -17,8 +18,10 @@ protected:
 	int type = NONE;
 	int currAmmo = 0;
 	int magSize = 0;
+	int totalAmmo = 0;
 	int ammoCapactity = 0;
 	int penetratingPower = 0;
+	float bulletSpread = 0.0f;
 	float recoilTime = 0.0f;
 	float reloadTime = 0.0f;
 	float damage = 0.0f;
@@ -28,12 +31,15 @@ protected:
 	bool m_bIsObtained = false;
 	Timer reloadTimer;
 	Timer recoilTimer;
-	Player* m_pOwner = nullptr;
+	MovingObject* m_pOwner = nullptr;
+	
 
 
 
 public:
+	
 	Weapon();
+
 	virtual ~Weapon();
 
 	virtual void Fire(float dt);
@@ -50,13 +56,16 @@ public:
 	float GetDamage(void) const { return damage; }
 	float GetSpeed(void) const { return speed; }
 	float GetLifeTime(void) const { return lifeTime; }
+	float GetBulletSpread(void) const { return bulletSpread; }
+	int GetTotalAmmo(void) const { return totalAmmo; }
 	bool GetObtained() { return m_bIsObtained; }
 	bool GetAutomatic() { return m_bIsAutomatic; }
 	Timer GetReloadTimer(void) const { return reloadTimer; }
 	Timer GetRecoilTimer(void) const { return recoilTimer; }
-	Player* GetOwner(void) const { return m_pOwner; }
+	MovingObject* GetOwner(void) const { return m_pOwner; }
 
 	//Mutators
+	void AddAmmo(int addedAmmo) { totalAmmo += addedAmmo; }
 
 	void SetRenderRect(SGD::Rectangle rRect) { m_rRenderRect = rRect; }
 	void SetType(int _type)  { type = _type; }
@@ -67,7 +76,8 @@ public:
 	void SetDamage(float _damage)  { damage = _damage; }
 	void SetSpeed(float _speed)  { speed = _speed; }
 	void SetLifeTime(float _lifeTime)  { lifeTime = _lifeTime; }
-	void SetOwner(Player* owner);
+	void SetBulletSpread(float _bulletSpread) { bulletSpread = _bulletSpread; }
+	void SetOwner(MovingObject* owner);
 	void SetEquipped(bool isEquipped) { m_bIsAutomatic = isEquipped ; }
 	void SetObtained(bool isObtained) { m_bIsObtained = isObtained; }
 

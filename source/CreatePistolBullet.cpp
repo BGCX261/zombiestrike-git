@@ -1,17 +1,17 @@
 #include "CreatePistolBullet.h"
 #include "MessageID.h"
-#include "MovingObject.h"
+#include "Weapon.h"
 
-CreatePistolBullet::CreatePistolBullet(MovingObject* owner) : Message(MessageID::MSG_CREATE_PSTL_BLT)
+CreatePistolBullet::CreatePistolBullet(Weapon* owner) : Message(MessageID::MSG_CREATE_PSTL_BLT)
 {
 	m_pOwner = owner;
-	m_pOwner->AddRef();
+
 
 }
 
 
 CreatePistolBullet::~CreatePistolBullet()
 {
-	m_pOwner->Release();
+	
 	m_pOwner = nullptr;
 }

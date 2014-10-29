@@ -1,17 +1,17 @@
 #pragma once
 #include "..\SGD Wrappers\SGD_Message.h"
 
-class MovingObject;
+class Weapon;
 
 class CreateShotgunBullet : public SGD::Message
 {
 public:
-	CreateShotgunBullet(MovingObject*);
+	CreateShotgunBullet(Weapon*);
 	virtual ~CreateShotgunBullet();
 
-	MovingObject* GetOwner(void) const { return m_pOwner; }
+	Weapon* GetOwner(void) const { return m_pOwner; }
 
 private:
-	MovingObject* m_pOwner = nullptr;
+	Weapon* m_pOwner = nullptr;
 };
 

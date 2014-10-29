@@ -55,3 +55,13 @@ C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectR
 C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo11\silent-strike\Tools\TileEditor\obj\Debug\TileEditor.pdb
 C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo11\silent-strike\Tools\TileEditor\TileEditor.exe
 C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo\repo11\silent-strike\Tools\TileEditor\TileEditor.pdb
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\TileEditor.exe.config
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\obj\Debug\TileEditor.exe
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\obj\Debug\TileEditor.pdb
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\obj\Debug\TileEditor.csprojResolveAssemblyReference.cache
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\obj\Debug\TileEditor.Form1.resources
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\obj\Debug\TileEditor.ModalControl.resources
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\obj\Debug\TileEditor.Properties.Resources.resources
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\obj\Debug\TileEditor.csproj.GenerateResource.Cache
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\TileEditor.exe
+C:\Users\fullsail\Desktop\ZombieStrike\Tools\TileEditor\TileEditor.pdb

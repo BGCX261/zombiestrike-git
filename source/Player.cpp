@@ -12,6 +12,14 @@
 #include <fstream>
 #include "../SGD Wrappers/SGD_Handle.h"
 
+#include "Pistol.h"
+#include "Shotgun.h"
+#include "AssaultRifle.h"
+#include "Sniper.h"
+#include "FlameThrower.h"
+
+
+
 
 Player::Player() : Listener(this)
 {
@@ -36,6 +44,15 @@ Player::Player() : Listener(this)
 	float rectheight	= 112.0f;
 	m_rectAbilityPoint	= { 13.0f, Game::GetInstance()->GetScreenHeight() - 112.0f + 6.0f };
 	m_rectAbilitySize	= { 95.0f, 102.0f };
+
+	pistol = new Pistol(this);
+	shotgun = new Shotgun(this);
+	arifle = new AssaultRifle(this);
+	sniper = new Sniper(this);
+	flameThrower = new FlameThrower(this);
+
+
+
 }
 
 Player::~Player()
@@ -47,7 +64,11 @@ Player::~Player()
 	UnregisterFromEvent("CHECKPOINT");
 	UnregisterFromEvent("LEVEL_COMPLETE");
 	UnregisterFromEvent("HIT");
-
+	delete pistol;
+	delete arifle;
+	delete shotgun;
+	delete sniper;
+	delete flameThrower;
 	hud.Shutdown();
 
 }
@@ -59,58 +80,64 @@ Player::~Player()
 		controller->Update(dt, this, { 0, 0 });
 
 
-	// camo
-	if (m_bIsCamoOn)
-	{
-		// minus energy this frame
-		m_Attributes.m_fCurrEnergy -= (m_Attributes.m_fCamoCost * m_Attributes.m_fCamoMultiplier) * dt;
+	//// camo
+	//if (m_bIsCamoOn)
+	//{
+	//	// minus energy this frame
+	//	m_Attributes.m_fCurrEnergy -= (m_Attributes.m_fCamoCost * m_Attributes.m_fCamoMultiplier) * dt;
 
-		// cap energy at min
- 		if (m_Attributes.m_fCurrEnergy < 0.0f)
-		{
-			m_Attributes.m_fCurrEnergy = 0.0f;
-			m_bIsCamoOn = false;
-		}
-	}
-
-
-	// sprinting
-	if (m_bIsSprinting == true)
-	{
-		// minus stamina this frame
-		m_Attributes.m_fCurrStamina -= (m_Attributes.m_fSprintCost * dt);
-
-		// cap stamina at min
-		if (m_Attributes.m_fCurrStamina < 0.0f)
-		{
-			m_Attributes.m_fCurrStamina = 0.0f;
-			m_bIsSprinting = false;
-		}
-	}
+	//	// cap energy at min
+ //		if (m_Attributes.m_fCurrEnergy < 0.0f)
+	//	{
+	//		m_Attributes.m_fCurrEnergy = 0.0f;
+	//		m_bIsCamoOn = false;
+	//	}
+	//}
 
 
-	// recover energy
-	if (m_Attributes.m_fCurrEnergy < m_Attributes.m_fMaxEnergy && m_bIsCamoOn == false)
-	{
-		if (energyReboot.Update(dt))
-			m_Attributes.m_fCurrEnergy += m_Attributes.m_fEnergyRegen * dt;
+	//// sprinting
+	//if (m_bIsSprinting == true)
+	//{
+	//	// minus stamina this frame
+	//	m_Attributes.m_fCurrStamina -= (m_Attributes.m_fSprintCost * dt);
 
-		if (m_Attributes.m_fCurrEnergy > m_Attributes.m_fMaxEnergy)
-			m_Attributes.m_fCurrEnergy = m_Attributes.m_fMaxEnergy;
-	}
+	//	// cap stamina at min
+	//	if (m_Attributes.m_fCurrStamina < 0.0f)
+	//	{
+	//		m_Attributes.m_fCurrStamina = 0.0f;
+	//		m_bIsSprinting = false;
+	//	}
+	//}
 
 
-	// recover stamina
-	if (m_Attributes.m_fCurrStamina < m_Attributes.m_fMaxStamina)
-	{
-		if (m_bIsSprinting == false)
-		{
-			if (m_bMoving == false)
-				m_Attributes.m_fCurrStamina += m_Attributes.m_fStaminaRegen * dt;
-			else
-				m_Attributes.m_fCurrStamina += (m_Attributes.m_fStaminaRegen *0.5f) * dt;
-		}
-	}
+	//// recover energy
+	//if (m_Attributes.m_fCurrEnergy < m_Attributes.m_fMaxEnergy && m_bIsCamoOn == false)
+	//{
+	//	if (energyReboot.Update(dt))
+	//		m_Attributes.m_fCurrEnergy += m_Attributes.m_fEnergyRegen * dt;
+
+	//	if (m_Attributes.m_fCurrEnergy > m_Attributes.m_fMaxEnergy)
+	//		m_Attributes.m_fCurrEnergy = m_Attributes.m_fMaxEnergy;
+	//}
+
+
+	//// recover stamina
+	//if (m_Attributes.m_fCurrStamina < m_Attributes.m_fMaxStamina)
+	//{
+	//	if (m_bIsSprinting == false)
+	//	{
+	//		if (m_bMoving == false)
+	//			m_Attributes.m_fCurrStamina += m_Attributes.m_fStaminaRegen * dt;
+	//		else
+	//			m_Attributes.m_fCurrStamina += (m_Attributes.m_fStaminaRegen *0.5f) * dt;
+	//	}
+	//}
+
+	pistol->Update(dt);
+	shotgun->Update(dt);
+	arifle->Update(dt);
+	sniper->Update(dt);
+	flameThrower->Update(dt);
 
 
 	// hud skills rects
@@ -242,13 +269,12 @@ void Player::Render()
 {
 	switch (pOther->GetType())
 	{
-	case ObjectType::OBJ_ZOMBIE:
-		m_bIsAlive = false;
+	case ObjectType::OBJ_SLOW_ZOMBIE:
+	//_bIsAlive = false;
 		break;
 
 	case ObjectType::OBJ_TURRET:
 	case ObjectType::OBJ_BULLET:
-	case ObjectType::OBJ_POWERCORE:
 	case ObjectType::OBJ_WALL:
 	case ObjectType::OBJ_DOOR:
 		MovingObject::HandleCollision(pOther);
