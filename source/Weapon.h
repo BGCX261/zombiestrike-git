@@ -46,6 +46,7 @@ public:
 	virtual void Update(float dt);
 
 	//Accessors
+	int GetCurrAmmo() const { return currAmmo; }
 	SGD::Rectangle GetRenderRect() { return m_rRenderRect; }
 	int GetType(void) const { return type; }
 	int GetMagSize(void) const { return magSize; }
@@ -67,6 +68,8 @@ public:
 	//Mutators
 	void AddAmmo(int addedAmmo) { totalAmmo += addedAmmo; }
 
+	void SetTotalAmmo(int tammo) { totalAmmo = tammo; }
+	void SetCurrAmmo(int cammo) { currAmmo = cammo; }
 	void SetRenderRect(SGD::Rectangle rRect) { m_rRenderRect = rRect; }
 	void SetType(int _type)  { type = _type; }
 	void SetMagSize(int _magSize)  { magSize = _magSize; }

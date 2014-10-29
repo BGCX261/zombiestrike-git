@@ -135,6 +135,7 @@
 	playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
+	m_hWpnSwitch		= pAudio->LoadAudio("resource/audio/switchweapon.wav");
 
 	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/hudweapons.png");
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
@@ -184,6 +185,7 @@
 	pAudio->UnloadAudio(playerDeath);
 	pAudio->UnloadAudio(cannot_use_skill);
 	pAudio->UnloadAudio(footstep);
+	pAudio->UnloadAudio(m_hWpnSwitch);
 
 	camera.SetTarget(nullptr);
 
@@ -514,6 +516,7 @@ void GameplayState::CreateBullet(Weapon* owner)
 
 		bullet->SetDirection(direction);
 		bullet->SetRotation(owner->GetOwner()->GetRotation());
+		bullet->SetDamage(owner->GetDamage());
 
 		bullet->SetVelocity(direction * owner->GetSpeed());
 		bullet->SetAnimation("bullet");
@@ -561,6 +564,8 @@ void GameplayState::CreateShotGunBullet(Weapon* owner)
 
 		bullet->SetDirection(direction);
 		bullet->SetRotation(owner->GetOwner()->GetRotation());
+		bullet->SetDamage(owner->GetDamage());
+
 
 		bullet->SetVelocity(direction * owner->GetSpeed());
 		bullet->SetAnimation("bullet");
@@ -582,6 +587,8 @@ void GameplayState::CreateARBullet(Weapon* owner)
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
+	bullet->SetDamage(owner->GetDamage());
+
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();
@@ -599,6 +606,8 @@ void GameplayState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
+	bullet->SetDamage(owner->GetDamage());
+
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();

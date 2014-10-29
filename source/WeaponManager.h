@@ -2,6 +2,7 @@
 #include "Weapon.h"
 #include "../SGD Wrappers/SGD_Declarations.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include <vector>
 
 class Player;
@@ -15,7 +16,12 @@ class WeaponManager : public Weapon
 
 	int curIndex;
 	
+	//Image Assets
 	SGD::HTexture * m_hHudWpn = nullptr;
+	
+	//Sound Assets
+	SGD::HAudio * m_hWpnSwitch = nullptr;
+	
 
 public:
 

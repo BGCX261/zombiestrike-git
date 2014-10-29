@@ -40,7 +40,7 @@ private:
 	
 
 
-	int m_nWaveEnemies = 0;
+	int m_nWaveEnemies = 10;
 	int m_nNumEnemies = 0;
 	int m_nZombieType = 0;
 	Timer m_fSpawnTimer;

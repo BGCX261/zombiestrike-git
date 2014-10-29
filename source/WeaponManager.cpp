@@ -29,6 +29,7 @@ using namespace std;
 void WeaponManager::Initialize(MovingObject& owner)
 {
 	m_hHudWpn = &GameplayState::GetInstance()->m_hHudWpn;
+	m_hWpnSwitch = &GameplayState::GetInstance()->m_hWpnSwitch;
 
 	SetOwner(&owner);
 	
@@ -61,12 +62,12 @@ void WeaponManager::Render()
 				m_vWeapons[curIndex]->GetRenderRect(), {}, {}, {}, { .5f, .5f });
 
 			stringstream magSize;
-			magSize << m_vWeapons[curIndex]->GetMagSize() << "|";
+			magSize << m_vWeapons[curIndex]->GetCurrAmmo() << "|";
 
 			SGD::Point magPos = { equipRect.left + 10, equipRect.bottom - 50 };
 			SGD::Point ammoPos = { equipRect.left + 71, equipRect.bottom - 50 };
 
-			if (m_vWeapons[curIndex]->GetMagSize() < 10)
+			if (m_vWeapons[curIndex]->GetCurrAmmo() < 10)
 			{
 				magPos.x = equipRect.left + 28;
 			}
@@ -74,14 +75,14 @@ void WeaponManager::Render()
 			bFont->Draw(magSize.str().c_str(), magPos, 1.0f, { 0, 0, 0 });
 
 			stringstream ammoCap;
-			ammoCap << m_vWeapons[curIndex]->GetAmmoCap();
+			ammoCap << m_vWeapons[curIndex]->GetTotalAmmo();
 
-			if (m_vWeapons[curIndex]->GetAmmoCap() < 10)
+			if (m_vWeapons[curIndex]->GetTotalAmmo() < 10)
 			{
 				ammoPos.x = equipRect.left + 58;
 			}
 
-			else if (m_vWeapons[curIndex]->GetAmmoCap() < 100)
+			else if (m_vWeapons[curIndex]->GetTotalAmmo() < 100)
 			{
 				ammoPos.x = equipRect.left + 68;
 			}
@@ -91,7 +92,14 @@ void WeaponManager::Render()
 				ammoPos.x = equipRect.left + 71;
 			}
 
-			bFont->Draw(ammoCap.str().c_str(), ammoPos, 1.0f, { 0, 0, 0 });
+			if (m_vWeapons[curIndex]->GetType() == PISTOL)
+			{
+				bFont->Draw("INF", ammoPos, 1.0f, { 0, 0, 0 });
+			}
+
+			else
+				bFont->Draw(ammoCap.str().c_str(), ammoPos, 1.0f, { 0, 0, 0 });
+			
 		}
 	}
 
@@ -152,6 +160,7 @@ void WeaponManager::Render()
 void WeaponManager::Input()
 {
 	SGD::InputManager * pInput = SGD::InputManager::GetInstance();
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
 	if (pInput->IsKeyPressed(SGD::Key::Q) == true)
 	{
@@ -166,6 +175,11 @@ void WeaponManager::Input()
 		//{
 		//	drawIndex[i]--;
 		//}
+
+		if (pAudio->IsAudioPlaying(*m_hWpnSwitch) == false)
+		{
+			pAudio->PlayAudio(*m_hWpnSwitch, false);
+		}
 
 		while (m_vWeapons[curIndex]->GetObtained() != true)
 		{
@@ -185,6 +199,11 @@ void WeaponManager::Input()
 		if (curIndex > m_vWeapons.size() - 1)
 		{
 			curIndex = 0;
+		}
+
+		if (pAudio->IsAudioPlaying(*m_hWpnSwitch) == false)
+		{
+			pAudio->PlayAudio(*m_hWpnSwitch, false);
 		}
 
 		while (m_vWeapons[curIndex]->GetObtained() != true)
@@ -245,8 +264,8 @@ Weapon * WeaponManager::CreateAssaultRifle()
 	//ar->SetOwner(GetOwner());
 	ar->SetObtained(true);
 	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
-	ar->SetMagSize(30);
-	ar->SetAmmoCap(150);
+	ar->SetCurrAmmo(30);
+	ar->SetTotalAmmo(150);
 	
 
 	return ar;
@@ -259,8 +278,8 @@ Weapon * WeaponManager::CreatePistol()
 	//pistol->SetOwner(GetOwner());
 	pistol->SetObtained(true);
 	pistol->SetRenderRect(SetImageRect(300, 300, 1, 3));
-	pistol->SetMagSize(10);
-	pistol->SetAmmoCap(50);
+	pistol->SetCurrAmmo(10);
+	pistol->SetTotalAmmo(INT_MAX);
 
 	return pistol;
 }
@@ -272,8 +291,8 @@ Weapon * WeaponManager::CreateShotgun()
 	//shotty->SetOwner(GetOwner());
 	shotty->SetObtained(true);
 	shotty->SetRenderRect(SetImageRect(300, 300, 0, 2));
-	shotty->SetMagSize(6);
-	shotty->SetAmmoCap(24);
+	shotty->SetCurrAmmo(6);
+	shotty->SetTotalAmmo(24);
 
 	return shotty;
 }
@@ -285,8 +304,8 @@ Weapon * WeaponManager::CreateSniper()
 	//snip->SetOwner(GetOwner());
 	snip->SetObtained(true);
 	snip->SetRenderRect(SetImageRect(300, 300, 4, 0));
-	snip->SetMagSize(8);
-	snip->SetAmmoCap(16);
+	snip->SetCurrAmmo(8);
+	snip->SetTotalAmmo(16);
 
 	return snip;
 }
@@ -305,8 +324,8 @@ Weapon * WeaponManager::CreateP90()
 	//p90->SetOwner(GetOwner());
 	p90->SetObtained(true);
 	p90->SetRenderRect(SetImageRect(300, 300, 3, 0));
-	p90->SetMagSize(32);
-	p90->SetAmmoCap(96);
+	p90->SetCurrAmmo(32);
+	p90->SetTotalAmmo(96);
 
 	return p90;
 }
