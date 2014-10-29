@@ -1,4 +1,4 @@
-#define NUM_CHOICES		5
+#define NUM_CHOICES		6
 
 #include "MainMenuState.h"
 
@@ -205,8 +205,18 @@
 
 		switch (m_nCursor)
 		{
-		case MenuItems::PLAY_GAME:
+		case MenuItems::STORY_MODE:
 			{
+				GameplayState::GetInstance()->SetGameMode(true);
+				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
+				return true;
+			}
+			break;
+
+
+		case MenuItems::SURVIVAL_MODE:
+			{
+				GameplayState::GetInstance()->SetGameMode(false);
 				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
 				return true;
 			}
@@ -324,7 +334,7 @@
 
 
 	// Display the menu options centered at 1x scale
-	std::string menuitems[NUM_CHOICES] = { "Play Game", "How to Play", "Options", "Credits", "Exit" };
+	std::string menuitems[NUM_CHOICES] = { "Story Mode", "Survival Mode", "How to Play", "Options", "Credits", "Exit" };
 
 	float offset = 100.0F;
 	for (size_t i = 0; i < NUM_CHOICES; i++)

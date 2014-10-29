@@ -121,6 +121,7 @@
     <ClCompile Include="source\GameplayState.cpp" />
     <ClCompile Include="source\HowToPlayState.cpp" />
     <ClCompile Include="source\HUD.cpp" />
+    <ClCompile Include="source\IntroState.cpp" />
     <ClCompile Include="source\LandMine.cpp" />
     <ClCompile Include="source\LoseGameState.cpp" />
     <ClCompile Include="source\MainMenuState.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="source\HUD.h" />
     <ClInclude Include="source\IBase.h" />
     <ClInclude Include="source\IGameState.h" />
+    <ClInclude Include="source\IntroState.h" />
     <ClInclude Include="source\LandMine.h" />
     <ClInclude Include="source\LoseGameState.h" />
     <ClInclude Include="source\MainMenuState.h" />

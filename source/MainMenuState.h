@@ -45,7 +45,7 @@ private:
 
 	/**********************************************************/
 	// Cursor Index
-	enum MenuItems { PLAY_GAME, HOW_TO_PLAY, OPTIONS, CREDITS, EXIT };
+	enum MenuItems { STORY_MODE, SURVIVAL_MODE, HOW_TO_PLAY, OPTIONS, CREDITS, EXIT };
 
 	int		m_nCursor		= 0;
 	int		m_mPrevious		= 0;

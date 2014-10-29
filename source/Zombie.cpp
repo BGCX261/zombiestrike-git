@@ -62,6 +62,8 @@ void Zombie::RetrieveBehavior(std::string name)
 
 /*virtual*/ void Zombie::HandleCollision(const IBase* pOther)
 {
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
 	if (pOther->GetType() == OBJ_BULLET)
 	{
 		const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
@@ -71,6 +73,9 @@ void Zombie::RetrieveBehavior(std::string name)
 		{
 			isAlive = false;
 		}
+
+		if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->zombie_pain) == false)
+			pAudio->PlayAudio(GameplayState::GetInstance()->zombie_pain, false);
 	}
 	else if (pOther->GetType() == OBJ_BARBEDWIRE)
 	{

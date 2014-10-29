@@ -49,6 +49,9 @@ public:
 	SGD::Size		GetWorldSize	( void )	{ return m_szWorldSize; }
 	void			PauseAudio		( bool );
 
+	bool			GetGameMode		( void ) const	{ return m_bStoryMode; }
+	void			SetGameMode		( bool m )		{ m_bStoryMode = m; }
+
 
 	/**********************************************************/
 	// Factory Methods:
@@ -79,6 +82,20 @@ public:
 	SGD::HAudio footstep			= SGD::INVALID_HANDLE;
 	SGD::HAudio turretfire			= SGD::INVALID_HANDLE;
 
+	SGD::HAudio storyMusic			= SGD::INVALID_HANDLE;
+	SGD::HAudio survivalMusic		= SGD::INVALID_HANDLE;
+	SGD::HAudio zombie_pain			= SGD::INVALID_HANDLE;
+	SGD::HAudio bullet_hit_zombie	= SGD::INVALID_HANDLE;
+	SGD::HAudio out_of_ammo			= SGD::INVALID_HANDLE;
+
+	SGD::HAudio pistol_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio shotgun_fire		= SGD::INVALID_HANDLE;
+	SGD::HAudio rifle_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio sniper_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio flamethrower_fire	= SGD::INVALID_HANDLE;
+
+
+
 
 private:
 	/**********************************************************/
@@ -98,7 +115,7 @@ private:
 
 	/**********************************************************/
 	// Game Entities
-	enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PICKUPS, BUCKET_TURRETS };
+	enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PICKUPS, BUCKET_TURRETS, BUCKET_ENVIRO };
 	EntityManager*			m_pEntities			= nullptr;
 	AnimationManager*		m_pAnimManager		= nullptr;
 
@@ -110,5 +127,11 @@ private:
 	/**********************************************************/
 	// World size
 	SGD::Size				m_szWorldSize		= { 1024, 768 };
+
+
+
+	/**********************************************************/
+	// Game mode: Story/Survival
+	bool					m_bStoryMode		= true;
 
 };

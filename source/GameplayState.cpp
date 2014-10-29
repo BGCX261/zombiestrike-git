@@ -126,14 +126,29 @@
 
 	MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetProfile(), m_pEntities);
 	SpawnManager::GetInstance()->Activate();
+
+
 	// Music
+	storyMusic		= pAudio->LoadAudio("resource/audio/AmbienceDrama.xwm");
+	survivalMusic	= pAudio->LoadAudio("resource/audio/AmbienceDungeon.xwm");
+	m_bStoryMode == true ? pAudio->PlayAudio(storyMusic, true) : pAudio->PlayAudio(survivalMusic, true);
 
 
 	// SFX
 	playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
+	zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");
+	bullet_hit_zombie	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
+	out_of_ammo			= pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
+
+	pistol_fire			= pAudio->LoadAudio("resource/audio/pistol_fire.wav");
+	shotgun_fire		= pAudio->LoadAudio("resource/audio/shotgun_fire.wav");
+	rifle_fire			= pAudio->LoadAudio("resource/audio/rifle_fire.wav");
+	sniper_fire			= pAudio->LoadAudio("resource/audio/sniper_fire.wav");
+	flamethrower_fire	= pAudio->LoadAudio("resource/audio/flamethrower_fire.wav");
+
 
 
 	// Setup the camera
@@ -172,9 +187,27 @@
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
 
 
+	if (pAudio->IsAudioPlaying(storyMusic) == true)
+		pAudio->StopAudio(storyMusic);
+	if (pAudio->IsAudioPlaying(survivalMusic) == true)
+		pAudio->StopAudio(survivalMusic);
+
+	pAudio->UnloadAudio(storyMusic);
+	pAudio->UnloadAudio(survivalMusic);
+
 	pAudio->UnloadAudio(playerDeath);
 	pAudio->UnloadAudio(cannot_use_skill);
 	pAudio->UnloadAudio(footstep);
+	pAudio->UnloadAudio(zombie_pain);
+	pAudio->UnloadAudio(bullet_hit_zombie);
+	pAudio->UnloadAudio(out_of_ammo);
+
+	pAudio->UnloadAudio(pistol_fire);
+	pAudio->UnloadAudio(shotgun_fire);
+	pAudio->UnloadAudio(rifle_fire);
+	pAudio->UnloadAudio(sniper_fire);
+	pAudio->UnloadAudio(flamethrower_fire);
+
 
 	camera.SetTarget(nullptr);
 
@@ -270,6 +303,7 @@
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_BULLETS);
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PICKUPS);
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
+		//m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENVIRO);
 
 
 		// Center camera on the player

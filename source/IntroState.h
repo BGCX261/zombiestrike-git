@@ -3,12 +3,12 @@
 #include "IGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"			// uses HTexture & HAudio
 
-class WinGameState : public IGameState
+class IntroState : public IGameState
 {
 public:
 	/**********************************************************/
 	// Singleton Accessor
-	static WinGameState* GetInstance( void );
+	static IntroState* GetInstance( void );
 
 	
 	/**********************************************************/
@@ -24,17 +24,11 @@ public:
 private:
 	/**********************************************************/
 	// SINGLETON!
-	WinGameState( void )			= default;
-	virtual ~WinGameState( void )	= default;
+	IntroState( void )			= default;
+	virtual ~IntroState( void )	= default;
 
-	WinGameState( const WinGameState& )				= delete;	
-	WinGameState& operator= ( const WinGameState& )	= delete;
-
-
-
-	/**********************************************************/
-	// Cursor Index
-	int		m_nCursor		= 0;
+	IntroState( const IntroState& )				= delete;	
+	IntroState& operator= ( const IntroState& )	= delete;
 
 
 

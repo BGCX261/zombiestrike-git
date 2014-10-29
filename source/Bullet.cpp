@@ -6,6 +6,7 @@
 #include "AnimationManager.h"
 #include "DestroyObjectMessage.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 Bullet::~Bullet()
 {
@@ -28,6 +29,9 @@ Bullet::~Bullet()
 
 /*virtual*/ void Bullet::HandleCollision(const IBase* pOther)	/*override*/
 {
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
+
 	// player
 	if (pOther->GetType() == OBJ_SLOW_ZOMBIE ||
 		pOther->GetType() == OBJ_FAST_ZOMBIE || 
@@ -37,8 +41,9 @@ Bullet::~Bullet()
 	{
 		if (GetOwner() != pOther)
 		{
-			
-			
+			if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->bullet_hit_zombie) == false)
+				pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_zombie, false);
+
 			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 			dMsg->QueueMessage();
 			dMsg = nullptr;
