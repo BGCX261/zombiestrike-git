@@ -249,7 +249,9 @@
     <ClCompile Include="source\FlameThrower.cpp">
       <Filter>Weapons</Filter>
     </ClCompile>
-    <ClCompile Include="source\P90.cpp" />
+    <ClCompile Include="source\P90.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -483,7 +485,9 @@
     <ClInclude Include="source\FlameThrower.h">
       <Filter>Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="source\P90.h" />
+    <ClInclude Include="source\P90.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
