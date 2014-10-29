@@ -12,11 +12,13 @@ Pistol::Pistol(MovingObject* owner)
 	ammoCapactity = INT_MAX;
 	recoilTime = .33f;
 	bulletSpread = 5.0f;
+
 	damage = 34.0f;
 	speed = 600.0f;
 	lifeTime = 700.0f;
 	m_pOwner = owner;
-	owner->AddRef();
+
+	m_pOwner->AddRef();
 
 }
 

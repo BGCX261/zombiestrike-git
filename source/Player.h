@@ -54,11 +54,11 @@ class Player : public MovingObject, public SGD::Listener
 	GamerProfile	profile;
 	Attributes		m_Attributes;
 
-	Weapon* pistol = nullptr;
-	Weapon* shotgun = nullptr;
-	Weapon* arifle = nullptr;
-	Weapon* sniper = nullptr;
-	Weapon* flameThrower = nullptr;
+	//Weapon* pistol = nullptr;
+	//Weapon* shotgun = nullptr;
+	//Weapon* arifle = nullptr;
+	//Weapon* sniper = nullptr;
+	//Weapon* flameThrower = nullptr;
 
 
 

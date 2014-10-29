@@ -9,7 +9,6 @@
 #include "MapManager.h"
 
 
-
 /**************************************************************/
 // Forward class declaration
 class BaseObject;
@@ -71,14 +70,15 @@ public:
 
 
 
-
 	/**********************************************************/
 	// Assets
 	SGD::HAudio playerDeath			= SGD::INVALID_HANDLE;
 	SGD::HAudio cannot_use_skill	= SGD::INVALID_HANDLE;
 	SGD::HAudio footstep			= SGD::INVALID_HANDLE;
 	SGD::HAudio turretfire			= SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWpnSwitch		= SGD::INVALID_HANDLE;
 
+	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
 
 private:
 	/**********************************************************/

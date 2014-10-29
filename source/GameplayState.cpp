@@ -25,6 +25,7 @@
 #include "Spawner.h"
 #include "SpawnManager.h"
 
+#include "WeaponManager.h"
 #include "CreateZombieMessage.h"
 #include "CreateFastZombieMsg.h"
 #include "CreateFatZombieMsg.h"
@@ -87,6 +88,8 @@
 	SGD::EventManager::GetInstance()->Initialize();
 	SGD::MessageManager::GetInstance()->Initialize( &MessageProc );
 
+	
+	
 
 	// Allocate the Entity Manager
 	m_pEntities = new EntityManager;
@@ -104,7 +107,6 @@
 	SGD::InputManager*		pInput				= SGD::InputManager::GetInstance();
 	AnimationManager*		pAnimationManager	= AnimationManager::GetInstance();
 
-
 	// player animations
 	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
 	pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
@@ -118,6 +120,7 @@
 
 
 	// enemy animations
+
 	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
 	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
 	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
@@ -142,8 +145,12 @@
 	playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
+	m_hWpnSwitch		= pAudio->LoadAudio("resource/audio/switchweapon.wav");
+
+	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/hudweapons.png");
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
 
+	
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
@@ -154,8 +161,10 @@
 
 	m_pPlayer = CreatePlayer();
 	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
-	
 
+	MovingObject * pPlayer = dynamic_cast<MovingObject*>(m_pPlayer);
+	
+	WeaponManager::GetInstance()->Initialize(*pPlayer);
 
 }
 
@@ -179,11 +188,14 @@
 
 	
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
+	pGraphics->UnloadTexture(m_hHudWpn);
+
 
 
 	pAudio->UnloadAudio(playerDeath);
 	pAudio->UnloadAudio(cannot_use_skill);
 	pAudio->UnloadAudio(footstep);
+	pAudio->UnloadAudio(m_hWpnSwitch);
 
 	camera.SetTarget(nullptr);
 
@@ -192,8 +204,9 @@
 
 	// Terminate the Behavior Manager
 	BehaviorManager::GetInstance()->Terminate();
-
-
+	
+	WeaponManager::GetInstance()->Exit();
+	
 	// Deallocate the Entity Manager
 	m_pEntities->RemoveAll();
 	delete m_pEntities;
@@ -209,7 +222,7 @@
 	MapManager::GetInstance()->UnloadLevel();
 	AnimationManager::GetInstance()->Shutdown();
 
-
+	
 
 	// Terminate & deallocate the SGD wrappers
 	SGD::EventManager::GetInstance()->Terminate();
@@ -237,7 +250,7 @@
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 	}
 
-
+	//WeaponManager::GetInstance()->Input();
 
 	/**********************************************************/
 	// Player Died!
@@ -266,7 +279,10 @@
 //	- update game entities
 /*virtual*/ void GameplayState::Update( float dt )
 {
+	WeaponManager::GetInstance()->Update(dt);
+
 	Player* player = dynamic_cast<Player*>(m_pPlayer);
+
 	if (player->isLevelCompleted() == false)
 	{
 		// Update the entities
@@ -327,12 +343,17 @@
 	float tops	= 475;
 	float lefts	= 435;
 
-	/*SGD::Rectangle energyRect = { left, top, left + m_pPlayer->GetAttributes()->m_fCurrEnergy / m_pPlayer->GetAttributes()->m_fMaxEnergy * 150, top + 25 };
+	WeaponManager::GetInstance()->Render();
+
+	///////OLD EnergyBar Render///////
+	/*
 	pGraphics->DrawRectangle(energyRect, { 0, 0, 255 });
 
 	SGD::Rectangle staminaRect = { lefts, tops, lefts + m_pPlayer->GetAttributes()->m_fCurrStamina / m_pPlayer->GetAttributes()->m_fMaxStamina * 150, tops + 25 };
 	pGraphics->DrawRectangle(staminaRect, { 0, 255, 0 });
-*/
+	*/
+	
+
 	// Draw the reticle
 	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
 	float		retscale = 0.8f;
@@ -478,9 +499,6 @@ void GameplayState::CreatePickUp( int type, SGD::Point pos )
 	//	pickup->SetAnimation("stimPack");
 	//	break;
 
-	//default:
-	//	break;
-	//}
 
 
 	m_pEntities->AddEntity(pickup, EntityBucket::BUCKET_PICKUPS);
@@ -564,6 +582,7 @@ void GameplayState::CreateShotGunBullet(Weapon* owner)
 		bullet->SetRotation(owner->GetOwner()->GetRotation());
 		bullet->SetDamage(owner->GetDamage());
 
+
 		bullet->SetVelocity(direction * owner->GetSpeed());
 		bullet->SetAnimation("bullet");
 
@@ -586,6 +605,7 @@ void GameplayState::CreateARBullet(Weapon* owner)
 	bullet->SetAnimation("bullet");
 	bullet->SetDamage(owner->GetDamage());
 
+
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();
 	bullet = nullptr;
@@ -602,6 +622,8 @@ void GameplayState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
+	bullet->SetDamage(owner->GetDamage());
+
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();
@@ -613,6 +635,7 @@ void	GameplayState::CreateZombie(Spawner* owner)
 	Zombie* zombie = new Zombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
+
 	zombie->SetAnimation("slowZombie");
 	zombie->SetMoveSpeed(64.0f);
 	zombie->SetTarget(m_pPlayer);
@@ -627,6 +650,7 @@ void			GameplayState::CreateFatZombie(Spawner* owner)
 	FatZombie* zombie = new FatZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
+
 	zombie->SetAnimation("fatZombie");
 	zombie->SetMoveSpeed(32.0f);
 	zombie->SetTarget(m_pPlayer);
@@ -641,6 +665,7 @@ void			GameplayState::CreateFastZombie(Spawner* owner)
 	FastZombie* zombie = new FastZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
+	
 	zombie->SetAnimation("fastZombie");
 	zombie->SetMoveSpeed(96.0f);
 	zombie->SetTarget(m_pPlayer);
@@ -656,6 +681,7 @@ void			GameplayState::CreateExplodingZombie(Spawner* owner)
 	ExplodingZombie* zombie = new ExplodingZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
+
 	zombie->SetAnimation("explodingZombie");
 	zombie->SetMoveSpeed(64.0f);
 	zombie->SetTarget(m_pPlayer);
