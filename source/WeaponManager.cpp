@@ -1,4 +1,5 @@
 #include "WeaponManager.h"
+#include "MovingObject.h"
 #include "AssaultRifle.h"
 #include "Pistol.h"
 #include "Shotgun.h"
@@ -25,14 +26,11 @@ using namespace std;
 	return &s_Instance;
 }
 
-void WeaponManager::Initialize()
+void WeaponManager::Initialize(MovingObject& owner)
 {
 	m_hHudWpn = &GameplayState::GetInstance()->m_hHudWpn;
 
-	for (unsigned int i = 0; i < 4; i++)
-	{
-		drawIndex[i] = i;
-	}
+	SetOwner(&owner);
 	
 	AddWeapons(CreatePistol());
 	AddWeapons(CreateShotgun());
@@ -205,23 +203,26 @@ void WeaponManager::Update(float dt)
 {
 	Input();
 
-	for (unsigned int i = 0; i < 4; i++)
+	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
 	{
-		if (drawIndex[i])
-		{
-
-		}
+		m_vWeapons[i]->Update(dt);
 	}
+	
 }
 
 void WeaponManager::Exit()
 {
 	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
 	{
-		m_vWeapons.pop_back();
+		delete m_vWeapons[i];
+		m_vWeapons[i] = nullptr;
+
 	}
 
 	m_vWeapons.clear();
+
+	m_pOwner->Release();
+	m_pOwner = nullptr;
 }
 
 void WeaponManager::SelectWeapon(int index)
@@ -239,20 +240,23 @@ void WeaponManager::AddWeapons(Weapon* wpn)
 
 Weapon * WeaponManager::CreateAssaultRifle()
 {
-	AssaultRifle * ar = new AssaultRifle();
+	AssaultRifle * ar = new AssaultRifle(GetOwner());
 
+	//ar->SetOwner(GetOwner());
 	ar->SetObtained(true);
 	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
 	ar->SetMagSize(30);
 	ar->SetAmmoCap(150);
+	
 
 	return ar;
 }
 
 Weapon * WeaponManager::CreatePistol()
 {
-	Pistol * pistol = new Pistol();
-
+	Pistol * pistol = new Pistol(GetOwner());
+	
+	//pistol->SetOwner(GetOwner());
 	pistol->SetObtained(true);
 	pistol->SetRenderRect(SetImageRect(300, 300, 1, 3));
 	pistol->SetMagSize(10);
@@ -263,8 +267,9 @@ Weapon * WeaponManager::CreatePistol()
 
 Weapon * WeaponManager::CreateShotgun()
 {
-	Shotgun * shotty = new Shotgun();
+	Shotgun * shotty = new Shotgun(GetOwner());
 
+	//shotty->SetOwner(GetOwner());
 	shotty->SetObtained(true);
 	shotty->SetRenderRect(SetImageRect(300, 300, 0, 2));
 	shotty->SetMagSize(6);
@@ -275,8 +280,9 @@ Weapon * WeaponManager::CreateShotgun()
 
 Weapon * WeaponManager::CreateSniper()
 {
-	Sniper * snip = new Sniper();
+	Sniper * snip = new Sniper(GetOwner());
 
+	//snip->SetOwner(GetOwner());
 	snip->SetObtained(true);
 	snip->SetRenderRect(SetImageRect(300, 300, 4, 0));
 	snip->SetMagSize(8);
@@ -287,15 +293,16 @@ Weapon * WeaponManager::CreateSniper()
 
 Weapon * WeaponManager::CreateFlameThrower()
 {
-	FlameThrower * ft = new FlameThrower();
+	FlameThrower * ft = new FlameThrower(GetOwner());
 
 	return ft;
 }
 
 Weapon * WeaponManager::CreateP90()
 {
-	P90 * p90 = new P90();
+	P90 * p90 = new P90(GetOwner());
 
+	//p90->SetOwner(GetOwner());
 	p90->SetObtained(true);
 	p90->SetRenderRect(SetImageRect(300, 300, 3, 0));
 	p90->SetMagSize(32);

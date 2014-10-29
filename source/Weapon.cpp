@@ -47,5 +47,7 @@ void Weapon::SetOwner(MovingObject* owner)
 		m_pOwner = nullptr; 
 	}
 	m_pOwner = owner;
+	if (m_pOwner != nullptr)
+		m_pOwner->AddRef();
 
 }

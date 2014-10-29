@@ -10,6 +10,8 @@
 #include "../SGD Wrappers/SGD_Handle.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
+#include "WeaponManager.h"
+
 
 PlayerController::PlayerController()
 {
@@ -147,7 +149,8 @@ PlayerController::~PlayerController()
 
 	if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
 	{
-		m_Player->flameThrower->Fire(dt);
+		//m_Player->flameThrower->Fire(dt);
+		WeaponManager::GetInstance()->GetSelected()->Fire(dt);
 	}
 
 	// player activates an ability

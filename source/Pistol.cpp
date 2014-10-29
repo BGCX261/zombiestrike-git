@@ -16,7 +16,7 @@ Pistol::Pistol(MovingObject* owner)
 	speed = 600.0f;
 	lifeTime = 700.0f;
 	m_pOwner = owner;
-	owner->AddRef();
+	m_pOwner->AddRef();
 }
 
 

@@ -28,28 +28,28 @@ Player::Player() : Listener(this)
 	//szSize = {68, 64};
 
 
-	RegisterForEvent("PICK_UP_CORE");
-	RegisterForEvent("PICK_UP_STIM");
-	RegisterForEvent("CHECKPOINT");
-	RegisterForEvent("LEVEL_COMPLETE");
-	RegisterForEvent("HIT");
+	//RegisterForEvent("PICK_UP_CORE");
+	//RegisterForEvent("PICK_UP_STIM");
+	//RegisterForEvent("CHECKPOINT");
+	//RegisterForEvent("LEVEL_COMPLETE");
+	//RegisterForEvent("HIT");
 
 
 	m_hDeath	= &GameplayState::GetInstance()->playerDeath;
 	voice		= SGD::INVALID_HANDLE;
 
 
-	hud.Initialize();
+	//hud.Initialize();
 	float rectoffset	= 9.0f;
 	float rectheight	= 112.0f;
 	m_rectAbilityPoint	= { 13.0f, Game::GetInstance()->GetScreenHeight() - 112.0f + 6.0f };
 	m_rectAbilitySize	= { 95.0f, 102.0f };
 
-	pistol = new Pistol(this);
-	shotgun = new Shotgun(this);
-	arifle = new AssaultRifle(this);
-	sniper = new Sniper(this);
-	flameThrower = new FlameThrower(this);
+	//pistol = new Pistol(this);
+	//shotgun = new Shotgun(this);
+	//arifle = new AssaultRifle(this);
+	//sniper = new Sniper(this);
+	//flameThrower = new FlameThrower(this);
 
 
 
@@ -59,17 +59,17 @@ Player::~Player()
 {
 	m_hDeath = nullptr;
 
-	UnregisterFromEvent("PICK_UP_CORE");
-	UnregisterFromEvent("PICK_UP_STIM");
-	UnregisterFromEvent("CHECKPOINT");
-	UnregisterFromEvent("LEVEL_COMPLETE");
-	UnregisterFromEvent("HIT");
-	delete pistol;
-	delete arifle;
-	delete shotgun;
-	delete sniper;
-	delete flameThrower;
-	hud.Shutdown();
+	//UnregisterFromEvent("PICK_UP_CORE");
+	//UnregisterFromEvent("PICK_UP_STIM");
+	//UnregisterFromEvent("CHECKPOINT");
+	//UnregisterFromEvent("LEVEL_COMPLETE");
+	//UnregisterFromEvent("HIT");
+	//delete pistol;
+	//delete arifle;
+	//delete shotgun;
+	//delete sniper;
+	//delete flameThrower;
+	//hud.Shutdown();
 
 }
 
@@ -133,11 +133,11 @@ Player::~Player()
 	//	}
 	//}
 
-	pistol->Update(dt);
-	shotgun->Update(dt);
-	arifle->Update(dt);
-	sniper->Update(dt);
-	flameThrower->Update(dt);
+	//pistol->Update(dt);
+	//shotgun->Update(dt);
+	//arifle->Update(dt);
+	//sniper->Update(dt);
+	//flameThrower->Update(dt);
 
 
 	// hud skills rects
@@ -192,7 +192,7 @@ void Player::Render()
 
 /*virtual*/ void Player::HandleEvent(const SGD::Event* pEvent)
 {
-	if (pEvent->GetEventID() == "PICK_UP_CORE")
+	/*if (pEvent->GetEventID() == "PICK_UP_CORE")
 	{
 		m_Attributes.m_fMaxEnergy += m_Attributes.m_fMaxEnergy * 0.10f;
 		m_Attributes.m_fCurrEnergy = m_Attributes.m_fMaxEnergy;
@@ -262,7 +262,7 @@ void Player::Render()
 		}
 
 		m_bLevelCompleted = true;
-	}
+	}*/
 }
 
 /*virtual*/ void Player::HandleCollision(const IBase* pOther) /*override*/

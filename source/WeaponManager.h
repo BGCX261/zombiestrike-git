@@ -4,6 +4,8 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include <vector>
 
+class Player;
+
 using namespace std;
 
 class WeaponManager : public Weapon
@@ -12,11 +14,11 @@ class WeaponManager : public Weapon
 	vector<Weapon*> m_vWeapons;
 
 	int curIndex;
-	int drawIndex[4];
 	
 	SGD::HTexture * m_hHudWpn = nullptr;
 
 public:
+
 	WeaponManager() = default;
 	virtual ~WeaponManager() = default;
 
@@ -40,7 +42,7 @@ public:
 
 	void SetPistolImage(SGD::HTexture * hWpn) { m_hHudWpn = hWpn; }
 
-	void Initialize();
+	void Initialize(MovingObject& owner);
 	void Render();
 	void Input();
 	void Update(float dt);

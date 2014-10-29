@@ -139,7 +139,7 @@
 	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/hudweapons.png");
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
 
-	WeaponManager::GetInstance()->Initialize();
+	
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
@@ -150,8 +150,10 @@
 
 	m_pPlayer = CreatePlayer();
 	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
-	
 
+	MovingObject * pPlayer = dynamic_cast<MovingObject*>(m_pPlayer);
+	
+	WeaponManager::GetInstance()->Initialize(*pPlayer);
 
 }
 
@@ -175,6 +177,8 @@
 
 	
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
+	pGraphics->UnloadTexture(m_hHudWpn);
+
 
 
 	pAudio->UnloadAudio(playerDeath);
@@ -188,8 +192,9 @@
 
 	// Terminate the Behavior Manager
 	BehaviorManager::GetInstance()->Terminate();
-
-
+	
+	WeaponManager::GetInstance()->Exit();
+	
 	// Deallocate the Entity Manager
 	m_pEntities->RemoveAll();
 	delete m_pEntities;
@@ -205,7 +210,7 @@
 	MapManager::GetInstance()->UnloadLevel();
 	AnimationManager::GetInstance()->Shutdown();
 
-
+	
 
 	// Terminate & deallocate the SGD wrappers
 	SGD::EventManager::GetInstance()->Terminate();
@@ -262,13 +267,11 @@
 //	- update game entities
 /*virtual*/ void GameplayState::Update( float dt )
 {
-	Player* player = dynamic_cast<Player*>(m_pPlayer);
-	if (player->isLevelCompleted() == false)
-
-
 	WeaponManager::GetInstance()->Update(dt);
 
+	Player* player = dynamic_cast<Player*>(m_pPlayer);
 
+	if (player->isLevelCompleted() == false)
 	{
 		// Update the entities
 		SpawnManager::GetInstance()->Update(dt);
@@ -330,11 +333,13 @@
 
 	WeaponManager::GetInstance()->Render();
 
+	///////OLD EnergyBar Render///////
+	/*
 	pGraphics->DrawRectangle(energyRect, { 0, 0, 255 });
 
 	SGD::Rectangle staminaRect = { lefts, tops, lefts + m_pPlayer->GetAttributes()->m_fCurrStamina / m_pPlayer->GetAttributes()->m_fMaxStamina * 150, tops + 25 };
 	pGraphics->DrawRectangle(staminaRect, { 0, 255, 0 });
-*/
+	*/
 	
 
 }
