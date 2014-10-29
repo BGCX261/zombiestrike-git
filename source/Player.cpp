@@ -275,7 +275,6 @@ void Player::Render()
 
 	case ObjectType::OBJ_TURRET:
 	case ObjectType::OBJ_BULLET:
-	case ObjectType::OBJ_POWERCORE:
 	case ObjectType::OBJ_WALL:
 	case ObjectType::OBJ_DOOR:
 		MovingObject::HandleCollision(pOther);

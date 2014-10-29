@@ -22,6 +22,15 @@
 #include "CreateARifleBullet.h"
 #include "CreateSniperBullet.h"
 #include "CreateFlameBullet.h"
+#include "Spawner.h"
+#include "SpawnManager.h"
+
+#include "CreateZombieMessage.h"
+#include "CreateFastZombieMsg.h"
+#include "CreateFatZombieMsg.h"
+#include "CreateExplodingZombieMsg.h"
+#include "CreateTankZombieMsg.h"
+
 
 
 #include "BitmapFont.h"
@@ -30,6 +39,11 @@
 #include "BaseObject.h"
 #include "MovingObject.h"
 #include "Player.h"
+#include "Zombie.h"
+#include "FastZombie.h"
+#include "FatZombie.h"
+#include "ExplodingZombie.h"
+#include "TankZombie.h"
 
 #include "Turret.h"
 #include "Bullet.h"
@@ -397,20 +411,7 @@ BaseObject* GameplayState::CreatePlayer( void )
 	return player;
 }
 
-void GameplayState::CreateZombie( SGD::Point pos, Player* player )
-{
 
-	//zombie->SetPosition(pos);
-	//zombie->SetRotation(0.0f);
-	//zombie->SetAnimation("zombie1");
-	//zombie->SetMoveSpeed(180.0f);
-	//zombie->SetTarget(player);
-	//zombie->RetrieveBehavior("runTo");
-
-	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
-	zombie->Release();
-	zombie = nullptr;
-}
 
 void GameplayState::CreatePickUp( int type, SGD::Point pos )
 {
@@ -419,19 +420,19 @@ void GameplayState::CreatePickUp( int type, SGD::Point pos )
 	pickup->SetType(type);
 	pickup->SetPosition(pos);
 
-	switch (type)
-	{
-	case BaseObject::OBJ_POWERCORE:
-		pickup->SetAnimation("powerCore");
-		break;
+	//switch (type)
+	//{
+	//case BaseObject::OBJ_POWERCORE:
+	//	pickup->SetAnimation("powerCore");
+	//	break;
 
-	case BaseObject::OBJ_STIMPACK:
-		pickup->SetAnimation("stimPack");
-		break;
+	//case BaseObject::OBJ_STIMPACK:
+	//	pickup->SetAnimation("stimPack");
+	//	break;
 
-	default:
-		break;
-	}
+	//default:
+	//	break;
+	//}
 
 
 	m_pEntities->AddEntity(pickup, EntityBucket::BUCKET_PICKUPS);
@@ -554,4 +555,76 @@ void GameplayState::CreateSnipeBullet(Weapon* owner)
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();
 	bullet = nullptr;
+}
+
+void	GameplayState::CreateZombie(Spawner* owner)
+{
+	Zombie* zombie = new Zombie;
+	zombie->SetPosition(owner->GetPosition());
+	zombie->SetRotation(0.0f);
+	zombie->SetAnimation("zombie1");
+	zombie->SetMoveSpeed(180.0f);
+	zombie->SetTarget(m_pPlayer);
+	zombie->RetrieveBehavior("runTo");
+	
+	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
+	zombie->Release();
+	zombie = nullptr;
+}
+void			GameplayState::CreateFatZombie(Spawner* owner)
+{
+	FatZombie* zombie = new FatZombie;
+	zombie->SetPosition(owner->GetPosition());
+	zombie->SetRotation(0.0f);
+	zombie->SetAnimation("zombie1");
+	zombie->SetMoveSpeed(180.0f);
+	zombie->SetTarget(m_pPlayer);
+	zombie->RetrieveBehavior("runTo");
+
+	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
+	zombie->Release();
+	zombie = nullptr;
+}
+void			GameplayState::CreateFastZombie(Spawner* owner)
+{
+	FastZombie* zombie = new FastZombie;
+	zombie->SetPosition(owner->GetPosition());
+	zombie->SetRotation(0.0f);
+	zombie->SetAnimation("zombie1");
+	zombie->SetMoveSpeed(180.0f);
+	zombie->SetTarget(m_pPlayer);
+	zombie->RetrieveBehavior("runTo");
+
+	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
+	zombie->Release();
+	zombie = nullptr;
+}
+
+void			GameplayState::CreateExplodingZombie(Spawner* owner)
+{
+	ExplodingZombie* zombie = new ExplodingZombie;
+	zombie->SetPosition(owner->GetPosition());
+	zombie->SetRotation(0.0f);
+	zombie->SetAnimation("zombie1");
+	zombie->SetMoveSpeed(180.0f);
+	zombie->SetTarget(m_pPlayer);
+	zombie->RetrieveBehavior("runTo");
+
+	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
+	zombie->Release();
+	zombie = nullptr;
+}
+void			GameplayState::CreateTankZombie(Spawner* owner)
+{
+	TankZombie* zombie = new TankZombie;
+	zombie->SetPosition(owner->GetPosition());
+	zombie->SetRotation(0.0f);
+	zombie->SetAnimation("zombie1");
+	zombie->SetMoveSpeed(180.0f);
+	zombie->SetTarget(m_pPlayer);
+	zombie->RetrieveBehavior("runTo");
+
+	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
+	zombie->Release();
+	zombie = nullptr;
 }

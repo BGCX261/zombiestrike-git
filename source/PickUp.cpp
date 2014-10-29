@@ -15,7 +15,7 @@ PickUp::~PickUp()
 {
 	if (pOther->GetType() == OBJ_PLAYER)
 	{
-		switch (m_nType)
+	/*	switch (m_nType)
 		{
 			case ObjectType::OBJ_POWERCORE:
 				{
@@ -34,7 +34,7 @@ PickUp::~PickUp()
 				break;
 			default:
 				break;
-		}
+		}*/
 
 
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
