@@ -13,11 +13,12 @@ Bullet::~Bullet()
 	m_pOwner = nullptr;
 }
 
-/*virtual*/ void Bullet::Update(float elapsedTime) /*override*/
+/*virtual*/ void Bullet::Update(float dt) /*override*/
 {
-	MovingObject::Update(elapsedTime);
+	MovingObject::Update(dt);
+//	lifeTime -= m_vtVelocity.ComputeLength() * dt;
 
-	if (IsDead())
+	if (IsDead() || lifeTime < 0)
 	{
 		DestroyObjectMessage* pMsg = new DestroyObjectMessage{ this };
 		pMsg->QueueMessage();
@@ -28,13 +29,15 @@ Bullet::~Bullet()
 /*virtual*/ void Bullet::HandleCollision(const IBase* pOther)	/*override*/
 {
 	// player
-	if (pOther->GetType() == ObjectType::OBJ_PLAYER)
+	if (pOther->GetType() == OBJ_SLOW_ZOMBIE ||
+		pOther->GetType() == OBJ_FAST_ZOMBIE || 
+		pOther->GetType() == OBJ_FAT_ZOMBIE || 
+		pOther->GetType() == OBJ_TANK_ZOMBIE || 
+		pOther->GetType() == OBJ_EXPLODING_ZOMBIE )
 	{
 		if (GetOwner() != pOther)
 		{
-			SGD::Event* msg = new SGD::Event{"HIT"};
-			msg->QueueEvent((Player*)pOther);
-			msg = nullptr;
+			
 			
 			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 			dMsg->QueueMessage();

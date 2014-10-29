@@ -20,6 +20,6 @@ Sniper::Sniper(MovingObject* owner)
 
 Sniper::~Sniper()
 {
-	m_pOwner->Release();
-	m_pOwner = nullptr;
+	//m_pOwner->Release();
+	//m_pOwner = nullptr;
 }

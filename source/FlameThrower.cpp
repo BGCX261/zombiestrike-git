@@ -21,8 +21,8 @@ FlameThrower::FlameThrower(MovingObject* owner) : Listener(this)
 
 FlameThrower::~FlameThrower()
 {
-	m_pOwner->Release();
-	m_pOwner = nullptr;
+	//m_pOwner->Release();
+	//m_pOwner = nullptr;
 }
 
 void FlameThrower::Fire(float dt)

@@ -233,13 +233,27 @@
     </ClCompile>
     <ClCompile Include="source\FlameThrower.cpp" />
     <ClCompile Include="source\CreateFlameBullet.cpp" />
+    <ClCompile Include="source\ExplodingZombie.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FastZombie.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FatZombie.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TankZombie.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Zombie.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
     <ClCompile Include="source\WeaponManager.cpp">
       <Filter>Weapons</Filter>
     </ClCompile>
     <ClCompile Include="source\FlameThrower.cpp">
       <Filter>Weapons</Filter>
-    </ClCompile>
-  </ItemGroup>
+    </ClCompile>  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
       <Filter>Wrappers\Core</Filter>
@@ -456,13 +470,27 @@
     </ClInclude>
     <ClInclude Include="source\FlameThrower.h" />
     <ClInclude Include="source\CreateFlameBullet.h" />
+    <ClInclude Include="source\ExplodingZombie.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FastZombie.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FatZombie.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\TankZombie.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Zombie.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
     <ClInclude Include="source\WeaponManager.h">
       <Filter>Weapons</Filter>
     </ClInclude>
     <ClInclude Include="source\FlameThrower.h">
       <Filter>Weapons</Filter>
-    </ClInclude>
-  </ItemGroup>
+    </ClInclude>  </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
   </ItemGroup>

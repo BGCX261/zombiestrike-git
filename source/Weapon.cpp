@@ -9,7 +9,7 @@ Weapon::Weapon()
 
 Weapon::~Weapon()
 {
-	
+	SetOwner(nullptr);
 }
  void Weapon::Update(float dt)
 {

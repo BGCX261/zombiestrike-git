@@ -22,8 +22,8 @@ Pistol::Pistol(MovingObject* owner)
 
 Pistol::~Pistol()
 {
-	m_pOwner->Release();
-	m_pOwner = nullptr;
+	//m_pOwner->Release();
+	//m_pOwner = nullptr;
 }
 void Pistol::Fire(float dt)
 {
