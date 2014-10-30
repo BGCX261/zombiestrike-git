@@ -115,6 +115,7 @@
 	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
 
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
+	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
 
 	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/crosshair.png");
 
@@ -255,15 +256,15 @@
 	/**********************************************************/
 	// Player Died!
 	/**********************************************************/
-	//int numframes = AnimationManager::GetInstance()->GetAnimation("playerDeath")->GetFrames().size();
-	//numframes--;
+	int numframes = AnimationManager::GetInstance()->GetAnimation("playerDeath")->GetFrames().size();
+	numframes--;
 
-	//if (m_pPlayer->GetAnimation() == "playerDeath" && m_pPlayer->GetAnimationStamp().m_nCurrFrame == numframes)
-	//{
-	//	SGD::Event msg("PAUSE");
-	//	msg.SendEventNow();
-	//	Game::GetInstance()->AddState(LoseGameState::GetInstance());
-	//}
+	if (m_pPlayer->GetAnimation() == "playerDeath" && m_pPlayer->GetAnimationStamp().m_nCurrFrame == numframes)
+	{
+		SGD::Event msg("PAUSE");
+		msg.SendEventNow();
+		Game::GetInstance()->AddState(LoseGameState::GetInstance());
+	}
 	
 
 

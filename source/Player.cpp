@@ -270,8 +270,9 @@ void Player::Render()
 	switch (pOther->GetType())
 	{
 	case ObjectType::OBJ_SLOW_ZOMBIE:
-	//_bIsAlive = false;
+		m_bIsAlive = false;
 		break;
+
 	case OBJ_BARBEDWIRE:
 	case OBJ_SANDBAG:
 	{
