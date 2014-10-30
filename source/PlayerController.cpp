@@ -149,7 +149,6 @@ PlayerController::~PlayerController()
 
 	if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
 	{
-	
 		//m_Player->flameThrower->Fire(dt);
 		WeaponManager::GetInstance()->GetSelected()->Fire(dt);
 	}

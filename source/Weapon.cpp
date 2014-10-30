@@ -18,22 +18,38 @@ void Weapon::Update(float dt)
 {
 	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
 	GameplayState*		pGameplay	= GameplayState::GetInstance();
+
 	recoilTimer.Update(dt);
-	if (currAmmo == 0)
+	if (currAmmo == 0 && pAudio->IsAudioPlaying(*fire_sound) == false)
 	{
+		if (reloadB == true)
+		{
+			pAudio->PlayAudio(pGameplay->reload_begin, false);
+			reloadB = false;
+		}
+
 		if (reloadTimer.Update(dt))
 		{
+			reloadF = true;
+
 			if (totalAmmo >= magSize)
 			{
 				currAmmo = magSize;
 				totalAmmo -= magSize;
 			}
-
 			else
 			{
 				currAmmo = totalAmmo;
 				totalAmmo = 0;
 			}
+		}
+
+		if (reloadF == true)
+		{
+			pAudio->PlayAudio(pGameplay->reload_finish, false);
+			reloadF = false;
+			reloadB = true;
+			currAmmo = magSize;
 		}
 	}
 
