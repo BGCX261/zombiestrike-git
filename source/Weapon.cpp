@@ -18,30 +18,24 @@ void Weapon::Update(float dt)
 {
 	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
 	GameplayState*		pGameplay	= GameplayState::GetInstance();
-
 	recoilTimer.Update(dt);
-	if (currAmmo == 0 && pAudio->IsAudioPlaying(*fire_sound) == false)
+	if (currAmmo == 0)
 	{
-		if (reloadB == true)
-		{
-			pAudio->PlayAudio(pGameplay->reload_begin, false);
-			reloadB = false;
-		}
-
 		if (reloadTimer.Update(dt))
 		{
-			reloadF = true;
-		}
+			if (totalAmmo >= magSize)
+			{
+				currAmmo = magSize;
+				totalAmmo -= magSize;
+			}
 
-		if (reloadF == true)
-		{
-			pAudio->PlayAudio(pGameplay->reload_finish, false);
-			reloadF = false;
-			reloadB = true;
-			currAmmo = magSize;
+			else
+			{
+				currAmmo = totalAmmo;
+				totalAmmo = 0;
+			}
 		}
 	}
-
 
 }
 
@@ -66,8 +60,10 @@ void Weapon::SetOwner(MovingObject* owner)
 	if (m_pOwner != nullptr)
 	{
 		m_pOwner->Release();
-		m_pOwner = nullptr; 
+		m_pOwner = nullptr;
 	}
 	m_pOwner = owner;
+	if (m_pOwner != nullptr)
+		m_pOwner->AddRef();
 
 }

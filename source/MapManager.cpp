@@ -110,8 +110,8 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 	playerInfo->Attribute("posX", &posX);
 	playerInfo->Attribute("posY", &posY);
 
-	player = CreatePlayer(tileid, { (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
-	player->SetGamerProfile(currProfile);
+	/*player = CreatePlayer(tileid, { (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+	player->SetGamerProfile(currProfile);*/
 	//level = level->NextSiblingElement("tile_info");
 	TiXmlElement * tileList = root->FirstChildElement("tile_list");
 	TiXmlElement * tileinfo = tileList->FirstChildElement("tile_info");
@@ -270,7 +270,7 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 	tileTexture = pGraphics->LoadTexture(tStruct.map.GetTilePath().c_str());
 
 
-	return player;
+	return nullptr;
 }
 void MapManager::UnloadLevel(void)
 {
@@ -352,21 +352,23 @@ void MapManager::UnloadTexture(SGD::HTexture)
 
 Player* MapManager::CreatePlayer(int type, SGD::Point pos, EntityManager* entities)
 {
-	Player* player = new Player;
+	/*Player* player = new Player;
 	player->SetPosition(pos);
 	player->SetRotation(0.0f);
 	player->SetMoveSpeed(180.0f);
 	player->RetrieveBehavior("playerController");
+	*/
 
 
-
-	return player;
+	return nullptr;
 }
 
 void MapManager::CreateLandMine(SGD::Point pos, EntityManager* entities)
 {
 	LandMine* landmine = new LandMine;
 	landmine->SetPosition(pos);
+	landmine->SetAnimation("testLandmine");
+	landmine->SetActive(true);
 	entities->AddEntity(landmine, BUCKET_ENVIRO);
 	landmine->Release();
 	landmine = nullptr;
@@ -376,6 +378,8 @@ void MapManager::CreateSandBags(SGD::Point pos, EntityManager* entities)
 {
 	SandBag* sandbag = new SandBag;
 	sandbag->SetPosition(pos);
+	sandbag->SetAnimation("testSandbag");
+
 	entities->AddEntity(sandbag, BUCKET_ENVIRO);
 	sandbag->Release();
 	sandbag = nullptr;
@@ -384,6 +388,8 @@ void MapManager::CreateBarbedWire(SGD::Point pos, EntityManager* entities)
 {
 	BarbedWire* barbedWire = new BarbedWire;
 	barbedWire->SetPosition(pos);
+	barbedWire->SetAnimation("testBarbwire");
+
 	entities->AddEntity(barbedWire, BUCKET_ENVIRO);
 	barbedWire->Release();
 	barbedWire = nullptr;

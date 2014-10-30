@@ -129,6 +129,7 @@
     <ClCompile Include="source\MapManager.cpp" />
     <ClCompile Include="source\MovingObject.cpp" />
     <ClCompile Include="source\OptionsState.cpp" />
+    <ClCompile Include="source\P90.cpp" />
     <ClCompile Include="source\PatrolBehavior.cpp" />
     <ClCompile Include="source\PauseState.cpp" />
     <ClCompile Include="source\PickSaveSlotState.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="source\Turret.cpp" />
     <ClCompile Include="source\WaitBehavior.cpp" />
     <ClCompile Include="source\Weapon.cpp" />
+    <ClCompile Include="source\WeaponManager.cpp" />
     <ClCompile Include="source\WinGameState.cpp" />
     <ClCompile Include="source\WinMain.cpp" />
     <ClCompile Include="source\Zombie.cpp" />
@@ -222,6 +224,7 @@
     <ClInclude Include="source\MessageID.h" />
     <ClInclude Include="source\MovingObject.h" />
     <ClInclude Include="source\OptionsState.h" />
+    <ClInclude Include="source\P90.h" />
     <ClInclude Include="source\PatrolBehavior.h" />
     <ClInclude Include="source\PauseState.h" />
     <ClInclude Include="source\PickSaveSlotState.h" />
@@ -232,6 +235,7 @@
     <ClInclude Include="source\RotateTowardsBehavior.h" />
     <ClInclude Include="source\RunToBehavior.h" />
     <ClInclude Include="source\SandBag.h" />
+    <ClInclude Include="source\ShopStructures.h" />
     <ClInclude Include="source\Shotgun.h" />
     <ClInclude Include="source\SLList.h" />
     <ClInclude Include="source\Sniper.h" />
@@ -243,6 +247,7 @@
     <ClInclude Include="source\Turret.h" />
     <ClInclude Include="source\WaitBehavior.h" />
     <ClInclude Include="source\Weapon.h" />
+    <ClInclude Include="source\WeaponManager.h" />
     <ClInclude Include="source\WinGameState.h" />
     <ClInclude Include="source\Zombie.h" />
   </ItemGroup>

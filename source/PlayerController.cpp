@@ -10,6 +10,8 @@
 #include "../SGD Wrappers/SGD_Handle.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
+#include "WeaponManager.h"
+
 
 PlayerController::PlayerController()
 {
@@ -48,8 +50,8 @@ PlayerController::~PlayerController()
 	
 
 
-//	std::string animation = "";
-	//animation = m_Player->m_bIsAlive == true ? m_Player->animation.m_strCurrAnimation : "playerDeath";
+	std::string animation = "";
+	animation = m_Player->m_bIsAlive == true ? m_Player->animation.m_strCurrAnimation : "playerDeath";
 
 
 	// player is walking(playerWalk) OR running(playerRun)
@@ -147,7 +149,9 @@ PlayerController::~PlayerController()
 
 	if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
 	{
-		m_Player->pistol->Fire(dt);
+	
+		//m_Player->flameThrower->Fire(dt);
+		WeaponManager::GetInstance()->GetSelected()->Fire(dt);
 	}
 
 	// player activates an ability
@@ -224,7 +228,7 @@ PlayerController::~PlayerController()
 			m_Player->SetVoice(pAudio->PlayAudio(*death, false)); //voice = pAudio->PlayAudio(*alarmSound, true);
 		pAudio->SetVoiceVolume(m_Player->GetVoice());
 
-	//	animation = "playerDeath";
+		animation = "playerDeath";
 		m_Player->SetVelocity({ 0, 0 });
 		m_Player->m_bMoving = false;
 		m_Player->m_bIsAlive = false;
@@ -249,11 +253,11 @@ PlayerController::~PlayerController()
 
 
 
-	//if (m_Player->GetAnimation() != animation)
-	//{
-	//	m_Player->SetAnimation(animation);
-	//}
-	//
+	if (m_Player->GetAnimation() != animation)
+	{
+		m_Player->SetAnimation(animation);
+	}
+	
 
 
 	return true;

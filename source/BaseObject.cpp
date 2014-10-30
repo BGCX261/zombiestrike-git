@@ -36,11 +36,11 @@ BaseObject::~BaseObject()
 	AnimationManager::GetInstance()->Render(animation, this->m_ptPosition, this->m_fRotation, { alpha, 255, 255, 255 });
 	//SGD::Point renderPos = SGD::Point(m_ptPosition.x - GameplayState::GetInstance()->GetCamera()->GetPosition().x, m_ptPosition.y - GameplayState::GetInstance()->GetCamera()->GetPosition().y);
 
-	////SGD::Rectangle collisionRect = AnimationManager::GetInstance()->GetAnimation(animation.m_strCurrAnimation)->GetFrames()[animation.m_nCurrFrame]->GetCollisionRect();
+	//SGD::Rectangle collisionRect = AnimationManager::GetInstance()->GetAnimation(animation.m_strCurrAnimation)->GetFrames()[animation.m_nCurrFrame]->GetCollisionRect();
 	//
 	//SGD::Rectangle rect = SGD::Rectangle(renderPos - m_szSize / 2, m_szSize);
 	////rect.Offset(GameplayState::GetInstance()->GetCamera()->GetPosition().x, GameplayState::GetInstance()->GetCamera()->GetPosition().y);
-	//SGD::GraphicsManager::GetInstance()->DrawRectangle(GetRect() , SGD::Color(0, 0, 0, 0), SGD::Color(255, 0, 0, 0));
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(GetRect() , SGD::Color(0, 0, 0, 0), SGD::Color(255, 0, 0, 0));
 
 }
 void BaseObject::Update(float dt)

@@ -58,6 +58,9 @@
     <Filter Include="Game States">
       <UniqueIdentifier>{929c6766-a868-4f4b-9f78-8d866d1af800}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Spawn System">
+      <UniqueIdentifier>{795ccc67-7355-475d-a38f-7e53ca9ec7c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SGD Wrappers\SGD_AudioManager.cpp">

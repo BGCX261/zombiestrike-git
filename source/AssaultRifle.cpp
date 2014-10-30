@@ -25,8 +25,8 @@ AssaultRifle::AssaultRifle(MovingObject* owner)
 
 AssaultRifle::~AssaultRifle()
 {
-	m_pOwner->Release();
-	m_pOwner = nullptr;
+	/*m_pOwner->Release();
+	m_pOwner = nullptr;*/
 }
 
 void AssaultRifle::Fire(float dt)

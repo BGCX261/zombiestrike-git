@@ -6,7 +6,7 @@
 
 FlameThrower::FlameThrower(MovingObject* owner) : Listener(this)
 {
-	type = FLAME_THROWER;
+	type = FTHROWER;
 	reloadTime = 4.0f;
 	currAmmo = 200;
 	magSize = 200;

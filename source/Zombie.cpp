@@ -9,19 +9,23 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "DestroyObjectMessage.h"
 #include "Game.h"
+#include "BarbedWire.h"
+#include "LandMine.h"
+#include "SandBag.h"
 
 
 
 Zombie::Zombie() : Listener(this)
 {
 
-
+	damage = 10.0f;
+	health = 100.0f;
 }
 
 
 Zombie::~Zombie() 
 {
-	
+	//SetTarget(nullptr); 
 	
 }
 void Zombie::Update(float dt)
@@ -79,17 +83,33 @@ void Zombie::RetrieveBehavior(std::string name)
 	}
 	else if (pOther->GetType() == OBJ_BARBEDWIRE)
 	{
+		const BarbedWire* barbWire = dynamic_cast<const BarbedWire*>(pOther);
+		if (barbWire->IsActive())
+		{
+			health -= 10.0f * Game::GetInstance()->DeltaTime();
+			if (health <= 0)
+				isAlive = false;
+			MovingObject::HandleCollision(pOther);
+		}
+		
 
-		health -= 10.0f * Game::GetInstance()->DeltaTime();
-		if (health <= 0)
-			isAlive = false;
 
 	}
 	else if (pOther->GetType() == OBJ_SANDBAG)
-		MovingObject::HandleCollision(pOther);
+	{
+		const SandBag* sandbag = dynamic_cast<const SandBag*>(pOther);
+		if (sandbag->IsActive())
+			MovingObject::HandleCollision(pOther);
+
+	}
 
 	else if (pOther->GetType() == OBJ_LANDMINE)
-		isAlive = false;
+	{
+		const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
+		if (landMine->IsActive())
+			isAlive = false;
+
+	}
 	
 
 }

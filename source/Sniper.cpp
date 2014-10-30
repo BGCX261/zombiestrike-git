@@ -4,7 +4,7 @@
 
 Sniper::Sniper(MovingObject* owner)
 {
-	type = SNIPER;
+	type = SPECIAL;
 	reloadTime = 3.5f;
 	currAmmo = 5;
 	magSize = 5;
@@ -15,6 +15,7 @@ Sniper::Sniper(MovingObject* owner)
 	lifeTime = 1000.0f;
 	m_pOwner = owner;
 	owner->AddRef();
+
 }
 
 

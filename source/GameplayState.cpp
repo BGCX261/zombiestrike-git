@@ -25,6 +25,7 @@
 #include "Spawner.h"
 #include "SpawnManager.h"
 
+#include "WeaponManager.h"
 #include "CreateZombieMessage.h"
 #include "CreateFastZombieMsg.h"
 #include "CreateFatZombieMsg.h"
@@ -87,6 +88,8 @@
 	SGD::EventManager::GetInstance()->Initialize();
 	SGD::MessageManager::GetInstance()->Initialize( &MessageProc );
 
+	
+	
 
 	// Allocate the Entity Manager
 	m_pEntities = new EntityManager;
@@ -104,18 +107,28 @@
 	SGD::InputManager*		pInput				= SGD::InputManager::GetInstance();
 	AnimationManager*		pAnimationManager	= AnimationManager::GetInstance();
 
-
 	// player animations
 	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
 	pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
+	pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
+	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
+	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
+
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
+	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
 
-
+	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/crosshair.png");
 
 
 	// enemy animations
-	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "zombie1");
-	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "zombie2");
+
+	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
+	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
+	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
+	pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
+
+	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+
 
 
 	// other animations
@@ -139,6 +152,9 @@
 	playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
+	m_hWpnSwitch		= pAudio->LoadAudio("resource/audio/switchweapon.wav");
+
+	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/hudweapons.png");
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
 
 	zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");
@@ -166,8 +182,10 @@
 
 	m_pPlayer = CreatePlayer();
 	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
-	
 
+	MovingObject * pPlayer = dynamic_cast<MovingObject*>(m_pPlayer);
+	
+	WeaponManager::GetInstance()->Initialize(*pPlayer);
 
 }
 
@@ -191,6 +209,7 @@
 
 	
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
+	pGraphics->UnloadTexture(m_hHudWpn);
 
 
 	if (pAudio->IsAudioPlaying(storyMusic) == true)
@@ -204,6 +223,7 @@
 	pAudio->UnloadAudio(playerDeath);
 	pAudio->UnloadAudio(cannot_use_skill);
 	pAudio->UnloadAudio(footstep);
+	pAudio->UnloadAudio(m_hWpnSwitch);
 	pAudio->UnloadAudio(zombie_pain);
 	pAudio->UnloadAudio(bullet_hit_zombie);
 	pAudio->UnloadAudio(bullet_hit_house);
@@ -226,8 +246,9 @@
 
 	// Terminate the Behavior Manager
 	BehaviorManager::GetInstance()->Terminate();
-
-
+	
+	WeaponManager::GetInstance()->Exit();
+	
 	// Deallocate the Entity Manager
 	m_pEntities->RemoveAll();
 	delete m_pEntities;
@@ -243,7 +264,7 @@
 	MapManager::GetInstance()->UnloadLevel();
 	AnimationManager::GetInstance()->Shutdown();
 
-
+	
 
 	// Terminate & deallocate the SGD wrappers
 	SGD::EventManager::GetInstance()->Terminate();
@@ -271,20 +292,20 @@
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 	}
 
-
+	//WeaponManager::GetInstance()->Input();
 
 	/**********************************************************/
 	// Player Died!
 	/**********************************************************/
-	//int numframes = AnimationManager::GetInstance()->GetAnimation("playerDeath")->GetFrames().size();
-	//numframes--;
+	int numframes = AnimationManager::GetInstance()->GetAnimation("playerDeath")->GetFrames().size();
+	numframes--;
 
-	//if (m_pPlayer->GetAnimation() == "playerDeath" && m_pPlayer->GetAnimationStamp().m_nCurrFrame == numframes)
-	//{
-	//	SGD::Event msg("PAUSE");
-	//	msg.SendEventNow();
-	//	Game::GetInstance()->AddState(LoseGameState::GetInstance());
-	//}
+	if (m_pPlayer->GetAnimation() == "playerDeath" && m_pPlayer->GetAnimationStamp().m_nCurrFrame == numframes)
+	{
+		SGD::Event msg("PAUSE");
+		msg.SendEventNow();
+		Game::GetInstance()->AddState(LoseGameState::GetInstance());
+	}
 	
 
 
@@ -300,7 +321,10 @@
 //	- update game entities
 /*virtual*/ void GameplayState::Update( float dt )
 {
+	WeaponManager::GetInstance()->Update(dt);
+
 	Player* player = dynamic_cast<Player*>(m_pPlayer);
+
 	if (player->isLevelCompleted() == false)
 	{
 		// Update the entities
@@ -344,7 +368,7 @@
 /*virtual*/ void GameplayState::Render( void )
 {
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
-
+	
 
 	// Draw background
 	MapManager::GetInstance()->Render();
@@ -361,12 +385,23 @@
 	float tops	= 475;
 	float lefts	= 435;
 
-	/*SGD::Rectangle energyRect = { left, top, left + m_pPlayer->GetAttributes()->m_fCurrEnergy / m_pPlayer->GetAttributes()->m_fMaxEnergy * 150, top + 25 };
+	WeaponManager::GetInstance()->Render();
+
+	///////OLD EnergyBar Render///////
+	/*
 	pGraphics->DrawRectangle(energyRect, { 0, 0, 255 });
 
 	SGD::Rectangle staminaRect = { lefts, tops, lefts + m_pPlayer->GetAttributes()->m_fCurrStamina / m_pPlayer->GetAttributes()->m_fMaxStamina * 150, tops + 25 };
 	pGraphics->DrawRectangle(staminaRect, { 0, 255, 0 });
-*/
+	*/
+	
+
+	// Draw the reticle
+	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+	float		retscale = 0.8f;
+
+	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
+	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
 }
 
 
@@ -506,9 +541,6 @@ void GameplayState::CreatePickUp( int type, SGD::Point pos )
 	//	pickup->SetAnimation("stimPack");
 	//	break;
 
-	//default:
-	//	break;
-	//}
 
 
 	m_pEntities->AddEntity(pickup, EntityBucket::BUCKET_PICKUPS);
@@ -542,6 +574,7 @@ void GameplayState::CreateBullet(Weapon* owner)
 
 		bullet->SetDirection(direction);
 		bullet->SetRotation(owner->GetOwner()->GetRotation());
+		bullet->SetDamage(owner->GetDamage());
 
 		bullet->SetVelocity(direction * owner->GetSpeed());
 		bullet->SetAnimation("bullet");
@@ -589,6 +622,8 @@ void GameplayState::CreateShotGunBullet(Weapon* owner)
 
 		bullet->SetDirection(direction);
 		bullet->SetRotation(owner->GetOwner()->GetRotation());
+		bullet->SetDamage(owner->GetDamage());
+
 
 		bullet->SetVelocity(direction * owner->GetSpeed());
 		bullet->SetAnimation("bullet");
@@ -610,6 +645,8 @@ void GameplayState::CreateARBullet(Weapon* owner)
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
+	bullet->SetDamage(owner->GetDamage());
+
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();
@@ -623,10 +660,12 @@ void GameplayState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetPosition(owner->GetOwner()->GetPosition());
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
 	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
-
+	bullet->SetDamage(owner->GetDamage());
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
+	bullet->SetDamage(owner->GetDamage());
+
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();
@@ -638,7 +677,8 @@ void	GameplayState::CreateZombie(Spawner* owner)
 	Zombie* zombie = new Zombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+
+	zombie->SetAnimation("slowZombie");
 	zombie->SetMoveSpeed(64.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");
@@ -652,7 +692,8 @@ void			GameplayState::CreateFatZombie(Spawner* owner)
 	FatZombie* zombie = new FatZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+
+	zombie->SetAnimation("fatZombie");
 	zombie->SetMoveSpeed(32.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");
@@ -666,7 +707,8 @@ void			GameplayState::CreateFastZombie(Spawner* owner)
 	FastZombie* zombie = new FastZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+	
+	zombie->SetAnimation("fastZombie");
 	zombie->SetMoveSpeed(96.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");
@@ -681,7 +723,8 @@ void			GameplayState::CreateExplodingZombie(Spawner* owner)
 	ExplodingZombie* zombie = new ExplodingZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+
+	zombie->SetAnimation("explodingZombie");
 	zombie->SetMoveSpeed(64.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");
@@ -695,7 +738,7 @@ void			GameplayState::CreateTankZombie(Spawner* owner)
 	TankZombie* zombie = new TankZombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetAnimation("zombie1");
+	zombie->SetAnimation("tankZombie");
 	zombie->SetMoveSpeed(32.0f);
 	zombie->SetTarget(m_pPlayer);
 	zombie->RetrieveBehavior("runTo");

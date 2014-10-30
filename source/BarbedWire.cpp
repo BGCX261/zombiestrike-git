@@ -17,18 +17,12 @@ BarbedWire::~BarbedWire()
 
 void BarbedWire::Update( float dt )
 {
-	if (this->isActive == false)
-		return;
-
 
 	SandBag::Update(dt);
 }
 
 void BarbedWire::Render( void )
 {
-	if (this->isActive == false)
-		return;
-
 
 	SandBag::Render();
 }
@@ -48,10 +42,10 @@ void BarbedWire::HandleCollision( const IBase* pOther )
 		SGD::Event* msg = new SGD::Event("BARBWIRE");
 		msg->QueueEvent(pOther);
 		msg = nullptr;
+		SandBag::HandleCollision(pOther);
 
 	}
 
 
 	// Let the SandBag handle damage to "this"
-	SandBag::HandleCollision(pOther);
 }

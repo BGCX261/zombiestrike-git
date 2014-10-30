@@ -41,7 +41,7 @@
 	//m_nCursor = 0;
 	clicked		= false;
 	selected	= false;
-	pInput->CheckForNewControllers();
+	//pInput->CheckForNewControllers();
 
 
 	// Load assets

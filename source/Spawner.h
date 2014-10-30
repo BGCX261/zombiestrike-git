@@ -16,6 +16,7 @@ public:
 	
 
 	virtual int	GetType(void) const override { return OBJ_SPAWNER; }
+	SGD::Rectangle GetRect(void) const { return SGD::Rectangle(); }
 
 	//int GetEnemyType(void) const { return m_nEnemyType; }
 	//int GetNumEnemies(void) const { return m_nNumEnemies; }

@@ -30,7 +30,7 @@ protected:
 	BaseObject* m_pTarget = nullptr;
 	BaseBehavior* currBehavior = nullptr;
 	float health = 100.0f;
-	float damage = 2.0f;
+	float damage = 10.0f;
 	bool isAlive = true;
 
 
