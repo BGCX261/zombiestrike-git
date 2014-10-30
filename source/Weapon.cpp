@@ -1,5 +1,7 @@
 #include "Weapon.h"
 #include "MovingObject.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "GameplayState.h"
 
 Weapon::Weapon()
 {
@@ -10,16 +12,36 @@ Weapon::Weapon()
 Weapon::~Weapon()
 {
 	SetOwner(nullptr);
+	fire_sound = nullptr;
 }
- void Weapon::Update(float dt)
+void Weapon::Update(float dt)
 {
-	 recoilTimer.Update(dt);
-	 if (currAmmo == 0)
-	 {
-		 if (reloadTimer.Update(dt))
-			 currAmmo = magSize;
-	 }
-	 
+	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
+	GameplayState*		pGameplay	= GameplayState::GetInstance();
+
+	recoilTimer.Update(dt);
+	if (currAmmo == 0 && pAudio->IsAudioPlaying(*fire_sound) == false)
+	{
+		if (reloadB == true)
+		{
+			pAudio->PlayAudio(pGameplay->reload_begin, false);
+			reloadB = false;
+		}
+
+		if (reloadTimer.Update(dt))
+		{
+			reloadF = true;
+		}
+
+		if (reloadF == true)
+		{
+			pAudio->PlayAudio(pGameplay->reload_finish, false);
+			reloadF = false;
+			reloadB = true;
+			currAmmo = magSize;
+		}
+	}
+
 
 }
 

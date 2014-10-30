@@ -19,6 +19,7 @@ Pistol::Pistol(MovingObject* owner)
 	lifeTime = 700.0f;
 	m_pOwner = owner;
 	owner->AddRef();
+	fire_sound = &GameplayState::GetInstance()->pistol_fire;
 }
 
 
@@ -29,19 +30,20 @@ Pistol::~Pistol()
 }
 void Pistol::Fire(float dt)
 {
-	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
+	GameplayState*		pGameplay	= GameplayState::GetInstance();
 
 	if (currAmmo > 0)
 	{
 		//create bullet message
-		if (recoilTimer.GetTime() == 0)
+		if (recoilTimer.GetTime() == 0 && pAudio->IsAudioPlaying(pGameplay->reload_finish) == false)
 		{
 			CreatePistolBullet* pMsg = new CreatePistolBullet(this);
 			pMsg->QueueMessage();
 			pMsg = nullptr;
 
-			if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->pistol_fire) == false)
-				pAudio->PlayAudio(GameplayState::GetInstance()->pistol_fire, false);
+			if (pAudio->IsAudioPlaying(*fire_sound) == false)
+				pAudio->PlayAudio(*fire_sound, false);
 
 			recoilTimer.AddTime(recoilTime);
 			currAmmo--;
@@ -51,7 +53,9 @@ void Pistol::Fire(float dt)
 	}
 	else
 	{
-		if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->out_of_ammo) == false)
-			pAudio->PlayAudio(GameplayState::GetInstance()->out_of_ammo, false);
+		if (pAudio->IsAudioPlaying(pGameplay->out_of_ammo) == false && pAudio->IsAudioPlaying(*fire_sound) == false
+			&& pAudio->IsAudioPlaying(pGameplay->reload_begin) == false
+			&& pAudio->IsAudioPlaying(pGameplay->reload_finish) == false)
+			pAudio->PlayAudio(pGameplay->out_of_ammo, false);
 	}
 }

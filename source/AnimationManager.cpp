@@ -170,7 +170,7 @@ bool AnimationManager::Load(std::string xmlFilePath, std::string name)
 
 /**************************************************************/
 // Update
-void AnimationManager::Update(AnimTimeStamp& ats, float dt)
+void AnimationManager::Update(AnimTimeStamp& ats, float dt, BaseObject* destination, void* data)
 {
 	// Was an animation to use NOT set? 
 	if (ats.m_strCurrAnimation == "")
@@ -200,8 +200,8 @@ void AnimationManager::Update(AnimTimeStamp& ats, float dt)
 		if (pCurrFrame->GetTrigger() != "NONE")
 		{
 			// Queue event from Frame Trigger
-			SGD::Event* pEvent = new SGD::Event{ pCurrFrame->GetTrigger().c_str(), nullptr, this };
-			pEvent->QueueEvent(nullptr);
+			SGD::Event* pEvent = new SGD::Event{ pCurrFrame->GetTrigger().c_str(), data, this };
+			pEvent->QueueEvent(destination);
 			pEvent = nullptr;
 
 			// Send event immediately from Frame Trigger

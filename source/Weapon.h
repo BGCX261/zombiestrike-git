@@ -1,5 +1,6 @@
 #pragma once
 #include "../SGD Wrappers/SGD_Geometry.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "Timer.h"
 
 class MovingObject;
@@ -26,7 +27,11 @@ protected:
 	Timer reloadTimer;
 	Timer recoilTimer;
 	MovingObject* m_pOwner = nullptr;
-	
+
+	bool reloadB = false;
+	bool reloadF = false;
+	SGD::HAudio* fire_sound = nullptr;
+
 
 
 

@@ -86,7 +86,11 @@ public:
 	SGD::HAudio survivalMusic		= SGD::INVALID_HANDLE;
 	SGD::HAudio zombie_pain			= SGD::INVALID_HANDLE;
 	SGD::HAudio bullet_hit_zombie	= SGD::INVALID_HANDLE;
+	SGD::HAudio bullet_hit_house	= SGD::INVALID_HANDLE;
 	SGD::HAudio out_of_ammo			= SGD::INVALID_HANDLE;
+	SGD::HAudio reload_begin		= SGD::INVALID_HANDLE;
+	SGD::HAudio reload_finish		= SGD::INVALID_HANDLE;
+	SGD::HAudio explosion			= SGD::INVALID_HANDLE;
 
 	SGD::HAudio pistol_fire			= SGD::INVALID_HANDLE;
 	SGD::HAudio shotgun_fire		= SGD::INVALID_HANDLE;
@@ -115,7 +119,7 @@ private:
 
 	/**********************************************************/
 	// Game Entities
-	enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PICKUPS, BUCKET_TURRETS, BUCKET_ENVIRO };
+	enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PICKUPS, BUCKET_TURRETS };
 	EntityManager*			m_pEntities			= nullptr;
 	AnimationManager*		m_pAnimManager		= nullptr;
 

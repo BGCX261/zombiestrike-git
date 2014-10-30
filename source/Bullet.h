@@ -2,18 +2,20 @@
 
 #include "MovingObject.h"
 #include "../SGD Wrappers/SGD_Handle.h"	
+#include "../SGD Wrappers\SGD_Listener.h"
 #include <string>
 
 class MovingObject;
 
-class Bullet : public MovingObject
+class Bullet : public MovingObject, public SGD::Listener
 {
 public:
-	Bullet() = default;
+	Bullet();
 	virtual ~Bullet();
 
 	virtual void		Update(float elapsedTime) override;
 	virtual void		HandleCollision(const IBase* pOther)	override;
+	virtual void		HandleEvent(const SGD::Event* pEvent);
 
 	virtual int			GetType(void) const override { return OBJ_BULLET; }
 	float GetDamage(void) const { return damage; }

@@ -1,6 +1,8 @@
 #include "LandMine.h"
 #include "AnimationManager.h"
 #include "Animation.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "GameplayState.h"
 
 
 LandMine::LandMine()
@@ -60,6 +62,7 @@ void LandMine::HandleCollision( const IBase* pOther )
 		{
 			// trigger explosion
 			this->SetAnimation("explode");
+			SGD::AudioManager::GetInstance()->PlayAudio(GameplayState::GetInstance()->explosion, false);
 		}
 
 		// exploding mine

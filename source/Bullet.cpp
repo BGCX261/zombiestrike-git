@@ -8,6 +8,11 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
+Bullet::Bullet() : Listener(this)
+{
+	RegisterForEvent("KILL_ME");
+}
+
 Bullet::~Bullet()
 {
 	m_pOwner->Release();
@@ -16,8 +21,10 @@ Bullet::~Bullet()
 
 /*virtual*/ void Bullet::Update(float dt) /*override*/
 {
-	MovingObject::Update(dt);
+	//MovingObject::Update(dt);
 //	lifeTime -= m_vtVelocity.ComputeLength() * dt;
+	m_ptPosition += m_vtVelocity * dt;
+	AnimationManager::GetInstance()->Update(animation, dt, this);
 
 	if (IsDead() || lifeTime < 0)
 	{
@@ -53,6 +60,16 @@ Bullet::~Bullet()
 
 	// other stuff
 	else if (pOther->GetType() == ObjectType::OBJ_BASE || pOther->GetType() == ObjectType::OBJ_WALL)
+	{
+		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+		dMsg->QueueMessage();
+		dMsg = nullptr;
+	}
+}
+
+/*virtual*/ void Bullet::HandleEvent(const SGD::Event* pEvent)
+{
+	if (pEvent->GetEventID() == "KILL_ME")
 	{
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();
