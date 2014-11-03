@@ -1,6 +1,8 @@
 #include "SawnOff.h"
 #include "MovingObject.h"
 #include "CreateShotgunBullet.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "GameplayState.h"
 
 SawnOff::SawnOff(MovingObject* owner)
 {
@@ -16,6 +18,7 @@ SawnOff::SawnOff(MovingObject* owner)
 	lifeTime = 400.0f;
 	m_pOwner = owner;
 	owner->AddRef();
+	fire_sound = &GameplayState::GetInstance()->shotgun_fire;
 }
 
 
@@ -26,6 +29,9 @@ SawnOff::~SawnOff()
 
 void SawnOff::Fire(float dt)
 {
+	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
+	GameplayState*		pGameplay	= GameplayState::GetInstance();
+
 	if (currAmmo > 0)
 	{
 		//create bullet message
@@ -35,11 +41,23 @@ void SawnOff::Fire(float dt)
 			pMsg->QueueMessage();
 			pMsg = nullptr;
 
+			if (pAudio->IsAudioPlaying(*fire_sound) == false)
+				pAudio->PlayAudio(*fire_sound, false);
+
 			recoilTimer.AddTime(recoilTime);
 			currAmmo--;
 			if (currAmmo == 0)
+			{
 				reloadTimer.AddTime(reloadTime);
+				reloading = true;
+			}
 		}
-
+	}
+	else
+	{
+		if (pAudio->IsAudioPlaying(pGameplay->out_of_ammo) == false && pAudio->IsAudioPlaying(*fire_sound) == false
+			&& pAudio->IsAudioPlaying(pGameplay->reload_begin) == false
+			&& pAudio->IsAudioPlaying(pGameplay->reload_finish) == false)
+			pAudio->PlayAudio(pGameplay->out_of_ammo, false);
 	}
 }

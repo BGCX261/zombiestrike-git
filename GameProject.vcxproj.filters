@@ -282,9 +282,6 @@
     <ClCompile Include="source\IntroState.cpp">
       <Filter>Game States</Filter>
     </ClCompile>
-    <ClCompile Include="source\P90.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="source\Spawner.cpp">
       <Filter>Spawn System</Filter>
     </ClCompile>
@@ -344,8 +341,15 @@
     <ClCompile Include="source\WeaponManager.cpp">
       <Filter>Weapons</Filter>
     </ClCompile>
-    <ClCompile Include="source\CreatePukeBullet.cpp" />
-    <ClCompile Include="source\CreateTurretMessage.cpp" />
+    <ClCompile Include="source\CreateTurretMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreatePukeBullet.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\P90.cpp">
+      <Filter>Weapons\SMGs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -592,9 +596,6 @@
       <Filter>Game States</Filter>
     </ClInclude>
     <ClInclude Include="source\ShopStructures.h" />
-    <ClInclude Include="source\P90.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="source\Spawner.h">
       <Filter>Spawn System</Filter>
     </ClInclude>
@@ -651,12 +652,21 @@
       <Filter>Weapons\Heavy</Filter>
     </ClInclude>
     <ClInclude Include="source\Grenade.h" />
-    <ClInclude Include="source\PukerBlaster.h" />
     <ClInclude Include="source\WeaponManager.h">
       <Filter>Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="source\CreatePukeBullet.h" />
-    <ClInclude Include="source\CreateTurretMessage.h" />
+    <ClInclude Include="source\CreateTurretMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreatePukeBullet.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PukerBlaster.h">
+      <Filter>Weapons\Heavy</Filter>
+    </ClInclude>
+    <ClInclude Include="source\P90.h">
+      <Filter>Weapons\SMGs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />

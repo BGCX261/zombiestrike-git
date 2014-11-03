@@ -96,12 +96,15 @@ public:
 	SGD::HAudio reload_begin		= SGD::INVALID_HANDLE;
 	SGD::HAudio reload_finish		= SGD::INVALID_HANDLE;
 	SGD::HAudio explosion			= SGD::INVALID_HANDLE;
+	SGD::HAudio vomit_hit_player	= SGD::INVALID_HANDLE;
 
 	SGD::HAudio pistol_fire			= SGD::INVALID_HANDLE;
 	SGD::HAudio shotgun_fire		= SGD::INVALID_HANDLE;
 	SGD::HAudio rifle_fire			= SGD::INVALID_HANDLE;
 	SGD::HAudio sniper_fire			= SGD::INVALID_HANDLE;
 	SGD::HAudio flamethrower_fire	= SGD::INVALID_HANDLE;
+	SGD::HAudio smg_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio vomit_fire			= SGD::INVALID_HANDLE;
 
 
 
