@@ -1,6 +1,6 @@
 #include "Sniper.h"
 #include "MovingObject.h"
-
+#include "CreateSniperBullet.h"
 
 Sniper::Sniper(MovingObject* owner)
 {
@@ -15,6 +15,7 @@ Sniper::Sniper(MovingObject* owner)
 	lifeTime = 1000.0f;
 	m_pOwner = owner;
 	owner->AddRef();
+
 }
 
 
@@ -22,4 +23,24 @@ Sniper::~Sniper()
 {
 	//m_pOwner->Release();
 	//m_pOwner = nullptr;
+}
+
+void Sniper::Fire(float dt)
+{
+	if (currAmmo > 0)
+	{
+		//create bullet message
+		if (recoilTimer.GetTime() == 0)
+		{
+			CreateSniperBullet* pMsg = new CreateSniperBullet(this);
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+
+			recoilTimer.AddTime(recoilTime);
+			currAmmo--;
+			if (currAmmo == 0)
+				reloadTimer.AddTime(reloadTime);
+		}
+
+	}
 }

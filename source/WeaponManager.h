@@ -56,12 +56,22 @@ public:
 	SGD::Rectangle SetImageRect(float width,  float height, unsigned int row, unsigned int col);
 
 	//Weapon factory methods
-	Weapon * CreateAssaultRifle();
 	Weapon * CreatePistol();
-	Weapon * CreateShotgun();
+	Weapon* CreateRevolver();
+	Weapon * CreateMac10();
+	Weapon * CreateTech9();
+	Weapon * CreateP90();
+	Weapon * CreateAssaultRifle();
+	Weapon * CreateAK47();
+	Weapon * CreateLMG();
+	Weapon* CreateSawnOff();
+	Weapon * CreatePumpShotgun();
+	Weapon* CreateAutoShotgun();
 	Weapon * CreateSniper();
 	Weapon * CreateFlameThrower();
-	Weapon * CreateP90();
+	Weapon* CreateGrenadeLauncher();
+
+
 
 };
 

@@ -58,6 +58,24 @@
     <Filter Include="Game States">
       <UniqueIdentifier>{929c6766-a868-4f4b-9f78-8d866d1af800}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Spawn System">
+      <UniqueIdentifier>{795ccc67-7355-475d-a38f-7e53ca9ec7c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons\Assault Rifles">
+      <UniqueIdentifier>{4b825b3b-1216-4b8f-b4ce-9328796aeaea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons\SMGs">
+      <UniqueIdentifier>{b547e6f7-213e-44d2-bd27-fe3f1b32a5fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons\Shotguns">
+      <UniqueIdentifier>{e027bb10-3406-4587-94b9-0f7505b4bd02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons\Heavy">
+      <UniqueIdentifier>{031a941b-3385-4b58-b4bc-90b5063761c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons\Handguns">
+      <UniqueIdentifier>{2f10e010-9e91-4cd4-abc1-757ec5c78319}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SGD Wrappers\SGD_AudioManager.cpp">
@@ -201,25 +219,10 @@
     <ClCompile Include="source\Turret.cpp">
       <Filter>Objects\Environment</Filter>
     </ClCompile>
-    <ClCompile Include="source\Zombie.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="source\EnvironmentalObject.cpp">
       <Filter>Objects\Environment</Filter>
     </ClCompile>
-    <ClCompile Include="source\Pistol.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Shotgun.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Sniper.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="source\Weapon.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="source\AssaultRifle.cpp">
       <Filter>Weapons</Filter>
     </ClCompile>
     <ClCompile Include="source\CreateShotgunBullet.cpp">
@@ -228,47 +231,11 @@
     <ClCompile Include="source\CreatePistolBullet.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
-    <ClCompile Include="source\CreateSniperBullet.cpp">
-      <Filter>Messages</Filter>
-    </ClCompile>
     <ClCompile Include="source\CreateARifleBullet.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
-    <ClCompile Include="source\BarbedWire.cpp">
-      <Filter>Objects\Environment</Filter>
-    </ClCompile>
-    <ClCompile Include="source\LandMine.cpp">
-      <Filter>Objects\Environment</Filter>
-    </ClCompile>
-    <ClCompile Include="source\SandBag.cpp">
-      <Filter>Objects\Environment</Filter>
-    </ClCompile>
-    <ClCompile Include="source\WeaponManager.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="source\FlameThrower.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="source\P90.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CreateExplodingZombieMsg.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CreateFastZombieMsg.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CreateFatZombieMsg.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CreateFlameBullet.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CreateTankZombieMsg.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CreateZombieMessage.cpp">
-      <Filter>Objects\Enemies</Filter>
+    <ClCompile Include="source\CreateSniperBullet.cpp">
+      <Filter>Messages</Filter>
     </ClCompile>
     <ClCompile Include="source\ExplodingZombie.cpp">
       <Filter>Objects\Enemies</Filter>
@@ -279,16 +246,106 @@
     <ClCompile Include="source\FatZombie.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="source\Spawner.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\SpawnManager.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="source\TankZombie.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="source\Zombie.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BarbedWire.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateExplodingZombieMsg.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateFastZombieMsg.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateFatZombieMsg.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateFlameBullet.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateTankZombieMsg.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateZombieMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LandMine.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SandBag.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\IntroState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\P90.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Spawner.cpp">
+      <Filter>Spawn System</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SpawnManager.cpp">
+      <Filter>Spawn System</Filter>
+    </ClCompile>
     <ClCompile Include="source\ShopState.cpp" />
+    <ClCompile Include="source\CreateGrenadeBullet.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Ak47.cpp">
+      <Filter>Weapons\Assault Rifles</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AssaultRifle.cpp">
+      <Filter>Weapons\Assault Rifles</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LMG.cpp">
+      <Filter>Weapons\Assault Rifles</Filter>
+    </ClCompile>
+    <ClCompile Include="source\UZI.cpp">
+      <Filter>Weapons\SMGs</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Tech9.cpp">
+      <Filter>Weapons\SMGs</Filter>
+    </ClCompile>
+    <ClCompile Include="source\P90.cpp">
+      <Filter>Weapons\SMGs</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AutoShotgun.cpp">
+      <Filter>Weapons\Shotguns</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SawnOff.cpp">
+      <Filter>Weapons\Shotguns</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Shotgun.cpp">
+      <Filter>Weapons\Shotguns</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FlameThrower.cpp">
+      <Filter>Weapons\Heavy</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Sniper.cpp">
+      <Filter>Weapons\Heavy</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Pistol.cpp">
+      <Filter>Weapons\Handguns</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Revolver.cpp">
+      <Filter>Weapons\Handguns</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GrenadeLauncher.cpp">
+      <Filter>Weapons\Heavy</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Grenade.cpp" />
+    <ClCompile Include="source\PukerBlaster.cpp">
+      <Filter>Weapons\Heavy</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WeaponManager.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreatePukeBullet.cpp" />
+    <ClCompile Include="source\CreateTurretMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -471,25 +528,10 @@
     <ClInclude Include="source\Turret.h">
       <Filter>Objects\Environment</Filter>
     </ClInclude>
-    <ClInclude Include="source\Zombie.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="source\EnvironmentalObject.h">
       <Filter>Objects\Environment</Filter>
     </ClInclude>
-    <ClInclude Include="source\Pistol.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Shotgun.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Sniper.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="source\Weapon.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="source\AssaultRifle.h">
       <Filter>Weapons</Filter>
     </ClInclude>
     <ClInclude Include="source\CreateShotgunBullet.h">
@@ -498,47 +540,11 @@
     <ClInclude Include="source\CreatePistolBullet.h">
       <Filter>Messages</Filter>
     </ClInclude>
-    <ClInclude Include="source\CreateSniperBullet.h">
-      <Filter>Messages</Filter>
-    </ClInclude>
     <ClInclude Include="source\CreateARifleBullet.h">
       <Filter>Messages</Filter>
     </ClInclude>
-    <ClInclude Include="source\BarbedWire.h">
-      <Filter>Objects\Environment</Filter>
-    </ClInclude>
-    <ClInclude Include="source\LandMine.h">
-      <Filter>Objects\Environment</Filter>
-    </ClInclude>
-    <ClInclude Include="source\SandBag.h">
-      <Filter>Objects\Environment</Filter>
-    </ClInclude>
-    <ClInclude Include="source\WeaponManager.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="source\FlameThrower.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="source\P90.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="source\CreateExplodingZombieMsg.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="source\CreateFastZombieMsg.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="source\CreateFatZombieMsg.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="source\CreateFlameBullet.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="source\CreateTankZombieMsg.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="source\CreateZombieMessage.h">
-      <Filter>Objects\Enemies</Filter>
+    <ClInclude Include="source\CreateSniperBullet.h">
+      <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="source\ExplodingZombie.h">
       <Filter>Objects\Enemies</Filter>
@@ -549,20 +555,110 @@
     <ClInclude Include="source\FatZombie.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="source\Spawner.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="source\SpawnManager.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="source\TankZombie.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="source\Zombie.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\BarbedWire.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateExplodingZombieMsg.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateFastZombieMsg.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateFatZombieMsg.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateFlameBullet.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateTankZombieMsg.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateZombieMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LandMine.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SandBag.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\IntroState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ShopStructures.h" />
+    <ClInclude Include="source\P90.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Spawner.h">
+      <Filter>Spawn System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SpawnManager.h">
+      <Filter>Spawn System</Filter>
+    </ClInclude>
+    <ClInclude Include="source\WeaponManager.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
     <ClInclude Include="source\ShopState.h" />
+    <ClInclude Include="source\CreateGrenadeBullet.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Ak47.h">
+      <Filter>Weapons\Assault Rifles</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AssaultRifle.h">
+      <Filter>Weapons\Assault Rifles</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LMG.h">
+      <Filter>Weapons\Assault Rifles</Filter>
+    </ClInclude>
+    <ClInclude Include="source\UZI.h">
+      <Filter>Weapons\SMGs</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Tech9.h">
+      <Filter>Weapons\SMGs</Filter>
+    </ClInclude>
+    <ClInclude Include="source\P90.h">
+      <Filter>Weapons\SMGs</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AutoShotgun.h">
+      <Filter>Weapons\Shotguns</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SawnOff.h">
+      <Filter>Weapons\Shotguns</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Shotgun.h">
+      <Filter>Weapons\Shotguns</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FlameThrower.h">
+      <Filter>Weapons\Heavy</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Sniper.h">
+      <Filter>Weapons\Heavy</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Pistol.h">
+      <Filter>Weapons\Handguns</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Revolver.h">
+      <Filter>Weapons\Handguns</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GrenadeLauncher.h">
+      <Filter>Weapons\Heavy</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Grenade.h" />
+    <ClInclude Include="source\PukerBlaster.h" />
+    <ClInclude Include="source\WeaponManager.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreatePukeBullet.h" />
+    <ClInclude Include="source\CreateTurretMessage.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="OptionsVolumes.txt">
-      <Filter>Objects\Enemies</Filter>
-    </Text>
+    <Text Include="OptionsVolumes.txt" />
   </ItemGroup>
 </Project>

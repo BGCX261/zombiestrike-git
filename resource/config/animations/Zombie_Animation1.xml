@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Animations>
-  <Animation looping="0">Zombie_01.png<Frame sx="0" sy="0" sw="128" sh="128" cx="20" cy="82" cw="109" ch="128" px="58" py="109" rx="58" ry="109" duration="0.25">NONE</Frame><Sheet path="C:\Users\fullsail\Desktop\Structure_of_Game_Production_I_September_2014\ProjectRepo2\starter_point\Code\resource\graphics\Zombie_01.png" /></Animation>
+  <Animation looping="0">zombies.jpg<Frame sx="273" sy="86" sw="322" sh="136" cx="15" cy="24" cw="36" ch="47" px="25" py="34" rx="25" ry="34" duration="0.25">NONE</Frame><Sheet path="C:\Users\fullsail\Desktop\ZombieStrike\resource\graphics\zombies.jpg" /></Animation>
 </Animations>

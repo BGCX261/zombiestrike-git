@@ -367,6 +367,8 @@ void MapManager::CreateLandMine(SGD::Point pos, EntityManager* entities)
 {
 	LandMine* landmine = new LandMine;
 	landmine->SetPosition(pos);
+	//landmine->SetAnimation("testLandmine");
+	landmine->SetActive(true);
 	entities->AddEntity(landmine, BUCKET_ENVIRO);
 	landmine->Release();
 	landmine = nullptr;
@@ -376,6 +378,8 @@ void MapManager::CreateSandBags(SGD::Point pos, EntityManager* entities)
 {
 	SandBag* sandbag = new SandBag;
 	sandbag->SetPosition(pos);
+	sandbag->SetAnimation("testSandbag");
+
 	entities->AddEntity(sandbag, BUCKET_ENVIRO);
 	sandbag->Release();
 	sandbag = nullptr;
@@ -384,6 +388,8 @@ void MapManager::CreateBarbedWire(SGD::Point pos, EntityManager* entities)
 {
 	BarbedWire* barbedWire = new BarbedWire;
 	barbedWire->SetPosition(pos);
+	barbedWire->SetAnimation("testBarbwire");
+
 	entities->AddEntity(barbedWire, BUCKET_ENVIRO);
 	barbedWire->Release();
 	barbedWire = nullptr;

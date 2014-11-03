@@ -1,6 +1,8 @@
 #include "LandMine.h"
 #include "AnimationManager.h"
 #include "Animation.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "GameplayState.h"
 
 
 LandMine::LandMine()
@@ -22,15 +24,15 @@ void LandMine::Update( float dt )
 	BaseObject::Update(dt);
 
 
-	// on last frame of expolsion animation
-	int numframes = AnimationManager::GetInstance()->GetAnimation("explode")->GetFrames().size();
-	numframes--;
+	//// on last frame of expolsion animation
+	//int numframes = AnimationManager::GetInstance()->GetAnimation("explode")->GetFrames().size();
+	//numframes--;
 
-	if (this->GetAnimation() == "explode" && this->GetAnimationStamp().m_nCurrFrame == numframes)
-	{
-		// deactivate landmine
-		this->isActive = false;
-	}
+	//if (this->GetAnimation() == "explode" && this->GetAnimationStamp().m_nCurrFrame == numframes)
+	//{
+	//	// deactivate landmine
+	//	this->isActive = false;
+	//}
 
 
 }
@@ -56,10 +58,11 @@ void LandMine::HandleCollision( const IBase* pOther )
 		pOther->GetType() == ObjectType::OBJ_FAST_ZOMBIE )
 	{
 		// activated mine
-		if (this->GetAnimation() == "landmine")
+		if (this->GetAnimation() == "testLandmine" || this->GetAnimation() == "landmine")
 		{
 			// trigger explosion
-			this->SetAnimation("explode");
+		//	this->SetAnimation("explode");
+			SGD::AudioManager::GetInstance()->PlayAudio(GameplayState::GetInstance()->explosion, false);
 		}
 
 		// exploding mine
@@ -67,6 +70,7 @@ void LandMine::HandleCollision( const IBase* pOther )
 		{
 			// insta-kill zombies caught in explosion
 		}
+		isActive = false;
 	}
 
 }

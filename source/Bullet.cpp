@@ -5,7 +5,12 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "AnimationManager.h"
 #include "DestroyObjectMessage.h"
-#include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+
+Bullet::Bullet() : Listener(this)
+{
+	RegisterForEvent("KILL_ME");
+}
 
 Bullet::~Bullet()
 {
@@ -15,8 +20,10 @@ Bullet::~Bullet()
 
 /*virtual*/ void Bullet::Update(float dt) /*override*/
 {
-	MovingObject::Update(dt);
+	//MovingObject::Update(dt);
 //	lifeTime -= m_vtVelocity.ComputeLength() * dt;
+	m_ptPosition += m_vtVelocity * dt;
+	AnimationManager::GetInstance()->Update(animation, dt, this);
 
 	if (IsDead() || lifeTime < 0)
 	{
@@ -28,6 +35,9 @@ Bullet::~Bullet()
 
 /*virtual*/ void Bullet::HandleCollision(const IBase* pOther)	/*override*/
 {
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
+
 	// player
 	if (pOther->GetType() == OBJ_SLOW_ZOMBIE ||
 		pOther->GetType() == OBJ_FAST_ZOMBIE || 
@@ -37,8 +47,9 @@ Bullet::~Bullet()
 	{
 		if (GetOwner() != pOther)
 		{
-			
-			
+			if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->bullet_hit_zombie) == false)
+				pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_zombie, false);
+
 			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 			dMsg->QueueMessage();
 			dMsg = nullptr;
@@ -48,6 +59,16 @@ Bullet::~Bullet()
 
 	// other stuff
 	else if (pOther->GetType() == ObjectType::OBJ_BASE || pOther->GetType() == ObjectType::OBJ_WALL)
+	{
+		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+		dMsg->QueueMessage();
+		dMsg = nullptr;
+	}
+}
+
+/*virtual*/ void Bullet::HandleEvent(const SGD::Event* pEvent)
+{
+	if (pEvent->GetEventID() == "KILL_ME")
 	{
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();

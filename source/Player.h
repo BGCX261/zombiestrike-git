@@ -81,6 +81,7 @@ class Player : public MovingObject, public SGD::Listener
 	SGD::Point		m_rectAbilityPoint;
 	SGD::Size		m_rectAbilitySize;
 
+	int				m_nNumTurrets		= 0;
 
 public:
 
@@ -93,6 +94,7 @@ public:
 	virtual void		HandleEvent			(const SGD::Event* pEvent);
 	virtual void		HandleCollision		(const IBase* pOther)		override;
 	virtual void		Attack				(void)						override;
+	virtual void		SpawnTurret			(void);
 
 
 	// Accessors
@@ -115,6 +117,8 @@ public:
 	bool				IsSprinting			(void) const				{ return m_bMoving; }
 	bool				isLevelCompleted	(void) const				{ return m_bLevelCompleted; }
 
+	int					GetNumTurrets		(void) const				{ return m_nNumTurrets; }
+	void				SetNumTurrets		(int tur)					{ m_nNumTurrets = tur; }
 
 
 

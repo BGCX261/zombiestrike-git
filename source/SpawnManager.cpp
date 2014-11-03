@@ -53,14 +53,15 @@ void SpawnManager::Update(float dt)
 
 				m_nZombieType = rand() % 100 + 1; // get a random number to decide type
 
-				if (m_nZombieType % 2 == 0)								//50% chance
-					m_nZombieType = BaseObject::OBJ_FAST_ZOMBIE;
+
+				if (m_nZombieType % 20 == 0)				 //5% changes
+					m_nZombieType = BaseObject::OBJ_TANK_ZOMBIE;
+				else if (m_nZombieType % 10 == 0)				 //10% chance
+					m_nZombieType = BaseObject::OBJ_EXPLODING_ZOMBIE;
+
 				else if (m_nZombieType % 5 == 0)						//20% chance
 					m_nZombieType = BaseObject::OBJ_FAT_ZOMBIE;
-				else if (m_nZombieType % 10 == 0)						//10% chance
-					m_nZombieType = BaseObject::OBJ_EXPLODING_ZOMBIE;
-				else if (m_nZombieType % 20 == 0)						//5% changes
-					m_nZombieType = BaseObject::OBJ_TANK_ZOMBIE;
+
 				else
 					m_nZombieType = BaseObject::OBJ_SLOW_ZOMBIE; //if its not a special, its normal
 
