@@ -17,17 +17,18 @@ ExplodingZombie::~ExplodingZombie()
 
 void ExplodingZombie::Update(float dt)
 {
-	if (isAlive)
-	{
-		if (currBehavior != nullptr)
-			currBehavior->Update(dt, this, m_pTarget->GetPosition());
-	}
-	else
-	{
-		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
-		dMsg->QueueMessage();
-		dMsg = nullptr;
-	}
+	Zombie::Update(dt);
+	//if (isAlive)
+	//{
+	//	if (currBehavior != nullptr)
+	//		currBehavior->Update(dt, this, m_pTarget->GetPosition());
+	//}
+	//else
+	//{
+	//	DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+	//	dMsg->QueueMessage();
+	//	dMsg = nullptr;
+	//}
 }
 
 

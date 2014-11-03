@@ -65,6 +65,10 @@ Turret::~Turret()
 		{
 			// turn off turet
 			isActive = false;
+			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+			dMsg->QueueMessage();
+			dMsg = nullptr;
+
 
 			// tell owner
 			m_pOwner->SetNumTurrets(m_pOwner->GetNumTurrets() - 1);

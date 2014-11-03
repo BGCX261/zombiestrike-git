@@ -150,9 +150,21 @@
 	// Input: L1 - Left Joystick
 	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
-		SGD::Point mpoint;
-		mpoint.x = pInput->GetMousePosition().x + pInput->GetLeftJoystick(0).x;
-		mpoint.y = pInput->GetMousePosition().y + pInput->GetLeftJoystick(0).y;
+		SGD::Point	mpoint		= pInput->GetMousePosition();
+		SGD::Vector	joystick	= pInput->GetLeftJoystick(0);
+		float		stickmin	= 0.500f;
+		float		mousevel	= 1.0f;
+
+
+		if (joystick.x > stickmin)
+			mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+			mpoint.x -= mousevel;
+		
+		if (joystick.y > stickmin)
+			mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+			mpoint.y -= mousevel;
 
 		if (mpoint.x < 0.0F)
 			mpoint.x = 0.0F;
