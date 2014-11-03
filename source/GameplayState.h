@@ -80,6 +80,7 @@ public:
 	SGD::HAudio footstep			= SGD::INVALID_HANDLE;
 	SGD::HAudio turretfire			= SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWpnSwitch		= SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWaveChange = SGD::INVALID_HANDLE;
 
 	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
 

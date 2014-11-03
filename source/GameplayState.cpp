@@ -133,6 +133,7 @@
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
 	m_hWpnSwitch		= pAudio->LoadAudio("resource/audio/switchweapon.wav");
+	m_hWaveChange		= pAudio->LoadAudio("resource/audio/wavechange.wav");
 
 	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/hudweapons.png");
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
@@ -180,6 +181,7 @@
 	pAudio->UnloadAudio(cannot_use_skill);
 	pAudio->UnloadAudio(footstep);
 	pAudio->UnloadAudio(m_hWpnSwitch);
+	pAudio->UnloadAudio(m_hWaveChange);
 
 	camera.SetTarget(nullptr);
 
@@ -352,6 +354,7 @@
 /*virtual*/ void GameplayState::Render( void )
 {
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 	const BitmapFont * pFont = Game::GetInstance()->GetFont();
 
 	SGD::Point textPos({ Game::GetInstance()->GetScreenWidth() / 2, Game::GetInstance()->GetScreenHeight() / 2 });
@@ -377,6 +380,11 @@
 		nWave << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1;
 
 		pFont->Draw(nWave.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+
+		if (pAudio->IsAudioPlaying(m_hWaveChange) == false)
+		{
+			pAudio->PlayAudio(m_hWaveChange, false);
+		}
 	}
 
 	else if (m_bShopState == false && SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies() && SpawnManager::GetInstance()->GetGameWon() == false)
