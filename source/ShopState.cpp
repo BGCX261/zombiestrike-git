@@ -24,11 +24,14 @@
 // IGameState Interface:
 void	ShopState::Enter(void)
 {
+	profile = Game::GetInstance()->GetProfile();
+
 	screenSize = SGD::Size( Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() );
 
 	weaponsImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/weapons.png");
 	buyButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/rectangle1.png");
 	upgradeButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/rectangle2.png");
+	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/crosshair.png");
 
 
 	LoadShopStatus();
@@ -41,7 +44,7 @@ void	ShopState::Enter(void)
 	}
 	Buttons[8] = SGD::Rectangle({ screenSize.width* 0.7f, screenSize.height * 0.7f }, SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
 
-	
+
 }
 void	ShopState::Exit(void)
 {
@@ -50,6 +53,7 @@ void	ShopState::Exit(void)
 
 bool	ShopState::Input(void)
 {
+	
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
 	if (pInput->IsKeyPressed(SGD::Key::Q) == true)
@@ -66,36 +70,246 @@ bool	ShopState::Input(void)
 			currPage = 0;
 
 	}
+	if (pInput->IsKeyPressed(SGD::Key::Tab) == true)
+		currTab++;
+		
+	SGD::Point mousePos = pInput->GetMousePosition();
 
 	switch (currPage)
 	{
 	case PISTOLS:
+	{
+					if (currTab > 1)
+						currTab = 0;
 
-		if (pInput->IsKeyPressed(SGD::Key::Tab) == true)
-		{
-			currTab++;
-			if (currTab > 1)
-				currTab = 0;
-		}
+					if (currTab == 0)
+					{
+						if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+						{
+							for (unsigned int currButton = 0; currButton < 3; currButton++)
+							{
+								if (mousePos.IsWithinRectangle(Buttons[currButton]))
+								{
+									if (currButton == 0)
+									{
+										if (pistolUpgrade.magSize.isMaxed == false)
+										{
+											if (profile.money >= 500)
+											{
+												pistolUpgrade.magSize.upgradedSkill.stat += 5;
+												pistolUpgrade.magSize.upgradedSkill.currTier++;
+
+												profile.money -= 500;
+
+												if (pistolUpgrade.magSize.upgradedSkill.currTier == pistolUpgrade.magSize.upgradedSkill.maxTier)
+													pistolUpgrade.magSize.isMaxed = true;
+											}
+												
+												
+										}
+										
+									}
+
+									else if (currButton == 1)
+									{
+										if (pistolUpgrade.reloadTime.isMaxed == false)
+										{
+											if (profile.money >= 500)
+											{
+												profile.money -= 500;
+
+												pistolUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
+												pistolUpgrade.reloadTime.upgradedSkill.currTier++;
+
+												if (pistolUpgrade.reloadTime.upgradedSkill.currTier == pistolUpgrade.reloadTime.upgradedSkill.maxTier)
+													pistolUpgrade.reloadTime.isMaxed = true;
+											}
+										}
+									}
+									else if (currButton == 2)
+									{
+										if (pistolUpgrade.recoilTime.isMaxed == false)
+										{
+											if (profile.money >= 500)
+											{
+												profile.money -= 500;
+
+												pistolUpgrade.recoilTime.upgradedSkill.stat -= 0.11f;
+												pistolUpgrade.recoilTime.upgradedSkill.currTier++;
+
+												if (pistolUpgrade.recoilTime.upgradedSkill.currTier == pistolUpgrade.recoilTime.upgradedSkill.maxTier)
+													pistolUpgrade.recoilTime.isMaxed = true;
+											}
+										}
+									}
+								}
+							}
+						}
+					
+						
+					}
+					else
+					{
+						if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+						{
+							for (unsigned int currButton = 0; currButton < 8; currButton++)
+							{
+								if (mousePos.IsWithinRectangle(Buttons[currButton]))
+								{
+									switch (currButton)
+									{
+									case 0:
+										if (revolverUpgrade.magSize.isMaxed == false)
+										{
+											if (profile.money >= 600)
+											{
+												profile.money -= 600;
+
+												revolverUpgrade.magSize.upgradedSkill.stat += 5;
+												revolverUpgrade.magSize.upgradedSkill.currTier++;
+
+												if (revolverUpgrade.magSize.upgradedSkill.currTier == revolverUpgrade.magSize.upgradedSkill.maxTier)
+													revolverUpgrade.magSize.isMaxed = true;
+											}
+										}
+
+										break;
+									case 1:
+										if (revolverUpgrade.reloadTime.isMaxed == false)
+										{
+											if (profile.money >= 600)
+											{
+												profile.money -= 600;
+												revolverUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
+												revolverUpgrade.reloadTime.upgradedSkill.currTier++;
+
+												if (revolverUpgrade.reloadTime.upgradedSkill.currTier == revolverUpgrade.reloadTime.upgradedSkill.maxTier)
+													revolverUpgrade.reloadTime.isMaxed = true;
+											}
+										}
+										break;
+									case 2:
+										if (revolverUpgrade.recoilTime.isMaxed == false)
+										{
+											if (profile.money >= 600)
+											{
+												profile.money -= 600;
+												revolverUpgrade.recoilTime.upgradedSkill.stat -= 0.11f;
+												revolverUpgrade.recoilTime.upgradedSkill.currTier++;
+
+												if (revolverUpgrade.recoilTime.upgradedSkill.currTier == revolverUpgrade.recoilTime.upgradedSkill.maxTier)
+													revolverUpgrade.recoilTime.isMaxed = true;
+											}
+										}
+										break;
+									case 3:
+										if (revolverUpgrade.penPower.isMaxed == false)
+										{
+											if (profile.money >= 600)
+											{
+												profile.money -= 600;
+												revolverUpgrade.penPower.upgradedSkill.stat++;
+												revolverUpgrade.penPower.upgradedSkill.currTier++;
+
+												if (revolverUpgrade.penPower.upgradedSkill.currTier == revolverUpgrade.recoilTime.upgradedSkill.maxTier)
+													revolverUpgrade.penPower.isMaxed = true;
+											}
+										}
+										break;
+									case 4:
+										if (revolverUpgrade.damage.isMaxed == false)
+										{
+											if (profile.money >= 600)
+											{
+												profile.money -= 600;
+												revolverUpgrade.damage.upgradedSkill.stat -= 0.11f;
+												revolverUpgrade.damage.upgradedSkill.currTier++;
+
+												if (revolverUpgrade.damage.upgradedSkill.currTier == revolverUpgrade.damage.upgradedSkill.maxTier)
+													revolverUpgrade.damage.isMaxed = true;
+											}
+										}
+										break;
+									case 5:
+										if (revolverUpgrade.ammoCap.isMaxed == false)
+										{
+											if (profile.money >= 600)
+											{
+												profile.money -= 600;
+												revolverUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+												revolverUpgrade.ammoCap.upgradedSkill.currTier++;
+
+												if (revolverUpgrade.ammoCap.upgradedSkill.currTier == revolverUpgrade.ammoCap.upgradedSkill.maxTier)
+													revolverUpgrade.ammoCap.isMaxed = true;
+											}
+										}
+										break;
+									case 6:
+										if (revolverUpgrade.totalAmmo.isMaxed == false)
+										{
+											if (profile.money >= 600)
+											{
+												profile.money -= 600;
+												revolverUpgrade.recoilTime.upgradedSkill.stat -= 0.11f;
+												revolverUpgrade.recoilTime.upgradedSkill.currTier++;
+
+												if (revolverUpgrade.recoilTime.upgradedSkill.currTier == revolverUpgrade.recoilTime.upgradedSkill.maxTier)
+													revolverUpgrade.recoilTime.isMaxed = true;
+											}
+										}
+										break;
+									case 7:
+										if (revolverUpgrade.recoilTime.isMaxed == false)
+										{
+											if (profile.money >= 600)
+											{
+												profile.money -= 600;
+												revolverUpgrade.recoilTime.upgradedSkill.stat -= 0.11f;
+												revolverUpgrade.recoilTime.upgradedSkill.currTier++;
+
+												if (revolverUpgrade.recoilTime.upgradedSkill.currTier == revolverUpgrade.recoilTime.upgradedSkill.maxTier)
+													revolverUpgrade.recoilTime.isMaxed = true;
+											}
+										}
+										break;
 
 
+									}
+								}
+							}
+						}
+					}
+									
+					
+
+	}
+		
 		break;
 	case SHOTGUNS:
+		if (currTab > 2)
+			currTab = 0;
+		break;
 	case SMGS:
+		if (currTab > 2)
+			currTab = 0;
+		break;
 	case ASSAULT_RIFLES:
+		if (currTab > 2)
+			currTab = 0;
+		break;
+
 	case HEAVY:
-		if (pInput->IsKeyPressed(SGD::Key::Tab) == true)
-		{
-			currTab++;
+	
 			if (currTab > 2)
 				currTab = 0;
-		}
+		
 		break;
 	}
 
 	
 	return true;
 }
+
 void	ShopState::Update(float elapsedTime)
 {
 
@@ -145,17 +359,17 @@ void	ShopState::Render(void)
 						for (size_t i = 0; i < 3; i++)
 							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
 						
-						if (pistolUpgrade.magSize.upgradedSkill.currTier < pistolUpgrade.magSize.upgradedSkill.maxTier)
+						if (pistolUpgrade.magSize.isMaxed == false)
 							pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (pistolUpgrade.magSize.upgradedSkill.currTier < pistolUpgrade.reloadTime.upgradedSkill.maxTier)
+						if (pistolUpgrade.reloadTime.isMaxed == false)
 							pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 						
-						if (pistolUpgrade.magSize.upgradedSkill.currTier < pistolUpgrade.recoilTime.upgradedSkill.maxTier)
+						if (pistolUpgrade.recoilTime.isMaxed == false)
 							pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
@@ -208,37 +422,37 @@ void	ShopState::Render(void)
 						for (size_t i = 0; i < 7; i++)
 							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
 					
-						if (revolverUpgrade.magSize.upgradedSkill.currTier < revolverUpgrade.magSize.upgradedSkill.maxTier)
+						if (revolverUpgrade.magSize.isMaxed)
 							pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.reloadTime.upgradedSkill.currTier < revolverUpgrade.reloadTime.upgradedSkill.maxTier)
+						if (revolverUpgrade.reloadTime.isMaxed)
 							pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.recoilTime.upgradedSkill.currTier < revolverUpgrade.recoilTime.upgradedSkill.maxTier)
+						if (revolverUpgrade.recoilTime.isMaxed)
 							pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.penPower.upgradedSkill.currTier < revolverUpgrade.penPower.upgradedSkill.maxTier)
+						if (revolverUpgrade.penPower.isMaxed)
 							pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.damage.upgradedSkill.currTier < revolverUpgrade.damage.upgradedSkill.maxTier)
+						if (revolverUpgrade.damage.isMaxed)
 							pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.ammoCap.upgradedSkill.currTier < revolverUpgrade.ammoCap.upgradedSkill.maxTier)
+						if (revolverUpgrade.ammoCap.isMaxed)
 							pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.totalAmmo.upgradedSkill.currTier < revolverUpgrade.totalAmmo.upgradedSkill.maxTier)
+						if (revolverUpgrade.totalAmmo.isMaxed)
 							pFont->Draw("Buy Ammo", { Buttons[6].left + 18, Buttons[6].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Ammo Full", { Buttons[6].left + 18, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
@@ -1311,6 +1525,16 @@ void	ShopState::Render(void)
 		break;
 
 	}
+	for (unsigned int i = 0; i < 1; i++)
+	{
+		pGraphics->DrawRectangle(Buttons[i], { 0, 0, 0, 0 }, { 255, 255, 0, 0 });
+	}
+	// Draw the reticle
+	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+	//float		retscale = 0.8f;
+
+	retpos.Offset(-5.0f, -5.0f);
+	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { 1.0f, 1.0f });
 
 }
 

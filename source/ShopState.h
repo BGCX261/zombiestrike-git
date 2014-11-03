@@ -1,6 +1,7 @@
 #pragma once
 #include "IGameState.h"
 #include "ShopStructures.h"
+#include "GamerProfile.h"
 
 #define BUTTON_WIDTH 123
 #define BUTTON_HEIGHT 27
@@ -62,7 +63,9 @@ private:
 	SGD::HTexture weaponsImage = SGD::INVALID_HANDLE;
 	SGD::HTexture buyButton = SGD::INVALID_HANDLE;
 	SGD::HTexture upgradeButton = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hReticleImage = SGD::INVALID_HANDLE;
 
+	GamerProfile profile;
 	SGD::Rectangle Buttons[9];
 	SGD::Size screenSize;
 };

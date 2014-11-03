@@ -27,6 +27,7 @@ struct GamerProfile
 	SniperUpgrade sniper;
 	FlamethrowerUpgrade flameThrower;
 	GrenadeLauncherUpgrade nadeLauncher;
+	int money;
 
 
 
