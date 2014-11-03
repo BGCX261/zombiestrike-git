@@ -70,12 +70,15 @@ bool	ShopState::Input(void)
 	switch (currPage)
 	{
 	case PISTOLS:
+
 		if (pInput->IsKeyPressed(SGD::Key::Tab) == true)
 		{
 			currTab++;
 			if (currTab > 1)
 				currTab = 0;
 		}
+
+
 		break;
 	case SHOTGUNS:
 	case SMGS:

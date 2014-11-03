@@ -208,7 +208,7 @@
 		{
 		case MenuItems::PLAY_GAME:
 			{
-				Game::GetInstance()->AddState(GameplayState::GetInstance());
+				Game::GetInstance()->AddState(ShopState::GetInstance());
 				return true;
 			}
 			break;
