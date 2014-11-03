@@ -32,6 +32,7 @@ protected:
 	float health = 100.0f;
 	float damage = 2.0f;
 	bool isAlive = true;
+	bool isCounted = false;
 
 
 	friend class BaseBehavior;

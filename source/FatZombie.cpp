@@ -7,14 +7,13 @@
 #include "AnimationManager.h"
 #include "Bullet.h"
 #include "DestroyObjectMessage.h"
+#include "SpawnManager.h"
 
 
 FatZombie::FatZombie()
 {
 	health = 200.0f;
 	damage = 20.0f;
-
-
 }
 
 
@@ -34,8 +33,12 @@ void FatZombie::Update(float dt)
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();
 		dMsg = nullptr;
+
+		SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
+
 	}
 
+	MovingObject::Update(dt);
 }
 
 

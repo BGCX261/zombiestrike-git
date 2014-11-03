@@ -1,13 +1,48 @@
 #include "SpawnManager.h"
 #include "Spawner.h"
+#include <fstream>
+#include "GameplayState.h"
+
+using namespace std;
 
 /*static*/ SpawnManager* SpawnManager::GetInstance(void)
 {
 	static SpawnManager s_Instance;	// stored in global memory once
 	return &s_Instance;
 }
+
 void SpawnManager::Update(float dt)
-{
+{	
+	if (GameplayState::GetInstance()->GetShopState() == true && m_nNumWaves <= m_vEnemyWaves.size())
+	{
+		GameplayState::GetInstance()->SetShopState(false);
+
+		m_nCurrWave++;
+
+		m_nEnemiesKilled = 0;
+		
+		m_nNumEnemies = 0;
+
+		if (m_nCurrWave < m_vEnemyWaves.size())
+		{
+			m_nWaveEnemies = m_vEnemyWaves[m_nCurrWave];
+			
+			Activate();
+		}
+
+		else
+		{
+			isGameWon = true;
+		}
+		
+		
+	}
+
+	else if (m_nNumWaves == m_vEnemyWaves.size() && m_nEnemiesKilled == m_nWaveEnemies)
+	{
+		
+	}
+
 	if (isActive == true) // if its on
 	{
 		if (m_fSpawnTimer.Update(dt)) // an the spawn timer is up
@@ -18,13 +53,13 @@ void SpawnManager::Update(float dt)
 
 				m_nZombieType = rand() % 100 + 1; // get a random number to decide type
 
-				if (m_nZombieType % 2 == 0)					 //50% chance
+				if (m_nZombieType % 2 == 0)								//50% chance
 					m_nZombieType = BaseObject::OBJ_FAST_ZOMBIE;
-				else if (m_nZombieType % 5 == 0)				 //20% chance
+				else if (m_nZombieType % 5 == 0)						//20% chance
 					m_nZombieType = BaseObject::OBJ_FAT_ZOMBIE;
-				else if (m_nZombieType % 10 == 0)				 //10% chance
+				else if (m_nZombieType % 10 == 0)						//10% chance
 					m_nZombieType = BaseObject::OBJ_EXPLODING_ZOMBIE;
-				else if (m_nZombieType % 20 == 0)				 //5% changes
+				else if (m_nZombieType % 20 == 0)						//5% changes
 					m_nZombieType = BaseObject::OBJ_TANK_ZOMBIE;
 				else
 					m_nZombieType = BaseObject::OBJ_SLOW_ZOMBIE; //if its not a special, its normal
@@ -39,7 +74,35 @@ void SpawnManager::Update(float dt)
 				m_fSpawnTimer.AddTime(newSpawnTime); // add the time
 			}
 		}
-		
 	}
 }
+
+void SpawnManager::LoadFromFile(const char * fpath)
+{
+	int numEnemies;
+
+	fstream lfile(fpath,ios_base::in);
+
+	if (lfile.is_open())
+	{
+		while (!lfile.eof())
+		{
+			lfile >> numEnemies;
+			m_vEnemyWaves.push_back(numEnemies);
+		}
+
+		lfile.close();
+	}
+
+	m_nNumWaves = m_vEnemyWaves.size();
+
+	m_nWaveEnemies = m_vEnemyWaves[0];
+
+	m_nCurrWave = 0;
+
+	//m_vEnemyWaves.push_back(10);
+	//m_vEnemyWaves.push_back(20);
+
+}
+
 

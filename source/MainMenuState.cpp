@@ -14,6 +14,7 @@
 #include "CreditsState.h"
 #include "OptionsState.h"
 
+#include "../SGD Wrappers/SGD_EventManager.h"
 
 /**************************************************************/
 // GetInstance

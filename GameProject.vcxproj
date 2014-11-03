@@ -139,6 +139,7 @@
     <ClCompile Include="source\RotateTowardsBehavior.cpp" />
     <ClCompile Include="source\RunToBehavior.cpp" />
     <ClCompile Include="source\SandBag.cpp" />
+    <ClCompile Include="source\ShopState.cpp" />
     <ClCompile Include="source\Shotgun.cpp" />
     <ClCompile Include="source\Sniper.cpp" />
     <ClCompile Include="source\Spawner.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="source\RotateTowardsBehavior.h" />
     <ClInclude Include="source\RunToBehavior.h" />
     <ClInclude Include="source\SandBag.h" />
+    <ClInclude Include="source\ShopState.h" />
     <ClInclude Include="source\Shotgun.h" />
     <ClInclude Include="source\SLList.h" />
     <ClInclude Include="source\Sniper.h" />

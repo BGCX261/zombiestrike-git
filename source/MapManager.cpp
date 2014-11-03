@@ -29,7 +29,7 @@ enum EntityBucket {  BUCKET_ENEMIES, BUCKET_PLAYER, BUCKET_ENVIRO, BUCKET_BULLET
 BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pEntities)
 {
 	//EntityManager* m_pEntities = new EntityManager;
-	Player* player;
+	Player* player = nullptr;
 
 	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
 

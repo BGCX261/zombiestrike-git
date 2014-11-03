@@ -5,6 +5,7 @@
 #include "PauseState.h"
 #include "WinGameState.h"
 #include "LoseGameState.h"
+#include "ShopState.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -57,11 +58,10 @@
 #include "Frame.h"
 #include "MapManager.h"
 
+#include <Windows.h>
 #include <cstdlib>
 #include <cassert>
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-
 
 /**************************************************************/
 // GetInstance
@@ -72,7 +72,6 @@
 	static GameplayState s_Instance;	// stored in global memory once
 	return &s_Instance;
 }
-
 
 /**************************************************************/
 // Enter
@@ -87,9 +86,6 @@
 	// Initialize the Event & Message Managers
 	SGD::EventManager::GetInstance()->Initialize();
 	SGD::MessageManager::GetInstance()->Initialize( &MessageProc );
-
-	
-	
 
 	// Allocate the Entity Manager
 	m_pEntities = new EntityManager;
@@ -127,6 +123,7 @@
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
 
 	MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetProfile(), m_pEntities);
+	SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
 	SpawnManager::GetInstance()->Activate();
 	// Music
 
@@ -140,12 +137,8 @@
 	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/hudweapons.png");
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
 
-	
-
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
-
-
 
 	// Create the main entities
 
@@ -156,6 +149,7 @@
 	
 	WeaponManager::GetInstance()->Initialize(*pPlayer);
 
+	m_tCompleteWave.AddTime(3);
 }
 
 
@@ -215,6 +209,7 @@
 	
 
 	// Terminate & deallocate the SGD wrappers
+
 	SGD::EventManager::GetInstance()->Terminate();
 	SGD::EventManager::DeleteInstance();
 	SGD::MessageManager::GetInstance()->Terminate();
@@ -270,8 +265,10 @@
 /*virtual*/ void GameplayState::Update( float dt )
 {
 	WeaponManager::GetInstance()->Update(dt);
+	SpawnManager * eSpawner = SpawnManager::GetInstance();
 
 	Player* player = dynamic_cast<Player*>(m_pPlayer);
+
 
 	if (player->isLevelCompleted() == false)
 	{
@@ -301,12 +298,51 @@
 
 		// Update the Map Manager
 	//	MapManager::GetInstance()->Update(dt);
+
 	}
+
 	else
 	{
 		Game::GetInstance()->RemoveState();
 		Game::GetInstance()->AddState(GameplayState::GetInstance());
 	}
+
+	//For Testing enemies killed to enemies spawned for the current wave//
+	//int numKilled = SpawnManager::GetInstance()->GetEnemiesKilled();
+
+	if (SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies())
+	{
+		SpawnManager::GetInstance()->Deactivate();
+
+		if (m_tCompleteWave.GetTime() > 0.0f)
+		{
+			m_tCompleteWave.Update(dt);
+		}
+
+		else if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
+		{
+			SpawnManager::GetInstance()->SetGameWon(true);
+		}
+
+		else
+		{
+			m_bShopState = true;
+
+			m_tNextWave.AddTime(6);
+			m_tCompleteWave.AddTime(3);
+
+			SGD::Event msg("PAUSE");
+			msg.SendEventNow();
+
+			//Calls the shopstate//
+			Game::GetInstance()->AddState(ShopState::GetInstance());
+
+		}
+	}
+
+	//ShopState::GetInstance()->Update(dt);
+	m_tNextWave.Update(dt);
+
 }
 
 
@@ -316,15 +352,15 @@
 /*virtual*/ void GameplayState::Render( void )
 {
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	const BitmapFont * pFont = Game::GetInstance()->GetFont();
 
+	SGD::Point textPos({ Game::GetInstance()->GetScreenWidth() / 2, Game::GetInstance()->GetScreenHeight() / 2 });
 
 	// Draw background
 	MapManager::GetInstance()->Render();
 
-
 	// Render the entities
 	m_pEntities->RenderAll();
-
 
 	// Draw status bars
 	float top	= 450;
@@ -335,7 +371,36 @@
 
 	WeaponManager::GetInstance()->Render();
 
-	///////OLD EnergyBar Render///////
+	if (m_tNextWave.GetTime() > 0.0f && m_bShopState == false && SpawnManager::GetInstance()->GetGameWon() == false)
+	{
+		stringstream nWave;
+		nWave << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1;
+
+		pFont->Draw(nWave.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+	}
+
+	else if (m_bShopState == false && SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies() && SpawnManager::GetInstance()->GetGameWon() == false)
+	{
+		stringstream nComplete;
+		nComplete << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1 << " Complete";
+
+		pFont->Draw(nComplete.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+	}
+
+	else if (SpawnManager::GetInstance()->GetGameWon() == true)
+	{
+		stringstream gameWin;
+		gameWin << "YOU WIN!";
+
+		pFont->Draw(gameWin.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+	}
+
+	if (SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies())
+	{
+
+	}
+
+	///////OLD Energy Bar & Stamina Bar Render///////
 	/*
 	pGraphics->DrawRectangle(energyRect, { 0, 0, 255 });
 
@@ -343,9 +408,7 @@
 	pGraphics->DrawRectangle(staminaRect, { 0, 255, 0 });
 	*/
 	
-
 }
-
 
 /**************************************************************/
 // MessageProc
@@ -463,8 +526,6 @@ BaseObject* GameplayState::CreatePlayer( void )
 	player->SetAnimation("player");
 	return player;
 }
-
-
 
 void GameplayState::CreatePickUp( int type, SGD::Point pos )
 {
@@ -614,7 +675,7 @@ void GameplayState::CreateSnipeBullet(Weapon* owner)
 	bullet = nullptr;
 }
 
-void	GameplayState::CreateZombie(Spawner* owner)
+void GameplayState::CreateZombie(Spawner* owner)
 {
 	Zombie* zombie = new Zombie;
 	zombie->SetPosition(owner->GetPosition());
@@ -628,7 +689,7 @@ void	GameplayState::CreateZombie(Spawner* owner)
 	zombie->Release();
 	zombie = nullptr;
 }
-void			GameplayState::CreateFatZombie(Spawner* owner)
+void GameplayState::CreateFatZombie(Spawner* owner)
 {
 	FatZombie* zombie = new FatZombie;
 	zombie->SetPosition(owner->GetPosition());
@@ -642,7 +703,7 @@ void			GameplayState::CreateFatZombie(Spawner* owner)
 	zombie->Release();
 	zombie = nullptr;
 }
-void			GameplayState::CreateFastZombie(Spawner* owner)
+void GameplayState::CreateFastZombie(Spawner* owner)
 {
 	FastZombie* zombie = new FastZombie;
 	zombie->SetPosition(owner->GetPosition());
@@ -657,7 +718,7 @@ void			GameplayState::CreateFastZombie(Spawner* owner)
 	zombie = nullptr;
 }
 
-void			GameplayState::CreateExplodingZombie(Spawner* owner)
+void GameplayState::CreateExplodingZombie(Spawner* owner)
 {
 	ExplodingZombie* zombie = new ExplodingZombie;
 	zombie->SetPosition(owner->GetPosition());
@@ -671,7 +732,7 @@ void			GameplayState::CreateExplodingZombie(Spawner* owner)
 	zombie->Release();
 	zombie = nullptr;
 }
-void			GameplayState::CreateTankZombie(Spawner* owner)
+void GameplayState::CreateTankZombie(Spawner* owner)
 {
 	TankZombie* zombie = new TankZombie;
 	zombie->SetPosition(owner->GetPosition());

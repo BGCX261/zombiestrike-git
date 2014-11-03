@@ -7,7 +7,7 @@
 #include "../SGD Wrappers/SGD_String.h"
 #include "GameCamera.h"
 #include "MapManager.h"
-
+#include "Timer.h"
 
 /**************************************************************/
 // Forward class declaration
@@ -17,8 +17,6 @@ class Spawner;
 class EntityManager;
 class BehaviorManager;
 class AnimationManager;
-
-
 
 /**************************************************************/
 // GameplayState class
@@ -31,9 +29,10 @@ public:
 	// Singleton Accessor:
 	static GameplayState* GetInstance( void );
 
-
 	/**********************************************************/
 	// IGameState Interface:
+	
+
 	virtual void	Enter	( void )		override;	// load resources
 	virtual void	Exit	( void )		override;	// unload resources
 													
@@ -48,6 +47,12 @@ public:
 	SGD::Size		GetWorldSize	( void )	{ return m_szWorldSize; }
 	void			PauseAudio		( bool );
 
+	bool GetShopState() const { return m_bShopState; }
+	Timer GetWaveTimer() const { return m_tNextWave; }
+	Timer GetWaveEndTimer() const { return m_tCompleteWave; }
+
+	void SetShopState(bool shopState) { m_bShopState = shopState; }
+	void SetWaveTimer(Timer nwave) { m_tNextWave = nwave; }
 
 	/**********************************************************/
 	// Factory Methods:
@@ -57,8 +62,6 @@ public:
 	void			CreateFastZombie(Spawner* owner);
 	void			CreateExplodingZombie(Spawner* owner);
 	void			CreateTankZombie(Spawner* owner);
-
-
 	void			CreatePickUp	( int type, SGD::Point pos );
 	void			CreateTurret	( SGD::Point pos, float rotation );
 	void			CreateBullet	( Weapon* owner );
@@ -83,8 +86,8 @@ public:
 private:
 	/**********************************************************/
 	// SINGLETON (not-dynamically allocated)
-	GameplayState( void )			= default;	// default constructor
-	virtual ~GameplayState( void )	= default;	// destructor
+	GameplayState( void ) = default;	// default constructor
+	virtual ~GameplayState( void) = default;	// destructor
 
 	GameplayState( const GameplayState& )				= delete;	// copy constructor
 	GameplayState& operator= ( const GameplayState& )	= delete;	// assignment operator
@@ -111,4 +114,8 @@ private:
 	// World size
 	SGD::Size				m_szWorldSize		= { 1024, 768 };
 
+	bool m_bShopState = false;
+
+	Timer m_tNextWave;
+	Timer m_tCompleteWave;
 };
