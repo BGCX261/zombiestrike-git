@@ -1,5 +1,6 @@
 #include "ExplodingZombie.h"
 #include "BaseBehavior.h"
+#include "../SGD Wrappers/SGD_Event.h"
 #include "DestroyObjectMessage.h"
 
 
@@ -17,18 +18,22 @@ ExplodingZombie::~ExplodingZombie()
 
 void ExplodingZombie::Update(float dt)
 {
-	Zombie::Update(dt);
-	//if (isAlive)
-	//{
-	//	if (currBehavior != nullptr)
-	//		currBehavior->Update(dt, this, m_pTarget->GetPosition());
-	//}
-	//else
-	//{
-	//	DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
-	//	dMsg->QueueMessage();
-	//	dMsg = nullptr;
-	//}
+	if (isAlive)
+	{
+		if (currBehavior != nullptr)
+			currBehavior->Update(dt, this, m_pTarget->GetPosition());
+
+		// possible turret target
+		SGD::Event event = { "ASSESS_THREAT", nullptr, this };
+		event.SendEventNow(nullptr);
+
+	}
+	else
+	{
+		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+		dMsg->QueueMessage();
+		dMsg = nullptr;
+	}
 	MovingObject::Update(dt);
 
 }

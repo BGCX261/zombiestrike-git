@@ -173,7 +173,6 @@
     <ClCompile Include="source\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_Color.h" />
     <ClInclude Include="SGD Wrappers\SGD_Declarations.h" />
@@ -282,9 +281,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="GameProject.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

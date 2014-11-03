@@ -35,7 +35,6 @@ void Zombie::Update(float dt)
 		if (currBehavior != nullptr)
 			currBehavior->Update(dt, this, m_pTarget->GetPosition());
 
-
 		// possible turret target
 		SGD::Event event = { "ASSESS_THREAT", nullptr, this };
 		event.SendEventNow(nullptr);

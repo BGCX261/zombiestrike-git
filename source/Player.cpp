@@ -141,33 +141,6 @@ Player::~Player()
 	//flameThrower->Update(dt);
 
 
-	// hud skills rects
-	switch (m_unCurrAbility)
-	{
-	case 0: // Camo
-		m_rectAbilityPoint.x	= 13.0f;
-		m_rectAbilitySize		= { 95.0f, 102.0f };
-		break;
-
-	case 1: //ppp
-		m_rectAbilityPoint.x	= 116.0f;
-		m_rectAbilitySize		= { 104.0f, 102.0f };
-		break;
-
-	case 2: // ppp
-		m_rectAbilityPoint.x	= 226.0f;
-		m_rectAbilitySize		= { 104.0f, 102.0f };
-		break;
-
-	case 3: // ppp
-		m_rectAbilityPoint.x	= 336.0f;
-		m_rectAbilitySize		= { 104.0f, 102.0f };
-		break;
-
-	default:
-		break;
-	}
-	
 
 	// update hud
 	hud.Update(dt);
@@ -274,11 +247,11 @@ void Player::Render()
 	{
 		case ObjectType::OBJ_SLOW_ZOMBIE:
 		{
-			//if (pAudio->IsAudioPlaying(*m_hDeath) == false && m_bIsAlive == true)
-			//	voice = pAudio->PlayAudio(*m_hDeath, false);
-			//pAudio->SetVoiceVolume(voice);
+			if (pAudio->IsAudioPlaying(*m_hDeath) == false && m_bIsAlive == true)
+				voice = pAudio->PlayAudio(*m_hDeath, false);
+			pAudio->SetVoiceVolume(voice);
 
-			//m_bIsAlive = false;
+			m_bIsAlive = false;
 		}
 		break;
 

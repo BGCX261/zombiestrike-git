@@ -345,6 +345,7 @@
       <Filter>Weapons</Filter>
     </ClCompile>
     <ClCompile Include="source\CreatePukeBullet.cpp" />
+    <ClCompile Include="source\CreateTurretMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -650,17 +651,14 @@
       <Filter>Weapons\Heavy</Filter>
     </ClInclude>
     <ClInclude Include="source\Grenade.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="source\PukerBlaster.h" />
     <ClInclude Include="source\WeaponManager.h">
       <Filter>Weapons</Filter>
     </ClInclude>
     <ClInclude Include="source\CreatePukeBullet.h" />
+    <ClInclude Include="source\CreateTurretMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="GameProject.rc" />
   </ItemGroup>
 </Project>

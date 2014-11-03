@@ -6,6 +6,7 @@
 #include "BaseBehavior.h"
 #include "AnimationManager.h"
 #include "Bullet.h"
+#include "../SGD Wrappers/SGD_Event.h"
 #include "DestroyObjectMessage.h"
 #include "Weapon.h"
 #include "PukerBlaster.h"
@@ -27,18 +28,24 @@ FatZombie::~FatZombie()
 void FatZombie::Update(float dt)
 {
 	pukeBlaster->Update(dt);
-	Zombie::Update(dt);
-	//if (isAlive)
-	//{
-	//	if (currBehavior != nullptr)
-	//		currBehavior->Update(dt, this, m_pTarget->GetPosition());
-	//}
-	//else
-	//{
-	//	DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
-	//	dMsg->QueueMessage();
-	//	dMsg = nullptr;
-	//}
+	if (isAlive)
+	{
+		if (currBehavior != nullptr)
+			currBehavior->Update(dt, this, m_pTarget->GetPosition());
+
+		// possible turret target
+		SGD::Event event = { "ASSESS_THREAT", nullptr, this };
+		event.SendEventNow(nullptr);
+
+		if ((m_pTarget->GetPosition() - m_ptPosition).ComputeLength() <= 200.0f)
+			pukeBlaster->Fire(dt);
+	}
+	else
+	{
+		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+		dMsg->QueueMessage();
+		dMsg = nullptr;
+	}
 	MovingObject::Update(dt);
 
 }
