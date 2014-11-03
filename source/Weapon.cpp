@@ -5,7 +5,8 @@
 
 Weapon::Weapon()
 {
-
+	reloadB = true;
+	reloadF = false;
 }
 
 
@@ -19,8 +20,9 @@ void Weapon::Update(float dt)
 	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
 	GameplayState*		pGameplay	= GameplayState::GetInstance();
 
+	/*
 	recoilTimer.Update(dt);
-	if (currAmmo == 0 && pAudio->IsAudioPlaying(*fire_sound) == false)
+	if (currAmmo == 0 && pAudio->IsAudioPlaying(*fire_sound) == false && totalAmmo > 0)
 	{
 		if (reloadB == true)
 		{
@@ -49,7 +51,60 @@ void Weapon::Update(float dt)
 			pAudio->PlayAudio(pGameplay->reload_finish, false);
 			reloadF = false;
 			reloadB = true;
-			currAmmo = magSize;
+		}
+	}
+	*/
+
+	recoilTimer.Update(dt);
+	if (reloading == true && pAudio->IsAudioPlaying(*fire_sound) == false && totalAmmo > 0)
+	{
+		// unload empty magazine
+		if (reloadB == true)
+		{
+			pAudio->PlayAudio(pGameplay->reload_begin, false);
+			reloadB = false;
+		}
+
+		// reload finished
+		if (reloadTimer.Update(dt))
+		{
+			reloadF = true;
+
+			// all ammo gone
+			if (currAmmo == 0)
+			{
+				if (totalAmmo >= magSize)
+				{
+					currAmmo = magSize;
+					totalAmmo -= magSize;
+				}
+				else
+				{
+					currAmmo = totalAmmo;
+					totalAmmo = 0;
+				}
+			}
+
+			// some ammo gone
+			else if (currAmmo > 0)
+			{
+				int bullets_needed = magSize - currAmmo;
+
+				if (totalAmmo >= bullets_needed)
+				{
+					totalAmmo -= bullets_needed;
+					currAmmo += bullets_needed;
+				}
+			}
+		}
+
+		// load full magazine
+		if (reloadF == true)
+		{
+			pAudio->PlayAudio(pGameplay->reload_finish, false);
+			reloadF = false;
+			reloadB = true;
+			reloading = false;
 		}
 	}
 
@@ -82,4 +137,25 @@ void Weapon::SetOwner(MovingObject* owner)
 	if (m_pOwner != nullptr)
 		m_pOwner->AddRef();
 
+}
+
+void Weapon::ReloadEntire(void)
+{
+	currAmmo = 0;
+	reloadTimer.AddTime(reloadTime);
+	reloading = true;
+}
+
+void Weapon::ReloadNeeded(void)
+{
+	if (currAmmo >= magSize)
+		return;
+
+	int bullets_needed = magSize - currAmmo;
+
+	if (totalAmmo >= bullets_needed)
+	{
+		reloadTimer.AddTime(reloadTime);
+		reloading = true;
+	}
 }

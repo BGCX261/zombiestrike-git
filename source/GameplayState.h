@@ -12,6 +12,7 @@
 /**************************************************************/
 // Forward class declaration
 class BaseObject;
+class MovingObject;
 class Weapon;
 class Spawner;
 class EntityManager;
@@ -63,7 +64,7 @@ public:
 
 
 	void			CreatePickUp	( int type, SGD::Point pos );
-	void			CreateTurret	( SGD::Point pos, float rotation );
+	void			CreateTurret	( MovingObject* owner );
 	void			CreateBullet	( Weapon* owner );
 	void			CreateShotGunBullet	(Weapon* owner);
 	void			CreateARBullet	(Weapon* owner);

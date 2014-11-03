@@ -19,6 +19,7 @@ public:
 
 	float GetHealth(void) const { return health; }
 	float GetDamage(void) const { return damage; }
+	bool IsAlive(void) const { return isAlive; }
 
 	void SetHealth(float _health) { health = _health; }
 	void SetDamage(float _damage) { damage = _damage; }

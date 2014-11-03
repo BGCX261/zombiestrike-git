@@ -58,7 +58,7 @@ void LandMine::HandleCollision( const IBase* pOther )
 		pOther->GetType() == ObjectType::OBJ_FAST_ZOMBIE )
 	{
 		// activated mine
-		if (this->GetAnimation() == "landmine")
+		if (this->GetAnimation() == "testLandmine" || this->GetAnimation() == "landmine")
 		{
 			// trigger explosion
 		//	this->SetAnimation("explode");

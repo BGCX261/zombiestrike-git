@@ -31,6 +31,7 @@
 #include "CreateFatZombieMsg.h"
 #include "CreateExplodingZombieMsg.h"
 #include "CreateTankZombieMsg.h"
+#include "CreateTurretMessage.h"
 
 
 
@@ -116,6 +117,7 @@
 
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
 	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
+	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
 
 	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/crosshair.png");
 
@@ -132,7 +134,7 @@
 
 
 	// other animations
-	pAnimationManager->Load("resource/config/animations/Turret_Animation.xml",		"turret");
+	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml",		"turret");
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
@@ -209,6 +211,7 @@
 
 	
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
+	pGraphics->UnloadTexture(m_hReticleImage);
 	pGraphics->UnloadTexture(m_hHudWpn);
 
 
@@ -280,6 +283,7 @@
 /*virtual*/ bool GameplayState::Input( void )
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
 
 	/**********************************************************/
@@ -305,6 +309,12 @@
 		SGD::Event msg("PAUSE");
 		msg.SendEventNow();
 		Game::GetInstance()->AddState(LoseGameState::GetInstance());
+
+
+		if (pAudio->IsAudioPlaying(storyMusic) == true)
+			pAudio->StopAudio(storyMusic);
+		if (pAudio->IsAudioPlaying(survivalMusic) == true)
+			pAudio->StopAudio(survivalMusic);
 	}
 	
 
@@ -501,6 +511,13 @@
 		}
 			break;
 
+		case MessageID::MSG_CREATE_TURRET:
+		{
+			const CreateTurretMessage* pCreateTurretMsg = dynamic_cast<const CreateTurretMessage*>(pMsg);
+			GameplayState::GetInstance()->CreateTurret(pCreateTurretMsg->GetOwner());
+		}
+		break;
+
 	}
 
 /* Restore previous warning levels */
@@ -548,13 +565,21 @@ void GameplayState::CreatePickUp( int type, SGD::Point pos )
 	pickup = nullptr;
 }
 
-void GameplayState::CreateTurret( SGD::Point pos, float rotation )
+void GameplayState::CreateTurret( MovingObject* owner )
 {
 	Turret* turret = new Turret;
-	turret->SetPosition(pos);
-	turret->SetRotation(rotation);
+
+	float		pixel_offset	= 100.0f;
+	SGD::Vector	ownerpos		= { owner->GetPosition().x, owner->GetPosition().y };
+	SGD::Vector	turretposV		= (owner->GetDirection() * pixel_offset) + ownerpos;
+	SGD::Point	turretposP		= { turretposV.x, turretposV.y };
+
+	turret->SetPosition(turretposP);
+	turret->SetRotation(owner->GetRotation());
 	turret->SetAnimation("turret");
-	turret->RetrieveBehavior("rotate");
+	turret->RetrieveBehavior("hostile");
+
+	turret->SetOwner(owner);
 
 	m_pEntities->AddEntity(turret, EntityBucket::BUCKET_TURRETS);
 	turret->Release();

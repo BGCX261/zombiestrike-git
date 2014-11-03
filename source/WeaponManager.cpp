@@ -216,6 +216,14 @@ void WeaponManager::Input()
 			}
 		}
 	}
+
+	if (pInput->IsKeyPressed(SGD::Key::R) == true && m_vWeapons[curIndex]->GetCurrAmmo() < m_vWeapons[curIndex]->GetMagSize())
+	{
+		//GetSelected()->SetCurrAmmo(0);
+		//GetSelected()->GetReloadTimer().AddTime(GetSelected()->GetReloadTime());
+		//m_vWeapons[curIndex]->SetCurrAmmo(0);
+		//m_vWeapons[curIndex]->GetReloadTimer().AddTime(m_vWeapons[curIndex]->GetReloadTime());
+	}
 }
 
 void WeaponManager::Update(float dt)
@@ -264,7 +272,7 @@ Weapon * WeaponManager::CreateAssaultRifle()
 	//ar->SetOwner(GetOwner());
 	ar->SetObtained(true);
 	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
-	ar->SetCurrAmmo(30);
+	ar->SetCurrAmmo(25);
 	ar->SetTotalAmmo(150);
 	
 

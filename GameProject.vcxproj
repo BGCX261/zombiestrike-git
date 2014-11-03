@@ -107,6 +107,7 @@
     <ClCompile Include="source\CreateShotgunBullet.cpp" />
     <ClCompile Include="source\CreateSniperBullet.cpp" />
     <ClCompile Include="source\CreateTankZombieMsg.cpp" />
+    <ClCompile Include="source\CreateTurretMessage.cpp" />
     <ClCompile Include="source\CreateZombieMessage.cpp" />
     <ClCompile Include="source\CreditsState.cpp" />
     <ClCompile Include="source\DestroyObjectMessage.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="source\CreateShotgunBullet.h" />
     <ClInclude Include="source\CreateSniperBullet.h" />
     <ClInclude Include="source\CreateTankZombieMsg.h" />
+    <ClInclude Include="source\CreateTurretMessage.h" />
     <ClInclude Include="source\CreateZombieMessage.h" />
     <ClInclude Include="source\CreditsState.h" />
     <ClInclude Include="source\DestroyObjectMessage.h" />

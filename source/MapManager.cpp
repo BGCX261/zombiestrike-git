@@ -367,7 +367,7 @@ void MapManager::CreateLandMine(SGD::Point pos, EntityManager* entities)
 {
 	LandMine* landmine = new LandMine;
 	landmine->SetPosition(pos);
-	landmine->SetAnimation("testLandmine");
+	//landmine->SetAnimation("testLandmine");
 	landmine->SetActive(true);
 	entities->AddEntity(landmine, BUCKET_ENVIRO);
 	landmine->Release();

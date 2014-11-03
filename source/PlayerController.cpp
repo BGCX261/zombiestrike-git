@@ -147,11 +147,27 @@ PlayerController::~PlayerController()
 		m_Player->m_unCurrAbility = 3;
 
 
+	WeaponManager*		pWeaponManager = WeaponManager::GetInstance();
+
 	if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
 	{
 		//m_Player->flameThrower->Fire(dt);
-		WeaponManager::GetInstance()->GetSelected()->Fire(dt);
+		//WeaponManager::GetInstance()->GetSelected()->Fire(dt);
+		pWeaponManager->GetSelected()->Fire(dt);
 	}
+	if (pInput->IsKeyPressed(SGD::Key::R) == true && pWeaponManager->GetSelected()->IsReloading() == false)
+	{
+		pWeaponManager->GetSelected()->ReloadNeeded();
+	}
+
+
+	// spawning turrets
+	if (pInput->IsKeyPressed(SGD::Key::G) == true)
+	{
+		m_Player->SpawnTurret();
+	}
+
+
 
 	// player activates an ability
 	if ((pInput->IsKeyPressed(SGD::Key::Space) == true || pInput->IsButtonPressed(0, 0) == true) && m_Player->m_bIsAlive == true)

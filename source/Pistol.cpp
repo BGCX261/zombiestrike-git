@@ -51,7 +51,10 @@ void Pistol::Fire(float dt)
 			recoilTimer.AddTime(recoilTime);
 			currAmmo--;
 			if (currAmmo == 0)
+			{
 				reloadTimer.AddTime(reloadTime);
+				reloading = true;
+			}
 		}
 	}
 	else
