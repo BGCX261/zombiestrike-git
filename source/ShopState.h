@@ -3,7 +3,12 @@
 #include "ShopStructures.h"
 #include "GamerProfile.h"
 #include "Timer.h"
-class ShopState : public IGameState{	
+
+#define BUTTON_WIDTH 123
+#define BUTTON_HEIGHT 27
+
+class ShopState : public IGameState
+{	
 	
 	ShopState() = default;
 	virtual ~ShopState() = default;

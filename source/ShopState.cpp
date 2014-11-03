@@ -4,7 +4,7 @@
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
-
+#include "../SGD Wrappers/SGD_Event.h"
 #include "Game.h"
 #include "BitmapFont.h"
 #include "GameplayState.h"
