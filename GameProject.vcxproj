@@ -111,6 +111,7 @@
     <ClCompile Include="source\CreateShotgunBullet.cpp" />
     <ClCompile Include="source\CreateSniperBullet.cpp" />
     <ClCompile Include="source\CreateTankZombieMsg.cpp" />
+    <ClCompile Include="source\CreateTurretMessage.cpp" />
     <ClCompile Include="source\CreateZombieMessage.cpp" />
     <ClCompile Include="source\CreditsState.cpp" />
     <ClCompile Include="source\DestroyObjectMessage.cpp" />
@@ -127,6 +128,7 @@
     <ClCompile Include="source\GrenadeLauncher.cpp" />
     <ClCompile Include="source\HowToPlayState.cpp" />
     <ClCompile Include="source\HUD.cpp" />
+    <ClCompile Include="source\IntroState.cpp" />
     <ClCompile Include="source\LandMine.cpp" />
     <ClCompile Include="source\LMG.cpp" />
     <ClCompile Include="source\LoseGameState.cpp" />
@@ -171,7 +173,6 @@
     <ClCompile Include="source\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_Color.h" />
     <ClInclude Include="SGD Wrappers\SGD_Declarations.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="source\CreateShotgunBullet.h" />
     <ClInclude Include="source\CreateSniperBullet.h" />
     <ClInclude Include="source\CreateTankZombieMsg.h" />
+    <ClInclude Include="source\CreateTurretMessage.h" />
     <ClInclude Include="source\CreateZombieMessage.h" />
     <ClInclude Include="source\CreditsState.h" />
     <ClInclude Include="source\DestroyObjectMessage.h" />
@@ -234,6 +236,7 @@
     <ClInclude Include="source\HUD.h" />
     <ClInclude Include="source\IBase.h" />
     <ClInclude Include="source\IGameState.h" />
+    <ClInclude Include="source\IntroState.h" />
     <ClInclude Include="source\LandMine.h" />
     <ClInclude Include="source\LMG.h" />
     <ClInclude Include="source\LoseGameState.h" />
@@ -278,9 +281,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="GameProject.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

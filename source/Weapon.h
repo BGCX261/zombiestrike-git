@@ -1,5 +1,6 @@
 #pragma once
 #include "../SGD Wrappers/SGD_Geometry.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "Timer.h"
 
 class MovingObject;
@@ -32,7 +33,12 @@ protected:
 	Timer reloadTimer;
 	Timer recoilTimer;
 	MovingObject* m_pOwner = nullptr;
-	
+
+	bool reloadB = true;
+	bool reloadF = false;
+	SGD::HAudio* fire_sound = nullptr;
+	bool reloading = false;
+
 
 
 
@@ -44,6 +50,8 @@ public:
 
 	virtual void Fire(float dt);
 	virtual void Update(float dt);
+	virtual void ReloadEntire(void);
+	virtual void ReloadNeeded(void);
 
 	//Accessors
 	int GetCurrAmmo() const { return currAmmo; }
@@ -64,6 +72,7 @@ public:
 	Timer GetReloadTimer(void) const { return reloadTimer; }
 	Timer GetRecoilTimer(void) const { return recoilTimer; }
 	MovingObject* GetOwner(void) const { return m_pOwner; }
+	bool IsReloading() { return reloading; }
 
 	//Mutators
 	void AddAmmo(int addedAmmo) { totalAmmo += addedAmmo; }

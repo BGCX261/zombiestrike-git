@@ -9,6 +9,7 @@ if (m_fCurrTime > 0.0f)
 		return false;
 
 	}
+
 	else 
 	{
 		if (maxTime > 0.0f)			//resets the currTime to the max time if it was set by the user,

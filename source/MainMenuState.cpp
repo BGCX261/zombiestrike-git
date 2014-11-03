@@ -1,4 +1,4 @@
-#define NUM_CHOICES		5
+#define NUM_CHOICES		6
 
 #include "MainMenuState.h"
 
@@ -15,6 +15,7 @@
 #include "OptionsState.h"
 #include "ShopState.h"
 
+#include "../SGD Wrappers/SGD_EventManager.h"
 
 /**************************************************************/
 // GetInstance
@@ -151,9 +152,21 @@
 	// Input: L1 - Left Joystick
 	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
-		SGD::Point mpoint;
-		mpoint.x = pInput->GetMousePosition().x + pInput->GetLeftJoystick(0).x;
-		mpoint.y = pInput->GetMousePosition().y + pInput->GetLeftJoystick(0).y;
+		SGD::Point	mpoint		= pInput->GetMousePosition();
+		SGD::Vector	joystick	= pInput->GetLeftJoystick(0);
+		float		stickmin	= 0.500f;
+		float		mousevel	= 1.0f;
+
+
+		if (joystick.x > stickmin)
+			mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+			mpoint.x -= mousevel;
+		
+		if (joystick.y > stickmin)
+			mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+			mpoint.y -= mousevel;
 
 		if (mpoint.x < 0.0F)
 			mpoint.x = 0.0F;
@@ -206,9 +219,19 @@
 
 		switch (m_nCursor)
 		{
-		case MenuItems::PLAY_GAME:
+		case MenuItems::STORY_MODE:
 			{
-				Game::GetInstance()->AddState(ShopState::GetInstance());
+				GameplayState::GetInstance()->SetGameMode(true);
+				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
+				return true;
+			}
+			break;
+
+
+		case MenuItems::SURVIVAL_MODE:
+			{
+				GameplayState::GetInstance()->SetGameMode(false);
+				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
 				return true;
 			}
 			break;
@@ -325,7 +348,7 @@
 
 
 	// Display the menu options centered at 1x scale
-	std::string menuitems[NUM_CHOICES] = { "Play Game", "How to Play", "Options", "Credits", "Exit" };
+	std::string menuitems[NUM_CHOICES] = { "Story Mode", "Survival Mode", "How to Play", "Options", "Credits", "Exit" };
 
 	float offset = 100.0F;
 	for (size_t i = 0; i < NUM_CHOICES; i++)

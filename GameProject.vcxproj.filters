@@ -252,12 +252,6 @@
     <ClCompile Include="source\Zombie.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="source\LandMine.cpp">
-      <Filter>Objects\Environment</Filter>
-    </ClCompile>
-    <ClCompile Include="source\SandBag.cpp">
-      <Filter>Objects\Environment</Filter>
-    </ClCompile>
     <ClCompile Include="source\BarbedWire.cpp">
       <Filter>Objects\Environment</Filter>
     </ClCompile>
@@ -278,6 +272,18 @@
     </ClCompile>
     <ClCompile Include="source\CreateZombieMessage.cpp">
       <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LandMine.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SandBag.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\IntroState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\P90.cpp">
+      <Filter>Weapons</Filter>
     </ClCompile>
     <ClCompile Include="source\Spawner.cpp">
       <Filter>Spawn System</Filter>
@@ -339,6 +345,7 @@
       <Filter>Weapons</Filter>
     </ClCompile>
     <ClCompile Include="source\CreatePukeBullet.cpp" />
+    <ClCompile Include="source\CreateTurretMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -554,12 +561,6 @@
     <ClInclude Include="source\Zombie.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="source\LandMine.h">
-      <Filter>Objects\Environment</Filter>
-    </ClInclude>
-    <ClInclude Include="source\SandBag.h">
-      <Filter>Objects\Environment</Filter>
-    </ClInclude>
     <ClInclude Include="source\BarbedWire.h">
       <Filter>Objects\Environment</Filter>
     </ClInclude>
@@ -581,14 +582,27 @@
     <ClInclude Include="source\CreateZombieMessage.h">
       <Filter>Messages</Filter>
     </ClInclude>
+    <ClInclude Include="source\LandMine.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SandBag.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\IntroState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ShopStructures.h" />
+    <ClInclude Include="source\P90.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
     <ClInclude Include="source\Spawner.h">
       <Filter>Spawn System</Filter>
     </ClInclude>
     <ClInclude Include="source\SpawnManager.h">
       <Filter>Spawn System</Filter>
     </ClInclude>
-    <ClInclude Include="source\ShopStructures.h">
-      <Filter>Tile System</Filter>
+    <ClInclude Include="source\WeaponManager.h">
+      <Filter>Weapons</Filter>
     </ClInclude>
     <ClInclude Include="source\ShopState.h" />
     <ClInclude Include="source\CreateGrenadeBullet.h">
@@ -637,17 +651,14 @@
       <Filter>Weapons\Heavy</Filter>
     </ClInclude>
     <ClInclude Include="source\Grenade.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="source\PukerBlaster.h" />
     <ClInclude Include="source\WeaponManager.h">
       <Filter>Weapons</Filter>
     </ClInclude>
     <ClInclude Include="source\CreatePukeBullet.h" />
+    <ClInclude Include="source\CreateTurretMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="GameProject.rc" />
   </ItemGroup>
 </Project>

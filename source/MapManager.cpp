@@ -29,7 +29,7 @@ enum EntityBucket {  BUCKET_ENEMIES, BUCKET_PLAYER, BUCKET_ENVIRO, BUCKET_BULLET
 BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pEntities)
 {
 	//EntityManager* m_pEntities = new EntityManager;
-	Player* player;
+	Player* player = nullptr;
 
 	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
 
@@ -367,8 +367,8 @@ void MapManager::CreateLandMine(SGD::Point pos, EntityManager* entities)
 {
 	LandMine* landmine = new LandMine;
 	landmine->SetPosition(pos);
-	landmine->SetAnimation("testLandmine");
-	landmine->SetActive(false);
+	//landmine->SetAnimation("testLandmine");
+	landmine->SetActive(true);
 	entities->AddEntity(landmine, BUCKET_ENVIRO);
 	landmine->Release();
 	landmine = nullptr;

@@ -22,7 +22,6 @@ class WeaponManager : public Weapon
 	//Sound Assets
 	SGD::HAudio * m_hWpnSwitch = nullptr;
 	
-
 public:
 
 	WeaponManager() = default;

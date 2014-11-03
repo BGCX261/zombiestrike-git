@@ -11,6 +11,7 @@
 #include "Game.h"
 #include <fstream>
 #include "../SGD Wrappers/SGD_Handle.h"
+#include "CreateTurretMessage.h"
 
 #include "Pistol.h"
 #include "Shotgun.h"
@@ -140,33 +141,6 @@ Player::~Player()
 	//flameThrower->Update(dt);
 
 
-	// hud skills rects
-	switch (m_unCurrAbility)
-	{
-	case 0: // Camo
-		m_rectAbilityPoint.x	= 13.0f;
-		m_rectAbilitySize		= { 95.0f, 102.0f };
-		break;
-
-	case 1: //ppp
-		m_rectAbilityPoint.x	= 116.0f;
-		m_rectAbilitySize		= { 104.0f, 102.0f };
-		break;
-
-	case 2: // ppp
-		m_rectAbilityPoint.x	= 226.0f;
-		m_rectAbilitySize		= { 104.0f, 102.0f };
-		break;
-
-	case 3: // ppp
-		m_rectAbilityPoint.x	= 336.0f;
-		m_rectAbilitySize		= { 104.0f, 102.0f };
-		break;
-
-	default:
-		break;
-	}
-	
 
 	// update hud
 	hud.Update(dt);
@@ -187,7 +161,7 @@ void Player::Render()
 
 
 	// render hud selection rect
-	SGD::GraphicsManager::GetInstance()->DrawRectangle(SGD::Rectangle(m_rectAbilityPoint, m_rectAbilitySize), { 0, 0, 0, 0 }, { 255, 0, 255, 0 });
+	//SGD::GraphicsManager::GetInstance()->DrawRectangle(SGD::Rectangle(m_rectAbilityPoint, m_rectAbilitySize), { 0, 0, 0, 0 }, { 255, 0, 255, 0 });
 }
 
 /*virtual*/ void Player::HandleEvent(const SGD::Event* pEvent)
@@ -267,22 +241,31 @@ void Player::Render()
 
 /*virtual*/ void Player::HandleCollision(const IBase* pOther) /*override*/
 {
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
 	switch (pOther->GetType())
 	{
-	case ObjectType::OBJ_SLOW_ZOMBIE:
-	//_bIsAlive = false;
+		case ObjectType::OBJ_SLOW_ZOMBIE:
+		{
+			if (pAudio->IsAudioPlaying(*m_hDeath) == false && m_bIsAlive == true)
+				voice = pAudio->PlayAudio(*m_hDeath, false);
+			pAudio->SetVoiceVolume(voice);
+
+			m_bIsAlive = false;
+		}
 		break;
-	case OBJ_BARBEDWIRE:
-	case OBJ_SANDBAG:
-	{
-		const EnvironmentalObject* temp = dynamic_cast<const EnvironmentalObject*>(pOther);
-		if (temp->IsActive())
-			MovingObject::HandleCollision(pOther);
-	}
+
+		case OBJ_BARBEDWIRE:
+		case OBJ_SANDBAG:
+		{
+			const EnvironmentalObject* temp = dynamic_cast<const EnvironmentalObject*>(pOther);
+			if (temp->IsActive())
+				MovingObject::HandleCollision(pOther);
+		}
 		break;
 
 
-	
+
 
 	}
 }
@@ -303,4 +286,16 @@ void Player::RetrieveBehavior(std::string name)
 
 }
 
+void Player::SpawnTurret(void)
+{
+	if (m_nNumTurrets == 3)
+		return;
+
+	// create turret message
+	CreateTurretMessage* pMsg = new CreateTurretMessage(this);
+	pMsg->QueueMessage();
+	pMsg = nullptr;
+
+	m_nNumTurrets++;
+}
 

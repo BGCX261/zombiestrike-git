@@ -1,6 +1,8 @@
 #include "LandMine.h"
 #include "AnimationManager.h"
 #include "Animation.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "GameplayState.h"
 
 
 LandMine::LandMine()
@@ -56,10 +58,11 @@ void LandMine::HandleCollision( const IBase* pOther )
 		pOther->GetType() == ObjectType::OBJ_FAST_ZOMBIE )
 	{
 		// activated mine
-		if (this->GetAnimation() == "landmine")
+		if (this->GetAnimation() == "testLandmine" || this->GetAnimation() == "landmine")
 		{
 			// trigger explosion
 		//	this->SetAnimation("explode");
+			SGD::AudioManager::GetInstance()->PlayAudio(GameplayState::GetInstance()->explosion, false);
 		}
 
 		// exploding mine

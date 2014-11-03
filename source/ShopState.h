@@ -2,42 +2,42 @@
 #include "IGameState.h"
 #include "ShopStructures.h"
 #include "GamerProfile.h"
+#include "Timer.h"
 
 #define BUTTON_WIDTH 123
 #define BUTTON_HEIGHT 27
 
-
 class ShopState : public IGameState
-{
+{	
+	
+	ShopState() = default;
+	virtual ~ShopState() = default;
+
+	ShopState(const ShopState&) = delete;
+	ShopState& operator=(const ShopState&) = delete;
+
+	int m_nCursor = 0;
+
+	//Shop time between waves
+	Timer m_tShopTimer;
+
+	bool m_bTimerSet = false;
+
 public:
 	enum Pages { PISTOLS, SHOTGUNS, SMGS, ASSAULT_RIFLES, HEAVY, DEFENSE };
 
-	/**********************************************************/
-	// Singleton Accessor
 	static ShopState* GetInstance(void);
 
+	virtual void	Enter(void)				override;
+	virtual void	Exit(void)				override;
 
-	/**********************************************************/
-	// IGameState Interface:
-	virtual void	Enter(void)				override;	// load resources
-	virtual void	Exit(void)				override;	// unload resources
+	virtual bool	Input(void)				override;
+	virtual void	Update(float elapsedTime)	override;
+	virtual void	Render(void)				override;
 
-	virtual bool	Input(void)				override;	// handle user input
-	virtual void	Update(float elapsedTime)	override;	// update entites
-	virtual void	Render(void)				override;	// render entities / menu
-
+	Timer GetShopTimer() const { return m_tShopTimer; }
 	void LoadShopStatus();
-
-
 private:
-	/**********************************************************/
-	// SINGLETON!
-	ShopState(void) = default;
-	virtual ~ShopState(void) = default;
-
-	ShopState(const ShopState&) = delete;
-	ShopState& operator= (const ShopState&) = delete;
-
 	PistolUpgrade pistolUpgrade;
 	RevolverUpgrade revolverUpgrade;
 	SMGUpgrade uziUpgrade;

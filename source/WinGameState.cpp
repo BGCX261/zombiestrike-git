@@ -33,6 +33,9 @@
 
 
 	// Load assets
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+
+	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/youWin.png");
 }
 
 
@@ -40,7 +43,11 @@
 // Exit
 /*virtual*/ void WinGameState::Exit( void )
 {
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+
+
 	// Unload assets
+	pGraphics->UnloadTexture(m_hBackgroundImage);
 }
 
 
@@ -100,6 +107,13 @@
 // Render
 /*virtual*/ void WinGameState::Render( void )
 {
+	SGD::GraphicsManager*	pGraphics = SGD::GraphicsManager::GetInstance();
+
+
+	// Draw the background image
+	pGraphics->DrawTexture(m_hBackgroundImage, { 0, -60 });
+
+
 	// Use the game's font
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
 
@@ -111,10 +125,10 @@
 
 
 	// Display the text centered
-	pFont->Draw("YOU WIN!", { (width - (8 * 32 * 3.0f)) / 2, height * 0.25F - (26.0F * 3.0F) }, 3.0f, { 255, 255, 255 });
+	//pFont->Draw("YOU WIN!", { (width - (8 * 32 * 3.0f)) / 2, height * 0.25F - (26.0F * 3.0F) }, 3.0f, { 255, 255, 255 });
 
 
-	pFont->Draw("Play Again?", { (width - (11 * 32 * scale)) / 2, height * 0.5F }, scale, { 255, 255, 0 });
+	pFont->Draw("Play Again?", { (width - (11 * 25 * scale)) / 2, height * 0.5F }, scale, { 255, 255, 0 });
 	pFont->Draw("YES", { (width - (3 * 32 * scale)) / 2, (height * 0.5F) + 100.0f }, scale, { 0, 255, 0 });
 	pFont->Draw("NO", { (width - (2 * 32 * scale)) / 2, (height * 0.5F) + 200.0f }, scale, { 0, 255, 0 });
 

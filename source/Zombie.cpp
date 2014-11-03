@@ -12,7 +12,7 @@
 #include "BarbedWire.h"
 #include "LandMine.h"
 #include "SandBag.h"
-
+#include "SpawnManager.h"
 
 
 Zombie::Zombie() : Listener(this)
@@ -34,13 +34,21 @@ void Zombie::Update(float dt)
 	{
 		if (currBehavior != nullptr)
 			currBehavior->Update(dt, this, m_pTarget->GetPosition());
+
+		// possible turret target
+		SGD::Event event = { "ASSESS_THREAT", nullptr, this };
+		event.SendEventNow(nullptr);
+
 	}
 	else
 	{
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();
 		dMsg = nullptr;
+
+		SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 	}
+
 	MovingObject::Update(dt);
 	
 }
@@ -66,6 +74,8 @@ void Zombie::RetrieveBehavior(std::string name)
 
 /*virtual*/ void Zombie::HandleCollision(const IBase* pOther)
 {
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
 	if (pOther->GetType() == OBJ_BULLET)
 	{
 		const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
@@ -74,7 +84,19 @@ void Zombie::RetrieveBehavior(std::string name)
 		if (health <= 0.0f)
 		{
 			isAlive = false;
+			isCounted = true;
+
+			if (isCounted == true)
+			{
+				
+
+				isCounted = false;
+			}
+			
 		}
+
+		if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->zombie_pain) == false)
+			pAudio->PlayAudio(GameplayState::GetInstance()->zombie_pain, false);
 	}
 	else if (pOther->GetType() == OBJ_BARBEDWIRE)
 	{
@@ -88,6 +110,10 @@ void Zombie::RetrieveBehavior(std::string name)
 		}
 		
 
+{
+
+			//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
+		}
 
 	}
 	else if (pOther->GetType() == OBJ_SANDBAG)
@@ -99,14 +125,16 @@ void Zombie::RetrieveBehavior(std::string name)
 	}
 
 	else if (pOther->GetType() == OBJ_LANDMINE)
+
 	{
 		const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
 		if (landMine->IsActive())
 			isAlive = false;
 
-	}
 	
 
+		//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
+	}
 }
 
 void Zombie::SetTarget(BaseObject* target)

@@ -206,7 +206,7 @@ void WeaponManager::Input()
 		while (m_vWeapons[curIndex]->GetObtained() != true)
 		{
 			curIndex--;		
-
+			
 			if (curIndex < 0)
 			{
 				curIndex = m_vWeapons.size() - 1;
@@ -237,6 +237,14 @@ void WeaponManager::Input()
 				curIndex = 0;
 			}
 		}
+	}
+
+	if (pInput->IsKeyPressed(SGD::Key::R) == true && m_vWeapons[curIndex]->GetCurrAmmo() < m_vWeapons[curIndex]->GetMagSize())
+	{
+		//GetSelected()->SetCurrAmmo(0);
+		//GetSelected()->GetReloadTimer().AddTime(GetSelected()->GetReloadTime());
+		//m_vWeapons[curIndex]->SetCurrAmmo(0);
+		//m_vWeapons[curIndex]->GetReloadTimer().AddTime(m_vWeapons[curIndex]->GetReloadTime());
 	}
 }
 
