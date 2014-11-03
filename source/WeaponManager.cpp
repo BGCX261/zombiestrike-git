@@ -206,7 +206,7 @@ void WeaponManager::Input()
 		while (m_vWeapons[curIndex]->GetObtained() != true)
 		{
 			curIndex--;		
-
+			
 			if (curIndex < 0)
 			{
 				curIndex = m_vWeapons.size() - 1;

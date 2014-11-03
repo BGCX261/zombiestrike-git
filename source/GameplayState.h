@@ -7,7 +7,7 @@
 #include "../SGD Wrappers/SGD_String.h"
 #include "GameCamera.h"
 #include "MapManager.h"
-
+#include "Timer.h"
 
 /**************************************************************/
 // Forward class declaration
@@ -18,8 +18,6 @@ class Spawner;
 class EntityManager;
 class BehaviorManager;
 class AnimationManager;
-
-
 
 /**************************************************************/
 // GameplayState class
@@ -32,9 +30,10 @@ public:
 	// Singleton Accessor:
 	static GameplayState* GetInstance( void );
 
-
 	/**********************************************************/
 	// IGameState Interface:
+	
+
 	virtual void	Enter	( void )		override;	// load resources
 	virtual void	Exit	( void )		override;	// unload resources
 													
@@ -53,6 +52,13 @@ public:
 	void			SetGameMode		( bool m )		{ m_bStoryMode = m; }
 
 
+	bool GetShopState() const { return m_bShopState; }
+	Timer GetWaveTimer() const { return m_tNextWave; }
+	Timer GetWaveEndTimer() const { return m_tCompleteWave; }
+
+	void SetShopState(bool shopState) { m_bShopState = shopState; }
+	void SetWaveTimer(Timer nwave) { m_tNextWave = nwave; }
+
 	/**********************************************************/
 	// Factory Methods:
 	BaseObject*		CreatePlayer	( void );
@@ -61,8 +67,6 @@ public:
 	void			CreateFastZombie(Spawner* owner);
 	void			CreateExplodingZombie(Spawner* owner);
 	void			CreateTankZombie(Spawner* owner);
-
-
 	void			CreatePickUp	( int type, SGD::Point pos );
 	void			CreateTurret	( MovingObject* owner );
 	void			CreateBullet	( Weapon* owner );
@@ -85,6 +89,7 @@ public:
 	SGD::HAudio footstep			= SGD::INVALID_HANDLE;
 	SGD::HAudio turretfire			= SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWpnSwitch		= SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWaveChange = SGD::INVALID_HANDLE;
 
 	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
 	SGD::HAudio storyMusic			= SGD::INVALID_HANDLE;
@@ -112,8 +117,8 @@ public:
 private:
 	/**********************************************************/
 	// SINGLETON (not-dynamically allocated)
-	GameplayState( void )			= default;	// default constructor
-	virtual ~GameplayState( void )	= default;	// destructor
+	GameplayState( void ) = default;	// default constructor
+	virtual ~GameplayState( void) = default;	// destructor
 
 	GameplayState( const GameplayState& )				= delete;	// copy constructor
 	GameplayState& operator= ( const GameplayState& )	= delete;	// assignment operator
@@ -150,4 +155,8 @@ private:
 	// Game mode: Story/Survival
 	bool					m_bStoryMode		= true;
 
+	bool m_bShopState = false;
+
+	Timer m_tNextWave;
+	Timer m_tCompleteWave;
 };

@@ -2,6 +2,7 @@
 #include "BaseBehavior.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "DestroyObjectMessage.h"
+#include "SpawnManager.h"
 
 
 ExplodingZombie::ExplodingZombie()
@@ -33,6 +34,8 @@ void ExplodingZombie::Update(float dt)
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();
 		dMsg = nullptr;
+
+		SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 	}
 	MovingObject::Update(dt);
 

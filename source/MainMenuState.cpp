@@ -15,6 +15,7 @@
 #include "OptionsState.h"
 #include "ShopState.h"
 
+#include "../SGD Wrappers/SGD_EventManager.h"
 
 /**************************************************************/
 // GetInstance

@@ -12,7 +12,7 @@
 #include "BarbedWire.h"
 #include "LandMine.h"
 #include "SandBag.h"
-
+#include "SpawnManager.h"
 
 
 Zombie::Zombie() : Listener(this)
@@ -45,7 +45,10 @@ void Zombie::Update(float dt)
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();
 		dMsg = nullptr;
+
+		SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 	}
+
 	MovingObject::Update(dt);
 	
 }
@@ -81,6 +84,15 @@ void Zombie::RetrieveBehavior(std::string name)
 		if (health <= 0.0f)
 		{
 			isAlive = false;
+			isCounted = true;
+
+			if (isCounted == true)
+			{
+				
+
+				isCounted = false;
+			}
+			
 		}
 
 		if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->zombie_pain) == false)
@@ -98,6 +110,10 @@ void Zombie::RetrieveBehavior(std::string name)
 		}
 		
 
+{
+
+			//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
+		}
 
 	}
 	else if (pOther->GetType() == OBJ_SANDBAG)
@@ -109,14 +125,16 @@ void Zombie::RetrieveBehavior(std::string name)
 	}
 
 	else if (pOther->GetType() == OBJ_LANDMINE)
+
 	{
 		const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
 		if (landMine->IsActive())
 			isAlive = false;
 
-	}
 	
 
+		//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
+	}
 }
 
 void Zombie::SetTarget(BaseObject* target)

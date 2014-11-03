@@ -4,7 +4,7 @@
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
-
+#include "../SGD Wrappers/SGD_Event.h"
 #include "Game.h"
 #include "BitmapFont.h"
 #include "GameplayState.h"
@@ -24,6 +24,8 @@
 // IGameState Interface:
 void	ShopState::Enter(void)
 {
+	m_tShopTimer.AddTime(10);
+
 	profile = Game::GetInstance()->GetProfile();
 
 	screenSize = SGD::Size( Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() );
@@ -312,7 +314,16 @@ bool	ShopState::Input(void)
 
 void	ShopState::Update(float elapsedTime)
 {
+	if (GetShopTimer().GetTime() <= 0.0f)
+	{
+		m_bTimerSet = true;
 
+		SGD::Event msg("UNPAUSE");
+		msg.SendEventNow();
+		Game::GetInstance()->RemoveState();
+	}
+	
+	m_tShopTimer.Update(elapsedTime);
 }
 void	ShopState::Render(void)
 {
@@ -320,7 +331,16 @@ void	ShopState::Render(void)
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
 	WeaponManager* pWeaponManager = WeaponManager::GetInstance(); 
 
-	
+
+
+	stringstream wave;
+	wave << "NEXT WAVE IN";
+
+	stringstream timer;
+	timer << (int)GetShopTimer().GetTime();
+
+	pFont->Draw(wave.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 175, Game::GetInstance()->GetScreenHeight() - 150 }, .5f, { 155, 0, 0 });
+	pFont->Draw(timer.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 150, Game::GetInstance()->GetScreenHeight() - 100 }, 2.0f, { 155, 0, 0 });
 
 
 

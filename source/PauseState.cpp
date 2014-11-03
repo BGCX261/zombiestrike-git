@@ -121,6 +121,12 @@
 // Render
 /*virtual*/ void PauseState::Render(void)
 {
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+
+	GameplayState::GetInstance()->Render();
+	pGraphics->DrawRectangle({ 0, 0, 1024, 768 }, { 210, 0, 0, 0 });
+
+
 	// Use the game's font
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
 
@@ -192,5 +198,6 @@
 
 
 	pFont->Draw(output, position, 1.0f, { 255, 0, 0 });
+
 
 }

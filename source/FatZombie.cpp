@@ -10,6 +10,7 @@
 #include "DestroyObjectMessage.h"
 #include "Weapon.h"
 #include "PukerBlaster.h"
+#include "SpawnManager.h"
 
 
 FatZombie::FatZombie()
@@ -51,9 +52,13 @@ void FatZombie::Update(float dt)
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();
 		dMsg = nullptr;
+
+		SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
+
 	}
 	MovingObject::Update(dt);
 
+	MovingObject::Update(dt);
 }
 
 
