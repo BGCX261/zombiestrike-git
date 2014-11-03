@@ -38,7 +38,7 @@
 	// Load assets
 	SGD::AudioManager* pAudio	= SGD::AudioManager::GetInstance();
 
-	m_hBackgroundSFX			= pAudio->LoadAudio(L"resource/audio/alarmSound.wav");
+	m_hBackgroundSFX			= pAudio->LoadAudio(L"resource/audio/shotgun_fire.wav");
 
 }
 

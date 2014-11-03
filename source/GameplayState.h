@@ -12,6 +12,7 @@
 /**************************************************************/
 // Forward class declaration
 class BaseObject;
+class MovingObject;
 class Weapon;
 class Spawner;
 class EntityManager;
@@ -47,6 +48,10 @@ public:
 	SGD::Size		GetWorldSize	( void )	{ return m_szWorldSize; }
 	void			PauseAudio		( bool );
 
+	bool			GetGameMode		( void ) const	{ return m_bStoryMode; }
+	void			SetGameMode		( bool m )		{ m_bStoryMode = m; }
+
+
 	bool GetShopState() const { return m_bShopState; }
 	Timer GetWaveTimer() const { return m_tNextWave; }
 	Timer GetWaveEndTimer() const { return m_tCompleteWave; }
@@ -63,12 +68,16 @@ public:
 	void			CreateExplodingZombie(Spawner* owner);
 	void			CreateTankZombie(Spawner* owner);
 	void			CreatePickUp	( int type, SGD::Point pos );
-	void			CreateTurret	( SGD::Point pos, float rotation );
+	void			CreateTurret	( MovingObject* owner );
 	void			CreateBullet	( Weapon* owner );
 	void			CreateShotGunBullet	(Weapon* owner);
 	void			CreateARBullet	(Weapon* owner);
 	void			CreateSnipeBullet	(Weapon* owner);
 	void			CreateFireBullet(Weapon* owner);
+	void			CreatePukeyBullet(Weapon* owner);
+
+	void			CreateGrenade(Weapon* owner);
+
 	
 
 
@@ -83,6 +92,24 @@ public:
 	SGD::HAudio m_hWaveChange = SGD::INVALID_HANDLE;
 
 	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
+	SGD::HAudio storyMusic			= SGD::INVALID_HANDLE;
+	SGD::HAudio survivalMusic		= SGD::INVALID_HANDLE;
+	SGD::HAudio zombie_pain			= SGD::INVALID_HANDLE;
+	SGD::HAudio bullet_hit_zombie	= SGD::INVALID_HANDLE;
+	SGD::HAudio bullet_hit_house	= SGD::INVALID_HANDLE;
+	SGD::HAudio out_of_ammo			= SGD::INVALID_HANDLE;
+	SGD::HAudio reload_begin		= SGD::INVALID_HANDLE;
+	SGD::HAudio reload_finish		= SGD::INVALID_HANDLE;
+	SGD::HAudio explosion			= SGD::INVALID_HANDLE;
+
+	SGD::HAudio pistol_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio shotgun_fire		= SGD::INVALID_HANDLE;
+	SGD::HAudio rifle_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio sniper_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio flamethrower_fire	= SGD::INVALID_HANDLE;
+
+
+
 
 private:
 	/**********************************************************/
@@ -114,6 +141,16 @@ private:
 	/**********************************************************/
 	// World size
 	SGD::Size				m_szWorldSize		= { 1024, 768 };
+
+
+	//Textures
+	SGD::HTexture	m_hReticleImage = SGD::INVALID_HANDLE;
+
+
+
+	/**********************************************************/
+	// Game mode: Story/Survival
+	bool					m_bStoryMode		= true;
 
 	bool m_bShopState = false;
 

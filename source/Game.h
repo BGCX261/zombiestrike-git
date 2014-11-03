@@ -62,7 +62,10 @@ public:
 	// Gamer profile
 	GamerProfile&		GetProfile		( void )		{	return profiles[selectedProfile];	}
 	void				LoadProfiles	( void );
-	void				CreateProfiles	( void );
+	void				CreateStoryProfiles	( void );
+	void				CreateSurvivalProfiles(void);
+
+
 	GamerProfile		profiles[3];
 	unsigned int		selectedProfile	= 0;
 

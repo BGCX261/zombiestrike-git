@@ -1,6 +1,8 @@
 #include "Shotgun.h"
 #include "MovingObject.h"
 #include "CreateShotgunBullet.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "GameplayState.h"
 
 Shotgun::Shotgun(MovingObject* owner)
 {
@@ -17,7 +19,8 @@ Shotgun::Shotgun(MovingObject* owner)
 	lifeTime = 400.0f;
 	m_pOwner = owner;
 	owner->AddRef();
-	
+	fire_sound = &GameplayState::GetInstance()->shotgun_fire;
+
 }
 
 
@@ -30,20 +33,35 @@ Shotgun::~Shotgun()
 
 void Shotgun::Fire(float dt)
 {
+	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
+	GameplayState*		pGameplay	= GameplayState::GetInstance();
+
 	if (currAmmo > 0)
 	{
 		//create bullet message
-		if (recoilTimer.GetTime() == 0)
+		if (recoilTimer.GetTime() == 0 && pAudio->IsAudioPlaying(pGameplay->reload_finish) == false)
 		{
 			CreateShotgunBullet* pMsg = new CreateShotgunBullet(this);
 			pMsg->QueueMessage();
 			pMsg = nullptr;
 
+			if (pAudio->IsAudioPlaying(*fire_sound) == false)
+				pAudio->PlayAudio(*fire_sound, false);
+
 			recoilTimer.AddTime(recoilTime);
 			currAmmo--;
 			if (currAmmo == 0)
+			{
 				reloadTimer.AddTime(reloadTime);
+				reloading = true;
+			}
 		}
-
+	}
+	else
+	{
+		if (pAudio->IsAudioPlaying(pGameplay->out_of_ammo) == false && pAudio->IsAudioPlaying(*fire_sound) == false
+			&& pAudio->IsAudioPlaying(pGameplay->reload_begin) == false
+			&& pAudio->IsAudioPlaying(pGameplay->reload_finish) == false)
+			pAudio->PlayAudio(pGameplay->out_of_ammo, false);
 	}
 }

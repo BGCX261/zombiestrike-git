@@ -9,6 +9,7 @@ protected:
 	SGD::Point m_ptPosition = { 0, 0 };
 	SGD::Size m_szSize = { 0, 0 };
 	float m_fRotation = 0.0f;
+	SGD::Size m_szScale = { 1.0f, 1.0f };
 	AnimTimeStamp animation;
 	unsigned char alpha = (char)255;
 
@@ -42,6 +43,7 @@ public:
 	SGD::Point		GetPosition			(void) const	{ return m_ptPosition; }
 	SGD::Size		GetSize				(void) const	{ return m_szSize; }
 	float			GetRotation			(void) const	{ return m_fRotation; }
+	SGD::Size			GetScale(void) const	{ return m_szScale; }
 	std::string		GetAnimation		(void) const	{ return animation.m_strCurrAnimation; }
 	AnimTimeStamp	GetAnimationStamp	(void) const	{ return animation; }
 
@@ -51,5 +53,6 @@ public:
 	void			SetSize				(SGD::Size size)		{ m_szSize = size; }
 	void			SetRotation			(float rad)				{ m_fRotation = rad; }
 	void			SetAnimation		(std::string animName);
+	void SetScale(SGD::Size scale) { m_szScale = scale; }
 };
 

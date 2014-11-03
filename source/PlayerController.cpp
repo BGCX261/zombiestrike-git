@@ -50,8 +50,8 @@ PlayerController::~PlayerController()
 	
 
 
-//	std::string animation = "";
-	//animation = m_Player->m_bIsAlive == true ? m_Player->animation.m_strCurrAnimation : "playerDeath";
+	std::string animation = "";
+	animation = m_Player->m_bIsAlive == true ? m_Player->animation.m_strCurrAnimation : "playerDeath";
 
 
 	// player is walking(playerWalk) OR running(playerRun)
@@ -147,11 +147,27 @@ PlayerController::~PlayerController()
 		m_Player->m_unCurrAbility = 3;
 
 
+	WeaponManager*		pWeaponManager = WeaponManager::GetInstance();
+
 	if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
 	{
 		//m_Player->flameThrower->Fire(dt);
-		WeaponManager::GetInstance()->GetSelected()->Fire(dt);
+		//WeaponManager::GetInstance()->GetSelected()->Fire(dt);
+		pWeaponManager->GetSelected()->Fire(dt);
 	}
+	if (pInput->IsKeyPressed(SGD::Key::R) == true && pWeaponManager->GetSelected()->IsReloading() == false)
+	{
+		pWeaponManager->GetSelected()->ReloadNeeded();
+	}
+
+
+	// spawning turrets
+	if (pInput->IsKeyPressed(SGD::Key::G) == true)
+	{
+		m_Player->SpawnTurret();
+	}
+
+
 
 	// player activates an ability
 	if ((pInput->IsKeyPressed(SGD::Key::Space) == true || pInput->IsButtonPressed(0, 0) == true) && m_Player->m_bIsAlive == true)
@@ -227,7 +243,7 @@ PlayerController::~PlayerController()
 			m_Player->SetVoice(pAudio->PlayAudio(*death, false)); //voice = pAudio->PlayAudio(*alarmSound, true);
 		pAudio->SetVoiceVolume(m_Player->GetVoice());
 
-	//	animation = "playerDeath";
+		animation = "playerDeath";
 		m_Player->SetVelocity({ 0, 0 });
 		m_Player->m_bMoving = false;
 		m_Player->m_bIsAlive = false;
@@ -252,11 +268,11 @@ PlayerController::~PlayerController()
 
 
 
-	//if (m_Player->GetAnimation() != animation)
-	//{
-	//	m_Player->SetAnimation(animation);
-	//}
-	//
+	if (m_Player->GetAnimation() != animation)
+	{
+		m_Player->SetAnimation(animation);
+	}
+	
 
 
 	return true;

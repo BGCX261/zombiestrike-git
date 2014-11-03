@@ -9,20 +9,23 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "DestroyObjectMessage.h"
 #include "Game.h"
+#include "BarbedWire.h"
+#include "LandMine.h"
+#include "SandBag.h"
 #include "SpawnManager.h"
-
 
 
 Zombie::Zombie() : Listener(this)
 {
 
-
+	damage = 10.0f;
+	health = 100.0f;
 }
 
 
 Zombie::~Zombie() 
 {
-	
+	//SetTarget(nullptr); 
 	
 }
 void Zombie::Update(float dt)
@@ -31,6 +34,11 @@ void Zombie::Update(float dt)
 	{
 		if (currBehavior != nullptr)
 			currBehavior->Update(dt, this, m_pTarget->GetPosition());
+
+		// possible turret target
+		SGD::Event event = { "ASSESS_THREAT", nullptr, this };
+		event.SendEventNow(nullptr);
+
 	}
 	else
 	{
@@ -66,6 +74,8 @@ void Zombie::RetrieveBehavior(std::string name)
 
 /*virtual*/ void Zombie::HandleCollision(const IBase* pOther)
 {
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
 	if (pOther->GetType() == OBJ_BULLET)
 	{
 		const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
@@ -84,25 +94,44 @@ void Zombie::RetrieveBehavior(std::string name)
 			}
 			
 		}
+
+		if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->zombie_pain) == false)
+			pAudio->PlayAudio(GameplayState::GetInstance()->zombie_pain, false);
 	}
 	else if (pOther->GetType() == OBJ_BARBEDWIRE)
 	{
-
-		health -= 10.0f * Game::GetInstance()->DeltaTime();
-		if (health <= 0)
+		const BarbedWire* barbWire = dynamic_cast<const BarbedWire*>(pOther);
+		if (barbWire->IsActive())
 		{
-			isAlive = false;
+			health -= 10.0f * Game::GetInstance()->DeltaTime();
+			if (health <= 0)
+				isAlive = false;
+			MovingObject::HandleCollision(pOther);
+		}
+		
+
+{
 
 			//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 		}
 
 	}
 	else if (pOther->GetType() == OBJ_SANDBAG)
-		MovingObject::HandleCollision(pOther);
+	{
+		const SandBag* sandbag = dynamic_cast<const SandBag*>(pOther);
+		if (sandbag->IsActive())
+			MovingObject::HandleCollision(pOther);
+
+	}
 
 	else if (pOther->GetType() == OBJ_LANDMINE)
+
 	{
-		isAlive = false;
+		const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
+		if (landMine->IsActive())
+			isAlive = false;
+
+	
 
 		//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 	}

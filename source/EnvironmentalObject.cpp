@@ -17,10 +17,10 @@ void EnvironmentalObject::HandleCollision(const IBase* pOther)
 {
 }
 
-/*virtual*/ SGD::Rectangle EnvironmentalObject::GetRect(void) const
-{
-	SGD::Point renderPos = SGD::Point(m_ptPosition.x - GameplayState::GetInstance()->GetCamera()->GetPosition().x,
-		m_ptPosition.y - GameplayState::GetInstance()->GetCamera()->GetPosition().y);
-
-	return SGD::Rectangle({ renderPos, m_szSize });
-}
+///*virtual*/ SGD::Rectangle EnvironmentalObject::GetRect(void) const
+//{
+//	SGD::Point renderPos = SGD::Point(m_ptPosition.x - GameplayState::GetInstance()->GetCamera()->GetPosition().x,
+//		m_ptPosition.y - GameplayState::GetInstance()->GetCamera()->GetPosition().y);
+//
+//	return SGD::Rectangle({ renderPos, m_szSize });
+//}
