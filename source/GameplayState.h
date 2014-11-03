@@ -70,6 +70,10 @@ public:
 	void			CreateARBullet	(Weapon* owner);
 	void			CreateSnipeBullet	(Weapon* owner);
 	void			CreateFireBullet(Weapon* owner);
+	void			CreatePukeyBullet(Weapon* owner);
+
+	void			CreateGrenade(Weapon* owner);
+
 	
 
 

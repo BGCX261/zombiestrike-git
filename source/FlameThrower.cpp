@@ -11,7 +11,7 @@ FlameThrower::FlameThrower(MovingObject* owner) : Listener(this)
 	currAmmo = 200;
 	magSize = 200;
 	ammoCapactity = 500;
-	recoilTime = .01f;
+	recoilTime = .02f;
 	bulletSpread = 5.0f;
 	damage = 50.0f;
 	speed = 500.0f;
@@ -62,3 +62,4 @@ void FlameThrower::Fire(float dt)
 			pAudio->PlayAudio(pGameplay->out_of_ammo, false);
 	}
 }
+

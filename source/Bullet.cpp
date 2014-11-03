@@ -5,7 +5,6 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "AnimationManager.h"
 #include "DestroyObjectMessage.h"
-#include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
 Bullet::Bullet() : Listener(this)

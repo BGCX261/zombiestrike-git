@@ -33,7 +33,7 @@ BaseObject::~BaseObject()
 }
 /*virtual*/ void BaseObject::Render(void) /*override*/
 {
-	AnimationManager::GetInstance()->Render(animation, this->m_ptPosition, this->m_fRotation, { alpha, 255, 255, 255 });
+	AnimationManager::GetInstance()->Render(animation, this->m_ptPosition, this->m_fRotation, { alpha, 255, 255, 255 }, m_szScale);
 	//SGD::Point renderPos = SGD::Point(m_ptPosition.x - GameplayState::GetInstance()->GetCamera()->GetPosition().x, m_ptPosition.y - GameplayState::GetInstance()->GetCamera()->GetPosition().y);
 
 	//SGD::Rectangle collisionRect = AnimationManager::GetInstance()->GetAnimation(animation.m_strCurrAnimation)->GetFrames()[animation.m_nCurrFrame]->GetCollisionRect();

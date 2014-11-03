@@ -13,6 +13,7 @@
 #include "HowToPlayState.h"
 #include "CreditsState.h"
 #include "OptionsState.h"
+#include "ShopState.h"
 
 
 /**************************************************************/

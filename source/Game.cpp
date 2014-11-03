@@ -5,6 +5,7 @@
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_String.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "WeaponManager.h"
 
 #include "BitmapFont.h"
 #include "IGameState.h"
@@ -83,7 +84,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 
 
 	// Setup the profiles
-	CreateProfiles();
+	CreateStoryProfiles();
 	LoadProfiles();
 
 
@@ -240,7 +241,7 @@ void Game::LoadProfiles( void )
 
 
 	// Add the company and game information
-	pathtowrite += "\\GoldNuggetGames\\SilentStrike\\";
+	pathtowrite += "\\CTS\\ZombieStrike\\Story\\";
 
 
 	// Create our directory
@@ -259,14 +260,440 @@ void Game::LoadProfiles( void )
 		if (fin.is_open())
 		{
 			getline(fin, profiles[i - 1].path);
-			/*fin >> profiles[i - 1].MaxEnergy;
-			fin >> profiles[i - 1].MaxStamina;
-			fin >> profiles[i - 1].CamoMultiplier;
-			fin >> profiles[i - 1].SpeedMultiplier;
-			fin >> profiles[i - 1].RadarMultiplier;
-			fin >> profiles[i - 1].LevelsComplete;
-			fin >> profiles[i - 1].m_bHasKey;
-			fin >> profiles[i - 1].CheckPointReached;*/
+
+#pragma region Pistols
+
+			//pistol
+			fin >> profiles[i - 1].pistol.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].pistol.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pistol.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].pistol.recoilTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].pistol.recoilTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pistol.recoilTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].pistol.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].pistol.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pistol.reloadTime.upgradedSkill.maxTier;
+
+			//revolver
+			fin >> profiles[i - 1].revolver.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].revolver.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].revolver.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].revolver.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].revolver.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].revolver.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].revolver.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].revolver.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].revolver.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].revolver.recoilTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].revolver.recoilTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].revolver.recoilTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].revolver.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].revolver.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].revolver.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].revolver.penPower.upgradedSkill.stat;
+			fin >> profiles[i - 1].revolver.penPower.upgradedSkill.currTier;
+			fin >> profiles[i - 1].revolver.penPower.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].revolver.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].revolver.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].revolver.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].revolver.isBought;
+
+
+#pragma endregion
+
+
+
+
+
+#pragma region SMGs
+			//Mac10
+			fin >> profiles[i - 1].mac10.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].mac10.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].mac10.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].mac10.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].mac10.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].mac10.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].mac10.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].mac10.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].mac10.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].mac10.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].mac10.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].mac10.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].mac10.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].mac10.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].mac10.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].mac10.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].mac10.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].mac10.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].mac10.isBought;
+		
+			//Tech9
+			fin >> profiles[i - 1].tech9.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].tech9.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].tech9.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].tech9.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].tech9.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].tech9.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].tech9.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].tech9.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].tech9.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].tech9.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].tech9.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].tech9.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].tech9.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].tech9.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].tech9.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].tech9.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].tech9.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].tech9.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].tech9.isBought;
+
+			//P90
+			fin >> profiles[i - 1].p90.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].p90.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].p90.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].p90.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].p90.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].p90.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].p90.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].p90.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].p90.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].p90.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].p90.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].p90.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].p90.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].p90.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].p90.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].p90.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].p90.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].p90.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].p90.isBought;
+
+#pragma endregion
+
+#pragma region Shotguns
+
+			//SawnOff
+			fin >> profiles[i - 1].sawnoff.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].sawnoff.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sawnoff.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sawnoff.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].sawnoff.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sawnoff.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sawnoff.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].sawnoff.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sawnoff.reloadTime.upgradedSkill.maxTier;
+
+
+			fin >> profiles[i - 1].sawnoff.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].sawnoff.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sawnoff.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sawnoff.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].sawnoff.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sawnoff.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sawnoff.recoilTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].sawnoff.recoilTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sawnoff.recoilTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sawnoff.isBought;
+
+
+			//Pump
+			fin >> profiles[i - 1].pumpShotgun.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].pumpShotgun.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pumpShotgun.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].pumpShotgun.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].pumpShotgun.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pumpShotgun.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].pumpShotgun.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].pumpShotgun.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pumpShotgun.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].pumpShotgun.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].pumpShotgun.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pumpShotgun.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].pumpShotgun.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].pumpShotgun.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pumpShotgun.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].pumpShotgun.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].pumpShotgun.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pumpShotgun.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].pumpShotgun.recoilTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].pumpShotgun.recoilTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].pumpShotgun.recoilTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].pumpShotgun.isBought;
+
+			//Auto
+			fin >> profiles[i - 1].autoShotgun.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].autoShotgun.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].autoShotgun.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].autoShotgun.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].autoShotgun.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].autoShotgun.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].autoShotgun.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].autoShotgun.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].autoShotgun.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].autoShotgun.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].autoShotgun.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].autoShotgun.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].autoShotgun.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].autoShotgun.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].autoShotgun.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].autoShotgun.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].autoShotgun.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].autoShotgun.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].autoShotgun.recoilTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].autoShotgun.recoilTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].autoShotgun.recoilTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].autoShotgun.isBought;
+
+
+
+#pragma endregion
+
+#pragma region Assault Rifles
+
+			//AK-47
+			fin >> profiles[i - 1].ak47.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].ak47.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].ak47.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].ak47.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].ak47.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].ak47.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].ak47.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].ak47.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].ak47.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].ak47.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].ak47.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].ak47.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].ak47.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].ak47.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].ak47.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].ak47.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].ak47.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].ak47.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].ak47.recoilTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].ak47.recoilTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].ak47.recoilTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].ak47.isBought;
+
+			//M-16
+			fin >> profiles[i - 1].m16.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].m16.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].m16.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].m16.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].m16.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].m16.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].m16.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].m16.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].m16.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].m16.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].m16.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].m16.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].m16.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].m16.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].m16.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].m16.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].m16.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].m16.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].m16.recoilTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].m16.recoilTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].m16.recoilTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].m16.isBought;
+
+			//LMG
+			fin >> profiles[i - 1].lmg.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].lmg.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].lmg.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].lmg.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].lmg.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].lmg.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].lmg.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].lmg.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].lmg.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].lmg.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].lmg.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].lmg.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].lmg.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].lmg.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].lmg.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].lmg.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].lmg.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].lmg.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].lmg.recoilTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].lmg.recoilTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].lmg.recoilTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].lmg.isBought;
+
+#pragma endregion
+
+#pragma region Heavy Weapons
+
+			//Sniper
+			fin >> profiles[i - 1].sniper.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].sniper.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sniper.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sniper.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].sniper.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sniper.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sniper.penPower.upgradedSkill.stat;
+			fin >> profiles[i - 1].sniper.penPower.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sniper.penPower.upgradedSkill.maxTier;
+
+
+			fin >> profiles[i - 1].sniper.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].sniper.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sniper.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sniper.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].sniper.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sniper.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sniper.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].sniper.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sniper.bulletSpread.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sniper.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].sniper.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sniper.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sniper.recoilTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].sniper.recoilTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sniper.recoilTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].sniper.isBought;
+
+			//Flamethrower
+
+			fin >> profiles[i - 1].flameThrower.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].flameThrower.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].flameThrower.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].flameThrower.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].flameThrower.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].flameThrower.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].flameThrower.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].flameThrower.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].flameThrower.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].flameThrower.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].flameThrower.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].flameThrower.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].flameThrower.bulletSpread.upgradedSkill.stat;
+			fin >> profiles[i - 1].flameThrower.bulletSpread.upgradedSkill.currTier;
+			fin >> profiles[i - 1].flameThrower.bulletSpread.upgradedSkill.maxTier;
+		
+			fin >> profiles[i - 1].flameThrower.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].flameThrower.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].flameThrower.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].flameThrower.bulletVelocity.upgradedSkill.stat;
+			fin >> profiles[i - 1].flameThrower.bulletVelocity.upgradedSkill.currTier;
+			fin >> profiles[i - 1].flameThrower.bulletVelocity.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].flameThrower.isBought;
+
+			//Grenade Launcher
+
+			fin >> profiles[i - 1].nadeLauncher.totalAmmo.upgradedSkill.stat;
+			fin >> profiles[i - 1].nadeLauncher.totalAmmo.upgradedSkill.currTier;
+			fin >> profiles[i - 1].nadeLauncher.totalAmmo.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].nadeLauncher.magSize.upgradedSkill.stat;
+			fin >> profiles[i - 1].nadeLauncher.magSize.upgradedSkill.currTier;
+			fin >> profiles[i - 1].nadeLauncher.magSize.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].nadeLauncher.ammoCap.upgradedSkill.stat;
+			fin >> profiles[i - 1].nadeLauncher.ammoCap.upgradedSkill.currTier;
+			fin >> profiles[i - 1].nadeLauncher.ammoCap.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].nadeLauncher.reloadTime.upgradedSkill.stat;
+			fin >> profiles[i - 1].nadeLauncher.reloadTime.upgradedSkill.currTier;
+			fin >> profiles[i - 1].nadeLauncher.reloadTime.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].nadeLauncher.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].nadeLauncher.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].nadeLauncher.damage.upgradedSkill.maxTier;
+
+			fin >> profiles[i - 1].nadeLauncher.bulletVelocity.upgradedSkill.stat;
+			fin >> profiles[i - 1].nadeLauncher.bulletVelocity.upgradedSkill.currTier;
+			fin >> profiles[i - 1].nadeLauncher.bulletVelocity.upgradedSkill.maxTier;
+		
+			fin >> profiles[i - 1].nadeLauncher.isBought;
+
+
+
+#pragma endregion
+			
 			fin.close();
 		}
 	}
@@ -275,7 +702,7 @@ void Game::LoadProfiles( void )
 
 /**************************************************************/
 // CreateProfiles
-void Game::CreateProfiles()
+void Game::CreateStoryProfiles()
 {
 	//* If using Wide characters under project settings *//
 	HRESULT hr;
@@ -300,7 +727,379 @@ void Game::CreateProfiles()
 
 
 	// Add the company and game information
-	pathtowrite += "\\GoldNuggetGames\\ZombieStrike\\";
+	pathtowrite += "\\CTS\\ZombieStrike\\Story\\";
+
+
+	// Create our directory
+	if (SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0) == ERROR_SUCCESS)
+	{
+		// Create our save file
+		for (unsigned int i = 1; i < 4; i++)
+		{
+			string filePath = pathtowrite;
+
+			filePath += "savefile.save";
+			filePath += std::to_string(i);
+
+
+
+			fstream fout(filePath.c_str(), std::ios_base::out);
+			if (fout.is_open())
+			{
+				WeaponManager::GetInstance()->GetWeapons();
+				fout << filePath << '\n';
+
+#pragma region Pistols
+
+				//pistol stats
+				fout << 10 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 2 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << .33 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				//revolver
+				fout << 25 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 25 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << .5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 50 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+#pragma endregion
+
+#pragma region SMGs
+				//Mac10
+				fout << 60 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 20 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 60 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 2 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 20 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+				//Tech9
+				fout << 90 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 30 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 90 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 35 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+				//p90
+				fout << 150 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 50 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 150 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 35 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+
+#pragma endregion
+
+#pragma region Shotguns
+				//sawn off
+				fout << 16 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 16 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 2 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 20 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 35 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << .5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+				//pump
+				fout << 24 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 6 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 24 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 4 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 10 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 25 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+				//auto shotty
+				fout << 30 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 8 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 30 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 15 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 25 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << .5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+
+#pragma endregion
+
+
+#pragma region Assault Rifles
+				//ak47
+				fout << 90 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 30 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 90 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 7 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 40 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << .33 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+				//m16
+				fout << 90 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 30 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 90 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 25 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << .2 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n'; 
+				//LMG
+				fout << 200 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 100 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 200 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 6 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 75 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << .33 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+
+#pragma endregion
+
+
+#pragma region Heavy Weapons
+				//sniper
+				fout << 15 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 2 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 15 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 2 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 200 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+				//flamethrower
+				fout << 200 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 100 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 200 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 4 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 10 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 20 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 300 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+				//grenade launcher
+				fout << 5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 1 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 5 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 4 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 200 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 300 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+				fout << 0 << '\n';
+
+
+#pragma endregion
+
+				fout.close();
+			}
+		}
+	}
+}
+void Game::CreateSurvivalProfiles()
+{
+	//* If using Wide characters under project settings *//
+	HRESULT hr;
+	ostringstream stringstream;
+	char path[MAX_PATH];
+	LPWSTR wszPath = NULL;
+	size_t   size;
+
+
+	// Get the path to the app data folder
+	hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, 0, &wszPath);
+
+
+	// Convert from LPWSTR to char[]
+	wcstombs_s(&size, path, MAX_PATH, wszPath, MAX_PATH);
+
+
+	// Convert char types
+	if (hr == S_OK)
+		stringstream << path;
+	string pathtowrite = stringstream.str();
+
+
+	// Add the company and game information
+	pathtowrite += "\\CTS\\ZombieStrike\\Survival\\";
 
 
 	// Create our directory

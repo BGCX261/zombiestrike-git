@@ -1,14 +1,14 @@
-#include "P90.h"
+#include "UZI.h"
 #include "MovingObject.h"
 #include "CreatePistolBullet.h"
 
-P90::P90(MovingObject* owner)
+UZI::UZI(MovingObject* owner)
 {
-	type = SP90;
-	reloadTime = 2.5f;
-	currAmmo = 25;
-	magSize = 25;
-	ammoCapactity = 100;
+	type = MAC10;
+	reloadTime = 3.0f;
+	currAmmo = 20;
+	magSize = 20;
+	ammoCapactity = 60;
 	recoilTime = 0.1f;
 	bulletSpread = 6.0f;
 	damage = 34.0f;
@@ -16,17 +16,9 @@ P90::P90(MovingObject* owner)
 	lifeTime = 1000.0f;
 	m_pOwner = owner;
 	owner->AddRef();
-	
 }
 
-
-P90::~P90()
-{
-	/*m_pOwner->Release();
-	m_pOwner = nullptr;*/
-}
-
-void P90::Fire(float dt)
+void UZI::Fire(float dt)
 {
 	if (currAmmo > 0)
 	{
@@ -44,5 +36,4 @@ void P90::Fire(float dt)
 		}
 
 	}
-
 }
