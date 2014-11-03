@@ -13,6 +13,7 @@
 #include "HowToPlayState.h"
 #include "CreditsState.h"
 #include "OptionsState.h"
+#include "ShopState.h"
 
 
 /**************************************************************/
@@ -207,7 +208,7 @@
 		{
 		case MenuItems::PLAY_GAME:
 			{
-				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
+				Game::GetInstance()->AddState(GameplayState::GetInstance());
 				return true;
 			}
 			break;

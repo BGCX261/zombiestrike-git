@@ -1,10 +1,10 @@
-#include "P90.h"
+#include "Ak47.h"
 #include "MovingObject.h"
 #include "CreatePistolBullet.h"
 
-P90::P90(MovingObject* owner)
+Ak47::Ak47(MovingObject* owner)
 {
-	type = SP90;
+	type = AK47;
 	reloadTime = 2.5f;
 	currAmmo = 25;
 	magSize = 25;
@@ -16,17 +16,14 @@ P90::P90(MovingObject* owner)
 	lifeTime = 1000.0f;
 	m_pOwner = owner;
 	owner->AddRef();
-	
 }
 
 
-P90::~P90()
+Ak47::~Ak47()
 {
-	/*m_pOwner->Release();
-	m_pOwner = nullptr;*/
 }
 
-void P90::Fire(float dt)
+void Ak47::Fire(float dt)
 {
 	if (currAmmo > 0)
 	{
@@ -44,5 +41,4 @@ void P90::Fire(float dt)
 		}
 
 	}
-
 }

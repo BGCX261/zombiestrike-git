@@ -14,7 +14,7 @@ struct UpgradeF
 };
 struct UpgradeN
 {
-	int stat = 0.0f;
+	int stat = 0;
 	int currTier = 0;
 	int maxTier = 0;
 };
@@ -26,7 +26,7 @@ struct ButtonF
 	SGD::HTexture* buttonImage = nullptr;
 	UpgradeF upgradedSkill;
 	std::string text;
-	bool isLocked;
+	bool isMaxed;
 
 };
 struct ButtonN
@@ -36,35 +36,36 @@ struct ButtonN
 	SGD::HTexture* buttonImage = nullptr;
 	UpgradeN upgradedSkill;
 	std::string text; 
-	bool isBought;
 	bool isMaxed;
 
 };
 
 struct PistolUpgrade
 {
-
 	ButtonN magSize;
-	ButtonN ammoCap;
 	ButtonF reloadTime;
 	ButtonF recoilTime;
-	bool isBought;
+
 
 };
 struct RevolverUpgrade
 {
+	
+	ButtonN totalAmmo;
+
 	ButtonN magSize;
 	ButtonN ammoCap;
-	ButtonN penPower;
 	ButtonF recoilTime;
 	ButtonF reloadTime;
+	ButtonN penPower;
 	ButtonF damage;
 	bool isBought;
 
 };
 struct SMGUpgrade
 {
-	
+	ButtonN totalAmmo;
+
 	ButtonN magSize;
 	ButtonN ammoCap;
 	ButtonF reloadTime;
@@ -76,6 +77,8 @@ struct SMGUpgrade
 
 struct AssualtRifleUpgrade
 {
+	ButtonN totalAmmo;
+
 	ButtonN magSize;
 	ButtonN ammoCap;
 	ButtonF reloadTime;
@@ -88,6 +91,8 @@ struct AssualtRifleUpgrade
 
 struct SawnOffUpgrade
 {
+	ButtonN totalAmmo;
+
 	ButtonN ammoCap;
 	ButtonN reloadTime;
 	ButtonF bulletSpread;
@@ -100,6 +105,8 @@ struct SawnOffUpgrade
 };
 struct StdShotgunUpgrade
 {
+	ButtonN totalAmmo;
+
 	ButtonN magSize;
 	ButtonN ammoCap;
 	ButtonF reloadTime;
@@ -114,15 +121,20 @@ struct StdShotgunUpgrade
 
 struct SniperUpgrade
 {
+	ButtonN totalAmmo;
+
 	ButtonN magSize;
 	ButtonN penPower;
+	
+
 
 	ButtonN ammoCap;
 	ButtonF reloadTime;
+
 	ButtonF bulletSpread;
 	ButtonF damage;
 	ButtonF recoilTime;
-	ButtonF bulletVelocity;
+
 	bool isBought;
 
 
@@ -131,8 +143,10 @@ struct SniperUpgrade
 };
 struct FlamethrowerUpgrade
 {
-	UpgradeN magSize;
-	UpgradeN ammoCap;
+	ButtonN totalAmmo;
+
+	ButtonN magSize;
+	ButtonN ammoCap;
 	ButtonF reloadTime;
 	ButtonF bulletSpread;
 	ButtonF damage;
@@ -142,11 +156,27 @@ struct FlamethrowerUpgrade
 };
 struct GrenadeLauncherUpgrade
 {
-	UpgradeN magSize;
-	UpgradeN ammoCap;
+	ButtonN totalAmmo;
+
+	ButtonN magSize;
+	ButtonN ammoCap;
 	ButtonF reloadTime;
 	ButtonF damage;
 	ButtonF bulletVelocity;
 	bool isBought;
 
 };
+
+//pFont->Draw("P90: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
+//pFont->Draw(p90MagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+//pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+//pFont->Draw(p90ReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+//pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+//pFont->Draw(p90BullSpreadLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+//pFont->Draw("Stability: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+//pFont->Draw(p90DamageLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+//pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+//pFont->Draw(p90AmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+//pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+//pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+//pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(315.0f, 130.0f), SGD::Size(240.0f, 90.0f)));

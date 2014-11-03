@@ -28,6 +28,8 @@ void ExplodingZombie::Update(float dt)
 		dMsg->QueueMessage();
 		dMsg = nullptr;
 	}
+	MovingObject::Update(dt);
+
 }
 
 

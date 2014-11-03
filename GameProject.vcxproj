@@ -89,10 +89,12 @@
     <ClCompile Include="SGD Wrappers\SGD_Listener.cpp" />
     <ClCompile Include="SGD Wrappers\SGD_Message.cpp" />
     <ClCompile Include="SGD Wrappers\SGD_MessageManager.cpp" />
+    <ClCompile Include="source\Ak47.cpp" />
     <ClCompile Include="source\AlertBehavior.cpp" />
     <ClCompile Include="source\Animation.cpp" />
     <ClCompile Include="source\AnimationManager.cpp" />
     <ClCompile Include="source\AssaultRifle.cpp" />
+    <ClCompile Include="source\AutoShotgun.cpp" />
     <ClCompile Include="source\BarbedWire.cpp" />
     <ClCompile Include="source\BaseObject.cpp" />
     <ClCompile Include="source\BehaviorManager.cpp" />
@@ -103,7 +105,9 @@
     <ClCompile Include="source\CreateFastZombieMsg.cpp" />
     <ClCompile Include="source\CreateFatZombieMsg.cpp" />
     <ClCompile Include="source\CreateFlameBullet.cpp" />
+    <ClCompile Include="source\CreateGrenadeBullet.cpp" />
     <ClCompile Include="source\CreatePistolBullet.cpp" />
+    <ClCompile Include="source\CreatePukeBullet.cpp" />
     <ClCompile Include="source\CreateShotgunBullet.cpp" />
     <ClCompile Include="source\CreateSniperBullet.cpp" />
     <ClCompile Include="source\CreateTankZombieMsg.cpp" />
@@ -119,9 +123,12 @@
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\GameCamera.cpp" />
     <ClCompile Include="source\GameplayState.cpp" />
+    <ClCompile Include="source\Grenade.cpp" />
+    <ClCompile Include="source\GrenadeLauncher.cpp" />
     <ClCompile Include="source\HowToPlayState.cpp" />
     <ClCompile Include="source\HUD.cpp" />
     <ClCompile Include="source\LandMine.cpp" />
+    <ClCompile Include="source\LMG.cpp" />
     <ClCompile Include="source\LoseGameState.cpp" />
     <ClCompile Include="source\MainMenuState.cpp" />
     <ClCompile Include="source\Map.cpp" />
@@ -136,20 +143,26 @@
     <ClCompile Include="source\Pistol.cpp" />
     <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\PlayerController.cpp" />
+    <ClCompile Include="source\PukerBlaster.cpp" />
+    <ClCompile Include="source\Revolver.cpp" />
     <ClCompile Include="source\RotateTowardsBehavior.cpp" />
     <ClCompile Include="source\RunToBehavior.cpp" />
     <ClCompile Include="source\SandBag.cpp" />
+    <ClCompile Include="source\SawnOff.cpp" />
+    <ClCompile Include="source\ShopState.cpp" />
     <ClCompile Include="source\Shotgun.cpp" />
     <ClCompile Include="source\Sniper.cpp" />
     <ClCompile Include="source\Spawner.cpp" />
     <ClCompile Include="source\SpawnManager.cpp" />
     <ClCompile Include="source\TankZombie.cpp" />
+    <ClCompile Include="source\Tech9.cpp" />
     <ClCompile Include="source\Timer.cpp" />
     <ClCompile Include="source\tinystr.cpp" />
     <ClCompile Include="source\tinyxml.cpp" />
     <ClCompile Include="source\tinyxmlerror.cpp" />
     <ClCompile Include="source\tinyxmlparser.cpp" />
     <ClCompile Include="source\Turret.cpp" />
+    <ClCompile Include="source\UZI.cpp" />
     <ClCompile Include="source\WaitBehavior.cpp" />
     <ClCompile Include="source\Weapon.cpp" />
     <ClCompile Include="source\WeaponManager.cpp" />
@@ -158,6 +171,7 @@
     <ClCompile Include="source\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_Color.h" />
     <ClInclude Include="SGD Wrappers\SGD_Declarations.h" />
@@ -174,11 +188,13 @@
     <ClInclude Include="SGD Wrappers\SGD_Message.h" />
     <ClInclude Include="SGD Wrappers\SGD_MessageManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_String.h" />
+    <ClInclude Include="source\Ak47.h" />
     <ClInclude Include="source\AlertBehavior.h" />
     <ClInclude Include="source\Animation.h" />
     <ClInclude Include="source\AnimationManager.h" />
     <ClInclude Include="source\AnimTimeStamp.h" />
     <ClInclude Include="source\AssaultRifle.h" />
+    <ClInclude Include="source\AutoShotgun.h" />
     <ClInclude Include="source\BarbedWire.h" />
     <ClInclude Include="source\BaseBehavior.h" />
     <ClInclude Include="source\BaseObject.h" />
@@ -190,7 +206,9 @@
     <ClInclude Include="source\CreateFastZombieMsg.h" />
     <ClInclude Include="source\CreateFatZombieMsg.h" />
     <ClInclude Include="source\CreateFlameBullet.h" />
+    <ClInclude Include="source\CreateGrenadeBullet.h" />
     <ClInclude Include="source\CreatePistolBullet.h" />
+    <ClInclude Include="source\CreatePukeBullet.h" />
     <ClInclude Include="source\CreateShotgunBullet.h" />
     <ClInclude Include="source\CreateSniperBullet.h" />
     <ClInclude Include="source\CreateTankZombieMsg.h" />
@@ -210,11 +228,14 @@
     <ClInclude Include="source\GameplayState.h" />
     <ClInclude Include="source\GamerProfile.h" />
     <ClInclude Include="source\Graph.h" />
+    <ClInclude Include="source\Grenade.h" />
+    <ClInclude Include="source\GrenadeLauncher.h" />
     <ClInclude Include="source\HowToPlayState.h" />
     <ClInclude Include="source\HUD.h" />
     <ClInclude Include="source\IBase.h" />
     <ClInclude Include="source\IGameState.h" />
     <ClInclude Include="source\LandMine.h" />
+    <ClInclude Include="source\LMG.h" />
     <ClInclude Include="source\LoseGameState.h" />
     <ClInclude Include="source\MainMenuState.h" />
     <ClInclude Include="source\Map.h" />
@@ -230,9 +251,13 @@
     <ClInclude Include="source\Pistol.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\PlayerController.h" />
+    <ClInclude Include="source\PukerBlaster.h" />
+    <ClInclude Include="source\Revolver.h" />
     <ClInclude Include="source\RotateTowardsBehavior.h" />
     <ClInclude Include="source\RunToBehavior.h" />
     <ClInclude Include="source\SandBag.h" />
+    <ClInclude Include="source\SawnOff.h" />
+    <ClInclude Include="source\ShopState.h" />
     <ClInclude Include="source\ShopStructures.h" />
     <ClInclude Include="source\Shotgun.h" />
     <ClInclude Include="source\SLList.h" />
@@ -240,9 +265,11 @@
     <ClInclude Include="source\Spawner.h" />
     <ClInclude Include="source\SpawnManager.h" />
     <ClInclude Include="source\TankZombie.h" />
+    <ClInclude Include="source\Tech9.h" />
     <ClInclude Include="source\tinystr.h" />
     <ClInclude Include="source\tinyxml.h" />
     <ClInclude Include="source\Turret.h" />
+    <ClInclude Include="source\UZI.h" />
     <ClInclude Include="source\WaitBehavior.h" />
     <ClInclude Include="source\Weapon.h" />
     <ClInclude Include="source\WeaponManager.h" />
@@ -251,6 +278,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameProject.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

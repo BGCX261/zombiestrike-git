@@ -1,8 +1,8 @@
-#include "Sniper.h"
+#include "GrenadeLauncher.h"
 #include "MovingObject.h"
-#include "CreateSniperBullet.h"
+#include "CreateGrenadeBullet.h"
 
-Sniper::Sniper(MovingObject* owner)
+GrenadeLauncher::GrenadeLauncher(MovingObject* owner)
 {
 	type = SPECIAL;
 	reloadTime = 3.5f;
@@ -15,24 +15,21 @@ Sniper::Sniper(MovingObject* owner)
 	lifeTime = 1000.0f;
 	m_pOwner = owner;
 	owner->AddRef();
-
 }
 
 
-Sniper::~Sniper()
+GrenadeLauncher::~GrenadeLauncher()
 {
-	//m_pOwner->Release();
-	//m_pOwner = nullptr;
 }
 
-void Sniper::Fire(float dt)
+void GrenadeLauncher::Fire(float dt)
 {
 	if (currAmmo > 0)
 	{
 		//create bullet message
 		if (recoilTimer.GetTime() == 0)
 		{
-			CreateSniperBullet* pMsg = new CreateSniperBullet(this);
+			CreateGrenadeBullet* pMsg = new CreateGrenadeBullet(this);
 			pMsg->QueueMessage();
 			pMsg = nullptr;
 

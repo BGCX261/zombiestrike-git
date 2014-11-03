@@ -1,39 +1,36 @@
-#include "FlameThrower.h"
+#include "PukerBlaster.h"
 #include "MovingObject.h"
-#include "CreateFlameBullet.h"
+#include "CreatePukeBullet.h"
 
-FlameThrower::FlameThrower(MovingObject* owner) : Listener(this)
+PukerBlaster::PukerBlaster(MovingObject* owner)
 {
 	type = FTHROWER;
-	reloadTime = 4.0f;
-	currAmmo = 200;
-	magSize = 200;
+	reloadTime = 5.0f;
+	currAmmo = INT_MAX;
+	magSize = 100;
 	ammoCapactity = 500;
 	recoilTime = .02f;
-	bulletSpread = 5.0f;
-	damage = 50.0f;
+	bulletSpread = 3.0f;
+	damage = 2.0f;
 	speed = 500.0f;
 	lifeTime = 700.0f;
 	m_pOwner = owner;
 	owner->AddRef();
-
 }
 
 
-FlameThrower::~FlameThrower()
+PukerBlaster::~PukerBlaster()
 {
-	//m_pOwner->Release();
-	//m_pOwner = nullptr;
 }
 
-void FlameThrower::Fire(float dt)
+void PukerBlaster::Fire(float dt)
 {
 	if (currAmmo > 0)
 	{
 		//create bullet message
 		if (recoilTimer.GetTime() == 0)
 		{
-			CreateFlameBullet* pMsg = new CreateFlameBullet(this);
+			CreatePukeBullet* pMsg = new CreatePukeBullet(this);
 			pMsg->QueueMessage();
 			pMsg = nullptr;
 
@@ -45,4 +42,3 @@ void FlameThrower::Fire(float dt)
 
 	}
 }
-

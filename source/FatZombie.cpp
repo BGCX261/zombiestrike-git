@@ -7,13 +7,15 @@
 #include "AnimationManager.h"
 #include "Bullet.h"
 #include "DestroyObjectMessage.h"
+#include "Weapon.h"
+#include "PukerBlaster.h"
 
 
 FatZombie::FatZombie()
 {
 	health = 200.0f;
 	damage = 20.0f;
-
+	pukeBlaster = new PukerBlaster(this);
 
 }
 
@@ -24,10 +26,15 @@ FatZombie::~FatZombie()
 }
 void FatZombie::Update(float dt)
 {
+	pukeBlaster->Update(dt);
 	if (isAlive)
 	{
 		if (currBehavior != nullptr)
 			currBehavior->Update(dt, this, m_pTarget->GetPosition());
+
+		if ((m_pTarget->GetPosition()-m_ptPosition).ComputeLength() <= 200.0f)
+			pukeBlaster->Fire(dt);
+		
 	}
 	else
 	{
@@ -35,6 +42,7 @@ void FatZombie::Update(float dt)
 		dMsg->QueueMessage();
 		dMsg = nullptr;
 	}
+	MovingObject::Update(dt);
 
 }
 

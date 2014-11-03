@@ -22,6 +22,8 @@
 #include "CreateARifleBullet.h"
 #include "CreateSniperBullet.h"
 #include "CreateFlameBullet.h"
+#include "CreateGrenadeBullet.h"
+#include "CreatePukeBullet.h"
 #include "Spawner.h"
 #include "SpawnManager.h"
 
@@ -125,6 +127,7 @@
 	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
 	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
 	pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
+	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
 
 	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
 
@@ -189,6 +192,8 @@
 	
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
 	pGraphics->UnloadTexture(m_hHudWpn);
+	pGraphics->UnloadTexture(m_hReticleImage);
+
 
 
 
@@ -427,6 +432,18 @@
 			GameplayState::GetInstance()->CreateFireBullet(pCreateBulletMsg->GetOwner());
 		}
 			break;
+		case MessageID::MSG_CREATE_PUKE:
+		{
+										   const CreatePukeBullet* pCreateBulletMsg = dynamic_cast<const CreatePukeBullet*>(pMsg);
+			GameplayState::GetInstance()->CreatePukeyBullet(pCreateBulletMsg->GetOwner());
+		}
+			break;
+		case MessageID::MSG_CREATE_NADE:
+		{
+										   const CreateGrenadeBullet* pCreateBulletMsg = dynamic_cast<const CreateGrenadeBullet*>(pMsg);
+											GameplayState::GetInstance()->CreateGrenade(pCreateBulletMsg->GetOwner());
+		}
+			break;
 		case MessageID::MSG_CREATE_SLOW_ZOMBIE:
 		{
 												  const CreateZombieMessage* pCreateBulletMsg = dynamic_cast<const CreateZombieMessage*>(pMsg);
@@ -543,6 +560,29 @@ void GameplayState::CreateBullet(Weapon* owner)
 	
 	
 }
+void GameplayState::CreateGrenade(Weapon* owner)
+{
+
+	Bullet* bullet = new Bullet;
+	bullet->SetOwner(owner->GetOwner());
+	bullet->SetPosition(owner->GetOwner()->GetPosition());
+	SGD::Vector direction = owner->GetOwner()->GetDirection();
+
+	
+
+	bullet->SetDirection(direction);
+	bullet->SetRotation(owner->GetOwner()->GetRotation());
+	bullet->SetDamage(owner->GetDamage());
+
+	bullet->SetVelocity(direction * owner->GetSpeed());
+	bullet->SetAnimation("bullet");
+	bullet->SetMoveSpeed(owner->GetSpeed());
+	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+	bullet->Release();
+	bullet = nullptr;
+
+
+}
 void GameplayState::CreateFireBullet(Weapon* owner)
 {
 	
@@ -564,6 +604,29 @@ void GameplayState::CreateFireBullet(Weapon* owner)
 		bullet->Release();
 		bullet = nullptr;
 	
+
+}
+void GameplayState::CreatePukeyBullet(Weapon* owner)
+{
+
+	Bullet* bullet = new Bullet;
+	bullet->SetOwner(owner->GetOwner());
+	bullet->SetPosition(owner->GetOwner()->GetPosition());
+	SGD::Vector direction = owner->GetOwner()->GetDirection();
+	float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
+
+	direction.Rotate(angle);
+
+	bullet->SetDirection(direction);
+	bullet->SetRotation(owner->GetOwner()->GetRotation());
+
+	bullet->SetVelocity(direction * owner->GetSpeed());
+	bullet->SetAnimation("flameThrowerRound");
+	bullet->SetDamage(owner->GetDamage());
+	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+	bullet->Release();
+	bullet = nullptr;
+
 
 }
 void GameplayState::CreateShotGunBullet(Weapon* owner)
