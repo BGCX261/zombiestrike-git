@@ -422,37 +422,37 @@ void	ShopState::Render(void)
 						for (size_t i = 0; i < 7; i++)
 							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
 					
-						if (revolverUpgrade.magSize.isMaxed)
+						if (revolverUpgrade.magSize.isMaxed == false)
 							pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.reloadTime.isMaxed)
+						if (revolverUpgrade.reloadTime.isMaxed == false)
 							pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.recoilTime.isMaxed)
+						if (revolverUpgrade.recoilTime.isMaxed == false)
 							pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.penPower.isMaxed)
+						if (revolverUpgrade.penPower.isMaxed == false)
 							pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.damage.isMaxed)
+						if (revolverUpgrade.damage.isMaxed == false)
 							pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.ammoCap.isMaxed)
+						if (revolverUpgrade.ammoCap.isMaxed == false)
 							pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
-						if (revolverUpgrade.totalAmmo.isMaxed)
+						if (revolverUpgrade.totalAmmo.isMaxed == false)
 							pFont->Draw("Buy Ammo", { Buttons[6].left + 18, Buttons[6].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Ammo Full", { Buttons[6].left + 18, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });

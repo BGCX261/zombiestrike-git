@@ -397,6 +397,7 @@
 			assert(pDestroyMsg != nullptr && "Game::MessageProc - MSG_DESTROY_OBJECT is not actually a DestroyObjectMessage");
 
 			BaseObject* ptr = pDestroyMsg->GetEntity();
+			
 			GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
 		}
 		break;
