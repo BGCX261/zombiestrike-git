@@ -11,7 +11,7 @@ protected:
 
 
 	enum Type { PISTOL, SMG, SHOTGUN, ASSUALT_RIFLE, SPECIAL, NONE};
-	enum Gun {GLOCK, REVOLVER, MAC10, TECH9, SP90 , SAWN, PUMP, AUTO, M16, LMG, AK47, GLAUNCHER, MINIGUN, FTHROWER};
+	enum Gun {GLOCK, REVOLVER, MAC10, TECH9, SP90 , SAWN, PUMP, AUTO, M16, LIGHT_MG, AK47, GLAUNCHER, MINIGUN, FTHROWER};
 
 	SGD::Rectangle m_rRenderRect;
 
@@ -67,7 +67,7 @@ public:
 
 	//Mutators
 	void AddAmmo(int addedAmmo) { totalAmmo += addedAmmo; }
-
+	void SetPenPower(int penPower) { penetratingPower = penPower; }
 	void SetTotalAmmo(int tammo) { totalAmmo = tammo; }
 	void SetCurrAmmo(int cammo) { currAmmo = cammo; }
 	void SetRenderRect(SGD::Rectangle rRect) { m_rRenderRect = rRect; }

@@ -1,10 +1,10 @@
-#include "P90.h"
+#include "LMG.h"
 #include "MovingObject.h"
 #include "CreatePistolBullet.h"
 
-P90::P90(MovingObject* owner)
+LMG::LMG(MovingObject* owner)
 {
-	type = SP90;
+	type = LIGHT_MG;
 	reloadTime = 2.5f;
 	currAmmo = 25;
 	magSize = 25;
@@ -16,17 +16,14 @@ P90::P90(MovingObject* owner)
 	lifeTime = 1000.0f;
 	m_pOwner = owner;
 	owner->AddRef();
-	
 }
 
 
-P90::~P90()
+LMG::~LMG()
 {
-	/*m_pOwner->Release();
-	m_pOwner = nullptr;*/
 }
 
-void P90::Fire(float dt)
+void LMG::Fire(float dt)
 {
 	if (currAmmo > 0)
 	{
@@ -44,5 +41,4 @@ void P90::Fire(float dt)
 		}
 
 	}
-
 }

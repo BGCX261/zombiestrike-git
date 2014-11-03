@@ -3,8 +3,7 @@
 #include "CreatePistolBullet.h"
 
 AssaultRifle::AssaultRifle(MovingObject* owner)
-{
-	
+{	
 	type = ASSUALT_RIFLE;
 	reloadTime = 2.5f;
 	currAmmo = 25;

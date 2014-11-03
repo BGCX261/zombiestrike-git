@@ -3,9 +3,8 @@
 #include "BaseObject.h"
 #include "GameplayState.h"
 #include "../SGD Wrappers/SGD_Event.h"
-#include "AnimationManager.h"
 #include "DestroyObjectMessage.h"
-#include "../SGD Wrappers/SGD_GraphicsManager.h"
+
 
 Bullet::~Bullet()
 {
