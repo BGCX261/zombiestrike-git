@@ -129,6 +129,8 @@
 	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
 
 	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
+
 
 
 
@@ -758,9 +760,10 @@ void GameplayState::CreatePukeyBullet(Weapon* owner)
 
 	bullet->SetDirection(direction);
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
+	bullet->SetType(BaseObject::OBJ_PUKE);
 
 	bullet->SetVelocity(direction * owner->GetSpeed());
-	bullet->SetAnimation("flameThrowerRound");
+	bullet->SetAnimation("puke");
 	bullet->SetDamage(owner->GetDamage());
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();

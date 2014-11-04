@@ -222,7 +222,7 @@
 		case MenuItems::STORY_MODE:
 			{
 				GameplayState::GetInstance()->SetGameMode(true);
-				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
+				Game::GetInstance()->AddState(GameplayState::GetInstance());
 				return true;
 			}
 			break;

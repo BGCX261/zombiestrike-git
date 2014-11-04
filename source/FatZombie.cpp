@@ -52,7 +52,7 @@ void FatZombie::Update(float dt)
 	}
 	MovingObject::Update(dt);
 
-	MovingObject::Update(dt);
+	
 }
 
 

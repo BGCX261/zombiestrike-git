@@ -3,16 +3,21 @@
 #include "Animation.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "GameplayState.h"
+#include "../SGD Wrappers/SGD_Event.h"
 
 
 LandMine::LandMine()
 {
 	this->SetType(ObjectType::OBJ_LANDMINE);
 	this->SetAnimation("landmine");
+
+	RegisterForEvent("REPIAR_LANDMINES");
 }
 
 LandMine::~LandMine()
 {
+	UnregisterFromEvent("REPIAR_LANDMINES");
+
 }
 
 void LandMine::Update( float dt )
@@ -73,4 +78,12 @@ void LandMine::HandleCollision( const IBase* pOther )
 		isActive = false;
 	}
 
+}
+
+void LandMine::HandleEvent(const SGD::Event* pEvent)
+{
+	if (pEvent->GetEventID() == "REPAIR_LANDMINES")
+	{
+		isActive = true;
+	}
 }

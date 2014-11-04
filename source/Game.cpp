@@ -1066,6 +1066,29 @@ void Game::CreateStoryProfiles()
 				fout << 3 << '\n';
 				fout << 0 << '\n';
 
+				//barbedwire
+				fout << 100 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+
+				fout << 10 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+
+				fout << 0 << '\n';
+
+				//sandbags
+				fout << 250 << '\n';
+				fout << 1 << '\n';
+				fout << 3 << '\n';
+
+				fout << 0 << '\n';
+
+				//landmines
+				fout << 0 << '\n';
+
+				//turrets
+
 
 #pragma endregion
 

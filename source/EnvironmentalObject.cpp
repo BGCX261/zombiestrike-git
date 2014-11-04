@@ -17,6 +17,8 @@ void EnvironmentalObject::HandleCollision(const IBase* pOther)
 {
 }
 
+
+
 ///*virtual*/ SGD::Rectangle EnvironmentalObject::GetRect(void) const
 //{
 //	SGD::Point renderPos = SGD::Point(m_ptPosition.x - GameplayState::GetInstance()->GetCamera()->GetPosition().x,

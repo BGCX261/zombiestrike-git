@@ -37,24 +37,29 @@ Bullet::~Bullet()
 {
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
-
-	// player
-	if (pOther->GetType() == OBJ_SLOW_ZOMBIE ||
-		pOther->GetType() == OBJ_FAST_ZOMBIE || 
-		pOther->GetType() == OBJ_FAT_ZOMBIE || 
-		pOther->GetType() == OBJ_TANK_ZOMBIE || 
-		pOther->GetType() == OBJ_EXPLODING_ZOMBIE )
+	if (GetType() != OBJ_PUKE)
 	{
-		if (GetOwner() != pOther)
+		// player
+		if (pOther->GetType() == OBJ_SLOW_ZOMBIE ||
+			pOther->GetType() == OBJ_FAST_ZOMBIE ||
+			pOther->GetType() == OBJ_FAT_ZOMBIE ||
+			pOther->GetType() == OBJ_TANK_ZOMBIE ||
+			pOther->GetType() == OBJ_EXPLODING_ZOMBIE)
 		{
-			if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->bullet_hit_zombie) == false)
-				pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_zombie, false);
+			if (GetOwner() != pOther)
+			{
+				if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->bullet_hit_zombie) == false)
+					pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_zombie, false);
 
-			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
-			dMsg->QueueMessage();
-			dMsg = nullptr;
+				DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+				dMsg->QueueMessage();
+				dMsg = nullptr;
+			}
 		}
 	}
+	
+
+	
 	
 
 	// other stuff

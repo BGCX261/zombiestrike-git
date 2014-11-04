@@ -3,9 +3,14 @@
 #include "ShopStructures.h"
 #include "GamerProfile.h"
 #include "Timer.h"
+#include <vector>
 
 #define BUTTON_WIDTH 123
 #define BUTTON_HEIGHT 27
+
+class BarbedWire;
+class LandMine;
+class SandBag;
 
 class ShopState : public IGameState
 {	
@@ -22,6 +27,10 @@ class ShopState : public IGameState
 	Timer m_tShopTimer;
 
 	bool m_bTimerSet = false;
+	int barbedWireRepairCost;
+	int sandBagRepairCost;
+	int landMineRepairCost;
+
 
 public:
 	enum Pages { PISTOLS, SHOTGUNS, SMGS, ASSAULT_RIFLES, HEAVY, DEFENSE };
@@ -52,11 +61,21 @@ private:
 	SniperUpgrade sniperUpgrade;
 	FlamethrowerUpgrade flameUpgrade;
 	GrenadeLauncherUpgrade nadeLauncherUpgrade;
+	DefenseUpgrade barbedwire;
+	DefenseUpgrade sandBag;
+	DefenseUpgrade landMine;
+
+	
 
 	SGD::Rectangle shotTab1 = { 350, 100, 350 + BUTTON_WIDTH, 127 };
 	SGD::Rectangle shotTab2 = { shotTab1.right, 100, shotTab1.right + BUTTON_WIDTH, 127 };
 	SGD::Rectangle shotTab3 = { shotTab2.right, 100, shotTab2.right + BUTTON_WIDTH, 127 };
 
+	float numLandMines = 0;
+	float sandBagCurrHealth = 0;
+	float sandBagMaxHealth = 0;
+	float barbWireCurrHealth = 0;
+	float barbWireMaxHealth = 0;
 
 	int currPage = 0;
 	int currTab = 0;
@@ -67,6 +86,13 @@ private:
 
 	GamerProfile profile;
 	SGD::Rectangle Buttons[9];
+	SGD::Rectangle DefenseButtons[7];
+
 	SGD::Size screenSize;
+
+	std::vector<BarbedWire*> barbedWires;
+	std::vector<SandBag*> sandBags;
+	std::vector<LandMine*> landMines;
+
 };
 

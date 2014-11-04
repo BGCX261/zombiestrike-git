@@ -6,6 +6,7 @@
 #include "Graph.h"
 #include "GamerProfile.h"
 #include <string>
+#include <vector>
 #include <map>
 
 #define NUM_LEVELS 6
@@ -14,6 +15,9 @@ class BaseObject;
 class EntityManager;
 class Player;
 class EnemyUnit;
+class BarbedWire;
+class SandBag;
+class LandMine;
 
 
 struct TileSets
@@ -32,6 +36,10 @@ class MapManager : public IBase
 	SGD::HTexture tileTexture = SGD::INVALID_HANDLE;
 	std::string levels[NUM_LEVELS];
 	int startRow, startCol, endRow, endCol;
+
+	std::vector<SandBag*> sandBags;
+	std::vector<BarbedWire*> barbedWires;
+	std::vector<LandMine*> landMines;
 	
 public:
 
@@ -47,6 +55,10 @@ public:
 	virtual SGD::Rectangle	GetRect			(void)					const	override	{ return SGD::Rectangle(0.0f, 0.0f, 0.0f, 0.0f); }
 	virtual void			AddRef			(void)							override	{};
 	virtual void			Release			(void)							override	{};
+
+	std::vector<SandBag*>& GetSandBags(void) { return sandBags; }
+	std::vector<LandMine*>& GetLandMines(void) { return landMines; }
+	std::vector<BarbedWire*>& GetBaredWire(void) { return barbedWires; }
 
 
 	SGD::HTexture			GetMapTexture	(void)					{ return tileTexture; }

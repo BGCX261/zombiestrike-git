@@ -18,6 +18,9 @@ class Spawner;
 class EntityManager;
 class BehaviorManager;
 class AnimationManager;
+class SandBag;
+class LandMine;
+class BarbedWire;
 
 /**************************************************************/
 // GameplayState class
@@ -132,6 +135,9 @@ private:
 	enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PICKUPS, BUCKET_TURRETS };
 	EntityManager*			m_pEntities			= nullptr;
 	AnimationManager*		m_pAnimManager		= nullptr;
+
+
+
 
 	//BaseObject*				m_pPlayer			= nullptr;
 	BaseObject*					m_pPlayer			= nullptr;

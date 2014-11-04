@@ -251,7 +251,7 @@ void Player::Render()
 				voice = pAudio->PlayAudio(*m_hDeath, false);
 			pAudio->SetVoiceVolume(voice);
 
-			m_bIsAlive = false;
+		//	m_bIsAlive = false;
 		}
 		break;
 

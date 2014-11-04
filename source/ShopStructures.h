@@ -167,6 +167,15 @@ struct GrenadeLauncherUpgrade
 
 };
 
+struct DefenseUpgrade
+{
+
+	ButtonF maxHealth;
+	ButtonF damage;
+
+	bool isBought;
+};
+
 //pFont->Draw("P90: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
 //pFont->Draw(p90MagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
 //pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });

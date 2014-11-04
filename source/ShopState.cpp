@@ -8,6 +8,10 @@
 #include "Game.h"
 #include "BitmapFont.h"
 #include "GameplayState.h"
+#include "MapManager.h"
+#include "BarbedWire.h"
+#include "SandBag.h"
+#include "LandMine.h"
 
 
 
@@ -24,7 +28,7 @@
 // IGameState Interface:
 void	ShopState::Enter(void)
 {
-	m_tShopTimer.AddTime(10);
+	m_tShopTimer.AddTime(500);
 
 	profile = Game::GetInstance()->GetProfile();
 
@@ -35,6 +39,9 @@ void	ShopState::Enter(void)
 	upgradeButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/rectangle2.png");
 	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/crosshair.png");
 
+	profile.barbWire.isBought = true;
+	profile.sandBag.isBought = true;
+	profile.landMine.isBought = true;
 
 	LoadShopStatus();
 	float startY = screenSize.height * .4f;
@@ -45,6 +52,36 @@ void	ShopState::Enter(void)
 		startY += BUTTON_HEIGHT + 5;
 	}
 	Buttons[8] = SGD::Rectangle({ screenSize.width* 0.7f, screenSize.height * 0.7f }, SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
+
+	startY = screenSize.height * .15f;
+	DefenseButtons[0] = SGD::Rectangle(SGD::Point(screenSize.width * 0.5f, (float)startY), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
+	DefenseButtons[1] = DefenseButtons[0];
+	DefenseButtons[1].bottom += BUTTON_HEIGHT + 5;
+	DefenseButtons[1].top += BUTTON_HEIGHT + 5;
+
+	DefenseButtons[2] = DefenseButtons[0];
+	DefenseButtons[2].bottom += screenSize.height * 0.2;
+	DefenseButtons[2].top += screenSize.height * 0.2f;
+	DefenseButtons[3] = DefenseButtons[2];
+	DefenseButtons[3].bottom += BUTTON_HEIGHT + 5;
+	DefenseButtons[3].top += BUTTON_HEIGHT + 5;
+	DefenseButtons[4] = DefenseButtons[3];
+	DefenseButtons[4].bottom += BUTTON_HEIGHT + 5;
+	DefenseButtons[4].top += BUTTON_HEIGHT + 5;
+
+	DefenseButtons[5] = DefenseButtons[2];
+	DefenseButtons[5].bottom += screenSize.height * 0.2f;
+	DefenseButtons[5].top += screenSize.height * 0.2f;
+	DefenseButtons[6] = DefenseButtons[5];
+	DefenseButtons[6].bottom += screenSize.height * 0.2f;
+	DefenseButtons[6].top += screenSize.height * 0.2f;
+
+
+	barbedWires = MapManager::GetInstance()->GetBaredWire(); 
+	sandBags = MapManager::GetInstance()->GetSandBags();
+	landMines = MapManager::GetInstance()->GetLandMines();
+
+
 
 	profile.money = INT_MAX;
 }
@@ -221,9 +258,9 @@ bool	ShopState::Input(void)
 									case 4:
 										if (revolverUpgrade.damage.isMaxed == false)
 										{
-											if (profile.money >= 600)
+											if (profile.money >= 600.0f)
 											{
-												profile.money -= 600;
+												profile.money -= 600.0f;
 												revolverUpgrade.damage.upgradedSkill.stat -= 0.11f;
 												revolverUpgrade.damage.upgradedSkill.currTier++;
 
@@ -237,7 +274,7 @@ bool	ShopState::Input(void)
 										{
 											if (profile.money >= 600)
 											{
-												profile.money -= 600;
+												profile.money -= 600.0f;
 												revolverUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
 												revolverUpgrade.ammoCap.upgradedSkill.currTier++;
 
@@ -249,9 +286,9 @@ bool	ShopState::Input(void)
 									case 6:
 										if (revolverUpgrade.totalAmmo.isMaxed == false)
 										{
-											if (profile.money >= 600)
+											if (profile.money >= 600.0f)
 											{
-												profile.money -= 600;
+												profile.money -= 600.0f;
 												revolverUpgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
 												revolverUpgrade.totalAmmo.upgradedSkill.currTier++;
 
@@ -1860,6 +1897,121 @@ bool	ShopState::Input(void)
 			}
 		
 		break;
+
+		case DEFENSE:
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			{
+				for (unsigned int currButton = 0; currButton < 6; currButton++)
+				{
+					if (mousePos.IsWithinRectangle(DefenseButtons[currButton]))
+					{
+						switch (currButton)
+						{
+						case 0:
+							if (nadeLauncherUpgrade.magSize.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+
+									nadeLauncherUpgrade.magSize.upgradedSkill.stat += 5;
+									nadeLauncherUpgrade.magSize.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.magSize.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.magSize.isMaxed = true;
+								}
+							}
+
+							break;
+						case 1:
+							if (nadeLauncherUpgrade.reloadTime.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
+									nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier == nadeLauncherUpgrade.reloadTime.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.reloadTime.isMaxed = true;
+								}
+							}
+							break;
+
+						case 2:
+							if (nadeLauncherUpgrade.damage.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.damage.upgradedSkill.stat++;
+									nadeLauncherUpgrade.damage.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.damage.upgradedSkill.currTier == nadeLauncherUpgrade.damage.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.damage.isMaxed = true;
+								}
+							}
+							break;
+						case 3:
+							if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.bulletVelocity.upgradedSkill.stat++;
+									nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier == nadeLauncherUpgrade.bulletVelocity.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.bulletVelocity.isMaxed = true;
+								}
+							}
+							break;
+						case 4:
+							if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+									nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier == nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.ammoCap.isMaxed = true;
+								}
+							}
+						case 5:
+							if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+									nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier == nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.ammoCap.isMaxed = true;
+								}
+							}
+						case 6:
+							if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+									nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier == nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.ammoCap.isMaxed = true;
+								}
+							}
+						}
+					}
+				}
+			}
+						
+			break;
+
 	}
 
 	
@@ -1868,6 +2020,60 @@ bool	ShopState::Input(void)
 
 void	ShopState::Update(float elapsedTime)
 {
+	if (profile.barbWire.isBought)
+	{
+		barbedWireRepairCost = 0;
+		barbWireCurrHealth = 0;
+		barbWireMaxHealth = 0;
+		for (unsigned i = 0; i < barbedWires.size(); i++)
+		{
+			barbWireCurrHealth += barbedWires[i]->GetCurrHP();
+			barbWireMaxHealth += barbedWires[i]->GetMaxHP();
+		}
+		if (barbWireCurrHealth / barbWireMaxHealth != 1)
+		{
+			barbedWireRepairCost = (barbWireCurrHealth / barbWireMaxHealth) * 500;
+		}
+	}
+
+	if (profile.sandBag.isBought)
+	{
+		sandBagCurrHealth = 0;
+		sandBagMaxHealth = 0;
+		sandBagRepairCost = 0;
+		for (unsigned i = 0; i < sandBags.size(); i++)
+		{
+			sandBagCurrHealth += sandBags[i]->GetCurrHP();
+			sandBagMaxHealth += sandBags[i]->GetMaxHP();
+		}
+
+		if (sandBagCurrHealth / sandBagMaxHealth != 1)
+		{
+			sandBagRepairCost = (sandBagCurrHealth / sandBagMaxHealth) * 500;
+		}
+	}
+
+	if (profile.landMine.isBought)
+	{
+		numLandMines = 0;
+		for (unsigned i = 0; i < landMines.size(); i++)
+		{
+			if (landMines[i]->IsActive())
+			{
+				numLandMines++;
+			}
+		}
+
+		if ((numLandMines / landMines.size()) != 1)
+		{
+			landMineRepairCost = (numLandMines / landMines.size()) * 100;
+
+		}
+	}
+	
+
+
+
 	if (GetShopTimer().GetTime() <= 0.0f)
 	{
 		m_bTimerSet = true;
@@ -3160,16 +3366,155 @@ void	ShopState::Render(void)
 	}
 		break;
 	case DEFENSE:
-	{
+	
+					/*pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
+					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
+					pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
+					pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });*/
 
-	}
-		break;
+					string sandbagStatus = "";
+					sandbagStatus += std::to_string(sandBagCurrHealth);
+					sandbagStatus += " ";
 
-	}
-	for (unsigned int i = 0; i < 1; i++)
-	{
-		pGraphics->DrawRectangle(Buttons[i], { 0, 0, 0, 0 }, { 255, 255, 0, 0 });
-	}
+					string sandbagMaxHealth = "";
+					sandbagMaxHealth += std::to_string(sandBagMaxHealth);
+					sandbagMaxHealth += " ";
+
+					string barbedDamageStatus = "";
+					barbedDamageStatus += std::to_string(profile.barbWire.damage.upgradedSkill.stat);
+					barbedDamageStatus += " ";
+
+					string barbedHeatlhStatus = "";
+					barbedHeatlhStatus += std::to_string(barbWireCurrHealth);
+					barbedHeatlhStatus += " ";
+
+					string barbedMaxHealth = "";
+					barbedMaxHealth += std::to_string(barbWireMaxHealth);
+					barbedMaxHealth += " ";
+
+					string landmineStatus = "LeveL ";
+					landmineStatus += std::to_string(numLandMines);
+					landmineStatus += " ";
+
+					string turretInventory = "LeveL ";
+					turretInventory += std::to_string(profile.numTurrets);
+					turretInventory += " ";
+
+
+					pFont->Draw("Sandbags: ", { screenSize.width *.1f, screenSize.height * 0.1f }, 1.0f, { 255, 255, 0, 0 });
+					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(sandbagStatus.c_str(), { screenSize.width *.3f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("Max Durability: ", { screenSize.width * 0.1f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(sandbagMaxHealth.c_str(), { screenSize.width *.3f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
+
+					pFont->Draw("Barbed Wire: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
+					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(barbedHeatlhStatus.c_str(), { screenSize.width *.3f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("Max Durability: ", { screenSize.width * 0.1f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(barbedMaxHealth.c_str(), { screenSize.width *.3f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
+
+					pFont->Draw("Damage: ", { screenSize.width * 0.1f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(barbedDamageStatus.c_str(), { screenSize.width *.3f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
+					
+
+					pFont->Draw("Mine Field: ", { screenSize.width *.1f, screenSize.height * 0.5f }, 1.0f, { 255, 255, 0, 0 });
+					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(landmineStatus.c_str(), { screenSize.width *.3f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
+
+					pFont->Draw("Auto-Turrets: ", { screenSize.width *.1f, screenSize.height * 0.7f }, 1.0f, { 255, 255, 0, 0 });
+					pFont->Draw("Inventory: ", { screenSize.width * 0.1f, DefenseButtons[4].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(turretInventory.c_str(), { screenSize.width *.3f, DefenseButtons[5].top }, 0.5f, { 255, 255, 0, 0 });
+
+
+					for (size_t i = 0; i < 7; i++)
+						pGraphics->DrawTexture(upgradeButton, { DefenseButtons[i].left, DefenseButtons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+
+				
+					if (sandBag.isBought == true)
+					{
+						if (sandBagCurrHealth < sandBagMaxHealth)
+							pFont->Draw("Repair", { DefenseButtons[0].left + 5, DefenseButtons[0].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+							pFont->Draw("Maxed", { DefenseButtons[0].left + 25, DefenseButtons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					}
+					else
+						pFont->Draw("Buy", { DefenseButtons[0].left + 25, DefenseButtons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+					if (barbedwire.isBought == true)
+					{
+						if (barbWireCurrHealth < barbWireMaxHealth)
+							pFont->Draw("Repair", { DefenseButtons[1].left + 5, DefenseButtons[1].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+							pFont->Draw("Maxed", { DefenseButtons[1].left + 25, DefenseButtons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+						if (barbedwire.maxHealth.isMaxed == false)
+							pFont->Draw("Upgrade", { DefenseButtons[2].left + 5, DefenseButtons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+							pFont->Draw("Maxed", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					}
+					else
+						pFont->Draw("Buy", { DefenseButtons[1].left + 25, DefenseButtons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+					if (landMine.isBought == true)
+					{
+						if (numLandMines < landMines.size())
+							pFont->Draw("Repair", { DefenseButtons[3].left + 5, DefenseButtons[3].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+							pFont->Draw("Maxed", { DefenseButtons[3].left + 25, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					}
+					else
+						pFont->Draw("Buy", { DefenseButtons[3].left + 25, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+					
+						pFont->Draw("Buy", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+
+						
+						/*if (sniperUpgrade.reloadTime.isMaxed == false)
+						pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+						pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+						if (sniperUpgrade.recoilTime.isMaxed == false)
+						pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+						pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+						if (sniperUpgrade.bulletSpread.isMaxed == false)
+						pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+						pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+						if (sniperUpgrade.damage.isMaxed == false)
+						pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+						pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+						if (sniperUpgrade.penPower.isMaxed == false)
+						pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+						pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+						if (sniperUpgrade.ammoCap.isMaxed == false)
+						pFont->Draw("Upgrade", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+						pFont->Draw("Maxed", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+						if (sniperUpgrade.totalAmmo.isMaxed == false)
+						pFont->Draw("Buy Ammo", { Buttons[7].left + 18, Buttons[7].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+						pFont->Draw("Ammo Full", { Buttons[7].left + 18, Buttons[7].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+						if (sniperUpgrade.isBought == false)
+						pFont->Draw("Buy Gun", { Buttons[8].left + 18, Buttons[8].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+						pFont->Draw("Equipt", { Buttons[8].left + 18, Buttons[8].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+						*/
+						break;
+						}
+	
 	// Draw the reticle
 	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
 	//float		retscale = 0.8f;

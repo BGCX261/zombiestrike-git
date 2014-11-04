@@ -27,7 +27,14 @@ struct GamerProfile
 	SniperUpgrade sniper;
 	FlamethrowerUpgrade flameThrower;
 	GrenadeLauncherUpgrade nadeLauncher;
+	DefenseUpgrade barbWire;
+	DefenseUpgrade sandBag;
+	DefenseUpgrade landMine;
+
 	int money;
+	int numTurrets;
+	
+
 
 
 
