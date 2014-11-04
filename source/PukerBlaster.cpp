@@ -1,6 +1,7 @@
 #include "PukerBlaster.h"
 #include "MovingObject.h"
 #include "CreatePukeBullet.h"
+#include "GameplayState.h"
 
 PukerBlaster::PukerBlaster(MovingObject* owner)
 {
@@ -16,6 +17,7 @@ PukerBlaster::PukerBlaster(MovingObject* owner)
 	lifeTime = 700.0f;
 	m_pOwner = owner;
 	owner->AddRef();
+	fire_sound = &GameplayState::GetInstance()->vomit_fire;
 }
 
 
@@ -25,6 +27,8 @@ PukerBlaster::~PukerBlaster()
 
 void PukerBlaster::Fire(float dt)
 {
+	SGD::AudioManager*	pAudio = SGD::AudioManager::GetInstance();
+
 	if (currAmmo > 0)
 	{
 		//create bullet message
@@ -33,6 +37,9 @@ void PukerBlaster::Fire(float dt)
 			CreatePukeBullet* pMsg = new CreatePukeBullet(this);
 			pMsg->QueueMessage();
 			pMsg = nullptr;
+
+			if (pAudio->IsAudioPlaying(*fire_sound) == false)
+				pAudio->PlayAudio(*fire_sound, false);
 
 			recoilTimer.AddTime(recoilTime);
 			currAmmo--;

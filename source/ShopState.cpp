@@ -39,9 +39,9 @@ void	ShopState::Enter(void)
 	upgradeButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/rectangle2.png");
 	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/crosshair.png");
 
-	profile.barbWire.isBought = true;
-	profile.sandBag.isBought = true;
-	profile.landMine.isBought = true;
+	barbedwire.isBought = true;
+	sandBag.isBought = true;
+	landMine.isBought = true;
 
 	LoadShopStatus();
 	float startY = screenSize.height * .4f;
@@ -3407,25 +3407,25 @@ void	ShopState::Render(void)
 					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
 					pFont->Draw(sandbagStatus.c_str(), { screenSize.width *.3f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
 					pFont->Draw("Max Durability: ", { screenSize.width * 0.1f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(sandbagMaxHealth.c_str(), { screenSize.width *.3f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(sandbagMaxHealth.c_str(), { screenSize.width *.3f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
 
 					pFont->Draw("Barbed Wire: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(barbedHeatlhStatus.c_str(), { screenSize.width *.3f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw("Max Durability: ", { screenSize.width * 0.1f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(barbedMaxHealth.c_str(), { screenSize.width *.3f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(barbedHeatlhStatus.c_str(), { screenSize.width *.3f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("Max Durability: ", { screenSize.width * 0.1f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(barbedMaxHealth.c_str(), { screenSize.width *.3f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
 
-					pFont->Draw("Damage: ", { screenSize.width * 0.1f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(barbedDamageStatus.c_str(), { screenSize.width *.3f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("Damage: ", { screenSize.width * 0.1f, DefenseButtons[4].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(barbedDamageStatus.c_str(), { screenSize.width *.3f, DefenseButtons[4].top }, 0.5f, { 255, 255, 0, 0 });
 					
 
 					pFont->Draw("Mine Field: ", { screenSize.width *.1f, screenSize.height * 0.5f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(landmineStatus.c_str(), { screenSize.width *.3f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[5].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(landmineStatus.c_str(), { screenSize.width *.3f, DefenseButtons[5].top }, 0.5f, { 255, 255, 0, 0 });
 
 					pFont->Draw("Auto-Turrets: ", { screenSize.width *.1f, screenSize.height * 0.7f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw("Inventory: ", { screenSize.width * 0.1f, DefenseButtons[4].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(turretInventory.c_str(), { screenSize.width *.3f, DefenseButtons[5].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("Inventory: ", { screenSize.width * 0.1f, DefenseButtons[6].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(turretInventory.c_str(), { screenSize.width *.3f, DefenseButtons[6].top }, 0.5f, { 255, 255, 0, 0 });
 
 
 					for (size_t i = 0; i < 7; i++)
@@ -3438,37 +3438,52 @@ void	ShopState::Render(void)
 							pFont->Draw("Repair", { DefenseButtons[0].left + 5, DefenseButtons[0].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { DefenseButtons[0].left + 25, DefenseButtons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+						
+						if (sandBag.maxHealth.isMaxed == false)
+							pFont->Draw("Upgrade", { DefenseButtons[1].left + 5, DefenseButtons[1].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+							pFont->Draw("Maxed", { DefenseButtons[1].left + 25, DefenseButtons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 					}
 					else
 						pFont->Draw("Buy", { DefenseButtons[0].left + 25, DefenseButtons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
+
+
 					if (barbedwire.isBought == true)
 					{
 						if (barbWireCurrHealth < barbWireMaxHealth)
-							pFont->Draw("Repair", { DefenseButtons[1].left + 5, DefenseButtons[1].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-						else
-							pFont->Draw("Maxed", { DefenseButtons[1].left + 25, DefenseButtons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-						if (barbedwire.maxHealth.isMaxed == false)
-							pFont->Draw("Upgrade", { DefenseButtons[2].left + 5, DefenseButtons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+							pFont->Draw("Repair", { DefenseButtons[2].left + 5, DefenseButtons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
 							pFont->Draw("Maxed", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+						if (barbedwire.maxHealth.isMaxed == false)
+							pFont->Draw("Upgrade", { DefenseButtons[3].left + 5, DefenseButtons[3].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+							pFont->Draw("Maxed", { DefenseButtons[3].left + 25, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 }); 
+
+						if (barbedwire.damage.isMaxed == false)
+							pFont->Draw("Upgrade", { DefenseButtons[4].left + 5, DefenseButtons[4].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+						else
+							pFont->Draw("Maxed", { DefenseButtons[4].left + 25, DefenseButtons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 					}
 					else
-						pFont->Draw("Buy", { DefenseButtons[1].left + 25, DefenseButtons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw("Buy", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+
+
+
 
 					if (landMine.isBought == true)
 					{
 						if (numLandMines < landMines.size())
-							pFont->Draw("Repair", { DefenseButtons[3].left + 5, DefenseButtons[3].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+							pFont->Draw("Repair", { DefenseButtons[5].left + 5, DefenseButtons[5].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
-							pFont->Draw("Maxed", { DefenseButtons[3].left + 25, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw("Maxed", { DefenseButtons[5].left + 25, DefenseButtons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 					}
 					else
-						pFont->Draw("Buy", { DefenseButtons[3].left + 25, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw("Buy", { DefenseButtons[5].left + 25, DefenseButtons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
 					
-						pFont->Draw("Buy", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw("Buy", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
 
 						

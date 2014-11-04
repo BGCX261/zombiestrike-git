@@ -690,6 +690,14 @@ void Game::LoadProfiles( void )
 		
 			fin >> profiles[i - 1].nadeLauncher.isBought;
 
+			//Barb Wire
+
+
+			//Sandbag
+
+
+			//LandMine
+
 
 
 #pragma endregion
@@ -1077,6 +1085,11 @@ void Game::CreateStoryProfiles()
 
 				fout << 0 << '\n';
 
+				for (size_t i = 0; i < 30; i++)
+				{
+					fout << 0 << '\n';
+				}
+
 				//sandbags
 				fout << 250 << '\n';
 				fout << 1 << '\n';
@@ -1084,11 +1097,23 @@ void Game::CreateStoryProfiles()
 
 				fout << 0 << '\n';
 
+				for (size_t i = 0; i < 30; i++)
+				{
+					fout << 0 << '\n';
+				}
+
 				//landmines
 				fout << 0 << '\n';
 
+				for (size_t i = 0; i < 30; i++)
+				{
+					fout << 0 << '\n';
+				}
+
+
 				//turrets
 
+				fout << 0 << '\n';
 
 #pragma endregion
 

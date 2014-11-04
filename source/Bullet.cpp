@@ -37,7 +37,7 @@ Bullet::~Bullet()
 {
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
-	if (GetType() != OBJ_PUKE)
+	if (this->type != ObjectType::OBJ_VOMIT)
 	{
 		// player
 		if (pOther->GetType() == OBJ_SLOW_ZOMBIE ||
@@ -57,10 +57,23 @@ Bullet::~Bullet()
 			}
 		}
 	}
-	
+	else if (this->type == ObjectType::OBJ_VOMIT)
+	{
+		// zombie
+		if (pOther->GetType() == OBJ_PLAYER)
+		{
+			if (GetOwner() != pOther)
+			{
+				if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->vomit_hit_player) == false)
+					pAudio->PlayAudio(GameplayState::GetInstance()->vomit_hit_player, false);
 
 	
-	
+				DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+				dMsg->QueueMessage();
+				dMsg = nullptr;
+			}
+		}
+	}
 
 	// other stuff
 	else if (pOther->GetType() == ObjectType::OBJ_BASE || pOther->GetType() == ObjectType::OBJ_WALL)

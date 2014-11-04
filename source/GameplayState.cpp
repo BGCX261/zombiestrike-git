@@ -169,12 +169,15 @@
 	reload_begin		= pAudio->LoadAudio("resource/audio/reload_begin.wav");
 	reload_finish		= pAudio->LoadAudio("resource/audio/reload_finish.wav");
 	explosion			= pAudio->LoadAudio("resource/audio/Splode2.wav");
+	vomit_hit_player	= pAudio->LoadAudio("resource/audio/splat.wav");
 
 	pistol_fire			= pAudio->LoadAudio("resource/audio/pistol_fire.wav");
 	shotgun_fire		= pAudio->LoadAudio("resource/audio/shotgun_fire.wav");
 	rifle_fire			= pAudio->LoadAudio("resource/audio/rifle_fire.wav");
 	sniper_fire			= pAudio->LoadAudio("resource/audio/sniper_fire.wav");
 	flamethrower_fire	= pAudio->LoadAudio("resource/audio/fire_ignite_1.wav");
+	smg_fire			= pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
+	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
 
 
 
@@ -239,12 +242,15 @@
 	pAudio->UnloadAudio(reload_finish);
 	pAudio->UnloadAudio(explosion);
 	pAudio->UnloadAudio(m_hWaveChange);
+	pAudio->UnloadAudio(vomit_hit_player);
 
 	pAudio->UnloadAudio(pistol_fire);
 	pAudio->UnloadAudio(shotgun_fire);
 	pAudio->UnloadAudio(rifle_fire);
 	pAudio->UnloadAudio(sniper_fire);
 	pAudio->UnloadAudio(flamethrower_fire);
+	pAudio->UnloadAudio(smg_fire);
+	pAudio->UnloadAudio(vomit_fire);
 
 
 	camera.SetTarget(nullptr);
@@ -760,7 +766,7 @@ void GameplayState::CreatePukeyBullet(Weapon* owner)
 
 	bullet->SetDirection(direction);
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
-	bullet->SetType(BaseObject::OBJ_PUKE);
+	bullet->SetType(BaseObject::ObjectType::OBJ_VOMIT);
 
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("puke");

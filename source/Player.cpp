@@ -246,12 +246,15 @@ void Player::Render()
 	switch (pOther->GetType())
 	{
 		case ObjectType::OBJ_SLOW_ZOMBIE:
+		case ObjectType::OBJ_VOMIT:
 		{
-			if (pAudio->IsAudioPlaying(*m_hDeath) == false && m_bIsAlive == true)
-				voice = pAudio->PlayAudio(*m_hDeath, false);
-			pAudio->SetVoiceVolume(voice);
+			//if (pAudio->IsAudioPlaying(*m_hDeath) == false && m_bIsAlive == true)
+			//	voice = pAudio->PlayAudio(*m_hDeath, false);
+			//pAudio->SetVoiceVolume(voice);
 
-		//	m_bIsAlive = false;
+			//m_bIsAlive = false;
+
+			//SetVelocity({ 0, 0 });
 		}
 		break;
 
