@@ -354,13 +354,17 @@
 		// Update the entities
 		SpawnManager::GetInstance()->Update(dt);
 		m_pEntities->UpdateAll(dt);
+
 		
 
 		// Check collisions
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENEMIES);
-		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_BULLETS);
-		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PICKUPS);
+		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PUKE);
+		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENVIRO);
+
+		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENVIRO);
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
+		m_pEntities->CheckCollisions(BUCKET_ENVIRO, BUCKET_PUKE);
 
 
 		// Center camera on the player
@@ -369,10 +373,10 @@
 		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.5f;
 		camera.SetPostion(playerpos);
 
-
-		// Process the events & messages
 		SGD::EventManager::GetInstance()->Update();
 		SGD::MessageManager::GetInstance()->Update();
+		// Process the events & messages
+		
 		MapManager::GetInstance()->Update(dt);
 
 		// Update the Map Manager
@@ -644,29 +648,7 @@ BaseObject* GameplayState::CreatePlayer( void )
 	return player;
 }
 
-void GameplayState::CreatePickUp( int type, SGD::Point pos )
-{
-	PickUp* pickup = new PickUp;
 
-	pickup->SetType(type);
-	pickup->SetPosition(pos);
-
-	//switch (type)
-	//{
-	//case BaseObject::OBJ_POWERCORE:
-	//	pickup->SetAnimation("powerCore");
-	//	break;
-
-	//case BaseObject::OBJ_STIMPACK:
-	//	pickup->SetAnimation("stimPack");
-	//	break;
-
-
-
-	m_pEntities->AddEntity(pickup, EntityBucket::BUCKET_PICKUPS);
-	pickup->Release();
-	pickup = nullptr;
-}
 
 void GameplayState::CreateTurret( MovingObject* owner )
 {
@@ -773,11 +755,11 @@ void GameplayState::CreatePukeyBullet(Weapon* owner)
 	bullet->SetDirection(direction);
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
 	bullet->SetType(BaseObject::ObjectType::OBJ_VOMIT);
-
+	bullet->SetLifeTime(700.0f);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("puke");
 	bullet->SetDamage(owner->GetDamage());
-	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_PUKE);
 	bullet->Release();
 	bullet = nullptr;
 

@@ -60,10 +60,10 @@ void SpawnManager::Update(float dt)
 					m_nZombieType = BaseObject::OBJ_EXPLODING_ZOMBIE;
 
 				else if (m_nZombieType % 5 == 0)						//20% chance
-					m_nZombieType = BaseObject::OBJ_FAT_ZOMBIE;
+					m_nZombieType = BaseObject::OBJ_FAST_ZOMBIE;
 
 				else if (m_nZombieType % 2 == 0)						//20% chance
-					m_nZombieType = BaseObject::OBJ_FAST_ZOMBIE;
+					m_nZombieType = BaseObject::OBJ_FAT_ZOMBIE;
 				else
 					m_nZombieType = BaseObject::OBJ_SLOW_ZOMBIE; //if its not a special, its normal
 

@@ -217,7 +217,9 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 	case WM_CREATE:			// Window constructed
 		break;
 	
-	case WM_CLOSE:			// Window closed
+	case WM_CLOSE:	
+		// Window closed
+		//Game::GetInstance()->Terminate();
 		DestroyWindow( hWnd );	// completely destroy the window
 		break;
 

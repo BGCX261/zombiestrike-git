@@ -399,7 +399,10 @@ namespace SGD
 					{
 						// Remove the voice (could recycle it ...)
 						info->voice->DestroyVoice();
+
+						m_VoiceManager.RemoveData(iter->second, nullptr);
 						iter = m_mVoices.erase( iter );
+
 						continue;
 					}
 				}

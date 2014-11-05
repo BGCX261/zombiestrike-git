@@ -84,14 +84,7 @@ void Zombie::RetrieveBehavior(std::string name)
 		if (health <= 0.0f)
 		{
 			isAlive = false;
-			isCounted = true;
-
-			if (isCounted == true)
-			{
-				
-
-				isCounted = false;
-			}
+	
 			
 		}
 
@@ -110,11 +103,7 @@ void Zombie::RetrieveBehavior(std::string name)
 		}
 		
 
-{
-
-			//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
-		}
-
+		
 	}
 	else if (pOther->GetType() == OBJ_SANDBAG)
 	{

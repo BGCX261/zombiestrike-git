@@ -15,7 +15,8 @@
 //#include "../resource/config/"
 
 
-enum EntityBucket {  BUCKET_ENEMIES, BUCKET_PLAYER, BUCKET_ENVIRO, BUCKET_BULLETS, BUCKET_SHADOWS, BUCKET_NONCOLLIDABLE };
+enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE};
+
 
 
 
@@ -402,7 +403,7 @@ void MapManager::CreateSpawner(SGD::Point pos, EntityManager* entities)
 	Spawner* spawnPoint = new Spawner;
 	spawnPoint->SetPosition(pos);
 	SpawnManager::GetInstance()->GetSpawnVector().push_back(spawnPoint);
-	entities->AddEntity(spawnPoint, BUCKET_NONCOLLIDABLE);
+	entities->AddEntity(spawnPoint, BUCKET_NONE_COLLIDABLE);
 
 	spawnPoint->Release();
 	spawnPoint = nullptr;

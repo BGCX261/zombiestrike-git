@@ -8,13 +8,14 @@ PukerBlaster::PukerBlaster(MovingObject* owner)
 	type = FTHROWER;
 	reloadTime = 5.0f;
 	currAmmo = INT_MAX;
-	magSize = 100;
+	magSize = 10;
 	ammoCapactity = 500;
-	recoilTime = .02f;
+	recoilTime = .1f;
 	bulletSpread = 3.0f;
 	damage = 2.0f;
 	speed = 500.0f;
 	lifeTime = 700.0f;
+
 	m_pOwner = owner;
 	owner->AddRef();
 	fire_sound = &GameplayState::GetInstance()->vomit_fire;
@@ -23,6 +24,8 @@ PukerBlaster::PukerBlaster(MovingObject* owner)
 
 PukerBlaster::~PukerBlaster()
 {
+	//m_pOwner->Release();
+	//m_pOwner = nullptr;
 }
 
 void PukerBlaster::Fire(float dt)

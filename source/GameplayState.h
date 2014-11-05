@@ -135,7 +135,8 @@ private:
 
 	/**********************************************************/
 	// Game Entities
-	enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PICKUPS, BUCKET_TURRETS };
+	enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE };
+
 	EntityManager*			m_pEntities			= nullptr;
 	AnimationManager*		m_pAnimManager		= nullptr;
 
@@ -149,7 +150,7 @@ private:
 
 	/**********************************************************/
 	// World size
-	SGD::Size				m_szWorldSize		= { 1024, 768 };
+	SGD::Size				m_szWorldSize		= { 960, 960 };
 
 
 	//Textures
