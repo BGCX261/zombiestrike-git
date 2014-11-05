@@ -35,12 +35,12 @@
 
 	m_hBackgroundImage = pGraphics->LoadTexture("resource/graphics/emergencybroadcast.png");
 
-	m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
+	//m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
 
 	IntroTimer.AddTime(60);
 	ScreenTimer.AddTime(.1f);
 
-	pAudio->PlayAudio(m_hEmergency, false);
+	//pAudio->PlayAudio(m_hEmergency, false);
 
 	//m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/youLose.png");
 }
@@ -70,7 +70,9 @@
 	// Press Escape to quit
 	if (pInput->IsKeyPressed(SGD::Key::Escape) == true)
 	{
-		pAudio->StopAudio(m_hEmergency);
+
+		//COMMENT IN WHEN AUDIO ADDED
+//		pAudio->StopAudio(m_hEmergency);
 
 		Game::GetInstance()->RemoveState();
 		Game::GetInstance()->AddState(GameplayState::GetInstance());
@@ -122,8 +124,6 @@
 		
 		ScreenTimer.Update(elapsedTime);
 	}
-
-
 
 	if (transBack <= 0)
 	{
