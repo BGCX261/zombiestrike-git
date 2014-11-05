@@ -57,8 +57,10 @@
 
 	m_hButtonSwitchSFX	= pAudio->LoadAudio("resource/audio/button_switch.wav");
 	m_hMenuChangeSFX	= pAudio->LoadAudio("resource/audio/menu_change.wav");
-	m_hMainTheme = pAudio->LoadAudio("resource/audio/zstrikemain.xwm");
-	m_hSurvivalTheme = pAudio->LoadAudio("resource/audio/zstrikesurvival.xwm");
+
+	//COMMENT BACK IN WHEN FILES ARE ADDED
+	//m_hMainTheme = pAudio->LoadAudio("resource/audio/zstrikemain.xwm");
+	//m_hSurvivalTheme = pAudio->LoadAudio("resource/audio/zstrikesurvival.xwm");
 
 	// Load volume levels
 	OptionsState::GetInstance()->LoadVolumes();
@@ -321,17 +323,18 @@
 {
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
-	if (m_nCursor == 1 && pAudio->IsAudioPlaying(m_hSurvivalTheme) == false)
-	{
-		pAudio->StopAudio(m_hMainTheme);
-		pAudio->PlayAudio(m_hSurvivalTheme, true);
-	}
+	//COMMENT BACK IN WHEN AUDIO IS ADDED
+	//if (m_nCursor == 1 && pAudio->IsAudioPlaying(m_hSurvivalTheme) == false)
+	//{
+	//	pAudio->StopAudio(m_hMainTheme);
+	//	pAudio->PlayAudio(m_hSurvivalTheme, true);
+	//}
 
-	if (m_nCursor != 1 && pAudio->IsAudioPlaying(m_hMainTheme) == false)
-	{
-		pAudio->StopAudio(m_hSurvivalTheme);
-		pAudio->PlayAudio(m_hMainTheme, true);
-	}
+	//if (m_nCursor != 1 && pAudio->IsAudioPlaying(m_hMainTheme) == false)
+	//{
+	//	pAudio->StopAudio(m_hSurvivalTheme);
+	//	pAudio->PlayAudio(m_hMainTheme, true);
+	//}
 
 	if (m_nCursor == 1)
 	{
