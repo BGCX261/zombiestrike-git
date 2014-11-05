@@ -28,7 +28,13 @@
 // IGameState Interface:
 void	ShopState::Enter(void)
 {
-	m_tShopTimer.AddTime(500);
+
+	if (m_tShopTimer.GetTime() < 90)
+	{
+		float theTime = 90.0f - m_tShopTimer.GetTime();
+
+		m_tShopTimer.AddTime(theTime);
+	}
 
 	profile = Game::GetInstance()->GetProfile();
 
@@ -92,8 +98,17 @@ void	ShopState::Exit(void)
 
 bool	ShopState::Input(void)
 {
-	
+	WeaponManager * pWeapons = WeaponManager::GetInstance();
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true)
+	{
+		//m_bTimerSet = true;
+
+		SGD::Event msg("UNPAUSE");
+		msg.SendEventNow();
+		Game::GetInstance()->RemoveState();
+	}
 
 	if (pInput->IsKeyPressed(SGD::Key::Q) == true)
 	{
@@ -314,6 +329,18 @@ bool	ShopState::Input(void)
 								else
 								{
 									//equipt code
+									for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+									{
+										if (pWeapons->GetWeapons()[i]->GetGunType() == GLOCK)
+										{
+											pWeapons->GetWeapons()[i]->SetEquipped(false);
+										}
+
+										if (pWeapons->GetWeapons()[i]->GetGunType() == REVOLVER)
+										{
+											pWeapons->GetWeapons()[i]->SetEquipped(true);
+										}
+									}
 								}
 
 							}
@@ -442,6 +469,23 @@ bool	ShopState::Input(void)
 					else
 					{
 						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == SAWN)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == PUMP)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == AUTO)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+						}
 					}
 				
 				}
@@ -576,6 +620,23 @@ bool	ShopState::Input(void)
 					else
 					{
 						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == SAWN)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == PUMP)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == AUTO)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+						}
 					}
 
 				}
@@ -709,6 +770,23 @@ bool	ShopState::Input(void)
 					else
 					{
 						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == SAWN)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == PUMP)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == AUTO)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							}
+						}
 					}
 
 				}
@@ -832,6 +910,23 @@ bool	ShopState::Input(void)
 					else
 					{
 						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == MAC10)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == TECH9)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == SP90)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+						}
 					}
 
 				}
@@ -950,6 +1045,24 @@ bool	ShopState::Input(void)
 					else
 					{
 						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == MAC10)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == TECH9)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == SP90)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+						}
+
 					}
 
 				}
@@ -1068,6 +1181,23 @@ bool	ShopState::Input(void)
 					else
 					{
 						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == MAC10)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == TECH9)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == SP90)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							}
+						}
 					}
 
 				}
@@ -1205,6 +1335,23 @@ bool	ShopState::Input(void)
 					else
 					{
 						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == AK47)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == M16)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == LIGHT_MG)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+						}
 					}
 
 				}
@@ -1337,6 +1484,23 @@ bool	ShopState::Input(void)
 					else
 					{
 						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == AK47)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == M16)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == LIGHT_MG)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+						}
 					}
 
 				}
@@ -1470,6 +1634,23 @@ bool	ShopState::Input(void)
 					else
 					{
 						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == AK47)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == M16)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(false);
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == LIGHT_MG)
+							{
+								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							}
+						}
 					}
 
 				}
@@ -1625,6 +1806,23 @@ bool	ShopState::Input(void)
 						else
 						{
 							//equipt code
+							for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+							{
+								if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
+								{
+									pWeapons->GetWeapons()[i]->SetEquipped(true);
+								}
+
+								if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
+								{
+									pWeapons->GetWeapons()[i]->SetEquipped(false);
+								}
+
+								if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
+								{
+									pWeapons->GetWeapons()[i]->SetEquipped(false);
+								}
+							}
 						}
 
 					}
@@ -1758,6 +1956,23 @@ bool	ShopState::Input(void)
 						else
 						{
 							//equipt code
+							for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+							{
+								if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
+								{
+									pWeapons->GetWeapons()[i]->SetEquipped(false);
+								}
+
+								if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
+								{
+									pWeapons->GetWeapons()[i]->SetEquipped(true);
+								}
+
+								if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
+								{
+									pWeapons->GetWeapons()[i]->SetEquipped(false);
+								}
+							}
 						}
 
 					}
@@ -1871,7 +2086,8 @@ bool	ShopState::Input(void)
 								}
 								else
 								{
-									//equipt code
+
+
 								}
 								break;
 							}
@@ -1890,6 +2106,23 @@ bool	ShopState::Input(void)
 						else
 						{
 							//equipt code
+							for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+							{
+								if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
+								{
+									pWeapons->GetWeapons()[i]->SetEquipped(false);
+								}
+
+								if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
+								{
+									pWeapons->GetWeapons()[i]->SetEquipped(false);
+								}
+
+								if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
+								{
+									pWeapons->GetWeapons()[i]->SetEquipped(true);
+								}
+							}
 						}
 
 					}
@@ -2130,6 +2363,10 @@ void	ShopState::Render(void)
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
 	WeaponManager* pWeaponManager = WeaponManager::GetInstance(); 
 
+
+	stringstream moneyCount;
+	moneyCount << "$" << Game::GetInstance()->GetProfile().money;
+	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0, { 0, 255, 0 });
 
 
 	stringstream wave;
@@ -3578,6 +3815,66 @@ void	ShopState::Render(void)
 
 	retpos.Offset(-5.0f, -5.0f);
 	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { 1.0f, 1.0f });
+
+	int size = 75;
+	float sWidth = Game::GetInstance()->GetScreenWidth() / 2 - size * 2 - 50;
+	float sHeight = Game::GetInstance()->GetScreenHeight() - 10;
+
+	for (unsigned int j = 0; j < 5; j++)
+	{
+		for (unsigned int i = equipIndex; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+		{
+			SGD::Rectangle unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
+			pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
+
+			if (WeaponManager::GetInstance()->GetWeapons()[i]->GetObtained() == true && WeaponManager::GetInstance()->GetWeapons()[i]->GetEquipped() == true)
+			{
+				SGD::Rectangle imageRect = WeaponManager::GetInstance()->GetWeapons()[i]->GetRenderRect();
+
+				//if (WeaponManager::GetInstance()->GetWeapons()[i]->GetGunType() == WeaponManager::GetInstance()->GetSelected()->GetGunType())
+				//{
+					pGraphics->DrawTextureSection(*WeaponManager::GetInstance()->GetWeaponImage(), { sWidth + size*j, sHeight - size },
+						imageRect, {}, {}, {}, { .25f, .25f });
+				//}
+
+				//else
+				//{
+				//	pGraphics->DrawTextureSection(*WeaponManager::GetInstance()->GetWeaponImage(), { sWidth + size*j, sHeight - size },
+				//		imageRect, {}, {}, {}, { .25f, .25f });
+				//	pGraphics->DrawRectangle({ sWidth + size*j, sHeight - size, sWidth + size*j + size, sHeight }, { 175, 0, 0, 0 });
+				//}
+
+				equipIndex++;
+				break;
+			}
+
+			stringstream drawIndex;
+			drawIndex << j + 1;
+			pFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, .5f, { 150, 155, 155 });
+
+			equipIndex++;
+		}
+	}
+
+	equipIndex = 0;
+
+	for (unsigned int i = 0; i < 5; i++)
+	{
+		for (unsigned int j = 0; j < WeaponManager::GetInstance()->GetWeapons().size(); j++)
+		{
+			SGD::Rectangle unEquip = { sWidth + size*i, sHeight - 75, sWidth + size*i + size, sHeight };
+
+			//if (m_vWeapons[j]->GetGunType() == m_vWeapons[curIndex]->GetGunType() && m_vWeapons[curIndex]->GetEquipped() == true)
+			//{
+			//	pGraphics->DrawRectangle({ sWidth + size*i, sHeight - size, sWidth + size*i + size, sHeight }, { 0, 0, 0, 0 }, { 0, 100, 0 }, 6);
+			//}
+
+			stringstream drawIndex;
+			drawIndex << i + 1;
+
+			pFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, .5f, { 150, 155, 155 });
+		}
+	}
 
 }
 

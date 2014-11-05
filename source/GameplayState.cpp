@@ -35,9 +35,6 @@
 #include "CreateExplodingZombieMsg.h"
 #include "CreateTankZombieMsg.h"
 #include "CreateTurretMessage.h"
-
-
-
 #include "BitmapFont.h"
 
 #include "EntityManager.h"
@@ -180,12 +177,13 @@
 	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
 
 
+	m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
+	m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
 
 	// Create the main entities
-
 	m_pPlayer = CreatePlayer();
 	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
 
@@ -252,6 +250,8 @@
 	pAudio->UnloadAudio(smg_fire);
 	pAudio->UnloadAudio(vomit_fire);
 
+	pAudio->UnloadAudio(*m_hMain);
+	pAudio->UnloadAudio(*m_hSurvive);
 
 	camera.SetTarget(nullptr);
 
@@ -478,6 +478,8 @@
 		gameWin << "YOU WIN!";
 
 		pFont->Draw(gameWin.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+
+
 	}
 
 	if (SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies())
@@ -505,6 +507,7 @@
 
 	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
 	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+
 }
 
 /**************************************************************/
@@ -536,6 +539,31 @@
 			assert(pDestroyMsg != nullptr && "Game::MessageProc - MSG_DESTROY_OBJECT is not actually a DestroyObjectMessage");
 
 			BaseObject* ptr = pDestroyMsg->GetEntity();
+
+			if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 20;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 25;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 35;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 75;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 100;
+			}
 			
 			GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
 		}

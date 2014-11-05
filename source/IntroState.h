@@ -2,6 +2,7 @@
 
 #include "IGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"			// uses HTexture & HAudio
+#include "Timer.h"
 
 class IntroState : public IGameState
 {
@@ -30,11 +31,20 @@ private:
 	IntroState( const IntroState& )				= delete;	
 	IntroState& operator= ( const IntroState& )	= delete;
 
-
+	
 
 	/**********************************************************/
 	// Assets
 	SGD::HTexture	m_hBackgroundImage	= SGD::INVALID_HANDLE;
+	SGD::HTexture	m_hStaticImage		= SGD::INVALID_HANDLE;
 
+	SGD::HAudio		m_hEmergency		= SGD::INVALID_HANDLE;
+
+	Timer IntroTimer;
+	Timer ScreenTimer;
+
+	int transBack = 255;
+	int transTextFirst = 0;
+	int transText = 0;
 };
 
