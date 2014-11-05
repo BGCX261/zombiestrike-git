@@ -691,9 +691,54 @@ void Game::LoadProfiles( void )
 			fin >> profiles[i - 1].nadeLauncher.isBought;
 
 			//Barb Wire
+			fin >> profiles[i - 1].barbWire.maxHealth.upgradedSkill.stat;
+			fin >> profiles[i - 1].barbWire.maxHealth.upgradedSkill.currTier;
+			fin >> profiles[i - 1].barbWire.maxHealth.upgradedSkill.maxTier;
 
+			fin >> profiles[i - 1].barbWire.damage.upgradedSkill.stat;
+			fin >> profiles[i - 1].barbWire.damage.upgradedSkill.currTier;
+			fin >> profiles[i - 1].barbWire.damage.upgradedSkill.maxTier;
 
+			fin >> profiles[i - 1].barbWire.isBought;
+			bool temp;
+			for (size_t j = 0; j < 30; j++)
+			{
+				
+				fin >> profiles[i - 1].barbWireStates[j];
+				
+
+			}
 			//Sandbag
+
+			fin >> profiles[i - 1].sandBag.maxHealth.upgradedSkill.stat;
+			fin >> profiles[i - 1].sandBag.maxHealth.upgradedSkill.currTier;
+			fin >> profiles[i - 1].sandBag.maxHealth.upgradedSkill.maxTier;
+
+
+			fin >> profiles[i - 1].sandBag.isBought;
+
+			for (size_t j = 0; j < 30; j++)
+			{
+				
+				fin >> profiles[i - 1].sandBagStates[j];
+			
+
+			}
+			
+
+			fin >> profiles[i - 1].landMine.isBought;
+
+			for (size_t j = 0; j < 50; j++)
+			{
+				
+				fin >> profiles[i - 1].landMineStates[j];
+				
+
+			}
+
+			fin >> profiles[i - 1].numTurrets;
+
+
 
 
 			//LandMine
@@ -1105,7 +1150,7 @@ void Game::CreateStoryProfiles()
 				//landmines
 				fout << 0 << '\n';
 
-				for (size_t i = 0; i < 30; i++)
+				for (size_t i = 0; i < 50; i++)
 				{
 					fout << 0 << '\n';
 				}

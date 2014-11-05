@@ -12,7 +12,7 @@
 #include "BarbedWire.h"
 #include "SandBag.h"
 #include "LandMine.h"
-
+#include <fstream>
 
 
 
@@ -1908,103 +1908,142 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (nadeLauncherUpgrade.magSize.isMaxed == false)
+							if (sandBag.isBought == false)
 							{
-								if (profile.money >= 600)
+								if (profile.money >= 500)
 								{
-									profile.money -= 600;
+									profile.money -= 500;
+									sandBag.isBought = true;
+									SGD::Event* evnt = new SGD::Event("REPAIR_SANDBAGS");
+									evnt->QueueEvent();
+									evnt = nullptr;
+								}
 
-									nadeLauncherUpgrade.magSize.upgradedSkill.stat += 5;
-									nadeLauncherUpgrade.magSize.upgradedSkill.currTier++;
+							}
+							else
+							{
+								
+								if (sandBagCurrHealth / sandBagMaxHealth != 1)
+								{
+									if (profile.money >= sandBagRepairCost)
+									{
+									
 
-									if (nadeLauncherUpgrade.magSize.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
-										nadeLauncherUpgrade.magSize.isMaxed = true;
+										profile.money -= sandBagRepairCost;
+										SGD::Event* evnt = new SGD::Event("REPAIR_SANDBAGS");
+										evnt->QueueEvent();
+										evnt = nullptr;
+									}
 								}
 							}
-
 							break;
 						case 1:
-							if (nadeLauncherUpgrade.reloadTime.isMaxed == false)
+							if (sandBag.maxHealth.isMaxed == false)
 							{
-								if (profile.money >= 600)
+								if (profile.money >= 1000)
 								{
-									profile.money -= 600;
-									nadeLauncherUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
-									nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier++;
+									profile.money -= 1000;
 
-									if (nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier == nadeLauncherUpgrade.reloadTime.upgradedSkill.maxTier)
-										nadeLauncherUpgrade.reloadTime.isMaxed = true;
+									sandBag.maxHealth.upgradedSkill.stat += 50;
+									sandBag.maxHealth.upgradedSkill.currTier++;
+
+									if (sandBag.maxHealth.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
+										sandBag.maxHealth.isMaxed = true;
 								}
 							}
 							break;
-
 						case 2:
-							if (nadeLauncherUpgrade.damage.isMaxed == false)
-							{
-								if (profile.money >= 600)
-								{
-									profile.money -= 600;
-									nadeLauncherUpgrade.damage.upgradedSkill.stat++;
-									nadeLauncherUpgrade.damage.upgradedSkill.currTier++;
-
-									if (nadeLauncherUpgrade.damage.upgradedSkill.currTier == nadeLauncherUpgrade.damage.upgradedSkill.maxTier)
-										nadeLauncherUpgrade.damage.isMaxed = true;
-								}
-							}
-							break;
+							//buy/repair barbwire
 						case 3:
-							if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false)
+							if (barbedwire.isBought == false)
 							{
-								if (profile.money >= 600)
+								if (profile.money >= 1000)
 								{
-									profile.money -= 600;
-									nadeLauncherUpgrade.bulletVelocity.upgradedSkill.stat++;
-									nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier++;
+									barbedwire.isBought = true;
 
-									if (nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier == nadeLauncherUpgrade.bulletVelocity.upgradedSkill.maxTier)
-										nadeLauncherUpgrade.bulletVelocity.isMaxed = true;
+									profile.money -= 1000;
+									SGD::Event* evnt = new SGD::Event("REPAIR_SANDBAGS");
+									evnt->QueueEvent();
+									evnt = nullptr;
+								}
+
+							}
+							else
+							{
+
+								if (barbWireCurrHealth / barbWireMaxHealth != 1)
+								{
+									if (profile.money >= barbedWireRepairCost)
+									{
+										profile.money -= barbedWireRepairCost;
+										SGD::Event* evnt = new SGD::Event("REPAIR_BARB");
+										evnt->QueueEvent();
+										evnt = nullptr;
+									}
 								}
 							}
 							break;
 						case 4:
-							if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
+							if (barbedwire.damage.isMaxed == false)
 							{
-								if (profile.money >= 600)
+								if (profile.money >= 1000)
 								{
-									profile.money -= 600;
-									nadeLauncherUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
-									nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier++;
+									profile.money -= 1000;
 
-									if (nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier == nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier)
-										nadeLauncherUpgrade.ammoCap.isMaxed = true;
+									barbedwire.damage.upgradedSkill.stat += 15;
+									barbedwire.damage.upgradedSkill.currTier++;
+
+									if (barbedwire.damage.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
+										barbedwire.damage.isMaxed = true;
 								}
 							}
+							break;
 						case 5:
-							if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
+							if (landMine.isBought == false)
 							{
-								if (profile.money >= 600)
+								if (profile.money >= 1000)
 								{
-									profile.money -= 600;
-									nadeLauncherUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
-									nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier++;
-
-									if (nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier == nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier)
-										nadeLauncherUpgrade.ammoCap.isMaxed = true;
+									landMine.isBought = true;
+									profile.money -= 1000;
+									SGD::Event* evnt = new SGD::Event("REPAIR_LANDMINES");
+									evnt->QueueEvent();
+									evnt = nullptr;
 								}
+
 							}
+							else
+							{
+
+								if (numLandMines / landMines.size() != 1)
+								{
+									if (profile.money >= landMineRepairCost)
+									{
+										profile.money -= landMineRepairCost;
+										SGD::Event* evnt = new SGD::Event("REPAIR_LANDMINES");
+										evnt->QueueEvent();
+										evnt = nullptr;
+									}
+								}
+									
+								
+							}
+							break;
 						case 6:
-							if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
+							//buy turret
+							
+							if (profile.money >= 1000 && profile.numTurrets < profile.maxNumTurrets)
 							{
-								if (profile.money >= 600)
-								{
-									profile.money -= 600;
-									nadeLauncherUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
-									nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier++;
-
-									if (nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier == nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier)
-										nadeLauncherUpgrade.ammoCap.isMaxed = true;
-								}
+								profile.numTurrets++;
 							}
+						
+							break;
+						case 7:
+							//upgrade turret capacity
+							if (profile.money >= 2000 && profile.maxNumTurrets < 10)
+							{
+								profile.maxNumTurrets++;
+							}
+							break;
 						}
 					}
 				}
@@ -2134,6 +2173,7 @@ void	ShopState::Render(void)
 						pFont->Draw("ReLoaD SpeeD: ", { screenSize.width *.3f, Buttons[1].top }, 0.5, { 255, 255, 0, 0 });
 						pFont->Draw(pistolRecoilLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
 						pFont->Draw("RaTe of Fire: ", { screenSize.width *.3f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+
 						pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
 						
 						for (size_t i = 0; i < 3; i++)
@@ -2198,6 +2238,8 @@ void	ShopState::Render(void)
 						pFont->Draw(revolverAmmoCapLevel.c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
 						pFont->Draw("Ammo Capacity: ", { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
 						pFont->Draw("Ammo: ", { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+
+
 						pGraphics->DrawTextureSection(weaponsImage,  { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(315.0f, 560.0f), SGD::Size(180.0f, 95.0f)));
 
 						for (size_t i = 0; i < 7; i++)
@@ -3454,12 +3496,12 @@ void	ShopState::Render(void)
 						if (barbWireCurrHealth < barbWireMaxHealth)
 							pFont->Draw("Repair", { DefenseButtons[2].left + 5, DefenseButtons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
-							pFont->Draw("Maxed", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw("Full", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
 						if (barbedwire.maxHealth.isMaxed == false)
 							pFont->Draw("Upgrade", { DefenseButtons[3].left + 5, DefenseButtons[3].top + 5 }, 0.5f, { 255, 0, 0, 255 });
 						else
-							pFont->Draw("Maxed", { DefenseButtons[3].left + 25, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 }); 
+							pFont->Draw("Full", { DefenseButtons[3].left + 25, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 }); 
 
 						if (barbedwire.damage.isMaxed == false)
 							pFont->Draw("Upgrade", { DefenseButtons[4].left + 5, DefenseButtons[4].top + 5 }, 0.5f, { 255, 0, 0, 255 });
@@ -3996,7 +4038,1017 @@ void ShopState::LoadShopStatus()
 
 	nadeLauncherUpgrade.isBought = profile.nadeLauncher.isBought;
 
+	//barbed wire
+	barbedwire.damage.upgradedSkill.currTier = profile.barbWire.damage.upgradedSkill.currTier;
+	barbedwire.damage.upgradedSkill.maxTier = profile.barbWire.damage.upgradedSkill.maxTier;
+	barbedwire.damage.upgradedSkill.stat = profile.barbWire.damage.upgradedSkill.stat;
+
+	barbedwire.maxHealth.upgradedSkill.currTier = profile.barbWire.maxHealth.upgradedSkill.currTier;
+	barbedwire.maxHealth.upgradedSkill.maxTier = profile.barbWire.maxHealth.upgradedSkill.maxTier;
+	barbedwire.maxHealth.upgradedSkill.stat = profile.barbWire.maxHealth.upgradedSkill.stat;
+
+	barbedwire.isBought = profile.barbWire.isBought;
+	
+	//sandbag
+	sandBag.maxHealth.upgradedSkill.currTier = profile.sandBag.maxHealth.upgradedSkill.currTier;
+	sandBag.maxHealth.upgradedSkill.maxTier = profile.sandBag.maxHealth.upgradedSkill.maxTier;
+	sandBag.maxHealth.upgradedSkill.stat = profile.sandBag.maxHealth.upgradedSkill.stat;
+
+	sandBag.isBought = profile.sandBag.isBought;
+
+	//landmines
+
+
+	
 
 #pragma endregion
 
 }
+
+void ShopState::UpdateProfile()
+{
+	GamerProfile profile = Game::GetInstance()->GetProfile();
+
+#pragma region Pistol
+	profile.pistol.magSize.upgradedSkill.currTier = pistolUpgrade.magSize.upgradedSkill.currTier;
+	profile.pistol.magSize.upgradedSkill.maxTier = pistolUpgrade.magSize.upgradedSkill.maxTier;
+	profile.pistol.magSize.upgradedSkill.stat = pistolUpgrade.magSize.upgradedSkill.stat;
+
+	profile.pistol.recoilTime.upgradedSkill.currTier = pistolUpgrade.recoilTime.upgradedSkill.currTier;
+	profile.pistol.recoilTime.upgradedSkill.maxTier = pistolUpgrade.recoilTime.upgradedSkill.maxTier;
+	profile.pistol.recoilTime.upgradedSkill.stat = pistolUpgrade.recoilTime.upgradedSkill.stat;
+
+	profile.pistol.reloadTime.upgradedSkill.currTier = pistolUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.pistol.reloadTime.upgradedSkill.maxTier = pistolUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.pistol.reloadTime.upgradedSkill.stat = pistolUpgrade.reloadTime.upgradedSkill.stat;
+
+
+#pragma endregion
+
+#pragma region Revoler Loadin
+
+	profile.revolver.magSize.upgradedSkill.currTier = revolverUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.revolver.magSize.upgradedSkill.maxTier = revolverUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.revolver.magSize.upgradedSkill.stat = revolverUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.revolver.reloadTime.upgradedSkill.currTier = revolverUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.revolver.reloadTime.upgradedSkill.maxTier = revolverUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.revolver.reloadTime.upgradedSkill.stat = revolverUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.revolver.recoilTime.upgradedSkill.currTier = revolverUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.revolver.recoilTime.upgradedSkill.maxTier = revolverUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.revolver.recoilTime.upgradedSkill.stat = revolverUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.revolver.penPower.upgradedSkill.currTier = revolverUpgrade.penPower.upgradedSkill.currTier;
+	profile.revolver.penPower.upgradedSkill.maxTier = revolverUpgrade.penPower.upgradedSkill.maxTier;
+	profile.revolver.penPower.upgradedSkill.stat = revolverUpgrade.penPower.upgradedSkill.stat;
+
+	profile.revolver.damage.upgradedSkill.currTier = revolverUpgrade.damage.upgradedSkill.currTier;
+	profile.revolver.damage.upgradedSkill.maxTier = revolverUpgrade.damage.upgradedSkill.maxTier;
+	profile.revolver.damage.upgradedSkill.stat = revolverUpgrade.damage.upgradedSkill.stat;
+
+	profile.revolver.ammoCap.upgradedSkill.currTier = revolverUpgrade.ammoCap.upgradedSkill.currTier;
+	profile.revolver.ammoCap.upgradedSkill.maxTier = revolverUpgrade.ammoCap.upgradedSkill.maxTier;
+	profile.revolver.ammoCap.upgradedSkill.stat = revolverUpgrade.ammoCap.upgradedSkill.stat;
+
+	profile.revolver.totalAmmo.upgradedSkill.currTier = revolverUpgrade.totalAmmo.upgradedSkill.currTier;
+	profile.revolver.totalAmmo.upgradedSkill.maxTier = revolverUpgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.revolver.totalAmmo.upgradedSkill.stat = revolverUpgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.revolver.isBought = revolverUpgrade.isBought;
+
+#pragma endregion
+
+
+#pragma region Sawnoff Loadin
+
+
+
+	profile.sawnoff.reloadTime.upgradedSkill.currTier = sawnOffUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.sawnoff.reloadTime.upgradedSkill.maxTier = sawnOffUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.sawnoff.reloadTime.upgradedSkill.stat = sawnOffUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.sawnoff.recoilTime.upgradedSkill.currTier = sawnOffUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.sawnoff.recoilTime.upgradedSkill.maxTier = sawnOffUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.sawnoff.recoilTime.upgradedSkill.stat = sawnOffUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.sawnoff.bulletSpread.upgradedSkill.currTier = sawnOffUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.sawnoff.bulletSpread.upgradedSkill.maxTier = sawnOffUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.sawnoff.bulletSpread.upgradedSkill.stat = sawnOffUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.sawnoff.damage.upgradedSkill.currTier = sawnOffUpgrade.damage.upgradedSkill.currTier;
+	profile.sawnoff.damage.upgradedSkill.maxTier = sawnOffUpgrade.damage.upgradedSkill.maxTier;
+	profile.sawnoff.damage.upgradedSkill.stat = sawnOffUpgrade.damage.upgradedSkill.stat;
+
+	profile.sawnoff.ammoCap.upgradedSkill.currTier = sawnOffUpgrade.ammoCap.upgradedSkill.currTier;
+	profile.sawnoff.ammoCap.upgradedSkill.maxTier = sawnOffUpgrade.ammoCap.upgradedSkill.maxTier;
+	profile.sawnoff.ammoCap.upgradedSkill.stat = sawnOffUpgrade.ammoCap.upgradedSkill.stat;
+
+	profile.sawnoff.totalAmmo.upgradedSkill.currTier = sawnOffUpgrade.totalAmmo.upgradedSkill.currTier;
+	profile.sawnoff.totalAmmo.upgradedSkill.maxTier = sawnOffUpgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.sawnoff.totalAmmo.upgradedSkill.stat = sawnOffUpgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.sawnoff.isBought = sawnOffUpgrade.isBought;
+
+#pragma endregion
+
+
+#pragma region PumpAction Loadin
+
+	profile.pumpShotgun.magSize.upgradedSkill.currTier = pumpShotgunUpgrade.magSize.upgradedSkill.currTier;
+	profile.pumpShotgun.magSize.upgradedSkill.maxTier = pumpShotgunUpgrade.magSize.upgradedSkill.maxTier;
+	profile.pumpShotgun.magSize.upgradedSkill.stat = pumpShotgunUpgrade.magSize.upgradedSkill.stat;
+
+	profile.pumpShotgun.reloadTime.upgradedSkill.currTier = pumpShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.pumpShotgun.reloadTime.upgradedSkill.maxTier = pumpShotgunUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.pumpShotgun.reloadTime.upgradedSkill.stat = pumpShotgunUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.pumpShotgun.recoilTime.upgradedSkill.currTier = pumpShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.pumpShotgun.recoilTime.upgradedSkill.maxTier = pumpShotgunUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.pumpShotgun.recoilTime.upgradedSkill.stat = pumpShotgunUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.pumpShotgun.bulletSpread.upgradedSkill.currTier = pumpShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.pumpShotgun.bulletSpread.upgradedSkill.maxTier = pumpShotgunUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.pumpShotgun.bulletSpread.upgradedSkill.stat = pumpShotgunUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.pumpShotgun.damage.upgradedSkill.currTier = pumpShotgunUpgrade.damage.upgradedSkill.currTier;
+	profile.pumpShotgun.damage.upgradedSkill.maxTier = pumpShotgunUpgrade.damage.upgradedSkill.maxTier;
+	profile.pumpShotgun.damage.upgradedSkill.stat = pumpShotgunUpgrade.damage.upgradedSkill.stat;
+
+	profile.pumpShotgun.ammoCap.upgradedSkill.currTier = pumpShotgunUpgrade.ammoCap.upgradedSkill.currTier;
+	profile.pumpShotgun.ammoCap.upgradedSkill.maxTier = pumpShotgunUpgrade.ammoCap.upgradedSkill.maxTier;
+	profile.pumpShotgun.ammoCap.upgradedSkill.stat = pumpShotgunUpgrade.ammoCap.upgradedSkill.stat;
+
+	profile.pumpShotgun.totalAmmo.upgradedSkill.currTier = pumpShotgunUpgrade.totalAmmo.upgradedSkill.currTier;
+	profile.pumpShotgun.totalAmmo.upgradedSkill.maxTier = pumpShotgunUpgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.pumpShotgun.totalAmmo.upgradedSkill.stat = pumpShotgunUpgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.pumpShotgun.isBought = pumpShotgunUpgrade.isBought;
+
+#pragma endregion
+
+
+#pragma region AutoShotty Loadin
+
+	profile.autoShotgun.magSize.upgradedSkill.currTier = autoShotgunUpgrade.magSize.upgradedSkill.currTier;
+	profile.autoShotgun.magSize.upgradedSkill.maxTier = autoShotgunUpgrade.magSize.upgradedSkill.maxTier;
+	profile.autoShotgun.magSize.upgradedSkill.stat = autoShotgunUpgrade.magSize.upgradedSkill.stat;
+
+	profile.autoShotgun.reloadTime.upgradedSkill.currTier = autoShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.autoShotgun.reloadTime.upgradedSkill.maxTier = autoShotgunUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.autoShotgun.reloadTime.upgradedSkill.stat = autoShotgunUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.autoShotgun.recoilTime.upgradedSkill.currTier = autoShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.autoShotgun.recoilTime.upgradedSkill.maxTier = autoShotgunUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.autoShotgun.recoilTime.upgradedSkill.stat = autoShotgunUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.autoShotgun.bulletSpread.upgradedSkill.currTier = autoShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.autoShotgun.bulletSpread.upgradedSkill.maxTier = autoShotgunUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.autoShotgun.bulletSpread.upgradedSkill.stat = autoShotgunUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.autoShotgun.damage.upgradedSkill.currTier = autoShotgunUpgrade.damage.upgradedSkill.currTier;
+	profile.autoShotgun.damage.upgradedSkill.maxTier = autoShotgunUpgrade.damage.upgradedSkill.maxTier;
+	profile.autoShotgun.damage.upgradedSkill.stat = autoShotgunUpgrade.damage.upgradedSkill.stat;
+
+	profile.autoShotgun.ammoCap.upgradedSkill.currTier = autoShotgunUpgrade.ammoCap.upgradedSkill.currTier;
+	profile.autoShotgun.ammoCap.upgradedSkill.maxTier = autoShotgunUpgrade.ammoCap.upgradedSkill.maxTier;
+	profile.autoShotgun.ammoCap.upgradedSkill.stat = autoShotgunUpgrade.ammoCap.upgradedSkill.stat;
+
+	profile.autoShotgun.totalAmmo.upgradedSkill.currTier = autoShotgunUpgrade.totalAmmo.upgradedSkill.currTier;
+	profile.autoShotgun.totalAmmo.upgradedSkill.maxTier = autoShotgunUpgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.autoShotgun.totalAmmo.upgradedSkill.stat = autoShotgunUpgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.autoShotgun.isBought = autoShotgunUpgrade.isBought;
+
+#pragma endregion
+
+#pragma region UZI Loadin
+
+	profile.mac10.magSize.upgradedSkill.currTier = uziUpgrade.magSize.upgradedSkill.currTier;
+	profile.mac10.magSize.upgradedSkill.maxTier = uziUpgrade.magSize.upgradedSkill.maxTier;
+	profile.mac10.magSize.upgradedSkill.stat = uziUpgrade.magSize.upgradedSkill.stat;
+
+	profile.mac10.reloadTime.upgradedSkill.currTier = uziUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.mac10.reloadTime.upgradedSkill.maxTier = uziUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.mac10.reloadTime.upgradedSkill.stat = uziUpgrade.reloadTime.upgradedSkill.stat;
+
+
+	profile.mac10.bulletSpread.upgradedSkill.currTier = uziUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.mac10.bulletSpread.upgradedSkill.maxTier = uziUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.mac10.bulletSpread.upgradedSkill.stat = uziUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.mac10.damage.upgradedSkill.currTier = uziUpgrade.damage.upgradedSkill.currTier;
+	profile.mac10.damage.upgradedSkill.maxTier = uziUpgrade.damage.upgradedSkill.maxTier;
+	profile.mac10.damage.upgradedSkill.stat = uziUpgrade.damage.upgradedSkill.stat;
+
+	profile.mac10.ammoCap.upgradedSkill.currTier = uziUpgrade.ammoCap.upgradedSkill.currTier;
+	profile.mac10.ammoCap.upgradedSkill.maxTier = uziUpgrade.ammoCap.upgradedSkill.maxTier;
+	profile.mac10.ammoCap.upgradedSkill.stat = uziUpgrade.ammoCap.upgradedSkill.stat;
+
+	profile.mac10.totalAmmo.upgradedSkill.currTier = uziUpgrade.totalAmmo.upgradedSkill.currTier;
+	profile.mac10.totalAmmo.upgradedSkill.maxTier = uziUpgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.mac10.totalAmmo.upgradedSkill.stat = uziUpgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.mac10.isBought = uziUpgrade.isBought;
+
+#pragma endregion
+
+#pragma region Tech9mm Loadin
+
+	profile.tech9.magSize.upgradedSkill.currTier = tech9Upgrade.magSize.upgradedSkill.currTier;
+	profile.tech9.magSize.upgradedSkill.maxTier = tech9Upgrade.magSize.upgradedSkill.maxTier;
+	profile.tech9.magSize.upgradedSkill.stat = tech9Upgrade.magSize.upgradedSkill.stat;
+
+	profile.tech9.reloadTime.upgradedSkill.currTier = tech9Upgrade.reloadTime.upgradedSkill.currTier;
+	profile.tech9.reloadTime.upgradedSkill.maxTier = tech9Upgrade.reloadTime.upgradedSkill.maxTier;
+	profile.tech9.reloadTime.upgradedSkill.stat = tech9Upgrade.reloadTime.upgradedSkill.stat;
+
+
+	profile.tech9.bulletSpread.upgradedSkill.currTier = tech9Upgrade.reloadTime.upgradedSkill.currTier;
+	profile.tech9.bulletSpread.upgradedSkill.maxTier = tech9Upgrade.reloadTime.upgradedSkill.maxTier;
+	profile.tech9.bulletSpread.upgradedSkill.stat = tech9Upgrade.reloadTime.upgradedSkill.stat;
+
+	profile.tech9.damage.upgradedSkill.currTier = tech9Upgrade.damage.upgradedSkill.currTier;
+	profile.tech9.damage.upgradedSkill.maxTier = tech9Upgrade.damage.upgradedSkill.maxTier;
+	profile.tech9.damage.upgradedSkill.stat = tech9Upgrade.damage.upgradedSkill.stat;
+
+	profile.tech9.ammoCap.upgradedSkill.currTier = tech9Upgrade.ammoCap.upgradedSkill.currTier;
+	profile.tech9.ammoCap.upgradedSkill.maxTier = tech9Upgrade.ammoCap.upgradedSkill.maxTier;
+	profile.tech9.ammoCap.upgradedSkill.stat = tech9Upgrade.ammoCap.upgradedSkill.stat;
+
+	profile.tech9.totalAmmo.upgradedSkill.currTier = tech9Upgrade.totalAmmo.upgradedSkill.currTier;
+	profile.tech9.totalAmmo.upgradedSkill.maxTier = tech9Upgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.tech9.totalAmmo.upgradedSkill.stat = tech9Upgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.tech9.isBought = tech9Upgrade.isBought;
+
+#pragma endregion
+
+#pragma region P90 Loadin
+
+	profile.p90.magSize.upgradedSkill.currTier = p90Upgrade.magSize.upgradedSkill.currTier;
+	profile.p90.magSize.upgradedSkill.maxTier = p90Upgrade.magSize.upgradedSkill.maxTier;
+	profile.p90.magSize.upgradedSkill.stat = p90Upgrade.magSize.upgradedSkill.stat;
+
+	profile.p90.reloadTime.upgradedSkill.currTier = p90Upgrade.reloadTime.upgradedSkill.currTier;
+	profile.p90.reloadTime.upgradedSkill.maxTier = p90Upgrade.reloadTime.upgradedSkill.maxTier;
+	profile.p90.reloadTime.upgradedSkill.stat = p90Upgrade.reloadTime.upgradedSkill.stat;
+
+
+	profile.p90.bulletSpread.upgradedSkill.currTier = p90Upgrade.reloadTime.upgradedSkill.currTier;
+	profile.p90.bulletSpread.upgradedSkill.maxTier = p90Upgrade.reloadTime.upgradedSkill.maxTier;
+	profile.p90.bulletSpread.upgradedSkill.stat = p90Upgrade.reloadTime.upgradedSkill.stat;
+
+	profile.p90.damage.upgradedSkill.currTier = p90Upgrade.damage.upgradedSkill.currTier;
+	profile.p90.damage.upgradedSkill.maxTier = p90Upgrade.damage.upgradedSkill.maxTier;
+	profile.p90.damage.upgradedSkill.stat = p90Upgrade.damage.upgradedSkill.stat;
+
+	profile.p90.ammoCap.upgradedSkill.currTier = p90Upgrade.ammoCap.upgradedSkill.currTier;
+	profile.p90.ammoCap.upgradedSkill.maxTier = p90Upgrade.ammoCap.upgradedSkill.maxTier;
+	profile.p90.ammoCap.upgradedSkill.stat = p90Upgrade.ammoCap.upgradedSkill.stat;
+
+	profile.p90.totalAmmo.upgradedSkill.currTier = p90Upgrade.totalAmmo.upgradedSkill.currTier;
+	profile.p90.totalAmmo.upgradedSkill.maxTier = p90Upgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.p90.totalAmmo.upgradedSkill.stat = p90Upgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.p90.isBought = p90Upgrade.isBought;
+
+#pragma endregion
+
+
+#pragma region AK Loadin
+
+	profile.ak47.magSize.upgradedSkill.currTier = ak47Upgrade.magSize.upgradedSkill.currTier;
+	profile.ak47.magSize.upgradedSkill.maxTier = ak47Upgrade.magSize.upgradedSkill.maxTier;
+	profile.ak47.magSize.upgradedSkill.stat = ak47Upgrade.magSize.upgradedSkill.stat;
+
+	profile.ak47.reloadTime.upgradedSkill.currTier = ak47Upgrade.reloadTime.upgradedSkill.currTier;
+	profile.ak47.reloadTime.upgradedSkill.maxTier = ak47Upgrade.reloadTime.upgradedSkill.maxTier;
+	profile.ak47.reloadTime.upgradedSkill.stat = ak47Upgrade.reloadTime.upgradedSkill.stat;
+
+	profile.ak47.recoilTime.upgradedSkill.currTier = ak47Upgrade.recoilTime.upgradedSkill.currTier;
+	profile.ak47.recoilTime.upgradedSkill.maxTier = ak47Upgrade.recoilTime.upgradedSkill.maxTier;
+	profile.ak47.recoilTime.upgradedSkill.stat = ak47Upgrade.recoilTime.upgradedSkill.stat;
+
+	profile.ak47.bulletSpread.upgradedSkill.currTier = ak47Upgrade.bulletSpread.upgradedSkill.currTier;
+	profile.ak47.bulletSpread.upgradedSkill.maxTier = ak47Upgrade.bulletSpread.upgradedSkill.maxTier;
+	profile.ak47.bulletSpread.upgradedSkill.stat = ak47Upgrade.bulletSpread.upgradedSkill.stat;
+
+	profile.ak47.damage.upgradedSkill.currTier = ak47Upgrade.damage.upgradedSkill.currTier;
+	profile.ak47.damage.upgradedSkill.maxTier = ak47Upgrade.damage.upgradedSkill.maxTier;
+	profile.ak47.damage.upgradedSkill.stat = ak47Upgrade.damage.upgradedSkill.stat;
+
+	profile.ak47.ammoCap.upgradedSkill.currTier = ak47Upgrade.ammoCap.upgradedSkill.currTier;
+	profile.ak47.ammoCap.upgradedSkill.maxTier = ak47Upgrade.ammoCap.upgradedSkill.maxTier;
+	profile.ak47.ammoCap.upgradedSkill.stat = ak47Upgrade.ammoCap.upgradedSkill.stat;
+
+	profile.ak47.totalAmmo.upgradedSkill.currTier = ak47Upgrade.totalAmmo.upgradedSkill.currTier;
+	profile.ak47.totalAmmo.upgradedSkill.maxTier = ak47Upgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.ak47.totalAmmo.upgradedSkill.stat = ak47Upgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.ak47.isBought = ak47Upgrade.isBought;
+
+#pragma endregion
+
+#pragma region M16 Loadin
+
+	profile.m16.magSize.upgradedSkill.currTier = m16Upgrade.magSize.upgradedSkill.currTier;
+	profile.m16.magSize.upgradedSkill.maxTier = m16Upgrade.magSize.upgradedSkill.maxTier;
+	profile.m16.magSize.upgradedSkill.stat = m16Upgrade.magSize.upgradedSkill.stat;
+
+	profile.m16.reloadTime.upgradedSkill.currTier = m16Upgrade.reloadTime.upgradedSkill.currTier;
+	profile.m16.reloadTime.upgradedSkill.maxTier = m16Upgrade.reloadTime.upgradedSkill.maxTier;
+	profile.m16.reloadTime.upgradedSkill.stat = m16Upgrade.reloadTime.upgradedSkill.stat;
+
+	profile.m16.recoilTime.upgradedSkill.currTier = m16Upgrade.recoilTime.upgradedSkill.currTier;
+	profile.m16.recoilTime.upgradedSkill.maxTier = m16Upgrade.recoilTime.upgradedSkill.maxTier;
+	profile.m16.recoilTime.upgradedSkill.stat = m16Upgrade.recoilTime.upgradedSkill.stat;
+
+	profile.m16.bulletSpread.upgradedSkill.currTier = m16Upgrade.bulletSpread.upgradedSkill.currTier;
+	profile.m16.bulletSpread.upgradedSkill.maxTier = m16Upgrade.bulletSpread.upgradedSkill.maxTier;
+	profile.m16.bulletSpread.upgradedSkill.stat = m16Upgrade.bulletSpread.upgradedSkill.stat;
+
+	profile.m16.damage.upgradedSkill.currTier = m16Upgrade.damage.upgradedSkill.currTier;
+	profile.m16.damage.upgradedSkill.maxTier = m16Upgrade.damage.upgradedSkill.maxTier;
+	profile.m16.damage.upgradedSkill.stat = m16Upgrade.damage.upgradedSkill.stat;
+
+	profile.m16.ammoCap.upgradedSkill.currTier = m16Upgrade.ammoCap.upgradedSkill.currTier;
+	profile.m16.ammoCap.upgradedSkill.maxTier = m16Upgrade.ammoCap.upgradedSkill.maxTier;
+	profile.m16.ammoCap.upgradedSkill.stat = m16Upgrade.ammoCap.upgradedSkill.stat;
+
+	profile.m16.totalAmmo.upgradedSkill.currTier = m16Upgrade.totalAmmo.upgradedSkill.currTier;
+	profile.m16.totalAmmo.upgradedSkill.maxTier = m16Upgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.m16.totalAmmo.upgradedSkill.stat = m16Upgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.m16.isBought = m16Upgrade.isBought;
+
+#pragma endregion
+
+
+#pragma region LMG Loadin
+
+	profile.lmg.magSize.upgradedSkill.currTier = lmgUpgrade.magSize.upgradedSkill.currTier;
+	profile.lmg.magSize.upgradedSkill.maxTier = lmgUpgrade.magSize.upgradedSkill.maxTier;
+	profile.lmg.magSize.upgradedSkill.stat = lmgUpgrade.magSize.upgradedSkill.stat;
+
+	profile.lmg.reloadTime.upgradedSkill.currTier = lmgUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.lmg.reloadTime.upgradedSkill.maxTier = lmgUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.lmg.reloadTime.upgradedSkill.stat = lmgUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.lmg.recoilTime.upgradedSkill.currTier = lmgUpgrade.recoilTime.upgradedSkill.currTier;
+	profile.lmg.recoilTime.upgradedSkill.maxTier = lmgUpgrade.recoilTime.upgradedSkill.maxTier;
+	profile.lmg.recoilTime.upgradedSkill.stat = lmgUpgrade.recoilTime.upgradedSkill.stat;
+
+	profile.lmg.bulletSpread.upgradedSkill.currTier = lmgUpgrade.bulletSpread.upgradedSkill.currTier;
+	profile.lmg.bulletSpread.upgradedSkill.maxTier = lmgUpgrade.bulletSpread.upgradedSkill.maxTier;
+	profile.lmg.bulletSpread.upgradedSkill.stat = lmgUpgrade.bulletSpread.upgradedSkill.stat;
+
+	profile.lmg.damage.upgradedSkill.currTier = lmgUpgrade.damage.upgradedSkill.currTier;
+	profile.lmg.damage.upgradedSkill.maxTier = lmgUpgrade.damage.upgradedSkill.maxTier;
+	profile.lmg.damage.upgradedSkill.stat = lmgUpgrade.damage.upgradedSkill.stat;
+
+	profile.lmg.ammoCap.upgradedSkill.currTier = lmgUpgrade.ammoCap.upgradedSkill.currTier;
+	profile.lmg.ammoCap.upgradedSkill.maxTier = lmgUpgrade.ammoCap.upgradedSkill.maxTier;
+	profile.lmg.ammoCap.upgradedSkill.stat = lmgUpgrade.ammoCap.upgradedSkill.stat;
+
+	profile.lmg.totalAmmo.upgradedSkill.currTier = lmgUpgrade.totalAmmo.upgradedSkill.currTier;
+	profile.lmg.totalAmmo.upgradedSkill.maxTier = lmgUpgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.lmg.totalAmmo.upgradedSkill.stat = lmgUpgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.lmg.isBought = lmgUpgrade.isBought;
+
+#pragma endregion
+
+#pragma region FlameThrower Loadin
+
+	profile.flameThrower.magSize.upgradedSkill.currTier = flameUpgrade.magSize.upgradedSkill.currTier;
+	profile.flameThrower.magSize.upgradedSkill.maxTier = flameUpgrade.magSize.upgradedSkill.maxTier;
+	profile.flameThrower.magSize.upgradedSkill.stat = flameUpgrade.magSize.upgradedSkill.stat;
+
+	profile.flameThrower.reloadTime.upgradedSkill.currTier = flameUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.flameThrower.reloadTime.upgradedSkill.maxTier = flameUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.flameThrower.reloadTime.upgradedSkill.stat = flameUpgrade.reloadTime.upgradedSkill.stat;
+
+
+	profile.flameThrower.bulletSpread.upgradedSkill.currTier = flameUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.flameThrower.bulletSpread.upgradedSkill.maxTier = flameUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.flameThrower.bulletSpread.upgradedSkill.stat = flameUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.flameThrower.damage.upgradedSkill.currTier = flameUpgrade.damage.upgradedSkill.currTier;
+	profile.flameThrower.damage.upgradedSkill.maxTier = flameUpgrade.damage.upgradedSkill.maxTier;
+	profile.flameThrower.damage.upgradedSkill.stat = flameUpgrade.damage.upgradedSkill.stat;
+
+	profile.flameThrower.bulletVelocity.upgradedSkill.currTier = flameUpgrade.bulletVelocity.upgradedSkill.currTier;
+	profile.flameThrower.bulletVelocity.upgradedSkill.maxTier = flameUpgrade.bulletVelocity.upgradedSkill.maxTier;
+	profile.flameThrower.bulletVelocity.upgradedSkill.stat = flameUpgrade.bulletVelocity.upgradedSkill.stat;
+
+	profile.flameThrower.ammoCap.upgradedSkill.currTier = flameUpgrade.ammoCap.upgradedSkill.currTier;
+	profile.flameThrower.ammoCap.upgradedSkill.maxTier = flameUpgrade.ammoCap.upgradedSkill.maxTier;
+	profile.flameThrower.ammoCap.upgradedSkill.stat = flameUpgrade.ammoCap.upgradedSkill.stat;
+
+	profile.flameThrower.totalAmmo.upgradedSkill.currTier = flameUpgrade.totalAmmo.upgradedSkill.currTier;
+	profile.flameThrower.totalAmmo.upgradedSkill.maxTier = flameUpgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.flameThrower.totalAmmo.upgradedSkill.stat = flameUpgrade.totalAmmo.upgradedSkill.stat;
+
+	profile.flameThrower.isBought = flameUpgrade.isBought;
+
+
+#pragma endregion
+
+#pragma region Sniper Loadin
+
+	profile.sniper.magSize.upgradedSkill.currTier = sniperUpgrade.magSize.upgradedSkill.currTier;
+	profile.sniper.magSize.upgradedSkill.maxTier = sniperUpgrade.magSize.upgradedSkill.maxTier;
+	profile.sniper.magSize.upgradedSkill.stat = sniperUpgrade.magSize.upgradedSkill.stat;
+
+	profile.sniper.reloadTime.upgradedSkill.currTier = sniperUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.sniper.reloadTime.upgradedSkill.maxTier = sniperUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.sniper.reloadTime.upgradedSkill.stat = sniperUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.sniper.recoilTime.upgradedSkill.currTier = sniperUpgrade.recoilTime.upgradedSkill.currTier;
+	profile.sniper.recoilTime.upgradedSkill.maxTier = sniperUpgrade.recoilTime.upgradedSkill.maxTier;
+	profile.sniper.recoilTime.upgradedSkill.stat = sniperUpgrade.recoilTime.upgradedSkill.stat;
+
+
+	profile.sniper.bulletSpread.upgradedSkill.currTier = sniperUpgrade.reloadTime.upgradedSkill.currTier;
+	profile.sniper.bulletSpread.upgradedSkill.maxTier = sniperUpgrade.reloadTime.upgradedSkill.maxTier;
+	profile.sniper.bulletSpread.upgradedSkill.stat = sniperUpgrade.reloadTime.upgradedSkill.stat;
+
+	profile.sniper.damage.upgradedSkill.currTier = sniperUpgrade.damage.upgradedSkill.currTier;
+	profile.sniper.damage.upgradedSkill.maxTier = sniperUpgrade.damage.upgradedSkill.maxTier;
+	profile.sniper.damage.upgradedSkill.stat = sniperUpgrade.damage.upgradedSkill.stat;
+
+	profile.sniper.ammoCap.upgradedSkill.currTier = sniperUpgrade.ammoCap.upgradedSkill.currTier;
+	profile.sniper.ammoCap.upgradedSkill.maxTier = sniperUpgrade.ammoCap.upgradedSkill.maxTier;
+	profile.sniper.ammoCap.upgradedSkill.stat = sniperUpgrade.ammoCap.upgradedSkill.stat;
+
+	profile.sniper.penPower.upgradedSkill.currTier = sniperUpgrade.penPower.upgradedSkill.currTier;
+	profile.sniper.penPower.upgradedSkill.maxTier = sniperUpgrade.penPower.upgradedSkill.maxTier;
+	profile.sniper.penPower.upgradedSkill.stat = sniperUpgrade.penPower.upgradedSkill.stat;
+
+	profile.sniper.totalAmmo.upgradedSkill.currTier = sniperUpgrade.totalAmmo.upgradedSkill.currTier;
+	profile.sniper.totalAmmo.upgradedSkill.maxTier = sniperUpgrade.totalAmmo.upgradedSkill.maxTier;
+	profile.sniper.totalAmmo.upgradedSkill.stat = sniperUpgrade.totalAmmo.upgradedSkill.stat;
+	profile.sniper.isBought = profile.sniper.isBought;
+
+
+#pragma endregion
+
+#pragma region NadeLauncher Loadin
+
+	nadeLauncherUpgrade.magSize.upgradedSkill.currTier = profile.nadeLauncher.magSize.upgradedSkill.currTier;
+	nadeLauncherUpgrade.magSize.upgradedSkill.maxTier = profile.nadeLauncher.magSize.upgradedSkill.maxTier;
+	nadeLauncherUpgrade.magSize.upgradedSkill.stat = profile.nadeLauncher.magSize.upgradedSkill.stat;
+
+	nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier = profile.nadeLauncher.reloadTime.upgradedSkill.currTier;
+	nadeLauncherUpgrade.reloadTime.upgradedSkill.maxTier = profile.nadeLauncher.reloadTime.upgradedSkill.maxTier;
+	nadeLauncherUpgrade.reloadTime.upgradedSkill.stat = profile.nadeLauncher.reloadTime.upgradedSkill.stat;
+
+	nadeLauncherUpgrade.damage.upgradedSkill.currTier = profile.nadeLauncher.damage.upgradedSkill.currTier;
+	nadeLauncherUpgrade.damage.upgradedSkill.maxTier = profile.nadeLauncher.damage.upgradedSkill.maxTier;
+	nadeLauncherUpgrade.damage.upgradedSkill.stat = profile.nadeLauncher.damage.upgradedSkill.stat;
+
+	nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier = profile.nadeLauncher.bulletVelocity.upgradedSkill.currTier;
+	nadeLauncherUpgrade.bulletVelocity.upgradedSkill.maxTier = profile.nadeLauncher.bulletVelocity.upgradedSkill.maxTier;
+	nadeLauncherUpgrade.bulletVelocity.upgradedSkill.stat = profile.nadeLauncher.bulletVelocity.upgradedSkill.stat;
+
+	nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier = profile.nadeLauncher.ammoCap.upgradedSkill.currTier;
+	nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier = profile.nadeLauncher.ammoCap.upgradedSkill.maxTier;
+	nadeLauncherUpgrade.ammoCap.upgradedSkill.stat = profile.nadeLauncher.ammoCap.upgradedSkill.stat;
+
+	nadeLauncherUpgrade.totalAmmo.upgradedSkill.currTier = profile.nadeLauncher.totalAmmo.upgradedSkill.currTier;
+	nadeLauncherUpgrade.totalAmmo.upgradedSkill.maxTier = profile.nadeLauncher.totalAmmo.upgradedSkill.maxTier;
+	nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat = profile.nadeLauncher.totalAmmo.upgradedSkill.stat;
+
+	nadeLauncherUpgrade.isBought = profile.nadeLauncher.isBought;
+
+	//barbed wire
+	barbedwire.damage.upgradedSkill.currTier = profile.barbWire.damage.upgradedSkill.currTier;
+	barbedwire.damage.upgradedSkill.maxTier = profile.barbWire.damage.upgradedSkill.maxTier;
+	barbedwire.damage.upgradedSkill.stat = profile.barbWire.damage.upgradedSkill.stat;
+
+	barbedwire.maxHealth.upgradedSkill.currTier = profile.barbWire.maxHealth.upgradedSkill.currTier;
+	barbedwire.maxHealth.upgradedSkill.maxTier = profile.barbWire.maxHealth.upgradedSkill.maxTier;
+	barbedwire.maxHealth.upgradedSkill.stat = profile.barbWire.maxHealth.upgradedSkill.stat;
+
+	barbedwire.isBought = profile.barbWire.isBought;
+
+	//sandbag
+	sandBag.maxHealth.upgradedSkill.currTier = profile.sandBag.maxHealth.upgradedSkill.currTier;
+	sandBag.maxHealth.upgradedSkill.maxTier = profile.sandBag.maxHealth.upgradedSkill.maxTier;
+	sandBag.maxHealth.upgradedSkill.stat = profile.sandBag.maxHealth.upgradedSkill.stat;
+
+	sandBag.isBought = profile.sandBag.isBought;
+
+	//landmines
+
+
+
+
+#pragma endregion
+
+}
+
+void ShopState::SaveProfile()
+{
+	
+		
+
+			ofstream fout(profile.path.c_str());
+			if (fout.is_open())
+			{
+				fout << profile.path.c_str() << '\n';
+
+#pragma region Pistols
+
+				//pistol
+				fout << profile.pistol.magSize.upgradedSkill.stat;
+				fout << profile.pistol.magSize.upgradedSkill.currTier;
+				fout << profile.pistol.magSize.upgradedSkill.maxTier;
+
+				fout << profile.pistol.recoilTime.upgradedSkill.stat;
+				fout << profile.pistol.recoilTime.upgradedSkill.currTier;
+				fout << profile.pistol.recoilTime.upgradedSkill.maxTier;
+
+				fout << profile.pistol.reloadTime.upgradedSkill.stat;
+				fout << profile.pistol.reloadTime.upgradedSkill.currTier;
+				fout << profile.pistol.reloadTime.upgradedSkill.maxTier;
+
+				//revolver
+				fout << profile.revolver.totalAmmo.upgradedSkill.stat;
+				fout << profile.revolver.totalAmmo.upgradedSkill.currTier;
+				fout << profile.revolver.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.revolver.magSize.upgradedSkill.stat;
+				fout << profile.revolver.magSize.upgradedSkill.currTier;
+				fout << profile.revolver.magSize.upgradedSkill.maxTier;
+
+				fout << profile.revolver.ammoCap.upgradedSkill.stat;
+				fout << profile.revolver.ammoCap.upgradedSkill.currTier;
+				fout << profile.revolver.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.revolver.recoilTime.upgradedSkill.stat;
+				fout << profile.revolver.recoilTime.upgradedSkill.currTier;
+				fout << profile.revolver.recoilTime.upgradedSkill.maxTier;
+
+				fout << profile.revolver.reloadTime.upgradedSkill.stat;
+				fout << profile.revolver.reloadTime.upgradedSkill.currTier;
+				fout << profile.revolver.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.revolver.penPower.upgradedSkill.stat;
+				fout << profile.revolver.penPower.upgradedSkill.currTier;
+				fout << profile.revolver.penPower.upgradedSkill.maxTier;
+
+				fout << profile.revolver.damage.upgradedSkill.stat;
+				fout << profile.revolver.damage.upgradedSkill.currTier;
+				fout << profile.revolver.damage.upgradedSkill.maxTier;
+
+				fout << profile.revolver.isBought;
+
+
+#pragma endregion
+
+
+
+
+
+#pragma region SMGs
+				//Mac10
+				fout << profile.mac10.totalAmmo.upgradedSkill.stat;
+				fout << profile.mac10.totalAmmo.upgradedSkill.currTier;
+				fout << profile.mac10.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.mac10.magSize.upgradedSkill.stat;
+				fout << profile.mac10.magSize.upgradedSkill.currTier;
+				fout << profile.mac10.magSize.upgradedSkill.maxTier;
+
+				fout << profile.mac10.ammoCap.upgradedSkill.stat;
+				fout << profile.mac10.ammoCap.upgradedSkill.currTier;
+				fout << profile.mac10.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.mac10.reloadTime.upgradedSkill.stat;
+				fout << profile.mac10.reloadTime.upgradedSkill.currTier;
+				fout << profile.mac10.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.mac10.bulletSpread.upgradedSkill.stat;
+				fout << profile.mac10.bulletSpread.upgradedSkill.currTier;
+				fout << profile.mac10.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.mac10.damage.upgradedSkill.stat;
+				fout << profile.mac10.damage.upgradedSkill.currTier;
+				fout << profile.mac10.damage.upgradedSkill.maxTier;
+
+				fout << profile.mac10.isBought;
+
+				//Tech9
+				fout << profile.tech9.totalAmmo.upgradedSkill.stat;
+				fout << profile.tech9.totalAmmo.upgradedSkill.currTier;
+				fout << profile.tech9.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.tech9.magSize.upgradedSkill.stat;
+				fout << profile.tech9.magSize.upgradedSkill.currTier;
+				fout << profile.tech9.magSize.upgradedSkill.maxTier;
+
+				fout << profile.tech9.ammoCap.upgradedSkill.stat;
+				fout << profile.tech9.ammoCap.upgradedSkill.currTier;
+				fout << profile.tech9.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.tech9.reloadTime.upgradedSkill.stat;
+				fout << profile.tech9.reloadTime.upgradedSkill.currTier;
+				fout << profile.tech9.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.tech9.bulletSpread.upgradedSkill.stat;
+				fout << profile.tech9.bulletSpread.upgradedSkill.currTier;
+				fout << profile.tech9.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.tech9.damage.upgradedSkill.stat;
+				fout << profile.tech9.damage.upgradedSkill.currTier;
+				fout << profile.tech9.damage.upgradedSkill.maxTier;
+
+				fout << profile.tech9.isBought;
+
+				//P90
+				fout << profile.p90.totalAmmo.upgradedSkill.stat;
+				fout << profile.p90.totalAmmo.upgradedSkill.currTier;
+				fout << profile.p90.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.p90.magSize.upgradedSkill.stat;
+				fout << profile.p90.magSize.upgradedSkill.currTier;
+				fout << profile.p90.magSize.upgradedSkill.maxTier;
+
+				fout << profile.p90.ammoCap.upgradedSkill.stat;
+				fout << profile.p90.ammoCap.upgradedSkill.currTier;
+				fout << profile.p90.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.p90.reloadTime.upgradedSkill.stat;
+				fout << profile.p90.reloadTime.upgradedSkill.currTier;
+				fout << profile.p90.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.p90.bulletSpread.upgradedSkill.stat;
+				fout << profile.p90.bulletSpread.upgradedSkill.currTier;
+				fout << profile.p90.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.p90.damage.upgradedSkill.stat;
+				fout << profile.p90.damage.upgradedSkill.currTier;
+				fout << profile.p90.damage.upgradedSkill.maxTier;
+
+				fout << profile.p90.isBought;
+
+#pragma endregion
+
+#pragma region Shotguns
+
+				//SawnOff
+				fout << profile.sawnoff.totalAmmo.upgradedSkill.stat;
+				fout << profile.sawnoff.totalAmmo.upgradedSkill.currTier;
+				fout << profile.sawnoff.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.sawnoff.ammoCap.upgradedSkill.stat;
+				fout << profile.sawnoff.ammoCap.upgradedSkill.currTier;
+				fout << profile.sawnoff.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.sawnoff.reloadTime.upgradedSkill.stat;
+				fout << profile.sawnoff.reloadTime.upgradedSkill.currTier;
+				fout << profile.sawnoff.reloadTime.upgradedSkill.maxTier;
+
+
+				fout << profile.sawnoff.bulletSpread.upgradedSkill.stat;
+				fout << profile.sawnoff.bulletSpread.upgradedSkill.currTier;
+				fout << profile.sawnoff.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.sawnoff.damage.upgradedSkill.stat;
+				fout << profile.sawnoff.damage.upgradedSkill.currTier;
+				fout << profile.sawnoff.damage.upgradedSkill.maxTier;
+
+				fout << profile.sawnoff.recoilTime.upgradedSkill.stat;
+				fout << profile.sawnoff.recoilTime.upgradedSkill.currTier;
+				fout << profile.sawnoff.recoilTime.upgradedSkill.maxTier;
+
+				fout << profile.sawnoff.isBought;
+
+
+				//Pump
+				fout << profile.pumpShotgun.totalAmmo.upgradedSkill.stat;
+				fout << profile.pumpShotgun.totalAmmo.upgradedSkill.currTier;
+				fout << profile.pumpShotgun.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.pumpShotgun.magSize.upgradedSkill.stat;
+				fout << profile.pumpShotgun.magSize.upgradedSkill.currTier;
+				fout << profile.pumpShotgun.magSize.upgradedSkill.maxTier;
+
+				fout << profile.pumpShotgun.ammoCap.upgradedSkill.stat;
+				fout << profile.pumpShotgun.ammoCap.upgradedSkill.currTier;
+				fout << profile.pumpShotgun.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.pumpShotgun.reloadTime.upgradedSkill.stat;
+				fout << profile.pumpShotgun.reloadTime.upgradedSkill.currTier;
+				fout << profile.pumpShotgun.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.pumpShotgun.bulletSpread.upgradedSkill.stat;
+				fout << profile.pumpShotgun.bulletSpread.upgradedSkill.currTier;
+				fout << profile.pumpShotgun.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.pumpShotgun.damage.upgradedSkill.stat;
+				fout << profile.pumpShotgun.damage.upgradedSkill.currTier;
+				fout << profile.pumpShotgun.damage.upgradedSkill.maxTier;
+
+				fout << profile.pumpShotgun.recoilTime.upgradedSkill.stat;
+				fout << profile.pumpShotgun.recoilTime.upgradedSkill.currTier;
+				fout << profile.pumpShotgun.recoilTime.upgradedSkill.maxTier;
+
+				fout << profile.pumpShotgun.isBought;
+
+				//Auto
+				fout << profile.autoShotgun.totalAmmo.upgradedSkill.stat;
+				fout << profile.autoShotgun.totalAmmo.upgradedSkill.currTier;
+				fout << profile.autoShotgun.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.autoShotgun.magSize.upgradedSkill.stat;
+				fout << profile.autoShotgun.magSize.upgradedSkill.currTier;
+				fout << profile.autoShotgun.magSize.upgradedSkill.maxTier;
+
+				fout << profile.autoShotgun.ammoCap.upgradedSkill.stat;
+				fout << profile.autoShotgun.ammoCap.upgradedSkill.currTier;
+				fout << profile.autoShotgun.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.autoShotgun.reloadTime.upgradedSkill.stat;
+				fout << profile.autoShotgun.reloadTime.upgradedSkill.currTier;
+				fout << profile.autoShotgun.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.autoShotgun.bulletSpread.upgradedSkill.stat;
+				fout << profile.autoShotgun.bulletSpread.upgradedSkill.currTier;
+				fout << profile.autoShotgun.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.autoShotgun.damage.upgradedSkill.stat;
+				fout << profile.autoShotgun.damage.upgradedSkill.currTier;
+				fout << profile.autoShotgun.damage.upgradedSkill.maxTier;
+
+				fout << profile.autoShotgun.recoilTime.upgradedSkill.stat;
+				fout << profile.autoShotgun.recoilTime.upgradedSkill.currTier;
+				fout << profile.autoShotgun.recoilTime.upgradedSkill.maxTier;
+
+				fout << profile.autoShotgun.isBought;
+
+
+
+#pragma endregion
+
+#pragma region Assault Rifles
+
+				//AK-47
+				fout << profile.ak47.totalAmmo.upgradedSkill.stat;
+				fout << profile.ak47.totalAmmo.upgradedSkill.currTier;
+				fout << profile.ak47.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.ak47.magSize.upgradedSkill.stat;
+				fout << profile.ak47.magSize.upgradedSkill.currTier;
+				fout << profile.ak47.magSize.upgradedSkill.maxTier;
+
+				fout << profile.ak47.ammoCap.upgradedSkill.stat;
+				fout << profile.ak47.ammoCap.upgradedSkill.currTier;
+				fout << profile.ak47.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.ak47.reloadTime.upgradedSkill.stat;
+				fout << profile.ak47.reloadTime.upgradedSkill.currTier;
+				fout << profile.ak47.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.ak47.bulletSpread.upgradedSkill.stat;
+				fout << profile.ak47.bulletSpread.upgradedSkill.currTier;
+				fout << profile.ak47.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.ak47.damage.upgradedSkill.stat;
+				fout << profile.ak47.damage.upgradedSkill.currTier;
+				fout << profile.ak47.damage.upgradedSkill.maxTier;
+
+				fout << profile.ak47.recoilTime.upgradedSkill.stat;
+				fout << profile.ak47.recoilTime.upgradedSkill.currTier;
+				fout << profile.ak47.recoilTime.upgradedSkill.maxTier;
+
+				fout << profile.ak47.isBought;
+
+				//M-16
+				fout << profile.m16.totalAmmo.upgradedSkill.stat;
+				fout << profile.m16.totalAmmo.upgradedSkill.currTier;
+				fout << profile.m16.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.m16.magSize.upgradedSkill.stat;
+				fout << profile.m16.magSize.upgradedSkill.currTier;
+				fout << profile.m16.magSize.upgradedSkill.maxTier;
+
+				fout << profile.m16.ammoCap.upgradedSkill.stat;
+				fout << profile.m16.ammoCap.upgradedSkill.currTier;
+				fout << profile.m16.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.m16.reloadTime.upgradedSkill.stat;
+				fout << profile.m16.reloadTime.upgradedSkill.currTier;
+				fout << profile.m16.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.m16.bulletSpread.upgradedSkill.stat;
+				fout << profile.m16.bulletSpread.upgradedSkill.currTier;
+				fout << profile.m16.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.m16.damage.upgradedSkill.stat;
+				fout << profile.m16.damage.upgradedSkill.currTier;
+				fout << profile.m16.damage.upgradedSkill.maxTier;
+
+				fout << profile.m16.recoilTime.upgradedSkill.stat;
+				fout << profile.m16.recoilTime.upgradedSkill.currTier;
+				fout << profile.m16.recoilTime.upgradedSkill.maxTier;
+
+				fout << profile.m16.isBought;
+
+				//LMG
+				fout << profile.lmg.totalAmmo.upgradedSkill.stat;
+				fout << profile.lmg.totalAmmo.upgradedSkill.currTier;
+				fout << profile.lmg.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.lmg.magSize.upgradedSkill.stat;
+				fout << profile.lmg.magSize.upgradedSkill.currTier;
+				fout << profile.lmg.magSize.upgradedSkill.maxTier;
+
+				fout << profile.lmg.ammoCap.upgradedSkill.stat;
+				fout << profile.lmg.ammoCap.upgradedSkill.currTier;
+				fout << profile.lmg.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.lmg.reloadTime.upgradedSkill.stat;
+				fout << profile.lmg.reloadTime.upgradedSkill.currTier;
+				fout << profile.lmg.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.lmg.bulletSpread.upgradedSkill.stat;
+				fout << profile.lmg.bulletSpread.upgradedSkill.currTier;
+				fout << profile.lmg.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.lmg.damage.upgradedSkill.stat;
+				fout << profile.lmg.damage.upgradedSkill.currTier;
+				fout << profile.lmg.damage.upgradedSkill.maxTier;
+
+				fout << profile.lmg.recoilTime.upgradedSkill.stat;
+				fout << profile.lmg.recoilTime.upgradedSkill.currTier;
+				fout << profile.lmg.recoilTime.upgradedSkill.maxTier;
+
+				fout << profile.lmg.isBought;
+
+#pragma endregion
+
+#pragma region Heavy Weapons
+
+				//Sniper
+				fout << profile.sniper.totalAmmo.upgradedSkill.stat;
+				fout << profile.sniper.totalAmmo.upgradedSkill.currTier;
+				fout << profile.sniper.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.sniper.magSize.upgradedSkill.stat;
+				fout << profile.sniper.magSize.upgradedSkill.currTier;
+				fout << profile.sniper.magSize.upgradedSkill.maxTier;
+
+				fout << profile.sniper.penPower.upgradedSkill.stat;
+				fout << profile.sniper.penPower.upgradedSkill.currTier;
+				fout << profile.sniper.penPower.upgradedSkill.maxTier;
+
+
+				fout << profile.sniper.ammoCap.upgradedSkill.stat;
+				fout << profile.sniper.ammoCap.upgradedSkill.currTier;
+				fout << profile.sniper.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.sniper.reloadTime.upgradedSkill.stat;
+				fout << profile.sniper.reloadTime.upgradedSkill.currTier;
+				fout << profile.sniper.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.sniper.bulletSpread.upgradedSkill.stat;
+				fout << profile.sniper.bulletSpread.upgradedSkill.currTier;
+				fout << profile.sniper.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.sniper.damage.upgradedSkill.stat;
+				fout << profile.sniper.damage.upgradedSkill.currTier;
+				fout << profile.sniper.damage.upgradedSkill.maxTier;
+
+				fout << profile.sniper.recoilTime.upgradedSkill.stat;
+				fout << profile.sniper.recoilTime.upgradedSkill.currTier;
+				fout << profile.sniper.recoilTime.upgradedSkill.maxTier;
+
+				fout << profile.sniper.isBought;
+
+				//Flamethrower
+
+				fout << profile.flameThrower.totalAmmo.upgradedSkill.stat;
+				fout << profile.flameThrower.totalAmmo.upgradedSkill.currTier;
+				fout << profile.flameThrower.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.flameThrower.magSize.upgradedSkill.stat;
+				fout << profile.flameThrower.magSize.upgradedSkill.currTier;
+				fout << profile.flameThrower.magSize.upgradedSkill.maxTier;
+
+				fout << profile.flameThrower.ammoCap.upgradedSkill.stat;
+				fout << profile.flameThrower.ammoCap.upgradedSkill.currTier;
+				fout << profile.flameThrower.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.flameThrower.reloadTime.upgradedSkill.stat;
+				fout << profile.flameThrower.reloadTime.upgradedSkill.currTier;
+				fout << profile.flameThrower.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.flameThrower.bulletSpread.upgradedSkill.stat;
+				fout << profile.flameThrower.bulletSpread.upgradedSkill.currTier;
+				fout << profile.flameThrower.bulletSpread.upgradedSkill.maxTier;
+
+				fout << profile.flameThrower.damage.upgradedSkill.stat;
+				fout << profile.flameThrower.damage.upgradedSkill.currTier;
+				fout << profile.flameThrower.damage.upgradedSkill.maxTier;
+
+				fout << profile.flameThrower.bulletVelocity.upgradedSkill.stat;
+				fout << profile.flameThrower.bulletVelocity.upgradedSkill.currTier;
+				fout << profile.flameThrower.bulletVelocity.upgradedSkill.maxTier;
+
+				fout << profile.flameThrower.isBought;
+
+				//Grenade Launcher
+
+				fout << profile.nadeLauncher.totalAmmo.upgradedSkill.stat;
+				fout << profile.nadeLauncher.totalAmmo.upgradedSkill.currTier;
+				fout << profile.nadeLauncher.totalAmmo.upgradedSkill.maxTier;
+
+				fout << profile.nadeLauncher.magSize.upgradedSkill.stat;
+				fout << profile.nadeLauncher.magSize.upgradedSkill.currTier;
+				fout << profile.nadeLauncher.magSize.upgradedSkill.maxTier;
+
+				fout << profile.nadeLauncher.ammoCap.upgradedSkill.stat;
+				fout << profile.nadeLauncher.ammoCap.upgradedSkill.currTier;
+				fout << profile.nadeLauncher.ammoCap.upgradedSkill.maxTier;
+
+				fout << profile.nadeLauncher.reloadTime.upgradedSkill.stat;
+				fout << profile.nadeLauncher.reloadTime.upgradedSkill.currTier;
+				fout << profile.nadeLauncher.reloadTime.upgradedSkill.maxTier;
+
+				fout << profile.nadeLauncher.damage.upgradedSkill.stat;
+				fout << profile.nadeLauncher.damage.upgradedSkill.currTier;
+				fout << profile.nadeLauncher.damage.upgradedSkill.maxTier;
+
+				fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.stat;
+				fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.currTier;
+				fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.maxTier;
+
+				fout << profile.nadeLauncher.isBought;
+
+				//Barb Wire
+				fout << profile.barbWire.maxHealth.upgradedSkill.stat;
+				fout << profile.barbWire.maxHealth.upgradedSkill.currTier;
+				fout << profile.barbWire.maxHealth.upgradedSkill.maxTier;
+
+				fout << profile.barbWire.damage.upgradedSkill.stat;
+				fout << profile.barbWire.damage.upgradedSkill.currTier;
+				fout << profile.barbWire.damage.upgradedSkill.maxTier;
+
+				fout << profile.barbWire.isBought;
+				bool temp;
+				
+				for (size_t j = 0; j < 30; j++)
+				{
+
+					fout << profile.barbWireStates[j];
+
+
+				}
+				//Sandbag
+
+				fout << profile.sandBag.maxHealth.upgradedSkill.stat;
+				fout << profile.sandBag.maxHealth.upgradedSkill.currTier;
+				fout << profile.sandBag.maxHealth.upgradedSkill.maxTier;
+
+
+				fout << profile.sandBag.isBought;
+
+				for (size_t j = 0; j < 30; j++)
+				{
+
+					fout << profile.sandBagStates[j];
+
+
+				}
+
+
+				fout << profile.landMine.isBought;
+
+				for (size_t j = 0; j < 50; j++)
+				{
+
+					fout << profile.landMineStates[j];
+
+
+				}
+
+				fout << profile.numTurrets;
+
+
+
+
+				//LandMine
+
+
+
+#pragma endregion
+
+				fout.close();
+			}
+		}
+	
+
+

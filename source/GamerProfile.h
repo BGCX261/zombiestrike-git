@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "ShopStructures.h"
 
 struct GamerProfile
@@ -33,7 +34,11 @@ struct GamerProfile
 
 	int money;
 	int numTurrets;
+	int maxNumTurrets;
 	
+	bool sandBagStates[30];
+	bool landMineStates[50];
+	bool barbWireStates[30];
 
 
 

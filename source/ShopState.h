@@ -46,6 +46,8 @@ public:
 
 	Timer GetShopTimer() const { return m_tShopTimer; }
 	void LoadShopStatus();
+	void SaveProfile();
+	void UpdateProfile();
 private:
 	PistolUpgrade pistolUpgrade;
 	RevolverUpgrade revolverUpgrade;
