@@ -16,7 +16,7 @@ public:
 	void			Update			( float dt )			override;
 	void			Render			( void )				override;
 	void			HandleCollision	( const IBase* pOther )	override;
-
+	void			HandleEvent(const SGD::Event* pEvent);
 
 
 	float			GetDamage		( void )	const	{ return m_fDamage; }

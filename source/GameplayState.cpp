@@ -35,9 +35,6 @@
 #include "CreateExplodingZombieMsg.h"
 #include "CreateTankZombieMsg.h"
 #include "CreateTurretMessage.h"
-
-
-
 #include "BitmapFont.h"
 
 #include "EntityManager.h"
@@ -138,6 +135,8 @@
 
 	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
 	*/
+	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
+
 
 
 
@@ -197,12 +196,13 @@
 	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
 
 
+	m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
+	m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
 
 	// Create the main entities
-
 	m_pPlayer = CreatePlayer();
 	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
 
@@ -275,6 +275,8 @@
 	pAudio->UnloadAudio(rpg_fire);
 	pAudio->UnloadAudio(vomit_fire);
 
+	pAudio->UnloadAudio(*m_hMain);
+	pAudio->UnloadAudio(*m_hSurvive);
 
 	camera.SetTarget(nullptr);
 
@@ -521,6 +523,8 @@
 		gameWin << "YOU WIN!";
 
 		pFont->Draw(gameWin.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+
+
 	}
 
 	if (SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies())
@@ -535,6 +539,12 @@
 	SGD::Rectangle staminaRect = { lefts, tops, lefts + m_pPlayer->GetAttributes()->m_fCurrStamina / m_pPlayer->GetAttributes()->m_fMaxStamina * 150, tops + 25 };
 	pGraphics->DrawRectangle(staminaRect, { 0, 255, 0 });
 	*/
+
+	stringstream moneyCount;
+	moneyCount << "$" << Game::GetInstance()->GetProfile().money;
+	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0f, { 0, 255, 0 });
+
+
 	
 	// Draw the reticle
 	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
@@ -542,6 +552,7 @@
 
 	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
 	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+
 }
 
 /**************************************************************/
@@ -573,6 +584,31 @@
 			assert(pDestroyMsg != nullptr && "Game::MessageProc - MSG_DESTROY_OBJECT is not actually a DestroyObjectMessage");
 
 			BaseObject* ptr = pDestroyMsg->GetEntity();
+
+			if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 20;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 25;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 35;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 75;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
+			{
+				Game::GetInstance()->GetProfile().money += 100;
+			}
 			
 			GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
 		}
@@ -812,7 +848,7 @@ void GameplayState::CreatePukeyBullet(Weapon* owner)
 	bullet->SetType(BaseObject::ObjectType::OBJ_VOMIT);
 
 	bullet->SetVelocity(direction * owner->GetSpeed());
-	bullet->SetAnimation("flameThrowerRound");
+	bullet->SetAnimation("puke");
 	bullet->SetDamage(owner->GetDamage());
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
 	bullet->Release();

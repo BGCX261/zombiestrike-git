@@ -12,10 +12,11 @@ protected:
 
 
 	enum Type { PISTOL, SMG, SHOTGUN, ASSUALT_RIFLE, SPECIAL, NONE};
-	enum Gun {GLOCK, REVOLVER, MAC10, TECH9, SP90 , SAWN, PUMP, AUTO, M16, LIGHT_MG, AK47, GLAUNCHER, MINIGUN, FTHROWER};
+	enum Gun {GLOCK, REVOLVER, MAC10, TECH9, SP90 , SAWN, PUMP, AUTO, M16, LIGHT_MG, AK47, GLAUNCHER, SNIPER, FTHROWER};
 
 	SGD::Rectangle m_rRenderRect;
 
+	int category = NONE;
 	int type = NONE;
 	int currAmmo = 0;
 	int magSize = 0;
@@ -30,6 +31,7 @@ protected:
 	float lifeTime = 0.0f;
 	bool m_bIsAutomatic = false;
 	bool m_bIsObtained = false;
+	bool m_bIsEquipped = false;
 	Timer reloadTimer;
 	Timer recoilTimer;
 	MovingObject* m_pOwner = nullptr;
@@ -57,7 +59,7 @@ public:
 	//Accessors
 	int GetCurrAmmo() const { return currAmmo; }
 	SGD::Rectangle GetRenderRect() { return m_rRenderRect; }
-	int GetType(void) const { return type; }
+	int GetType(void) const { return category; }
 	int GetMagSize(void) const { return magSize; }
 	int GetAmmoCap(void) const { return ammoCapactity; }
 	int GetPenetratingPower(void) const { return penetratingPower; }
@@ -74,6 +76,8 @@ public:
 	Timer GetRecoilTimer(void) const { return recoilTimer; }
 	MovingObject* GetOwner(void) const { return m_pOwner; }
 	bool IsReloading() { return reloading; }
+	bool GetEquipped() { return m_bIsEquipped; }
+	int GetGunType() { return type; }
 
 	//Mutators
 	void AddAmmo(int addedAmmo) { totalAmmo += addedAmmo; }
@@ -81,7 +85,7 @@ public:
 	void SetTotalAmmo(int tammo) { totalAmmo = tammo; }
 	void SetCurrAmmo(int cammo) { currAmmo = cammo; }
 	void SetRenderRect(SGD::Rectangle rRect) { m_rRenderRect = rRect; }
-	void SetType(int _type)  { type = _type; }
+	void SetType(int _type)  { category = _type; }
 	void SetMagSize(int _magSize)  { magSize = _magSize; }
 	void SetAmmoCap(int _ammoCap)  { ammoCapactity = _ammoCap; }
 	void SetRecoilTime(float _recoilTime)  { recoilTime = _recoilTime; }
@@ -91,8 +95,10 @@ public:
 	void SetLifeTime(float _lifeTime)  { lifeTime = _lifeTime; }
 	void SetBulletSpread(float _bulletSpread) { bulletSpread = _bulletSpread; }
 	void SetOwner(MovingObject* owner);
-	void SetEquipped(bool isEquipped) { m_bIsAutomatic = isEquipped ; }
+	void SetAutomatic(bool isAuto) { m_bIsAutomatic = isAuto; }
 	void SetObtained(bool isObtained) { m_bIsObtained = isObtained; }
+	void SetEquipped(bool isEquipped) { m_bIsEquipped = isEquipped; }
+	void SetGunType(int theType) { type = theType; }
 
 };
 

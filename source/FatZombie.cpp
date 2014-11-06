@@ -61,6 +61,8 @@ void FatZombie::Update(float dt)
 
 	}
 	MovingObject::Update(dt);
+
+	
 }
 
 

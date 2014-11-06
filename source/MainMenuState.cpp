@@ -14,6 +14,7 @@
 #include "CreditsState.h"
 #include "OptionsState.h"
 #include "ShopState.h"
+#include "IntroState.h"
 
 #include "../SGD Wrappers/SGD_EventManager.h"
 
@@ -52,10 +53,14 @@
 	m_hReticleImage		= pGraphics->LoadTexture("resource/graphics/Reticle3.png", { 0, 0, 0 });
 	m_hButton1			= pGraphics->LoadTexture("resource/graphics/rectangle1.png");
 	m_hButton2			= pGraphics->LoadTexture("resource/graphics/rectangle2.png");
+	m_hLightning		= pGraphics->LoadTexture("resource/graphics/lightning2.png");
 
 	m_hButtonSwitchSFX	= pAudio->LoadAudio("resource/audio/button_switch.wav");
 	m_hMenuChangeSFX	= pAudio->LoadAudio("resource/audio/menu_change.wav");
 
+	//COMMENT BACK IN WHEN FILES ARE ADDED
+	//m_hMainTheme = pAudio->LoadAudio("resource/audio/zstrikemain.xwm");
+	//m_hSurvivalTheme = pAudio->LoadAudio("resource/audio/zstrikesurvival.xwm");
 
 	// Load volume levels
 	OptionsState::GetInstance()->LoadVolumes();
@@ -87,6 +92,10 @@
 		selectonrects[i].bottom = selectonrects[i].top + 32.0f;
 		selectonrects[i].bottom	+= y_offset * 2;
 	}
+
+	fadeTime.AddTime(.25f);
+	lightningTime.AddTime(3);
+	lFlashTime.AddTime(.01f);
 }
 
 
@@ -98,17 +107,16 @@
 	SGD::GraphicsManager* pGraphics	= SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager*	  pAudio	= SGD::AudioManager::GetInstance();
 
-
 	// Unload assets
 	pGraphics->UnloadTexture(m_hBackgroundImage);
 	pGraphics->UnloadTexture(m_hTitleImage);
 	pGraphics->UnloadTexture(m_hReticleImage);
 	pGraphics->UnloadTexture(m_hButton1);
 	pGraphics->UnloadTexture(m_hButton2);
+	pGraphics->UnloadTexture(m_hLightning);
 
 	pAudio->UnloadAudio(m_hButtonSwitchSFX);
 	pAudio->UnloadAudio(m_hMenuChangeSFX);
-
 
 	// deallocate dynamic arrays
 	delete[] selectonrects;
@@ -222,7 +230,7 @@
 		case MenuItems::STORY_MODE:
 			{
 				GameplayState::GetInstance()->SetGameMode(true);
-				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
+				Game::GetInstance()->AddState(IntroState::GetInstance());
 				return true;
 			}
 			break;
@@ -313,6 +321,72 @@
 //	- update entities / animations
 /*virtual*/ void MainMenuState::Update( float elapsedTime )
 {
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+
+	//COMMENT BACK IN WHEN AUDIO IS ADDED
+	//if (m_nCursor == 1 && pAudio->IsAudioPlaying(m_hSurvivalTheme) == false)
+	//{
+	//	pAudio->StopAudio(m_hMainTheme);
+	//	pAudio->PlayAudio(m_hSurvivalTheme, true);
+	//}
+
+	//if (m_nCursor != 1 && pAudio->IsAudioPlaying(m_hMainTheme) == false)
+	//{
+	//	pAudio->StopAudio(m_hSurvivalTheme);
+	//	pAudio->PlayAudio(m_hMainTheme, true);
+	//}
+
+	if (m_nCursor == 1)
+	{
+		if (fadeTime.GetTime() <= 0.0f && trans != 160 && mTrans != 0)
+		{
+			trans += 5;
+			mTrans -= 5;
+			fadeTime.AddTime(0.05);
+		}
+
+		fadeTime.Update(elapsedTime);
+	}
+
+	else
+	{
+		if (fadeTime.GetTime() <= 0.0f && trans != 0 && mTrans != 160)
+		{
+			trans -= 5;
+			mTrans += 5;
+			fadeTime.AddTime(0.05);
+		}
+
+
+
+		fadeTime.Update(elapsedTime);
+	}
+
+	if (lightningTime.GetTime() < .5f && lTrans != 50)
+	{
+		if (lFlashTime.GetTime() <= 0.0f)
+		{
+			lTrans += 10;
+			lFlashTime.AddTime(.025f);
+		}
+
+		lFlashTime.Update(elapsedTime);
+	}
+
+	if (lightningTime.GetTime() <= 0.0f)
+	{
+		rand();
+		lightningTime.AddTime(rand()% 5 + 3);
+		lTrans = 0;
+
+	}
+
+	if (lTrans >= 50)
+	{
+		lTrans = 0;
+	}
+
+	lightningTime.Update(elapsedTime);
 }
 
 
@@ -328,6 +402,19 @@
 	// Draw the background image
 	pGraphics->DrawTexture(m_hBackgroundImage, { 0, 0 });
 
+	if (lTrans > 0)
+	{
+		pGraphics->DrawTexture(m_hLightning, { 375, 0 }, 0.0f, {},{100,200,200,200}, {-1.0f,.5f});
+		pGraphics->DrawTexture(m_hLightning, { Game::GetInstance()->GetScreenWidth() * .65f, 0 }, 0.0f, {}, { 100, 200, 200, 200 }, { 1.0f, .5f });
+	}
+
+	SGD::Color sColor(trans, 100, 0, 0);
+	SGD::Color mColor(mTrans, 50, 0, 50);
+	SGD::Color lColor(lTrans, 200, 200, 255);
+
+	pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, sColor);
+	pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, mColor);
+	pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, lColor);
 
 	// Draw the buttons
 	for (size_t i = 0; i < NUM_CHOICES; i++)

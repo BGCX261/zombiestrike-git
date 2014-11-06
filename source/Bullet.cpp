@@ -78,13 +78,13 @@ Bullet::~Bullet()
 				if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->vomit_hit_player) == false)
 					pAudio->PlayAudio(GameplayState::GetInstance()->vomit_hit_player, false);
 
+	
 				DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 				dMsg->QueueMessage();
 				dMsg = nullptr;
 			}
 		}
 	}
-
 
 	// other stuff
 	else if (pOther->GetType() == ObjectType::OBJ_BASE || pOther->GetType() == ObjectType::OBJ_WALL)

@@ -1,5 +1,6 @@
 #include "SandBag.h"
 #include "Game.h"
+#include "../SGD Wrappers/SGD_Event.h"
 
 SandBag::SandBag()
 {
@@ -7,10 +8,14 @@ SandBag::SandBag()
 	this->SetAnimation("sandbag");
 
 	m_fCurrHP = m_fMaxHP = 250.0f;
+	RegisterForEvent("REPAIR_SANDBAGS");
 }
 
 SandBag::~SandBag()
 {
+	UnregisterFromEvent("REPAIR_SANDBAGS");
+	UnregisterFromEvent("UPGRADE_SANDBAG_HEALTH");
+
 }
 
 void SandBag::Update( float dt )
@@ -51,11 +56,26 @@ void SandBag::HandleCollision( const IBase* pOther )
 		if (m_fCurrHP <= 0.0f)
 		{
 			// reset HP
-			m_fCurrHP = m_fMaxHP;
+			m_fCurrHP = 0;
 
 			// deactivate
 			this->isActive = false;
 		}
+	}
+
+}
+
+void SandBag::HandleEvent(const SGD::Event* pEvent)
+{
+	if (pEvent->GetEventID() == "REPAIR_SANDBAGS")
+	{
+		isActive = true;
+		m_fCurrHP = m_fMaxHP;
+	}
+	if (pEvent->GetEventID() == "UPGRADE_SANDBAG_HEALTH")
+	{
+		m_fMaxHP += 50;
+		m_fCurrHP = m_fMaxHP;
 	}
 
 }

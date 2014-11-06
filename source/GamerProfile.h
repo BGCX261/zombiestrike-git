@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "ShopStructures.h"
 
 struct GamerProfile
@@ -27,7 +28,18 @@ struct GamerProfile
 	SniperUpgrade sniper;
 	FlamethrowerUpgrade flameThrower;
 	GrenadeLauncherUpgrade nadeLauncher;
+	DefenseUpgrade barbWire;
+	DefenseUpgrade sandBag;
+	DefenseUpgrade landMine;
+
 	int money;
+	int numTurrets;
+	int maxNumTurrets;
+	
+	bool sandBagStates[30];
+	bool landMineStates[50];
+	bool barbWireStates[30];
+
 
 
 
