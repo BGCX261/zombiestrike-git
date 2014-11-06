@@ -36,8 +36,8 @@ private:
 
 	/**********************************************************/
 	// Setup & workings
-	float			starting_y			= 170.0F;
-	AnimTimeStamp	animation;
+	//float			starting_y			= 170.0F;
+	//AnimTimeStamp	animation;
 
 
 	/**********************************************************/

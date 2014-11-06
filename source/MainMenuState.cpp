@@ -118,6 +118,9 @@
 	pAudio->UnloadAudio(m_hButtonSwitchSFX);
 	pAudio->UnloadAudio(m_hMenuChangeSFX);
 
+	//pAudio->UnloadAudio(m_hMainTheme);
+	//pAudio->UnloadAudio(m_hSurvivalTheme);
+
 	// deallocate dynamic arrays
 	delete[] selectonrects;
 	delete[] stringlengths;
@@ -140,7 +143,7 @@
 
 
 	// Press Escape to quit
-	if( pInput->IsKeyPressed( SGD::Key::Escape ) == true/* || pInput->IsButtonDown(0, 2) == true */)
+	if( pInput->IsKeyPressed( SGD::Key::Escape ) == true/* || pInput->IsButtonPressed(0, 2) == true */)
 		m_nCursor = MenuItems::EXIT;
 
 
@@ -162,7 +165,7 @@
 	{
 		SGD::Point	mpoint		= pInput->GetMousePosition();
 		SGD::Vector	joystick	= pInput->GetLeftJoystick(0);
-		float		stickmin	= 0.500f;
+		float		stickmin	= 0.250f;
 		float		mousevel	= 1.0f;
 
 
@@ -220,7 +223,7 @@
 
 
 	// Selection
-	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || (pInput->IsKeyReleased(SGD::Key::LButton) == true && selected == true) || pInput->IsButtonDown(0, 1) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || (pInput->IsKeyReleased(SGD::Key::LButton) == true && selected == true) || pInput->IsButtonPressed(0, 1) == true)
 	{
 		if (pAudio->IsAudioPlaying(m_hMenuChangeSFX) == false)
 			pAudio->PlayAudio(m_hMenuChangeSFX, false);
@@ -230,7 +233,8 @@
 		case MenuItems::STORY_MODE:
 			{
 				GameplayState::GetInstance()->SetGameMode(true);
-				Game::GetInstance()->AddState(IntroState::GetInstance());
+				//Game::GetInstance()->AddState(IntroState::GetInstance());
+				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
 				return true;
 			}
 			break;
@@ -324,17 +328,16 @@
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
 	//COMMENT BACK IN WHEN AUDIO IS ADDED
-	//if (m_nCursor == 1 && pAudio->IsAudioPlaying(m_hSurvivalTheme) == false)
-	//{
-	//	pAudio->StopAudio(m_hMainTheme);
-	//	pAudio->PlayAudio(m_hSurvivalTheme, true);
-	//}
-
-	//if (m_nCursor != 1 && pAudio->IsAudioPlaying(m_hMainTheme) == false)
-	//{
-	//	pAudio->StopAudio(m_hSurvivalTheme);
-	//	pAudio->PlayAudio(m_hMainTheme, true);
-	//}
+	if (m_nCursor == 1 && pAudio->IsAudioPlaying(Game::GetInstance()->m_hSurvivalTheme) == false)
+	{
+		pAudio->StopAudio(Game::GetInstance()->m_hMainTheme);
+		pAudio->PlayAudio(Game::GetInstance()->m_hSurvivalTheme, true);
+	}
+	if (m_nCursor != 1 && pAudio->IsAudioPlaying(Game::GetInstance()->m_hMainTheme) == false)
+	{
+		pAudio->StopAudio(Game::GetInstance()->m_hSurvivalTheme);
+		pAudio->PlayAudio(Game::GetInstance()->m_hMainTheme, true);
+	}
 
 	if (m_nCursor == 1)
 	{

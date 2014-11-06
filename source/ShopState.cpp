@@ -106,7 +106,7 @@ bool	ShopState::Input(void)
 	WeaponManager * pWeapons = WeaponManager::GetInstance();
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
-	if (pInput->IsKeyPressed(SGD::Key::Escape) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 2) == true)
 	{
 		//m_bTimerSet = true;
 
@@ -115,22 +115,51 @@ bool	ShopState::Input(void)
 		Game::GetInstance()->RemoveState();
 	}
 
-	if (pInput->IsKeyPressed(SGD::Key::Q) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Q) == true || pInput->IsButtonPressed(0, 4) == true)
 	{
 		currPage--;
 		if (currPage < 0)
 			currPage = 5;
 		
 	}
-	if (pInput->IsKeyPressed(SGD::Key::E) == true)
+	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsButtonPressed(0, 5) == true)
 	{
 		currPage++;
 		if (currPage > 5)
 			currPage = 0;
 
 	}
-	if (pInput->IsKeyPressed(SGD::Key::Tab) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Tab) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
 		currTab++;
+
+	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	{
+		SGD::Point	mpoint		= pInput->GetMousePosition();
+		SGD::Vector	joystick	= pInput->GetLeftJoystick(0);
+		float		stickmin	= 0.250f;
+		float		mousevel	= 4.0f;
+
+		if (joystick.x > stickmin)
+			mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+			mpoint.x -= mousevel;
+		
+		if (joystick.y > stickmin)
+			mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+			mpoint.y -= mousevel;
+
+		if (mpoint.x < 0.0F)
+			mpoint.x = 0.0F;
+		if (mpoint.y < 0.0F)
+			mpoint.y = 0.0F;
+		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+			mpoint.x = Game::GetInstance()->GetScreenWidth();
+		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+			mpoint.y = Game::GetInstance()->GetScreenHeight();
+
+		pInput->SetMousePosition(mpoint);
+	}
 		
 	SGD::Point mousePos = pInput->GetMousePosition();
 
@@ -143,7 +172,7 @@ bool	ShopState::Input(void)
 
 					if (currTab == 0)
 					{
-						if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+						if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 						{
 							for (unsigned int currButton = 0; currButton < 3; currButton++)
 							{
@@ -209,7 +238,7 @@ bool	ShopState::Input(void)
 					}
 					else
 					{
-						if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+						if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 						{
 							for (unsigned int currButton = 0; currButton < 8; currButton++)
 							{
@@ -363,7 +392,7 @@ bool	ShopState::Input(void)
 
 		if (currTab == 0)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 6; currButton++)
 				{
@@ -499,7 +528,7 @@ bool	ShopState::Input(void)
 		}
 		else if (currTab == 1)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 7; currButton++)
 				{
@@ -649,7 +678,7 @@ bool	ShopState::Input(void)
 		}
 		else if (currTab == 2)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 8; currButton++)
 				{
@@ -804,7 +833,7 @@ bool	ShopState::Input(void)
 
 		if (currTab == 0)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 6; currButton++)
 				{
@@ -939,7 +968,7 @@ bool	ShopState::Input(void)
 		}
 		else if (currTab == 1)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 6; currButton++)
 				{
@@ -1075,7 +1104,7 @@ bool	ShopState::Input(void)
 		}
 		else if (currTab == 2)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 6; currButton++)
 				{
@@ -1215,7 +1244,7 @@ bool	ShopState::Input(void)
 
 		if (currTab == 0)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 7; currButton++)
 				{
@@ -1364,7 +1393,7 @@ bool	ShopState::Input(void)
 		}
 		else if (currTab == 1)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 7; currButton++)
 				{
@@ -1514,7 +1543,7 @@ bool	ShopState::Input(void)
 				
 		else if (currTab == 2)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 7; currButton++)
 				{
@@ -1670,7 +1699,7 @@ bool	ShopState::Input(void)
 
 			if (currTab == 0)
 			{
-				if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+				if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 				{
 					for (unsigned int currButton = 0; currButton < 8; currButton++)
 					{
@@ -1835,7 +1864,7 @@ bool	ShopState::Input(void)
 			}
 			else if (currTab == 1)
 			{
-				if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+				if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 				{
 					for (unsigned int currButton = 0; currButton < 7; currButton++)
 					{
@@ -1985,7 +2014,7 @@ bool	ShopState::Input(void)
 			}
 			else if (currTab == 2)
 			{
-				if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+				if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 				{
 					for (unsigned int currButton = 0; currButton < 6; currButton++)
 					{
@@ -2137,9 +2166,9 @@ bool	ShopState::Input(void)
 		break;
 
 		case DEFENSE:
-			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
-				for (unsigned int currButton = 0; currButton < 6; currButton++)
+				for (unsigned int currButton = 0; currButton < 7; currButton++)
 				{
 					if (mousePos.IsWithinRectangle(DefenseButtons[currButton]))
 					{

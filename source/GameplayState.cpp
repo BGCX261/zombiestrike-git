@@ -196,8 +196,8 @@
 	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
 
 
-	m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
-	m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
+	//m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
+	//m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
@@ -275,8 +275,8 @@
 	pAudio->UnloadAudio(rpg_fire);
 	pAudio->UnloadAudio(vomit_fire);
 
-	pAudio->UnloadAudio(*m_hMain);
-	pAudio->UnloadAudio(*m_hSurvive);
+	//pAudio->UnloadAudio(*m_hMain);
+	//pAudio->UnloadAudio(*m_hSurvive);
 
 	camera.SetTarget(nullptr);
 
@@ -387,7 +387,8 @@
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_BULLETS);
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PICKUPS);
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
-		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_BULLETS);
+		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_BULLETS);	// house + bullets
+		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_ENEMIES);	// house + zombies
 
 
 		// Center camera on the player
@@ -460,7 +461,6 @@
 
 			//Calls the shopstate//
 			Game::GetInstance()->AddState(ShopState::GetInstance());
-
 		}
 	}
 

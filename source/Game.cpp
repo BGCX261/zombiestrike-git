@@ -81,6 +81,9 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 
 	// Load assets
 	loadScreen = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/Loading.png");
+	m_hMainTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikemain.xwm");
+	m_hSurvivalTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikesurvival.xwm");
+
 
 
 	// Setup the profiles
@@ -179,8 +182,10 @@ void Game::Terminate( void )
 
 	// Unload assets
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(loadScreen);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hMainTheme);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSurvivalTheme);
 
-	
+
 	// Terminate the core SGD wrappers
 	SGD::AudioManager::GetInstance()->Terminate();
 	SGD::AudioManager::DeleteInstance();

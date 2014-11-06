@@ -33,7 +33,7 @@
 	SGD::GraphicsManager::GetInstance()->SetClearColor({ 0, 0, 0 });	// black
 
 
-	starting_y = Game::GetInstance()->GetScreenHeight() + 20.0F;// * 15.0F;// + 170.0F;
+	//starting_y = Game::GetInstance()->GetScreenHeight() + 20.0F;// * 15.0F;// + 170.0F;
 
 
 
@@ -42,17 +42,17 @@
 	SGD::AudioManager*		pAudio				= SGD::AudioManager::GetInstance();
 	AnimationManager*		pAnimationManager	= AnimationManager::GetInstance();
 
-	pAnimationManager->Load("resource/config/animations/Zombie_Animation_New.xml", "zombie");
-	animation.m_strCurrAnimation = "zombie";
+	//pAnimationManager->Load("resource/config/animations/Zombie_Animation_New.xml", "zombie");
+	//animation.m_strCurrAnimation = "zombie";
 
 	m_hBackgroundImage = pGraphics->LoadTexture("resource/graphics/emergencybroadcast.png");
 
-	//m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
+	m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
 
 	IntroTimer.AddTime(60);
 	ScreenTimer.AddTime(.1f);
 
-	//pAudio->PlayAudio(m_hEmergency, false);
+	pAudio->PlayAudio(m_hEmergency, false);
 
 	//m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/youLose.png");
 
@@ -86,11 +86,11 @@
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
 	// Press Escape to quit
-	if (pInput->IsKeyPressed(SGD::Key::Escape) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 9) == true || pInput->IsButtonPressed(0, 2) == true)
 	{
 
 		//COMMENT IN WHEN AUDIO ADDED
-//		pAudio->StopAudio(m_hEmergency);
+		pAudio->StopAudio(m_hEmergency);
 
 		Game::GetInstance()->RemoveState();
 		Game::GetInstance()->AddState(GameplayState::GetInstance());
@@ -112,10 +112,10 @@
 
 	if (IntroTimer.GetTime() < 0.0f)
 	{
-		//pAudio->StopAudio(m_hEmergency);
+		pAudio->StopAudio(m_hEmergency);
 
-		//Game::GetInstance()->RemoveState();
-		//Game::GetInstance()->AddState(GameplayState::GetInstance());
+		Game::GetInstance()->RemoveState();
+		Game::GetInstance()->AddState(GameplayState::GetInstance());
 	}
 
 	if (IntroTimer.GetTime() < 25.0f)
@@ -164,6 +164,8 @@
 	}
 
 	IntroTimer.Update(elapsedTime);
+
+	/*
 	AnimationManager::GetInstance()->Update(animation, elapsedTime);
 
 	if (starting_y == 120.0f)
@@ -176,6 +178,7 @@
 
 	if (starting_y < 120.0f)
 		starting_y = 120.0f;
+	*/
 }
 
 
@@ -208,14 +211,14 @@
 	// Align text based on window width
 	float width = Game::GetInstance()->GetScreenWidth();
 
-
 	// Display the mode title & its animation
-	pFont->Draw("Story Mode", { (width - (10 * 32 * 3.0f)) / 2, 10 }, 3.0f, { 255, 255, 255 });
-	AnimationManager::GetInstance()->Render(animation, { width - 160.0f, 50 });
+	pFont->Draw("Story Mode", { (width - (10 * 25 * 3.0f)) / 2, 10 }, 3.0f, { 255, 255, 255 });
 
 	// Display skip input
 	std::string output0 = "Press 'Esc' to skip";
-	pFont->Draw(output0.c_str(), { (width - (19 * 32 * 1.0f)) / 2, 90 }, 1.0f, { 255, 0, 0 });
+	pFont->Draw(output0.c_str(), { (width - (19 * 25 * 1.0f)) / 2, 100 }, 1.0f, { 0, 0, 0 });
+	/*
+	AnimationManager::GetInstance()->Render(animation, { width - 160.0f, 50 });
 
 
 
@@ -232,5 +235,5 @@
 
 	pFont->Draw(output1.c_str(), { left_start, starting_y + (y_offset * 0) }, scale, { 0, 255, 0 });
 	pFont->Draw(output2.c_str(), { left_start, starting_y + (y_offset * 1) }, scale, { 255, 0, 0 });
-
+	*/
 }

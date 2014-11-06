@@ -33,8 +33,8 @@ public:
 	
 	SGD::HTexture m_hLightning = SGD::INVALID_HANDLE;
 
-	SGD::HAudio m_hMainTheme = SGD::INVALID_HANDLE;
-	SGD::HAudio m_hSurvivalTheme = SGD::INVALID_HANDLE;
+	//SGD::HAudio m_hMainTheme = SGD::INVALID_HANDLE;
+	//SGD::HAudio m_hSurvivalTheme = SGD::INVALID_HANDLE;
 
 
 private:

@@ -115,6 +115,12 @@ void Zombie::RetrieveBehavior(std::string name)
 
 		//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 	}
+
+	else if (pOther->GetType() == OBJ_WALL)
+	{
+		MovingObject::HandleCollision(pOther);
+	}
+
 }
 
 void Zombie::SetTarget(BaseObject* target)

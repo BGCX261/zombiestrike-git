@@ -59,13 +59,13 @@
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Down) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 		m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
-	else if (pInput->IsKeyPressed(SGD::Key::Up) == true)
+	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Enter) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
 	{
 		switch (m_nCursor)
 		{

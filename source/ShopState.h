@@ -89,7 +89,7 @@ private:
 
 	GamerProfile profile;
 	SGD::Rectangle Buttons[9];
-	SGD::Rectangle DefenseButtons[7];
+	SGD::Rectangle DefenseButtons[8];
 
 	SGD::Size screenSize;
 
