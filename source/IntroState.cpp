@@ -206,7 +206,11 @@
 		pFont->Draw("Trying to survive", { Game::GetInstance()->GetScreenWidth() / 2 - 200, Game::GetInstance()->GetScreenHeight() / 2 - 25}, 1.0f, colorText);
 	}
 
-	pFont->Draw("Press 'ESC' to continue", { Game::GetInstance()->GetScreenWidth() / 2 - 175, Game::GetInstance()->GetScreenHeight() - 25 }, .5f, { 100, 0, 0 });
+	if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == false)
+		pFont->Draw("Press 'ESC' to continue", { Game::GetInstance()->GetScreenWidth() / 2 - 175, Game::GetInstance()->GetScreenHeight() - 25 }, .5f, { 100, 0, 0 });
+	else
+		pFont->Draw("Press 'Start' to continue", { Game::GetInstance()->GetScreenWidth() / 2 - 175, Game::GetInstance()->GetScreenHeight() - 25 }, .5f, { 100, 0, 0 });
+
 
 	// Align text based on window width
 	float width = Game::GetInstance()->GetScreenWidth();
@@ -215,8 +219,11 @@
 	pFont->Draw("Story Mode", { (width - (10 * 25 * 3.0f)) / 2, 10 }, 3.0f, { 255, 255, 255 });
 
 	// Display skip input
-	std::string output0 = "Press 'Esc' to skip";
-	pFont->Draw(output0.c_str(), { (width - (19 * 25 * 1.0f)) / 2, 100 }, 1.0f, { 0, 0, 0 });
+	std::string output0 = SGD::InputManager::GetInstance()->IsControllerConnected(0) == false
+		? "Press 'Esc' to skip"
+		: "Press 'Start' to skip";
+	pFont->Draw(output0.c_str(), { (width - (output0.length() * 25 * 1.0f)) / 2, 100 }, 1.0f, { 0, 0, 0 });
+
 	/*
 	AnimationManager::GetInstance()->Render(animation, { width - 160.0f, 50 });
 
