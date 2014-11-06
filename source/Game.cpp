@@ -89,9 +89,12 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 
 
 	// Start the game in the Main Menu state
+	/*
 	m_pCurrState = MainMenuState::GetInstance();
 	m_pCurrState->Enter();
 	stateMachine.push(m_pCurrState);
+	*/
+	Game::GetInstance()->AddState(MainMenuState::GetInstance());
 
 
 	// Store the current time (in milliseconds)
@@ -133,16 +136,18 @@ int Game::Update( void )
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
 	// Let the current state handle input
-	IGameState* pCurrent = stateMachine.top();
-	if (pCurrent->Input() == false)
+	m_pCurrState = stateMachine.top();
+	if (m_pCurrState->Input() == false)
 		return 1;	// exit success!
 
 
 	// Update & render the current state if it was not changed
-	if (pCurrent == stateMachine.top())
+	if (m_pCurrState == stateMachine.top())
 	{
-		pCurrent->Update(elapsedTime);
-		pCurrent->Render();
+		m_pCurrState->Update(elapsedTime);
+
+		if (m_pCurrState != nullptr)
+			m_pCurrState->Render();
 	}
 
 
@@ -163,11 +168,14 @@ void Game::Terminate( void )
 
 
 	// Exit the current state
+	/*
 	IGameState* currState = stateMachine.top();
 	currState->Exit();
 	currState = nullptr;
 	stateMachine.pop();
-
+	*/
+	while (stateMachine.empty() == false)
+		Game::GetInstance()->RemoveState();
 
 	// Unload assets
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(loadScreen);
@@ -209,6 +217,8 @@ void Game::RemoveState( void )
 	m_pCurrState = stateMachine.top();
 	if (m_pCurrState != nullptr)
 		m_pCurrState->Exit();
+
+	m_pCurrState = nullptr;
 
 	stateMachine.pop();
 }

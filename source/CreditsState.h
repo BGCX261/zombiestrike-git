@@ -30,5 +30,12 @@ private:
 	CreditsState( const CreditsState& )				= delete;	
 	CreditsState& operator= ( const CreditsState& )	= delete;
 
+
+
+	/**********************************************************/
+	// Setup & workings
+	float			starting_y			= 170.0F;
+
+
 };
 

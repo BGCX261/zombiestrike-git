@@ -1,7 +1,8 @@
 #pragma once
 #include "Zombie.h"
+#include "PukerBlaster.h"
 
-class Weapon;
+//class Weapon;
 
 class FatZombie : public Zombie
 {
@@ -16,8 +17,8 @@ public:
 
 private:
 
-	Weapon* pukeBlaster = nullptr;
-	
+	//Weapon* pukeBlaster = nullptr;
+	PukerBlaster pukeBlaster = PukerBlaster(this);
 
 };
 

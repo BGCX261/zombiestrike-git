@@ -63,6 +63,7 @@ public:
 	void CreateEnvironment(SGD::Point pos, EntityManager* entities);
 	void CreateSpawner(SGD::Point pos, EntityManager* entities);
 
+	void CreateHouse(SGD::Point pos, EntityManager* entities);
 
 
 

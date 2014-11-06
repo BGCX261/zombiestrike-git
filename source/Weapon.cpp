@@ -56,7 +56,7 @@ void Weapon::Update(float dt)
 	*/
 
 	recoilTimer.Update(dt);
-	if (reloading == true && pAudio->IsAudioPlaying(*fire_sound) == false && totalAmmo > 0)
+	if (reloading == true && (pAudio->IsVoiceValid(voice) == false || pAudio->IsVoicePlaying(voice) == false) && totalAmmo > 0)
 	{
 		// unload empty magazine
 		if (reloadB == true)

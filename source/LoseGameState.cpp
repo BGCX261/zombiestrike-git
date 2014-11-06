@@ -30,7 +30,7 @@
 {
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor( {0, 0, 0} );	// black
-
+	m_nCursor = 0;
 
 	// Load assets
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();

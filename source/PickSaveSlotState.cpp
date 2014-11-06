@@ -14,6 +14,7 @@
 #include "GameplayState.h"
 #include "MainMenuState.h"
 #include "OptionsState.h"
+#include "IntroState.h"
 
 
 
@@ -29,7 +30,7 @@ void PickSaveSlotState::Enter(void)
 {
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor({ 50, 50, 50 });	// dark gray
-
+	m_nCursor = 0;
 
 	// Load assets
 
@@ -72,10 +73,18 @@ bool PickSaveSlotState::Input(void)
 		case MenuItems::SAVE2:
 		case MenuItems::SAVE3:
 		{
+			//if (GameplayState::GetInstance()->GetGameMode() == false)
+			//	m_nCursor += 3;
+
 			Game::GetInstance()->selectedProfile = m_nCursor;
 			Game::GetInstance()->RemoveState();
 			Game::GetInstance()->RemoveState();
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
+
+			if (GameplayState::GetInstance()->GetGameMode() == false)
+				Game::GetInstance()->AddState(GameplayState::GetInstance());
+			else
+				Game::GetInstance()->AddState(IntroState::GetInstance());
+
 			return true;
 		}
 			break;

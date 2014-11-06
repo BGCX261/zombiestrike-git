@@ -29,7 +29,7 @@
 {
 	// Reset the cursor to the top
 	// (commented out to keep the last cursor position)
-	//m_nCursor = 0;
+	m_nCursor = 0;
 
 
 	// Set background color

@@ -385,6 +385,10 @@ namespace SGD
 						{
 							// Remove the voice (could recycle it ...)
 							info->voice->DestroyVoice();
+							
+							// Remove the voice from the HandleManager
+							m_VoiceManager.RemoveData(iter->second, nullptr);
+
 							iter = m_mVoices.erase( iter );
 							continue;
 						}
@@ -399,6 +403,10 @@ namespace SGD
 					{
 						// Remove the voice (could recycle it ...)
 						info->voice->DestroyVoice();
+						
+						// Remove the voice from the HandleManager
+						m_VoiceManager.RemoveData(iter->second, nullptr);	// TODO:???
+
 						iter = m_mVoices.erase( iter );
 						continue;
 					}

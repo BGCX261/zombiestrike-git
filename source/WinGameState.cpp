@@ -12,6 +12,7 @@
 #include "BitmapFont.h"
 #include "MainMenuState.h"
 #include "GameplayState.h"
+#include "CreditsState.h"
 
 
 /**************************************************************/
@@ -84,6 +85,7 @@
 				Game::GetInstance()->RemoveState();
 				Game::GetInstance()->RemoveState();
 				Game::GetInstance()->AddState(MainMenuState::GetInstance());
+				Game::GetInstance()->AddState(CreditsState::GetInstance());
 				return true;
 			}
 			break;

@@ -24,7 +24,7 @@
 // IGameState Interface:
 void	ShopState::Enter(void)
 {
-	m_tShopTimer.AddTime(10);
+	m_tShopTimer.AddTime(2);
 
 	profile = Game::GetInstance()->GetProfile();
 
@@ -50,6 +50,10 @@ void	ShopState::Enter(void)
 }
 void	ShopState::Exit(void)
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(weaponsImage);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(buyButton);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(upgradeButton);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hReticleImage);
 
 }
 
@@ -321,6 +325,7 @@ void	ShopState::Update(float elapsedTime)
 		SGD::Event msg("UNPAUSE");
 		msg.SendEventNow();
 		Game::GetInstance()->RemoveState();
+		return;
 	}
 	
 	m_tShopTimer.Update(elapsedTime);

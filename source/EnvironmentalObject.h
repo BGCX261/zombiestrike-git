@@ -12,7 +12,7 @@ protected:
 public:
 	EnvironmentalObject();
 	virtual ~EnvironmentalObject();
-	virtual void Render(void) {}
+	//virtual void Render(void) {}
 //	virtual SGD::Rectangle GetRect(void) const;
 	virtual int GetType(void) const { return type; }
 	virtual void HandleCollision(const IBase* pOther) override;

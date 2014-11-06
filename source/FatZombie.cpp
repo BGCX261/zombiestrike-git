@@ -17,21 +17,23 @@ FatZombie::FatZombie()
 {
 	health = 200.0f;
 	damage = 20.0f;
-	pukeBlaster = new PukerBlaster(this);
-
+	//damage = 3.0f;
+	//pukeBlaster = new PukerBlaster(this);
 }
 
 
 FatZombie::~FatZombie()
 {
-	
+	//pukeBlaster->SetOwner(nullptr);
+	//delete pukeBlaster;
+	//pukeBlaster = nullptr;
 }
 void FatZombie::Update(float dt)
 {
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
 
-	pukeBlaster->Update(dt);
+	pukeBlaster.Update(dt);
 	if (isAlive)
 	{
 		if (currBehavior != nullptr)
@@ -44,7 +46,7 @@ void FatZombie::Update(float dt)
 		if ((m_pTarget->GetPosition() - m_ptPosition).ComputeLength() <= 200.0f)
 		{
 
-			pukeBlaster->Fire(dt);
+			pukeBlaster.Fire(dt);
 		}
 	}
 	else
@@ -53,11 +55,11 @@ void FatZombie::Update(float dt)
 		dMsg->QueueMessage();
 		dMsg = nullptr;
 
+		pukeBlaster.SetOwner(nullptr);
+
 		SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 
 	}
-	MovingObject::Update(dt);
-
 	MovingObject::Update(dt);
 }
 

@@ -12,6 +12,7 @@ FastZombie::FastZombie()
 {
 	health = 100.0f;
 	damage = 10.0f;
+	//damage = 2.0f;
 }
 
 
