@@ -35,9 +35,6 @@
 #include "CreateExplodingZombieMsg.h"
 #include "CreateTankZombieMsg.h"
 #include "CreateTurretMessage.h"
-
-
-
 #include "BitmapFont.h"
 
 #include "EntityManager.h"
@@ -113,6 +110,8 @@
 	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
 	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
 
+	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
+
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
 	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
@@ -139,8 +138,11 @@
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
+	if (m_bStoryMode == true)
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
+	else
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
 
-	MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetProfile(), m_pEntities);
 	SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
 	SpawnManager::GetInstance()->Activate();
 
@@ -180,16 +182,18 @@
 	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
 
 
+	m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
+	m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
 
 	// Create the main entities
-
 	m_pPlayer = CreatePlayer();
 	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
 
 	MovingObject * pPlayer = dynamic_cast<MovingObject*>(m_pPlayer);
+	
 	
 	WeaponManager::GetInstance()->Initialize(*pPlayer);
 
@@ -252,6 +256,8 @@
 	pAudio->UnloadAudio(smg_fire);
 	pAudio->UnloadAudio(vomit_fire);
 
+	pAudio->UnloadAudio(*m_hMain);
+	pAudio->UnloadAudio(*m_hSurvive);
 
 	camera.SetTarget(nullptr);
 
@@ -352,7 +358,7 @@
 	if (player->isLevelCompleted() == false)
 	{
 		// Update the entities
-		SpawnManager::GetInstance()->Update(dt);
+		eSpawner->Update(dt);
 		m_pEntities->UpdateAll(dt);
 
 		
@@ -363,20 +369,22 @@
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENVIRO);
 
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENVIRO);
+		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENEMIES);
+
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
 		m_pEntities->CheckCollisions(BUCKET_ENVIRO, BUCKET_PUKE);
 
 
 		// Center camera on the player
 		SGD::Point playerpos = m_pPlayer->GetPosition();
-		playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.5f;
-		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.5f;
+		playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.50f;
+		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.75f;
 		camera.SetPostion(playerpos);
 
+		
+		// Process the events & messages
 		SGD::EventManager::GetInstance()->Update();
 		SGD::MessageManager::GetInstance()->Update();
-		// Process the events & messages
-		
 		MapManager::GetInstance()->Update(dt);
 
 		// Update the Map Manager
@@ -416,6 +424,14 @@
 
 			SGD::Event msg("PAUSE");
 			msg.SendEventNow();
+			if (m_bStoryMode == true)
+			{
+				Game::GetInstance()->GetStoryProfile().wavesComplete++;
+
+			}
+			else
+				Game::GetInstance()->GetSurvivalProfile().wavesComplete++;
+
 
 			//Calls the shopstate//
 			Game::GetInstance()->AddState(ShopState::GetInstance());
@@ -482,6 +498,8 @@
 		gameWin << "YOU WIN!";
 
 		pFont->Draw(gameWin.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+
+
 	}
 
 	if (SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies())
@@ -498,17 +516,25 @@
 	*/
 
 	stringstream moneyCount;
-	moneyCount << "$" << Game::GetInstance()->GetProfile().money;
+	if (m_bStoryMode == true)
+	{
+		moneyCount << "$" << Game::GetInstance()->GetStoryProfile().money;
+	}
+	else
+		moneyCount << "$" << Game::GetInstance()->GetSurvivalProfile().money;
+
+	
 	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0f, { 0, 255, 0 });
 
 
 	
 	// Draw the reticle
 	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
-	float		retscale = 0.8f;
+	float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
 
-	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
-	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+	retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
+	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 0 }, { retscale, retscale });
+
 }
 
 /**************************************************************/
@@ -540,6 +566,49 @@
 			assert(pDestroyMsg != nullptr && "Game::MessageProc - MSG_DESTROY_OBJECT is not actually a DestroyObjectMessage");
 
 			BaseObject* ptr = pDestroyMsg->GetEntity();
+
+			if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
+			{
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 20;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 20;
+
+				
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
+			{
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 25;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 25;
+
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
+			{
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 35;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 35;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
+			{
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 75;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 75;
+			}
+
+			else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
+			{
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 100;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 100;
+			}
 			
 			GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
 		}

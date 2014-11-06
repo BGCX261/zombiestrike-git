@@ -45,11 +45,27 @@ void SandBag::HandleCollision( const IBase* pOther )
 
 	// zombie collision
 	if (pOther->GetType() == ObjectType::OBJ_SLOW_ZOMBIE ||
-		pOther->GetType() == ObjectType::OBJ_FAST_ZOMBIE||
-		pOther->GetType() == ObjectType::OBJ_FAT_ZOMBIE)
+		pOther->GetType() == ObjectType::OBJ_FAT_ZOMBIE ||
+		pOther->GetType() == ObjectType::OBJ_FAST_ZOMBIE || 
+		pOther->GetType() == ObjectType::OBJ_TANK_ZOMBIE )
 	{
 		// lower HP by zombie damage
 		m_fCurrHP -= 10.0f * Game::GetInstance()->DeltaTime();
+
+
+		// dead
+		if (m_fCurrHP <= 0.0f)
+		{
+			// reset HP
+			m_fCurrHP = 0;
+
+			// deactivate
+			this->isActive = false;
+		}
+	}
+	if (pOther->GetType() == ObjectType::OBJ_EXPLODING_ZOMBIE)
+	{
+		m_fCurrHP -= 200.0f * Game::GetInstance()->DeltaTime();
 
 
 		// dead

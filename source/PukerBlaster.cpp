@@ -15,7 +15,7 @@ PukerBlaster::PukerBlaster(MovingObject* owner)
 	damage = 2.0f;
 	speed = 500.0f;
 	lifeTime = 700.0f;
-
+	
 	m_pOwner = owner;
 	owner->AddRef();
 	fire_sound = &GameplayState::GetInstance()->vomit_fire;

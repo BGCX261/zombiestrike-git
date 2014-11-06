@@ -22,7 +22,7 @@ class ShopState : public IGameState
 	ShopState& operator=(const ShopState&) = delete;
 
 	int m_nCursor = 0;
-
+	unsigned int equipIndex = 0;
 	//Shop time between waves
 	Timer m_tShopTimer;
 
@@ -34,6 +34,7 @@ class ShopState : public IGameState
 
 public:
 	enum Pages { PISTOLS, SHOTGUNS, SMGS, ASSAULT_RIFLES, HEAVY, DEFENSE };
+	enum Gun { GLOCK, REVOLVER, MAC10, TECH9, SP90, SAWN, PUMP, AUTO, M16, LIGHT_MG, AK47, GLAUNCHER, SNIPER, FTHROWER };
 
 	static ShopState* GetInstance(void);
 
@@ -48,6 +49,8 @@ public:
 	void LoadShopStatus();
 	void SaveProfile();
 	void UpdateProfile();
+	void UpdateWeaponManager();
+
 private:
 	PistolUpgrade pistolUpgrade;
 	RevolverUpgrade revolverUpgrade;

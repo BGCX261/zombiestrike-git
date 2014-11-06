@@ -3,7 +3,7 @@
 #include "IGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"			// uses HTexture & HAudio
 #include "../SGD Wrappers/SGD_Geometry.h"
-
+#include "Timer.h"
 
 /**************************************************************/
 // MainMenuState class
@@ -30,6 +30,11 @@ public:
 	/**********************************************************/
 	// Accessors & Mutators:
 	const SGD::HTexture GetReticle(void) const	{ return m_hReticleImage; }
+	
+	SGD::HTexture m_hLightning = SGD::INVALID_HANDLE;
+
+	SGD::HAudio m_hMainTheme = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hSurvivalTheme = SGD::INVALID_HANDLE;
 
 
 private:
@@ -75,4 +80,12 @@ private:
 	float			starting_y		= 200.0F;
 	float			vertical_offset	= 100.0F;
 	float			text_scale		= 0.67F;
+
+	Timer fadeTime;
+	Timer lightningTime;
+	Timer lFlashTime;
+
+	int trans = 0;
+	int mTrans = 160;
+	int lTrans = 0;
 };

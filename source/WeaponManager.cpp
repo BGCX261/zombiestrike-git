@@ -46,7 +46,7 @@ void WeaponManager::Initialize(MovingObject& owner)
 	m_hWpnSwitch = &GameplayState::GetInstance()->m_hWpnSwitch;
 
 	SetOwner(&owner);
-	
+
 	AddWeapons(CreatePistol());
 	AddWeapons(CreateRevolver());
 	AddWeapons(CreateSawnOff());
@@ -78,7 +78,7 @@ void WeaponManager::Render()
 
 	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
 	{
-		if (m_vWeapons[curIndex]->GetType() == m_vWeapons[i]->GetType() && m_vWeapons[curIndex]->GetObtained() == true)
+		if (m_vWeapons[curIndex]->GetGunType() == m_vWeapons[i]->GetGunType() && m_vWeapons[curIndex]->GetEquipped() == true)
 		{
 			pGraphics->DrawTextureSection(*m_hHudWpn, { Game::GetInstance()->GetScreenWidth() - 150.0f, Game::GetInstance()->GetScreenHeight() - 150.0f },
 				m_vWeapons[curIndex]->GetRenderRect(), {}, {}, {}, { .5f, .5f });
@@ -121,7 +121,6 @@ void WeaponManager::Render()
 
 			else
 				bFont->Draw(ammoCap.str().c_str(), ammoPos, 1.0f, { 0, 0, 0 });
-			
 		}
 	}
 
@@ -130,52 +129,63 @@ void WeaponManager::Render()
 	float sHeight = Game::GetInstance()->GetScreenHeight() - 10;
 
 
-	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
-	{		
-		SGD::Rectangle unEquip = { sWidth + size*i, sHeight - 75, sWidth + size*i + size, sHeight };
-		pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255});
 
-		if (m_vWeapons[i]->GetObtained() == true)
-		{
-			SGD::Rectangle imageRect = m_vWeapons[i]->GetRenderRect();
-
-			if (m_vWeapons[i]->GetType() == m_vWeapons[curIndex]->GetType())
-			{
-				pGraphics->DrawTextureSection(*m_hHudWpn, { sWidth + size*i, sHeight - size },
-					imageRect, {}, {}, {}, { .25f, .25f });
-			}
-
-			else
-			{
-				pGraphics->DrawTextureSection(*m_hHudWpn, { sWidth + size*i, sHeight - size },
-					imageRect, {}, {}, {}, { .25f, .25f });
-				pGraphics->DrawRectangle({ sWidth + size*i, sHeight - size, sWidth + size*i + size, sHeight }, { 175, 0, 0, 0 });
-			}
-		}
-
-		stringstream drawIndex;
-		drawIndex << i + 1;
-
-		bFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, .5f, { 150, 155, 155 });
-
-	}
-
-	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
+	for (unsigned int j = 0; j < 5; j++)
 	{
-		SGD::Rectangle unEquip = { sWidth + size*i, sHeight - 75, sWidth + size*i + size, sHeight };
-
-		if (m_vWeapons[i]->GetType() == m_vWeapons[curIndex]->GetType())
+		for (unsigned int i = equipIndex; i < m_vWeapons.size(); i++)
 		{
-			pGraphics->DrawRectangle({ sWidth + size*i, sHeight - size, sWidth + size*i + size, sHeight }, { 0, 0, 0, 0 }, { 0, 100, 0 },6);
-		}
+			SGD::Rectangle unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
+			pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
 
-		stringstream drawIndex;
-		drawIndex << i + 1;
-		
-		bFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5}, .5f, { 150, 155, 155 });
+			if (m_vWeapons[i]->GetObtained() == true && m_vWeapons[i]->GetEquipped() == true)
+			{
+				SGD::Rectangle imageRect = m_vWeapons[i]->GetRenderRect();
+
+				if (m_vWeapons[i]->GetGunType() == m_vWeapons[curIndex]->GetGunType())
+				{
+					pGraphics->DrawTextureSection(*m_hHudWpn, { sWidth + size*j, sHeight - size },
+						imageRect, {}, {}, {}, { .25f, .25f });
+				}
+
+				else
+				{
+					pGraphics->DrawTextureSection(*m_hHudWpn, { sWidth + size*j, sHeight - size },
+						imageRect, {}, {}, {}, { .25f, .25f });
+					pGraphics->DrawRectangle({ sWidth + size*j, sHeight - size, sWidth + size*j + size, sHeight }, { 175, 0, 0, 0 });
+				}
+				
+				equipIndex++;
+				break;
+			} 
+
+			stringstream drawIndex;
+			drawIndex << j + 1;
+			bFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, .5f, { 150, 155, 155 });
+
+			equipIndex++;
+		}
 	}
 
-	
+	equipIndex = 0;
+
+	for (unsigned int i = 0; i < 5; i++)
+	{
+		for (unsigned int j = 0; j < m_vWeapons.size(); j++)
+		{
+			SGD::Rectangle unEquip = { sWidth + size*i, sHeight - 75, sWidth + size*i + size, sHeight };
+
+			//if (m_vWeapons[j]->GetGunType() == m_vWeapons[curIndex]->GetGunType() && m_vWeapons[curIndex]->GetEquipped() == true)
+			//{
+			//	pGraphics->DrawRectangle({ sWidth + size*i, sHeight - size, sWidth + size*i + size, sHeight }, { 0, 0, 0, 0 }, { 0, 100, 0 }, 6);
+			//}
+
+			stringstream drawIndex;
+			drawIndex << i + 1;
+
+			bFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, .5f, { 150, 155, 155 });
+		}
+	}
+
 
 }
 
@@ -203,10 +213,10 @@ void WeaponManager::Input()
 			pAudio->PlayAudio(*m_hWpnSwitch, false);
 		}
 
-		while (m_vWeapons[curIndex]->GetObtained() != true)
+		while (m_vWeapons[curIndex]->GetEquipped() != true)
 		{
-			curIndex--;		
-			
+			curIndex--;
+
 			if (curIndex < 0)
 			{
 				curIndex = m_vWeapons.size() - 1;
@@ -228,7 +238,7 @@ void WeaponManager::Input()
 			pAudio->PlayAudio(*m_hWpnSwitch, false);
 		}
 
-		while (m_vWeapons[curIndex]->GetObtained() != true)
+		while (m_vWeapons[curIndex]->GetEquipped() != true)
 		{
 			curIndex++;
 
@@ -255,8 +265,32 @@ void WeaponManager::Update(float dt)
 	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
 	{
 		m_vWeapons[i]->Update(dt);
+
+		//if (m_vWeapons[i]->GetType() == PISTOL )
+		//{
+		//	if (m_vWeapons[i]->GetGunType() == GLOCK && m_vWeapons[i]->GetEquipped() == true)
+		//	{
+		//			for (unsigned int j = 0; j < m_vWeapons.size(); j++)
+		//			{
+		//				if (m_vWeapons[j]->GetGunType() != GLOCK && m_vWeapons[j]->GetType() == PISTOL)
+		//				{
+		//					m_vWeapons[j]->SetEquipped(false);
+		//				}
+		//			}
+		//	}
+		//}
+
+		//else if (m_vWeapons[i]->GetType() == SMG)
+		//{
+
+		//}
+
+		//else if (m_vWeapons[i]->GetType() == )
+		//{
+
+		//}
 	}
-	
+
 }
 
 void WeaponManager::Exit()
@@ -290,12 +324,21 @@ void WeaponManager::AddWeapons(Weapon* wpn)
 Weapon * WeaponManager::CreateAssaultRifle()
 {
 	AssaultRifle * ar = new AssaultRifle(GetOwner());
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
 
-	
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
+
+
 	//ar->SetObtained(profile->m16.isBought);
-	ar->SetObtained(true);
+	ar->SetObtained(profile->m16.isBought);
 
+	ar->SetEquipped(false);
+	ar->SetAutomatic(true);
+	ar->SetGunType(M16);
+	ar->SetType(ASSUALT_RIFLE);
 	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
 	ar->SetMagSize(profile->m16.magSize.upgradedSkill.stat);
 	ar->SetCurrAmmo(profile->m16.magSize.upgradedSkill.stat);
@@ -309,11 +352,21 @@ Weapon * WeaponManager::CreateAssaultRifle()
 }
 Weapon * WeaponManager::CreateAK47()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
+
 	AssaultRifle * ar = new AssaultRifle(GetOwner());
 
 	//ar->SetObtained(profile->m16.isBought);
-	ar->SetObtained(true);
+	ar->SetObtained(profile->ak47.isBought);
+
+	ar->SetEquipped(false);
+	ar->SetAutomatic(true);
+	ar->SetGunType(AK47);
+	ar->SetType(ASSUALT_RIFLE);
 	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
 	ar->SetMagSize(profile->ak47.magSize.upgradedSkill.stat);
 	ar->SetCurrAmmo(profile->ak47.magSize.upgradedSkill.stat);
@@ -328,11 +381,20 @@ Weapon * WeaponManager::CreateAK47()
 Weapon * WeaponManager::CreateLMG()
 {
 	AssaultRifle * ar = new AssaultRifle(GetOwner());
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 
 	//ar->SetObtained(profile->m16.isBought);
-	ar->SetObtained(true);
+	ar->SetObtained(profile->lmg.isBought);
+
+	ar->SetEquipped(false);
+	ar->SetAutomatic(true);
+	ar->SetGunType(LIGHT_MG);
+	ar->SetType(ASSUALT_RIFLE);
 	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
 	ar->SetMagSize(profile->lmg.magSize.upgradedSkill.stat);
 	ar->SetCurrAmmo(profile->lmg.magSize.upgradedSkill.stat);
@@ -347,13 +409,22 @@ Weapon * WeaponManager::CreateLMG()
 
 Weapon * WeaponManager::CreatePistol()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 	Pistol * pistol = new Pistol(GetOwner());
-	
+
 	//pistol->SetOwner(GetOwner());
 	//pistol->SetObtained(profile->m16.isBought);
 	pistol->SetObtained(true);
+	pistol->SetAutomatic(false);
+
+	pistol->SetEquipped(true);
+	pistol->SetGunType(GLOCK);
+	pistol->SetType(PISTOL);
 	pistol->SetRenderRect(SetImageRect(300, 300, 1, 3));
 	pistol->SetCurrAmmo(profile->pistol.magSize.upgradedSkill.stat);
 	pistol->SetReloadTime(profile->pistol.reloadTime.upgradedSkill.stat);
@@ -364,11 +435,19 @@ Weapon * WeaponManager::CreatePistol()
 }
 Weapon * WeaponManager::CreateRevolver()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	Pistol* revolver = new Pistol(GetOwner());
 
 	//revolver->SetObtained(profile->revolver.isBought);
-	revolver->SetObtained(true);
+	revolver->SetObtained(profile->revolver.isBought);
+	revolver->SetAutomatic(false);
+	revolver->SetEquipped(false);
+	revolver->SetGunType(REVOLVER);
+	revolver->SetType(PISTOL);
 	revolver->SetRenderRect(SetImageRect(300, 300, 0, 1));
 	revolver->SetMagSize(profile->revolver.magSize.upgradedSkill.stat);
 	revolver->SetCurrAmmo(profile->revolver.magSize.upgradedSkill.stat);
@@ -384,12 +463,20 @@ Weapon * WeaponManager::CreateRevolver()
 
 Weapon * WeaponManager::CreatePumpShotgun()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 	Shotgun * shotty = new Shotgun(GetOwner());
 
 	//shotty->SetObtained(profile->shotty.isBought);
-	shotty->SetObtained(true);
+	shotty->SetObtained(profile->pumpShotgun.isBought);
+	shotty->SetAutomatic(false);
+	shotty->SetEquipped(false);
+	shotty->SetGunType(PUMP);
+	shotty->SetType(SHOTGUN);
 	shotty->SetRenderRect(SetImageRect(300, 300, 0, 2));
 	shotty->SetCurrAmmo(profile->pumpShotgun.magSize.upgradedSkill.stat);
 	shotty->SetMagSize(profile->pumpShotgun.magSize.upgradedSkill.stat);
@@ -404,12 +491,21 @@ Weapon * WeaponManager::CreatePumpShotgun()
 }
 Weapon * WeaponManager::CreateAutoShotgun()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 	Shotgun * shotty = new Shotgun(GetOwner());
 
-	//shotty->SetObtained(profile->shotty.isBought);
-	shotty->SetObtained(true);
+	shotty->SetObtained(profile->autoShotgun.isBought);
+
+	shotty->SetObtained(false);
+	shotty->SetAutomatic(false);
+	shotty->SetEquipped(false);
+	shotty->SetGunType(AUTO);
+	shotty->SetType(SHOTGUN);
 	shotty->SetRenderRect(SetImageRect(300, 300, 0, 2));
 	shotty->SetCurrAmmo(profile->autoShotgun.magSize.upgradedSkill.stat);
 	shotty->SetMagSize(profile->autoShotgun.magSize.upgradedSkill.stat);
@@ -424,12 +520,20 @@ Weapon * WeaponManager::CreateAutoShotgun()
 }
 Weapon * WeaponManager::CreateSawnOff()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 	Shotgun * shotty = new Shotgun(GetOwner());
 
-	//shotty->SetObtained(profile->shotty.isBought);
-	shotty->SetObtained(true);
+	shotty->SetObtained(profile->sawnoff.isBought);
+
+	shotty->SetAutomatic(false);
+	shotty->SetEquipped(false);
+	shotty->SetGunType(SAWN);
+	shotty->SetType(SHOTGUN);
 	shotty->SetRenderRect(SetImageRect(300, 300, 0, 2));
 	shotty->SetRecoilTime(profile->sawnoff.recoilTime.upgradedSkill.stat);
 	shotty->SetReloadTime(profile->sawnoff.reloadTime.upgradedSkill.stat);
@@ -443,11 +547,19 @@ Weapon * WeaponManager::CreateSawnOff()
 
 Weapon * WeaponManager::CreateSniper()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	Sniper * sniper = new Sniper(GetOwner());
 
-	//sniper->SetObtained(profile->sniper.isBought);
-	sniper->SetObtained(true);
+	sniper->SetObtained(profile->sniper.isBought);
+	
+	sniper->SetAutomatic(false);
+	sniper->SetEquipped(false);
+	sniper->SetGunType(SNIPER);
+	sniper->SetType(SPECIAL);
 	sniper->SetRenderRect(SetImageRect(300, 300, 0, 1));
 	sniper->SetMagSize(profile->sniper.magSize.upgradedSkill.stat);
 	sniper->SetCurrAmmo(profile->sniper.magSize.upgradedSkill.stat);
@@ -463,30 +575,48 @@ Weapon * WeaponManager::CreateSniper()
 }
 Weapon * WeaponManager::CreateFlameThrower()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	FlameThrower * ft = new FlameThrower(GetOwner());
 
-	//ft->SetObtained(profile->ft.isBought);
-	ft->SetObtained(true);
-	ft->SetRenderRect(SetImageRect(300, 300, 0, 1));
+	ft->SetObtained(profile->flameThrower.isBought);
+	
+	ft->SetAutomatic(true);
+	ft->SetEquipped(false);
+	ft->SetGunType(FTHROWER);
+	ft->SetType(SPECIAL);
+	ft->SetRenderRect(SetImageRect(300, 300, 0, 0));
 	ft->SetMagSize(profile->flameThrower.magSize.upgradedSkill.stat);
 	ft->SetCurrAmmo(profile->flameThrower.magSize.upgradedSkill.stat);
 	ft->SetTotalAmmo(profile->flameThrower.totalAmmo.upgradedSkill.stat);
 	ft->SetDamage(profile->flameThrower.damage.upgradedSkill.stat);
 	ft->SetBulletSpread(profile->flameThrower.bulletSpread.upgradedSkill.stat);
+	ft->SetSpeed(profile->flameThrower.bulletVelocity.upgradedSkill.stat);
+
 	ft->SetAmmoCap(profile->flameThrower.ammoCap.upgradedSkill.stat);
 	ft->SetReloadTime(profile->flameThrower.reloadTime.upgradedSkill.stat);
-	
+
 
 	return ft;
 }
 Weapon * WeaponManager::CreateGrenadeLauncher()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	GrenadeLauncher * nadeLauncher = new GrenadeLauncher(GetOwner());
 
-	//nadeLauncher->SetObtained(profile->nadeLauncher.isBought);
-	nadeLauncher->SetObtained(true);
+	nadeLauncher->SetObtained(profile->nadeLauncher.isBought);
+	
+	nadeLauncher->SetAutomatic(false);
+	nadeLauncher->SetEquipped(false);
+	nadeLauncher->SetGunType(GLAUNCHER);
+	nadeLauncher->SetType(SPECIAL);
 	nadeLauncher->SetRenderRect(SetImageRect(300, 300, 0, 1));
 	nadeLauncher->SetMagSize(profile->nadeLauncher.magSize.upgradedSkill.stat);
 	nadeLauncher->SetCurrAmmo(profile->nadeLauncher.magSize.upgradedSkill.stat);
@@ -495,18 +625,24 @@ Weapon * WeaponManager::CreateGrenadeLauncher()
 	nadeLauncher->SetAmmoCap(profile->nadeLauncher.ammoCap.upgradedSkill.stat);
 	nadeLauncher->SetReloadTime(profile->nadeLauncher.reloadTime.upgradedSkill.stat);
 
-
 	return nadeLauncher;
 }
 
 Weapon * WeaponManager::CreateP90()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
-	P90 * p90 = new P90(GetOwner());
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
+	P90 * p90 = new P90(GetOwner());  
 
-	//p90->SetObtained(profile->p90.isBought);
-	p90->SetObtained(true);
-	p90->SetRenderRect(SetImageRect(300, 300, 0, 1));
+	p90->SetObtained(profile->p90.isBought);
+	
+	p90->SetEquipped(false);
+	p90->SetGunType(SP90);
+	p90->SetType(SMG);
+	p90->SetRenderRect(SetImageRect(300, 300, 3, 0));
 	p90->SetMagSize(profile->p90.magSize.upgradedSkill.stat);
 	p90->SetCurrAmmo(profile->p90.magSize.upgradedSkill.stat);
 	p90->SetTotalAmmo(profile->p90.totalAmmo.upgradedSkill.stat);
@@ -514,15 +650,26 @@ Weapon * WeaponManager::CreateP90()
 	p90->SetBulletSpread(profile->p90.bulletSpread.upgradedSkill.stat);
 	p90->SetAmmoCap(profile->p90.ammoCap.upgradedSkill.stat);
 	p90->SetReloadTime(profile->p90.reloadTime.upgradedSkill.stat);
+	p90->SetAutomatic(true);
+
 	return p90;
 }
 Weapon * WeaponManager::CreateTech9()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	Tech9 * tech9 = new Tech9(GetOwner());
 
-	//tech9->SetObtained(profile->tech9.isBought);
-	tech9->SetObtained(true);
+	tech9->SetObtained(profile->tech9.isBought);
+	
+	tech9->SetEquipped(false);
+	tech9->SetAutomatic(true);
+
+	tech9->SetGunType(TECH9);
+	tech9->SetType(SMG);
 	tech9->SetRenderRect(SetImageRect(300, 300, 0, 1));
 	tech9->SetMagSize(profile->tech9.magSize.upgradedSkill.stat);
 	tech9->SetCurrAmmo(profile->tech9.magSize.upgradedSkill.stat);
@@ -535,11 +682,19 @@ Weapon * WeaponManager::CreateTech9()
 }
 Weapon * WeaponManager::CreateMac10()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	UZI * mac10 = new UZI(GetOwner());
 
-	//mac10->SetObtained(profile->mac10.isBought);
-	mac10->SetObtained(true);
+	mac10->SetObtained(profile->mac10.isBought);
+	mac10->SetEquipped(false);
+	mac10->SetAutomatic(true);
+
+	mac10->SetGunType(MAC10);
+	mac10->SetType(SMG);
 	mac10->SetRenderRect(SetImageRect(300, 300, 0, 1));
 	mac10->SetMagSize(profile->mac10.magSize.upgradedSkill.stat);
 	mac10->SetCurrAmmo(profile->mac10.magSize.upgradedSkill.stat);
@@ -557,5 +712,5 @@ SGD::Rectangle WeaponManager::SetImageRect(float width, float height, unsigned i
 	float left = width * col;
 	float top = height * row;
 
-	return SGD::Rectangle( left, top, left + width, top + height );
+	return SGD::Rectangle(left, top, left + width, top + height);
 }

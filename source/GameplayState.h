@@ -80,6 +80,7 @@ public:
 	void			CreatePukeyBullet(Weapon* owner);
 
 	void			CreateGrenade(Weapon* owner);
+	BaseObject*		GetPlayer() const { return m_pPlayer; }
 
 	
 
@@ -114,6 +115,8 @@ public:
 	SGD::HAudio smg_fire			= SGD::INVALID_HANDLE;
 	SGD::HAudio vomit_fire			= SGD::INVALID_HANDLE;
 
+	SGD::HAudio * m_hMain = nullptr;
+	SGD::HAudio * m_hSurvive = nullptr;
 
 
 
@@ -135,7 +138,7 @@ private:
 
 	/**********************************************************/
 	// Game Entities
-	enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE };
+	enum EntityBucket { BUCKET_BULLETS, BUCKET_PUKE, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE };
 
 	EntityManager*			m_pEntities			= nullptr;
 	AnimationManager*		m_pAnimManager		= nullptr;

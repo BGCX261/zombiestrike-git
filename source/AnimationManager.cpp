@@ -201,15 +201,15 @@ void AnimationManager::Update(AnimTimeStamp& ats, float dt, BaseObject* destinat
 		if (pCurrFrame->GetTrigger() != "NONE")
 		{
 			// Queue event from Frame Trigger
-			//SGD::Event* pEvent = new SGD::Event{ pCurrFrame->GetTrigger().c_str(), data, this };
-			//pEvent->QueueEvent(destination);
-			//pEvent = nullptr;
+			SGD::Event* pEvent = new SGD::Event{ pCurrFrame->GetTrigger().c_str(), data, this };
+			pEvent->QueueEvent(destination);
+			pEvent = nullptr;
 
 			// Send event immediately from Frame Trigger
 			
-			SGD::Event event = { pCurrFrame->GetTrigger().c_str(), data, this };
+			/*SGD::Event event = { pCurrFrame->GetTrigger().c_str(), data, this };
 			event.SendEventNow(destination);
-			
+			*/
 
 			if (destination != nullptr)
 			{

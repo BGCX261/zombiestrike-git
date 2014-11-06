@@ -149,12 +149,22 @@ PlayerController::~PlayerController()
 
 	WeaponManager*		pWeaponManager = WeaponManager::GetInstance();
 
-	if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
-	{
+	
 		//m_Player->flameThrower->Fire(dt);
-		//WeaponManager::GetInstance()->GetSelected()->Fire(dt);
-		pWeaponManager->GetSelected()->Fire(dt);
-	}
+		if (WeaponManager::GetInstance()->GetSelected()->GetAutomatic())
+		{
+			if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
+				pWeaponManager->GetSelected()->Fire(dt);
+			
+
+		}
+		else
+		{
+			if ((pInput->IsKeyPressed(SGD::Key::MouseLeft) == true))
+				pWeaponManager->GetSelected()->Fire(dt);
+		}
+		
+
 	if (pInput->IsKeyPressed(SGD::Key::R) == true && pWeaponManager->GetSelected()->IsReloading() == false)
 	{
 		pWeaponManager->GetSelected()->ReloadNeeded();

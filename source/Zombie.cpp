@@ -91,12 +91,22 @@ void Zombie::RetrieveBehavior(std::string name)
 		if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->zombie_pain) == false)
 			pAudio->PlayAudio(GameplayState::GetInstance()->zombie_pain, false);
 	}
-	else if (pOther->GetType() == OBJ_BARBEDWIRE)
+	if (pOther->GetType() == OBJ_EXPLODING_ZOMBIE)
+	{
+		const BaseObject* ptr = dynamic_cast<const BaseObject*>(pOther);
+		if (ptr->GetAnimation() == "bloodExplosion")
+		{
+			health -= 200 * Game::GetInstance()->DeltaTime();
+			if (health <= 0)
+				isAlive = false;
+		}
+	}
+	if (pOther->GetType() == OBJ_BARBEDWIRE)
 	{
 		const BarbedWire* barbWire = dynamic_cast<const BarbedWire*>(pOther);
 		if (barbWire->IsActive())
 		{
-			health -= 10.0f * Game::GetInstance()->DeltaTime();
+			health -= barbWire->GetDamage() * Game::GetInstance()->DeltaTime();
 			if (health <= 0)
 				isAlive = false;
 			MovingObject::HandleCollision(pOther);
@@ -105,7 +115,7 @@ void Zombie::RetrieveBehavior(std::string name)
 
 		
 	}
-	else if (pOther->GetType() == OBJ_SANDBAG)
+	if (pOther->GetType() == OBJ_SANDBAG)
 	{
 		const SandBag* sandbag = dynamic_cast<const SandBag*>(pOther);
 		if (sandbag->IsActive())
@@ -113,7 +123,7 @@ void Zombie::RetrieveBehavior(std::string name)
 
 	}
 
-	else if (pOther->GetType() == OBJ_LANDMINE)
+	if (pOther->GetType() == OBJ_LANDMINE)
 
 	{
 		const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
@@ -124,6 +134,7 @@ void Zombie::RetrieveBehavior(std::string name)
 
 		//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 	}
+	
 }
 
 void Zombie::SetTarget(BaseObject* target)

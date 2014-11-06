@@ -55,7 +55,6 @@ void FatZombie::Update(float dt)
 		dMsg->QueueMessage();
 		dMsg = nullptr;
 		pukeBlaster.SetOwner(nullptr);
-
 		SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 
 	}

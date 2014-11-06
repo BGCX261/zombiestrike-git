@@ -35,9 +35,9 @@ Bullet::~Bullet()
 	{
 	
 
-		DestroyObjectMessage pMsg(this);
-		pMsg.SendMessageNow();
-		
+			DestroyObjectMessage* pMsg = new DestroyObjectMessage{ this };
+			pMsg->QueueMessage();
+			pMsg = nullptr;
 		
 	
 	}
@@ -61,8 +61,9 @@ Bullet::~Bullet()
 				if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->bullet_hit_zombie) == false)
 					pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_zombie, false);
 
-				DestroyObjectMessage pMsg(this);
-				pMsg.SendMessageNow();
+				DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+				dMsg->QueueMessage();
+				dMsg = nullptr;
 			}
 		}
 	}
@@ -77,8 +78,9 @@ Bullet::~Bullet()
 					pAudio->PlayAudio(GameplayState::GetInstance()->vomit_hit_player, false);
 
 	
-				DestroyObjectMessage pMsg(this);
-				pMsg.SendMessageNow();
+				DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+				dMsg->QueueMessage();
+				dMsg = nullptr;
 			}
 		}
 	}
@@ -86,8 +88,9 @@ Bullet::~Bullet()
 	// other stuff
 	else if (pOther->GetType() == ObjectType::OBJ_BASE || pOther->GetType() == ObjectType::OBJ_WALL)
 	{
-		DestroyObjectMessage pMsg(this);
-		pMsg.SendMessageNow();
+		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+		dMsg->QueueMessage();
+		dMsg = nullptr;
 	}
 }
 
@@ -96,8 +99,9 @@ Bullet::~Bullet()
 	if (pEvent->GetEventID() == "KILL_ME")
 	{
 		
-		DestroyObjectMessage pMsg(this);
-		pMsg.SendMessageNow();
+		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+		dMsg->QueueMessage();
+		dMsg = nullptr;
 	}
 }
 

@@ -15,6 +15,7 @@ class WeaponManager : public Weapon
 	vector<Weapon*> m_vWeapons;
 
 	int curIndex;
+	int equipIndex = 0;
 	
 	//Image Assets
 	SGD::HTexture * m_hHudWpn = nullptr;
