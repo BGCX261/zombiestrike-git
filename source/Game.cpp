@@ -178,7 +178,7 @@ void Game::Terminate( void )
 
 
 	// Exit the current state
-	*/
+	
 	while (stateMachine.empty() == false)
 		Game::GetInstance()->RemoveState();
 

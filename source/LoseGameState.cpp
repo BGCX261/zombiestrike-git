@@ -14,6 +14,7 @@
 #include "GameplayState.h"
 #include <fstream>
 #include "Player.h"
+#include "SpawnManager.h"
 
 /**************************************************************/
 // GetInstance
@@ -81,7 +82,7 @@
 			}
 				break;
 
-	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
+
 			case 1: // main menu
 			{
 						Game::GetInstance()->RemoveState();
@@ -95,6 +96,7 @@
 	}
 	else
 	{
+		
 		if (scoreGiven == false)
 		{
 			if (initials.length() < 4)
@@ -106,8 +108,8 @@
 					initials.erase(initials.length() - 1);
 
 			}
-
-			if (pInput->IsKeyPressed(SGD::Key::Enter) == true && initials.length() > 0)
+		
+			if ((pInput->IsKeyPressed(SGD::Key::Enter) == true ||  pInput->IsButtonPressed(0, 1) == true) && initials.length() > 0)
 			{
 				Player* player = dynamic_cast<Player*>(GameplayState::GetInstance()->GetPlayer());
 				std::wofstream fout;
@@ -115,7 +117,10 @@
 
 				if (fout.is_open())
 				{
-					fout << initials.c_str() << '\t' << player->GetProfile().wavesComplete << '\n';
+					
+					fout << initials.c_str() << '\t' << Game::GetInstance()->GetSurvivalProfile().wavesComplete << '\n';
+
+
 				}
 				fout.close();
 				scoreGiven = true;

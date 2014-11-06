@@ -143,7 +143,7 @@ private:
 
 	/**********************************************************/
 	// Game Entities
-	enum EntityBucket { BUCKET_BULLETS, BUCKET_PUKE, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE };
+	enum EntityBucket { BUCKET_BULLETS, BUCKET_PUKE, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
 
 	EntityManager*			m_pEntities			= nullptr;
 	AnimationManager*		m_pAnimManager		= nullptr;
