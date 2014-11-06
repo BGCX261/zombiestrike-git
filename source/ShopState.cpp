@@ -6882,6 +6882,8 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[REVOLVER]->SetAmmoCap(profile.revolver.ammoCap.upgradedSkill.stat);
 
 			m_pWeapons->GetWeapons()[MAC10]->SetReloadTime(profile.mac10.reloadTime.upgradedSkill.stat);
+			m_pWeapons->GetWeapons()[MAC10]->SetRecoilTime(0.2f);
+
 			m_pWeapons->GetWeapons()[MAC10]->SetMagSize(profile.mac10.magSize.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[MAC10]->SetDamage(profile.mac10.damage.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[MAC10]->SetBulletSpread(profile.mac10.bulletSpread.upgradedSkill.stat);
@@ -6894,6 +6896,7 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[TECH9]->SetBulletSpread(profile.tech9.bulletSpread.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[TECH9]->SetTotalAmmo(profile.tech9.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[TECH9]->SetAmmoCap(profile.tech9.ammoCap.upgradedSkill.stat);
+			m_pWeapons->GetWeapons()[TECH9]->SetRecoilTime(0.3f);
 
 			m_pWeapons->GetWeapons()[SP90]->SetReloadTime(profile.p90.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SP90]->SetMagSize(profile.p90.magSize.upgradedSkill.stat);
@@ -6901,6 +6904,8 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[SP90]->SetBulletSpread(profile.p90.bulletSpread.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SP90]->SetTotalAmmo(profile.p90.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SP90]->SetAmmoCap(profile.p90.ammoCap.upgradedSkill.stat);
+			m_pWeapons->GetWeapons()[SP90]->SetRecoilTime(0.1f);
+
 
 			m_pWeapons->GetWeapons()[SAWN]->SetReloadTime(profile.sawnoff.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SAWN]->SetRecoilTime(profile.sawnoff.recoilTime.upgradedSkill.stat);

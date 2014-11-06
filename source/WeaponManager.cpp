@@ -703,6 +703,8 @@ Weapon * WeaponManager::CreateMac10()
 	mac10->SetBulletSpread(profile->mac10.bulletSpread.upgradedSkill.stat);
 	mac10->SetAmmoCap(profile->mac10.ammoCap.upgradedSkill.stat);
 	mac10->SetReloadTime(profile->mac10.reloadTime.upgradedSkill.stat);
+	mac10->SetRecoilTime(.2f);
+
 	return mac10;
 }
 
