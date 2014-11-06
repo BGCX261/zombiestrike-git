@@ -12,6 +12,9 @@
 #include "LandMine.h"
 #include "Spawner.h"
 #include "EntityManager.h"
+#include "AnimationManager.h"
+#include "Animation.h"
+#include "Frame.h"
 //#include "../resource/config/"
 
 
@@ -249,6 +252,9 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 
 		switch (tileid)
 		{
+			case BaseObject::OBJ_WALL:
+				CreateHouse({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+				break;
 			case BaseObject::OBJ_SANDBAG:
 				
 				CreateSandBags({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
@@ -435,6 +441,20 @@ void MapManager::CreateEnvironment(SGD::Point pos, EntityManager* entities)
 	object = nullptr;
 	
 
+}
+
+
+void MapManager::CreateHouse(SGD::Point pos, EntityManager* entities)
+{
+	EnvironmentalObject* object = new EnvironmentalObject;
+	object->SetPosition(pos);
+	object->SetSize({ 32, 32 });
+	object->SetType(BaseObject::ObjectType::OBJ_WALL);
+	object->SetAnimation("house");
+
+	entities->AddEntity(object, 3);
+	object->Release();
+	object = nullptr;
 }
 
 

@@ -81,6 +81,9 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 
 	// Load assets
 	loadScreen = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/Loading.png");
+	m_hMainTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikemain.xwm");
+	m_hSurvivalTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikesurvival.xwm");
+
 
 
 	// Setup the profiles
@@ -93,9 +96,12 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 
 
 	// Start the game in the Main Menu state
+	/*
 	m_pCurrState = MainMenuState::GetInstance();
 	m_pCurrState->Enter();
 	stateMachine.push(m_pCurrState);
+	*/
+	Game::GetInstance()->AddState(MainMenuState::GetInstance());
 
 
 	// Store the current time (in milliseconds)
@@ -144,12 +150,14 @@ int Game::Update( void )
 
 
 	// Update & render the current state if it was not changed
+	
 	if (m_pCurrState == stateMachine.top())
 	{
+	
 		m_pCurrState->Update(elapsedTime);
+
 		if (m_pCurrState != nullptr)
 			m_pCurrState->Render();
-
 	}
 
 
@@ -170,16 +178,16 @@ void Game::Terminate( void )
 
 
 	// Exit the current state
-	while (!stateMachine.empty())
-	{
+	*/
+	while (stateMachine.empty() == false)
 		Game::GetInstance()->RemoveState();
-	}
-
 
 	// Unload assets
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(loadScreen);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hMainTheme);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSurvivalTheme);
 
-	
+
 	// Terminate the core SGD wrappers
 	SGD::AudioManager::GetInstance()->Terminate();
 	SGD::AudioManager::DeleteInstance();
@@ -216,6 +224,8 @@ void Game::RemoveState( void )
 	m_pCurrState = stateMachine.top();
 	if (m_pCurrState != nullptr)
 		m_pCurrState->Exit();
+	m_pCurrState = nullptr;
+
 	m_pCurrState = nullptr;
 
 	stateMachine.pop();

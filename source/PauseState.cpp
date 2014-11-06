@@ -29,7 +29,7 @@
 {
 	// Reset the cursor to the top
 	// (commented out to keep the last cursor position)
-	//m_nCursor = 0;
+	m_nCursor = 0;
 
 
 	// Set background color
@@ -55,7 +55,17 @@
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
-	
+
+	// Press Escape to quit
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 2) == true)
+	{
+		SGD::Event msg("UNPAUSE");
+		msg.SendEventNow();
+		Game::GetInstance()->RemoveState();
+
+		return true;
+	}
+
 
 	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 		m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
@@ -87,9 +97,9 @@
 		case 2: // restart level
 			
 		{
-					Game::GetInstance()->RemoveState();
-					Game::GetInstance()->RemoveState();
-					Game::GetInstance()->AddState(GameplayState::GetInstance());
+					//Game::GetInstance()->RemoveState();
+					//Game::GetInstance()->RemoveState();
+					//Game::GetInstance()->AddState(GameplayState::GetInstance());
 					return true;
 		}
 			break;

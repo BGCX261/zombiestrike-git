@@ -1,6 +1,8 @@
 #include "GrenadeLauncher.h"
 #include "MovingObject.h"
 #include "CreateGrenadeBullet.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "GameplayState.h"
 
 GrenadeLauncher::GrenadeLauncher(MovingObject* owner)
 {
@@ -15,6 +17,7 @@ GrenadeLauncher::GrenadeLauncher(MovingObject* owner)
 	lifeTime = 1000.0f;
 	m_pOwner = owner;
 	owner->AddRef();
+	fire_sound = &GameplayState::GetInstance()->rpg_fire;
 }
 
 
@@ -24,6 +27,9 @@ GrenadeLauncher::~GrenadeLauncher()
 
 void GrenadeLauncher::Fire(float dt)
 {
+	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
+	GameplayState*		pGameplay	= GameplayState::GetInstance();
+
 	if (currAmmo > 0)
 	{
 		//create bullet message
@@ -33,11 +39,20 @@ void GrenadeLauncher::Fire(float dt)
 			pMsg->QueueMessage();
 			pMsg = nullptr;
 
+			if (pAudio->IsAudioPlaying(*fire_sound) == false)
+				voice = pAudio->PlayAudio(*fire_sound, false);
+
 			recoilTimer.AddTime(recoilTime);
 			currAmmo--;
 			if (currAmmo == 0)
 				reloadTimer.AddTime(reloadTime);
 		}
-
+	}
+	else
+	{
+		if (pAudio->IsAudioPlaying(pGameplay->out_of_ammo) == false && pAudio->IsAudioPlaying(*fire_sound) == false
+			&& pAudio->IsAudioPlaying(pGameplay->reload_begin) == false
+			&& pAudio->IsAudioPlaying(pGameplay->reload_finish) == false)
+			pAudio->PlayAudio(pGameplay->out_of_ammo, false);
 	}
 }

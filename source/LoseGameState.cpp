@@ -31,7 +31,7 @@
 {
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor( {0, 0, 0} );	// black
-
+	m_nCursor = 0;
 
 	// Load assets
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -66,7 +66,7 @@
 		else if (pInput->IsKeyPressed(SGD::Key::Up) == true)
 			m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
-		if (pInput->IsKeyPressed(SGD::Key::Enter) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 		{
 			switch (m_nCursor)
 			{
@@ -81,6 +81,7 @@
 			}
 				break;
 
+	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
 			case 1: // main menu
 			{
 						Game::GetInstance()->RemoveState();

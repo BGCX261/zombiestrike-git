@@ -51,6 +51,7 @@ public:
 	SGD::Size		GetWorldSize	( void )	{ return m_szWorldSize; }
 	void			PauseAudio		( bool );
 
+	// true/false == story/survival
 	bool			GetGameMode		( void ) const	{ return m_bStoryMode; }
 	void			SetGameMode		( bool m )		{ m_bStoryMode = m; }
 
@@ -89,6 +90,9 @@ public:
 	/**********************************************************/
 	// Assets
 	SGD::HAudio playerDeath			= SGD::INVALID_HANDLE;
+	SGD::HAudio playerHurt1			= SGD::INVALID_HANDLE;
+	SGD::HAudio playerHurt2			= SGD::INVALID_HANDLE;
+	SGD::HAudio playerHurt3			= SGD::INVALID_HANDLE;
 	SGD::HAudio cannot_use_skill	= SGD::INVALID_HANDLE;
 	SGD::HAudio footstep			= SGD::INVALID_HANDLE;
 	SGD::HAudio turretfire			= SGD::INVALID_HANDLE;
@@ -113,10 +117,11 @@ public:
 	SGD::HAudio sniper_fire			= SGD::INVALID_HANDLE;
 	SGD::HAudio flamethrower_fire	= SGD::INVALID_HANDLE;
 	SGD::HAudio smg_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio rpg_fire			= SGD::INVALID_HANDLE;
 	SGD::HAudio vomit_fire			= SGD::INVALID_HANDLE;
 
-	SGD::HAudio * m_hMain = nullptr;
-	SGD::HAudio * m_hSurvive = nullptr;
+	//SGD::HAudio * m_hMain = nullptr;
+	//SGD::HAudio * m_hSurvive = nullptr;
 
 
 
@@ -169,4 +174,7 @@ private:
 
 	Timer m_tNextWave;
 	Timer m_tCompleteWave;
+
+	Timer m_tToWinState;
+
 };

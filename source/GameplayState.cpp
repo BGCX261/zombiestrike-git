@@ -121,6 +121,14 @@
 
 	// enemy animations
 
+	pAnimationManager->Load("resource/config/animations/ZombieWalker_Animation.xml", "slowZombie");
+	pAnimationManager->Load("resource/config/animations/ZombieRunner_Animation.xml", "fastZombie");
+	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
+	pAnimationManager->Load("resource/config/animations/ZombieSploder_Animation.xml", "explodingZombie");
+	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
+
+	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	/*
 	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
 	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
 	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
@@ -128,6 +136,7 @@
 	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
 
 	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	*/
 	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
 
 
@@ -135,6 +144,7 @@
 
 	// other animations
 	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml",		"turret");
+	pAnimationManager->Load("resource/config/animations/House_Animation.xml",		"house");
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
@@ -143,7 +153,10 @@
 	else
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
 
-	SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
+	//SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
+	m_bStoryMode == true
+		? SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt")
+		: SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");;
 	SpawnManager::GetInstance()->Activate();
 
 
@@ -156,6 +169,9 @@
 
 	// SFX
 	playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
+	playerHurt1			= pAudio->LoadAudio("resource/audio/player_grunt1.wav");
+	playerHurt2			= pAudio->LoadAudio("resource/audio/player_grunt2.wav");
+	playerHurt3			= pAudio->LoadAudio("resource/audio/player_grunt3.wav");
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
 	m_hWpnSwitch		= pAudio->LoadAudio("resource/audio/switchweapon.wav");
@@ -166,7 +182,7 @@
 
 	zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");
 	bullet_hit_zombie	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
-	bullet_hit_house	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
+	bullet_hit_house	= pAudio->LoadAudio("resource/audio/bullet_hit_house.wav");
 	out_of_ammo			= pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
 	reload_begin		= pAudio->LoadAudio("resource/audio/reload_begin.wav");
 	reload_finish		= pAudio->LoadAudio("resource/audio/reload_finish.wav");
@@ -179,11 +195,12 @@
 	sniper_fire			= pAudio->LoadAudio("resource/audio/sniper_fire.wav");
 	flamethrower_fire	= pAudio->LoadAudio("resource/audio/fire_ignite_1.wav");
 	smg_fire			= pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
+	rpg_fire			= pAudio->LoadAudio("resource/audio/RocketLauncher.wav");
 	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
 
 
-	m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
-	m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
+	//m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
+	//m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
@@ -196,6 +213,9 @@
 	
 	
 	WeaponManager::GetInstance()->Initialize(*pPlayer);
+
+	//pPlayer->Release();
+	//pPlayer = nullptr;
 
 	m_tCompleteWave.AddTime(3);
 }
@@ -222,7 +242,6 @@
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
 	pGraphics->UnloadTexture(m_hReticleImage);
 	pGraphics->UnloadTexture(m_hHudWpn);
-	pGraphics->UnloadTexture(m_hReticleImage);
 
 
 
@@ -235,6 +254,9 @@
 	pAudio->UnloadAudio(survivalMusic);
 
 	pAudio->UnloadAudio(playerDeath);
+	pAudio->UnloadAudio(playerHurt1);
+	pAudio->UnloadAudio(playerHurt2);
+	pAudio->UnloadAudio(playerHurt3);
 	pAudio->UnloadAudio(cannot_use_skill);
 	pAudio->UnloadAudio(footstep);
 	pAudio->UnloadAudio(m_hWpnSwitch);
@@ -254,10 +276,11 @@
 	pAudio->UnloadAudio(sniper_fire);
 	pAudio->UnloadAudio(flamethrower_fire);
 	pAudio->UnloadAudio(smg_fire);
+	pAudio->UnloadAudio(rpg_fire);
 	pAudio->UnloadAudio(vomit_fire);
 
-	pAudio->UnloadAudio(*m_hMain);
-	pAudio->UnloadAudio(*m_hSurvive);
+	//pAudio->UnloadAudio(*m_hMain);
+	//pAudio->UnloadAudio(*m_hSurvive);
 
 	camera.SetTarget(nullptr);
 
@@ -351,6 +374,7 @@
 {
 	WeaponManager::GetInstance()->Update(dt);
 	SpawnManager * eSpawner = SpawnManager::GetInstance();
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
 	Player* player = dynamic_cast<Player*>(m_pPlayer);
 
@@ -372,7 +396,8 @@
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENEMIES);
 
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
-		m_pEntities->CheckCollisions(BUCKET_ENVIRO, BUCKET_PUKE);
+		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_BULLETS);	// house + bullets
+		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_ENEMIES);	// house + zombies
 
 
 		// Center camera on the player
@@ -412,7 +437,25 @@
 
 		else if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
 		{
+			// start timer to go to WinState
+			if (SpawnManager::GetInstance()->GetGameWon() == false)
+				m_tToWinState.AddTime(5.0F);
+
+
+			// WinState sequence start
 			SpawnManager::GetInstance()->SetGameWon(true);
+
+
+			// go to WinState
+			if (m_tToWinState.Update(dt) == true)
+			{
+				if (pAudio->IsAudioPlaying(storyMusic) == true)
+					pAudio->StopAudio(storyMusic);
+				if (pAudio->IsAudioPlaying(survivalMusic) == true)
+					pAudio->StopAudio(survivalMusic);
+
+				Game::GetInstance()->AddState(WinGameState::GetInstance());
+			}
 		}
 
 		else
@@ -435,7 +478,6 @@
 
 			//Calls the shopstate//
 			Game::GetInstance()->AddState(ShopState::GetInstance());
-
 		}
 	}
 

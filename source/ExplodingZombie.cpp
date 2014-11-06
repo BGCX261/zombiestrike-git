@@ -13,7 +13,8 @@
 ExplodingZombie::ExplodingZombie()
 {
 	health = 60.0f;
-	damage = 200.0f;
+	//damage = 200.0f;
+	damage = 20.0f;
 }
 
 

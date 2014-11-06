@@ -78,6 +78,12 @@ public:
 
 
 	/**********************************************************/
+	// Music
+	SGD::HAudio			m_hMainTheme		= SGD::INVALID_HANDLE;
+	SGD::HAudio			m_hSurvivalTheme	= SGD::INVALID_HANDLE;
+
+
+	/**********************************************************/
 	// Game State Machine:
 	//	- can ONLY be called by the state's Input, Update, or Render methods!!!
 	void				AddState		( IGameState* pNewState );

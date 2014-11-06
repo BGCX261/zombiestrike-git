@@ -66,6 +66,17 @@ Bullet::~Bullet()
 				dMsg = nullptr;
 			}
 		}
+
+
+		// house
+		else if (pOther->GetType() == ObjectType::OBJ_WALL)
+		{
+			pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_house, false);
+
+			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+			dMsg->QueueMessage();
+			dMsg = nullptr;
+		}
 	}
 	else if (this->type == ObjectType::OBJ_VOMIT)
 	{
@@ -88,6 +99,8 @@ Bullet::~Bullet()
 	// other stuff
 	else if (pOther->GetType() == ObjectType::OBJ_BASE || pOther->GetType() == ObjectType::OBJ_WALL)
 	{
+		pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_house, false);
+
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();
 		dMsg = nullptr;

@@ -39,6 +39,7 @@ protected:
 	bool reloadB = true;
 	bool reloadF = false;
 	SGD::HAudio* fire_sound = nullptr;
+	SGD::HVoice voice;
 	bool reloading = false;
 
 
