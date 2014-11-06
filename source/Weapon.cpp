@@ -128,14 +128,18 @@ void Weapon::Fire(float dt)
 }
 void Weapon::SetOwner(MovingObject* owner)
 {
-	if (m_pOwner != nullptr)
+	if (owner != m_pOwner)
 	{
-		m_pOwner->Release();
-		m_pOwner = nullptr;
+		if (m_pOwner != nullptr)
+		{
+			m_pOwner->Release();
+			m_pOwner = nullptr;
+		}
+		m_pOwner = owner;
+		if (m_pOwner != nullptr)
+			m_pOwner->AddRef();
 	}
-	m_pOwner = owner;
-	if (m_pOwner != nullptr)
-		m_pOwner->AddRef();
+	
 
 }
 

@@ -324,12 +324,19 @@ void WeaponManager::AddWeapons(Weapon* wpn)
 Weapon * WeaponManager::CreateAssaultRifle()
 {
 	AssaultRifle * ar = new AssaultRifle(GetOwner());
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 
 	//ar->SetObtained(profile->m16.isBought);
-	ar->SetObtained(true);
-	ar->SetEquipped(true);
+	ar->SetObtained(profile->m16.isBought);
+
+	ar->SetEquipped(false);
+	ar->SetAutomatic(true);
 	ar->SetGunType(M16);
 	ar->SetType(ASSUALT_RIFLE);
 	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
@@ -345,12 +352,19 @@ Weapon * WeaponManager::CreateAssaultRifle()
 }
 Weapon * WeaponManager::CreateAK47()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
+
 	AssaultRifle * ar = new AssaultRifle(GetOwner());
 
 	//ar->SetObtained(profile->m16.isBought);
-	ar->SetObtained(true);
+	ar->SetObtained(profile->ak47.isBought);
+
 	ar->SetEquipped(false);
+	ar->SetAutomatic(true);
 	ar->SetGunType(AK47);
 	ar->SetType(ASSUALT_RIFLE);
 	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
@@ -367,12 +381,18 @@ Weapon * WeaponManager::CreateAK47()
 Weapon * WeaponManager::CreateLMG()
 {
 	AssaultRifle * ar = new AssaultRifle(GetOwner());
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 
 	//ar->SetObtained(profile->m16.isBought);
-	ar->SetObtained(true);
+	ar->SetObtained(profile->lmg.isBought);
+
 	ar->SetEquipped(false);
+	ar->SetAutomatic(true);
 	ar->SetGunType(LIGHT_MG);
 	ar->SetType(ASSUALT_RIFLE);
 	ar->SetRenderRect(SetImageRect(300, 300, 0, 1));
@@ -389,13 +409,19 @@ Weapon * WeaponManager::CreateLMG()
 
 Weapon * WeaponManager::CreatePistol()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 	Pistol * pistol = new Pistol(GetOwner());
 
 	//pistol->SetOwner(GetOwner());
 	//pistol->SetObtained(profile->m16.isBought);
 	pistol->SetObtained(true);
+	pistol->SetAutomatic(false);
+
 	pistol->SetEquipped(true);
 	pistol->SetGunType(GLOCK);
 	pistol->SetType(PISTOL);
@@ -409,11 +435,16 @@ Weapon * WeaponManager::CreatePistol()
 }
 Weapon * WeaponManager::CreateRevolver()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	Pistol* revolver = new Pistol(GetOwner());
 
 	//revolver->SetObtained(profile->revolver.isBought);
-	revolver->SetObtained(true);
+	revolver->SetObtained(profile->revolver.isBought);
+	revolver->SetAutomatic(false);
 	revolver->SetEquipped(false);
 	revolver->SetGunType(REVOLVER);
 	revolver->SetType(PISTOL);
@@ -432,13 +463,18 @@ Weapon * WeaponManager::CreateRevolver()
 
 Weapon * WeaponManager::CreatePumpShotgun()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 	Shotgun * shotty = new Shotgun(GetOwner());
 
 	//shotty->SetObtained(profile->shotty.isBought);
-	shotty->SetObtained(true);
-	shotty->SetEquipped(true);
+	shotty->SetObtained(profile->pumpShotgun.isBought);
+	shotty->SetAutomatic(false);
+	shotty->SetEquipped(false);
 	shotty->SetGunType(PUMP);
 	shotty->SetType(SHOTGUN);
 	shotty->SetRenderRect(SetImageRect(300, 300, 0, 2));
@@ -455,12 +491,18 @@ Weapon * WeaponManager::CreatePumpShotgun()
 }
 Weapon * WeaponManager::CreateAutoShotgun()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 	Shotgun * shotty = new Shotgun(GetOwner());
 
-	//shotty->SetObtained(profile->shotty.isBought);
-	shotty->SetObtained(true);
+	shotty->SetObtained(profile->autoShotgun.isBought);
+
+	shotty->SetObtained(false);
+	shotty->SetAutomatic(false);
 	shotty->SetEquipped(false);
 	shotty->SetGunType(AUTO);
 	shotty->SetType(SHOTGUN);
@@ -478,12 +520,17 @@ Weapon * WeaponManager::CreateAutoShotgun()
 }
 Weapon * WeaponManager::CreateSawnOff()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 
 	Shotgun * shotty = new Shotgun(GetOwner());
 
-	//shotty->SetObtained(profile->shotty.isBought);
-	shotty->SetObtained(true);
+	shotty->SetObtained(profile->sawnoff.isBought);
+
+	shotty->SetAutomatic(false);
 	shotty->SetEquipped(false);
 	shotty->SetGunType(SAWN);
 	shotty->SetType(SHOTGUN);
@@ -500,11 +547,16 @@ Weapon * WeaponManager::CreateSawnOff()
 
 Weapon * WeaponManager::CreateSniper()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	Sniper * sniper = new Sniper(GetOwner());
 
-	//sniper->SetObtained(profile->sniper.isBought);
-	sniper->SetObtained(true);
+	sniper->SetObtained(profile->sniper.isBought);
+	
+	sniper->SetAutomatic(false);
 	sniper->SetEquipped(false);
 	sniper->SetGunType(SNIPER);
 	sniper->SetType(SPECIAL);
@@ -523,12 +575,17 @@ Weapon * WeaponManager::CreateSniper()
 }
 Weapon * WeaponManager::CreateFlameThrower()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	FlameThrower * ft = new FlameThrower(GetOwner());
 
-	//ft->SetObtained(profile->ft.isBought);
-	ft->SetObtained(true);
-	ft->SetEquipped(true);
+	ft->SetObtained(profile->flameThrower.isBought);
+	
+	ft->SetAutomatic(true);
+	ft->SetEquipped(false);
 	ft->SetGunType(FTHROWER);
 	ft->SetType(SPECIAL);
 	ft->SetRenderRect(SetImageRect(300, 300, 0, 0));
@@ -537,6 +594,8 @@ Weapon * WeaponManager::CreateFlameThrower()
 	ft->SetTotalAmmo(profile->flameThrower.totalAmmo.upgradedSkill.stat);
 	ft->SetDamage(profile->flameThrower.damage.upgradedSkill.stat);
 	ft->SetBulletSpread(profile->flameThrower.bulletSpread.upgradedSkill.stat);
+	ft->SetSpeed(profile->flameThrower.bulletVelocity.upgradedSkill.stat);
+
 	ft->SetAmmoCap(profile->flameThrower.ammoCap.upgradedSkill.stat);
 	ft->SetReloadTime(profile->flameThrower.reloadTime.upgradedSkill.stat);
 
@@ -545,11 +604,16 @@ Weapon * WeaponManager::CreateFlameThrower()
 }
 Weapon * WeaponManager::CreateGrenadeLauncher()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	GrenadeLauncher * nadeLauncher = new GrenadeLauncher(GetOwner());
 
-	//nadeLauncher->SetObtained(profile->nadeLauncher.isBought);
-	nadeLauncher->SetObtained(true);
+	nadeLauncher->SetObtained(profile->nadeLauncher.isBought);
+	
+	nadeLauncher->SetAutomatic(false);
 	nadeLauncher->SetEquipped(false);
 	nadeLauncher->SetGunType(GLAUNCHER);
 	nadeLauncher->SetType(SPECIAL);
@@ -566,12 +630,16 @@ Weapon * WeaponManager::CreateGrenadeLauncher()
 
 Weapon * WeaponManager::CreateP90()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	P90 * p90 = new P90(GetOwner());  
 
-	//p90->SetObtained(profile->p90.isBought);
-	p90->SetObtained(true);
-	p90->SetEquipped(true);
+	p90->SetObtained(profile->p90.isBought);
+	
+	p90->SetEquipped(false);
 	p90->SetGunType(SP90);
 	p90->SetType(SMG);
 	p90->SetRenderRect(SetImageRect(300, 300, 3, 0));
@@ -582,16 +650,24 @@ Weapon * WeaponManager::CreateP90()
 	p90->SetBulletSpread(profile->p90.bulletSpread.upgradedSkill.stat);
 	p90->SetAmmoCap(profile->p90.ammoCap.upgradedSkill.stat);
 	p90->SetReloadTime(profile->p90.reloadTime.upgradedSkill.stat);
+	p90->SetAutomatic(true);
+
 	return p90;
 }
 Weapon * WeaponManager::CreateTech9()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	Tech9 * tech9 = new Tech9(GetOwner());
 
-	//tech9->SetObtained(profile->tech9.isBought);
-	tech9->SetObtained(true);
+	tech9->SetObtained(profile->tech9.isBought);
+	
 	tech9->SetEquipped(false);
+	tech9->SetAutomatic(true);
+
 	tech9->SetGunType(TECH9);
 	tech9->SetType(SMG);
 	tech9->SetRenderRect(SetImageRect(300, 300, 0, 1));
@@ -606,12 +682,17 @@ Weapon * WeaponManager::CreateTech9()
 }
 Weapon * WeaponManager::CreateMac10()
 {
-	GamerProfile* profile = &Game::GetInstance()->GetProfile();
+	GamerProfile* profile;
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = &Game::GetInstance()->GetStoryProfile();
+	else
+		profile = &Game::GetInstance()->GetSurvivalProfile();
 	UZI * mac10 = new UZI(GetOwner());
 
-	//mac10->SetObtained(profile->mac10.isBought);
-	mac10->SetObtained(true);
+	mac10->SetObtained(profile->mac10.isBought);
 	mac10->SetEquipped(false);
+	mac10->SetAutomatic(true);
+
 	mac10->SetGunType(MAC10);
 	mac10->SetType(SMG);
 	mac10->SetRenderRect(SetImageRect(300, 300, 0, 1));
@@ -622,6 +703,8 @@ Weapon * WeaponManager::CreateMac10()
 	mac10->SetBulletSpread(profile->mac10.bulletSpread.upgradedSkill.stat);
 	mac10->SetAmmoCap(profile->mac10.ammoCap.upgradedSkill.stat);
 	mac10->SetReloadTime(profile->mac10.reloadTime.upgradedSkill.stat);
+	mac10->SetRecoilTime(.2f);
+
 	return mac10;
 }
 

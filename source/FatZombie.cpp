@@ -33,6 +33,7 @@ void FatZombie::Update(float dt)
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
 
+	
 	pukeBlaster.Update(dt);
 	if (isAlive)
 	{
@@ -46,16 +47,17 @@ void FatZombie::Update(float dt)
 		if ((m_pTarget->GetPosition() - m_ptPosition).ComputeLength() <= 200.0f)
 		{
 
-			pukeBlaster.Fire(dt);
+	
 		}
 	}
 	else
 	{
+
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();
 		dMsg = nullptr;
-
 		pukeBlaster.SetOwner(nullptr);
+		
 
 		SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
 

@@ -69,10 +69,10 @@ bool PickSaveSlotState::Input(void)
 		case MenuItems::SAVE2:
 		case MenuItems::SAVE3:
 		{
-			//if (GameplayState::GetInstance()->GetGameMode() == false)
-			//	m_nCursor += 3;
+							
+									 Game::GetInstance()->selectedProfile = m_nCursor;
+						
 
-			Game::GetInstance()->selectedProfile = m_nCursor;
 			Game::GetInstance()->RemoveState();
 			Game::GetInstance()->RemoveState();
 
@@ -112,6 +112,15 @@ void PickSaveSlotState::Render(void)
 	// Display the game title centered at 4x scale
 	const wchar_t* title1 = L"Save Slots";	// 10
 	pFont->Draw(title1, { (width - (10 * 32 * 2.0f)) / 2, 50 }, 2.0f, { 255, 255, 255 });
+
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+	{
+		const wchar_t* saveSlot1;
+		const wchar_t* saveSlot2;
+
+	
+	}
+	
 
 
 	// Display the menu options centered at 1x scale

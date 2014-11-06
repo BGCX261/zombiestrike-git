@@ -2,7 +2,6 @@
 #include "Zombie.h"
 #include "PukerBlaster.h"
 
-//class Weapon;
 
 class FatZombie : public Zombie
 {

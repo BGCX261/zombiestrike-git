@@ -7,6 +7,7 @@
 #include "DestroyObjectMessage.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
+
 Bullet::Bullet() : Listener(this)
 {
 	RegisterForEvent("KILL_ME");
@@ -14,22 +15,31 @@ Bullet::Bullet() : Listener(this)
 
 Bullet::~Bullet()
 {
-	m_pOwner->Release();
-	m_pOwner = nullptr;
+	if (m_pOwner != nullptr)
+	{
+		m_pOwner->Release();
+		m_pOwner = nullptr;
+	}
+	
+	UnregisterFromEvent("KILL_ME");
 }
 
 /*virtual*/ void Bullet::Update(float dt) /*override*/
 {
 	//MovingObject::Update(dt);
-//	lifeTime -= m_vtVelocity.ComputeLength() * dt;
+	//lifeTime -= m_vtVelocity.ComputeLength() * dt;
 	m_ptPosition += m_vtVelocity * dt;
 	AnimationManager::GetInstance()->Update(animation, dt, this);
 
-	if (IsDead() || lifeTime < 0)
+	if (IsDead())
 	{
-		DestroyObjectMessage* pMsg = new DestroyObjectMessage{ this };
-		pMsg->QueueMessage();
-		pMsg = nullptr;
+	
+
+			DestroyObjectMessage* pMsg = new DestroyObjectMessage{ this };
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+		
+	
 	}
 }
 
@@ -101,6 +111,7 @@ Bullet::~Bullet()
 {
 	if (pEvent->GetEventID() == "KILL_ME")
 	{
+		
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();
 		dMsg = nullptr;
@@ -124,8 +135,9 @@ bool Bullet::IsDead()
 	SGD::Rectangle world = { 0, 0,
 		GameplayState::GetInstance()->GetWorldSize().width,
 		GameplayState::GetInstance()->GetWorldSize().height };
-
-	if (GetRect().IsIntersecting(world))
+	SGD::Rectangle rect = GetRect();
+	rect.Offset(GameplayState::GetInstance()->GetCamera()->GetPosition().x, GameplayState::GetInstance()->GetCamera()->GetPosition().y);
+	if (rect.IsIntersecting(world))
 		return false;
 	else
 		return true;

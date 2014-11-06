@@ -9,6 +9,11 @@ BarbedWire::BarbedWire()
 	m_fCurrHP = m_fMaxHP = 100.0f;
 
 	m_fDamage = 10.0f;
+
+	RegisterForEvent("REPAIR_BARBEDWIRE");
+	RegisterForEvent("UPGRADE_BARBEDWIRE_HEALTH");
+	RegisterForEvent("UPGRADE_BARBEDWIRE_DAMAGE");
+
 }
 
 BarbedWire::~BarbedWire()

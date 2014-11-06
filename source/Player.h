@@ -107,7 +107,7 @@ public:
 	const Attributes*	GetAttributes		(void) const			{ return &m_Attributes; }
 	SGD::HAudio*		GetDeathSFX			(void) const			{ return m_hDeath; }
 	SGD::HVoice			GetVoice			(void) const			{ return voice; }
-
+	GamerProfile&		GetProfile()		{ return profile; }
 
 	// Mutators
 	void				RetrieveBehavior	(std::string name);

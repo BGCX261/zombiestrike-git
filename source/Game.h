@@ -60,13 +60,19 @@ public:
 
 	/**********************************************************/
 	// Gamer profile
-	GamerProfile&		GetProfile		( void )		{	return profiles[selectedProfile];	}
-	void				LoadProfiles	( void );
+	GamerProfile&		GetStoryProfile		( void )		{	return storyProfiles[selectedProfile];	}
+	GamerProfile&		GetSurvivalProfile(void)		{ return survivalProfiles[selectedProfile]; }
+
+	void				LoadStoryProfiles	( void );
+	void				LoadSurvivalProfiles(void);
+
 	void				CreateStoryProfiles	( void );
 	void				CreateSurvivalProfiles(void);
 
 
-	GamerProfile		profiles[3];
+	GamerProfile		storyProfiles[3];
+	GamerProfile		survivalProfiles[3];
+
 	unsigned int		selectedProfile	= 0;
 
 

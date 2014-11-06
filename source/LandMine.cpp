@@ -11,12 +11,12 @@ LandMine::LandMine()
 	this->SetType(ObjectType::OBJ_LANDMINE);
 	this->SetAnimation("landmine");
 
-	RegisterForEvent("REPIAR_LANDMINES");
+	RegisterForEvent("REPAIR_LANDMINES");
 }
 
 LandMine::~LandMine()
 {
-	UnregisterFromEvent("REPIAR_LANDMINES");
+	UnregisterFromEvent("REPAIR_LANDMINES");
 
 }
 

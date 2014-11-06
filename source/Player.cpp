@@ -252,7 +252,6 @@ void Player::Render()
 
 	switch (pOther->GetType())
 	{
-		// zombies
 		case ObjectType::OBJ_SLOW_ZOMBIE:
 		case ObjectType::OBJ_FAST_ZOMBIE:
 		case ObjectType::OBJ_FAT_ZOMBIE:

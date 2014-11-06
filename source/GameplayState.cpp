@@ -110,6 +110,8 @@
 	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
 	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
 
+	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
+
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
 	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
@@ -146,10 +148,11 @@
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
+	if (m_bStoryMode == true)
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
+	else
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
 
-
-
-	MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetProfile(), m_pEntities);
 	//SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
 	m_bStoryMode == true
 		? SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt")
@@ -207,6 +210,7 @@
 	m_pEntities->AddEntity(m_pPlayer, EntityBucket::BUCKET_PLAYER);
 
 	MovingObject * pPlayer = dynamic_cast<MovingObject*>(m_pPlayer);
+	
 	
 	WeaponManager::GetInstance()->Initialize(*pPlayer);
 
@@ -378,14 +382,19 @@
 	if (player->isLevelCompleted() == false)
 	{
 		// Update the entities
-		SpawnManager::GetInstance()->Update(dt);
+		eSpawner->Update(dt);
 		m_pEntities->UpdateAll(dt);
+
 		
 
 		// Check collisions
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENEMIES);
-		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_BULLETS);
-		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PICKUPS);
+		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PUKE);
+		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENVIRO);
+
+		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENVIRO);
+		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENEMIES);
+
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
 		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_BULLETS);	// house + bullets
 		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_ENEMIES);	// house + zombies
@@ -393,11 +402,11 @@
 
 		// Center camera on the player
 		SGD::Point playerpos = m_pPlayer->GetPosition();
-		playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.5f;
-		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.5f;
+		playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.50f;
+		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.75f;
 		camera.SetPostion(playerpos);
 
-
+		
 		// Process the events & messages
 		SGD::EventManager::GetInstance()->Update();
 		SGD::MessageManager::GetInstance()->Update();
@@ -458,6 +467,14 @@
 
 			SGD::Event msg("PAUSE");
 			msg.SendEventNow();
+			if (m_bStoryMode == true)
+			{
+				Game::GetInstance()->GetStoryProfile().wavesComplete++;
+
+			}
+			else
+				Game::GetInstance()->GetSurvivalProfile().wavesComplete++;
+
 
 			//Calls the shopstate//
 			Game::GetInstance()->AddState(ShopState::GetInstance());
@@ -541,17 +558,24 @@
 	*/
 
 	stringstream moneyCount;
-	moneyCount << "$" << Game::GetInstance()->GetProfile().money;
+	if (m_bStoryMode == true)
+	{
+		moneyCount << "$" << Game::GetInstance()->GetStoryProfile().money;
+	}
+	else
+		moneyCount << "$" << Game::GetInstance()->GetSurvivalProfile().money;
+
+	
 	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0f, { 0, 255, 0 });
 
 
 	
 	// Draw the reticle
 	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
-	float		retscale = 0.8f;
+	float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
 
-	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
-	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+	retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
+	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 0 }, { retscale, retscale });
 
 }
 
@@ -587,27 +611,45 @@
 
 			if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 20;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 20;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 20;
+
+				
 			}
 
 			else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 25;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 25;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 25;
+
 			}
 
 			else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 35;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 35;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 35;
 			}
 
 			else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 75;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 75;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 75;
 			}
 
 			else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 100;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 100;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 100;
 			}
 			
 			GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
@@ -717,29 +759,7 @@ BaseObject* GameplayState::CreatePlayer( void )
 	return player;
 }
 
-void GameplayState::CreatePickUp( int type, SGD::Point pos )
-{
-	PickUp* pickup = new PickUp;
 
-	pickup->SetType(type);
-	pickup->SetPosition(pos);
-
-	//switch (type)
-	//{
-	//case BaseObject::OBJ_POWERCORE:
-	//	pickup->SetAnimation("powerCore");
-	//	break;
-
-	//case BaseObject::OBJ_STIMPACK:
-	//	pickup->SetAnimation("stimPack");
-	//	break;
-
-
-
-	m_pEntities->AddEntity(pickup, EntityBucket::BUCKET_PICKUPS);
-	pickup->Release();
-	pickup = nullptr;
-}
 
 void GameplayState::CreateTurret( MovingObject* owner )
 {
@@ -846,11 +866,11 @@ void GameplayState::CreatePukeyBullet(Weapon* owner)
 	bullet->SetDirection(direction);
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
 	bullet->SetType(BaseObject::ObjectType::OBJ_VOMIT);
-
+	bullet->SetLifeTime(700.0f);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("puke");
 	bullet->SetDamage(owner->GetDamage());
-	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_PUKE);
 	bullet->Release();
 	bullet = nullptr;
 

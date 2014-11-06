@@ -2,7 +2,7 @@
 
 #include "IGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"			// uses HTexture & HAudio
-
+#include <string>
 class LoseGameState : public IGameState
 {
 public:
@@ -35,6 +35,8 @@ private:
 	/**********************************************************/
 	// Cursor Index
 	int		m_nCursor		= 0;
+	bool scoreGiven = false;
+	std::string initials;
 
 
 
