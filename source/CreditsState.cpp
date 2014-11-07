@@ -1,4 +1,4 @@
-#define SCROLL_SPEED		50.7F//47.0F
+#define SCROLL_SPEED		75.0f//47.0F
 
 #include "CreditsState.h"
 
