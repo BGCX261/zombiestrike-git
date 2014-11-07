@@ -23,7 +23,7 @@ void SpawnManager::Update(float dt)
 		
 		m_nNumEnemies = 0;
 
-		if (m_nCurrWave < m_vEnemyWaves.size())
+		if (m_nCurrWave < (int)m_vEnemyWaves.size())
 		{
 			m_nWaveEnemies = m_vEnemyWaves[m_nCurrWave];
 			
@@ -107,6 +107,21 @@ void SpawnManager::LoadFromFile(const char * fpath)
 	//m_vEnemyWaves.push_back(10);
 	//m_vEnemyWaves.push_back(20);
 
+}
+
+void SpawnManager::ShutDown()
+{
+	spawners.clear();
+	m_vEnemyWaves.clear();
+	m_nWaveEnemies = 1;
+	m_nNumEnemies = 0;
+	m_nCurrWave = 0;
+	m_nZombieType = 0;
+	m_nEnemiesKilled = 0;
+	m_nNumWaves = 0;
+	 isActive = false;
+	 isGameWon = false;
+	
 }
 
 

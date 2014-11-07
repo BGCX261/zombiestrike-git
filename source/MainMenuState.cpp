@@ -347,7 +347,7 @@
 		{
 			trans += 5;
 			mTrans -= 5;
-			fadeTime.AddTime(0.05);
+			fadeTime.AddTime(0.05f);
 		}
 
 		fadeTime.Update(elapsedTime);
@@ -359,7 +359,7 @@
 		{
 			trans -= 5;
 			mTrans += 5;
-			fadeTime.AddTime(0.05);
+			fadeTime.AddTime(0.05f);
 		}
 
 
@@ -381,7 +381,7 @@
 	if (lightningTime.GetTime() <= 0.0f)
 	{
 		rand();
-		lightningTime.AddTime(rand()% 5 + 3);
+		lightningTime.AddTime((float)(rand()% 5 + 3));
 		lTrans = 0;
 
 	}

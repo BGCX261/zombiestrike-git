@@ -1,4 +1,4 @@
-#define SCROLL_SPEED		50.7F//47.0F
+#define SCROLL_SPEED		75.0f//47.0F
 
 #include "CreditsState.h"
 
@@ -66,7 +66,7 @@
 // Update
 /*virtual*/ void CreditsState::Update( float elapsedTime )
 {
-	if (starting_y <= 120.0f)
+	if (starting_y <= -120.0f)
 	{
 		Game::GetInstance()->RemoveState();
 		//Game::GetInstance()->AddState(MainMenuState::GetInstance());

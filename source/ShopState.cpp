@@ -69,11 +69,11 @@ void	ShopState::Enter(void)
 	startY = screenSize.height * .15f;
 	DefenseButtons[0] = SGD::Rectangle(SGD::Point(screenSize.width * 0.5f, (float)startY), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
 	DefenseButtons[1] = DefenseButtons[0];
-	DefenseButtons[1].bottom += BUTTON_HEIGHT + 5;
-	DefenseButtons[1].top += BUTTON_HEIGHT + 5;
+	DefenseButtons[1].bottom += BUTTON_HEIGHT + 5.0f;
+	DefenseButtons[1].top += BUTTON_HEIGHT + 5.0f;
 
 	DefenseButtons[2] = DefenseButtons[0];
-	DefenseButtons[2].bottom += screenSize.height * 0.2;
+	DefenseButtons[2].bottom += screenSize.height * 0.2f;
 	DefenseButtons[2].top += screenSize.height * 0.2f;
 	DefenseButtons[3] = DefenseButtons[2];
 	DefenseButtons[3].bottom += BUTTON_HEIGHT + 5;
@@ -361,9 +361,9 @@ bool	ShopState::Input(void)
 									case 4:
 										if (revolverUpgrade.damage.isMaxed == false)
 										{
-											if (profile.money >= 600.0f)
+											if (profile.money >= 600)
 											{
-												profile.money -= 600.0f;
+												profile.money -= 600;
 												revolverUpgrade.damage.upgradedSkill.stat += 10.0f;
 												revolverUpgrade.damage.upgradedSkill.currTier++;
 
@@ -377,7 +377,7 @@ bool	ShopState::Input(void)
 										{
 											if (profile.money >= 600)
 											{
-												profile.money -= 600.0f;
+												profile.money -= 600;
 												revolverUpgrade.ammoCap.upgradedSkill.stat += 1;
 												revolverUpgrade.ammoCap.upgradedSkill.currTier++;
 
@@ -389,9 +389,9 @@ bool	ShopState::Input(void)
 									case 6:
 										if (revolverUpgrade.totalAmmo.isMaxed == false)
 										{
-											if (profile.money >= 600.0f)
+											if (profile.money >= 600)
 											{
-												profile.money -= 600.0f;
+												profile.money -= 600;
 												revolverUpgrade.totalAmmo.upgradedSkill.stat += revolverUpgrade.magSize.upgradedSkill.stat;
 												
 												if (revolverUpgrade.totalAmmo.upgradedSkill.stat > revolverUpgrade.ammoCap.upgradedSkill.stat)
@@ -990,7 +990,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 600)
 								{
 									profile.money -= 600;
-									uziUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+									uziUpgrade.ammoCap.upgradedSkill.stat -= 30;
 									uziUpgrade.ammoCap.upgradedSkill.currTier++;
 
 									if (uziUpgrade.ammoCap.upgradedSkill.currTier == uziUpgrade.ammoCap.upgradedSkill.maxTier)
@@ -1004,7 +1004,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 100)
 								{
 									profile.money -= 100;
-									uziUpgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
+									uziUpgrade.totalAmmo.upgradedSkill.stat -= 30;
 									uziUpgrade.totalAmmo.upgradedSkill.currTier++;
 
 									if (uziUpgrade.totalAmmo.upgradedSkill.currTier == uziUpgrade.totalAmmo.upgradedSkill.maxTier)
@@ -1129,7 +1129,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 600)
 								{
 									profile.money -= 600;
-									tech9Upgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+									tech9Upgrade.ammoCap.upgradedSkill.stat -= 30;
 									tech9Upgrade.ammoCap.upgradedSkill.currTier++;
 
 									if (tech9Upgrade.ammoCap.upgradedSkill.currTier == tech9Upgrade.ammoCap.upgradedSkill.maxTier)
@@ -1143,7 +1143,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 100)
 								{
 									profile.money -= 100;
-									tech9Upgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
+									tech9Upgrade.totalAmmo.upgradedSkill.stat -= 30;
 									tech9Upgrade.totalAmmo.upgradedSkill.currTier++;
 
 									if (tech9Upgrade.totalAmmo.upgradedSkill.currTier == tech9Upgrade.totalAmmo.upgradedSkill.maxTier)
@@ -1212,7 +1212,7 @@ bool	ShopState::Input(void)
 								{
 									profile.money -= 600;
 
-									p90Upgrade.magSize.upgradedSkill.stat += 5;
+									p90Upgrade.magSize.upgradedSkill.stat += 10;
 									p90Upgrade.magSize.upgradedSkill.currTier++;
 
 									if (p90Upgrade.magSize.upgradedSkill.currTier == p90Upgrade.magSize.upgradedSkill.maxTier)
@@ -1241,7 +1241,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 600)
 								{
 									profile.money -= 600;
-									p90Upgrade.bulletSpread.upgradedSkill.stat -= 0.11f;
+									p90Upgrade.bulletSpread.upgradedSkill.stat -= 0.2f;
 									p90Upgrade.bulletSpread.upgradedSkill.currTier++;
 
 									if (p90Upgrade.bulletSpread.upgradedSkill.currTier == p90Upgrade.bulletSpread.upgradedSkill.maxTier)
@@ -1269,7 +1269,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 600)
 								{
 									profile.money -= 600;
-									p90Upgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+									p90Upgrade.ammoCap.upgradedSkill.stat  += 50;
 									p90Upgrade.ammoCap.upgradedSkill.currTier++;
 
 									if (p90Upgrade.ammoCap.upgradedSkill.currTier == p90Upgrade.ammoCap.upgradedSkill.maxTier)
@@ -1283,10 +1283,10 @@ bool	ShopState::Input(void)
 								if (profile.money >= 100)
 								{
 									profile.money -= 100;
-									p90Upgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
+									p90Upgrade.totalAmmo.upgradedSkill.stat += 100;
 									p90Upgrade.totalAmmo.upgradedSkill.currTier++;
 
-									if (p90Upgrade.totalAmmo.upgradedSkill.currTier == p90Upgrade.totalAmmo.upgradedSkill.maxTier)
+									if (p90Upgrade.totalAmmo.upgradedSkill.stat >= p90Upgrade.ammoCap.upgradedSkill.stat)
 										p90Upgrade.totalAmmo.isMaxed = true;
 								}
 							}
@@ -1427,7 +1427,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 600)
 								{
 									profile.money -= 600;
-									ak47Upgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+									ak47Upgrade.ammoCap.upgradedSkill.stat += 30;
 									ak47Upgrade.ammoCap.upgradedSkill.currTier++;
 
 									if (ak47Upgrade.ammoCap.upgradedSkill.currTier == ak47Upgrade.ammoCap.upgradedSkill.maxTier)
@@ -1441,7 +1441,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 100)
 								{
 									profile.money -= 100;
-									ak47Upgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
+									ak47Upgrade.totalAmmo.upgradedSkill.stat += 30;
 									ak47Upgrade.totalAmmo.upgradedSkill.currTier++;
 									
 									if (ak47Upgrade.totalAmmo.upgradedSkill.currTier == ak47Upgrade.totalAmmo.upgradedSkill.maxTier)
@@ -1579,7 +1579,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 600)
 								{
 									profile.money -= 600;
-									m16Upgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+									m16Upgrade.ammoCap.upgradedSkill.stat += 30;
 									m16Upgrade.ammoCap.upgradedSkill.currTier++;
 
 									if (m16Upgrade.ammoCap.upgradedSkill.currTier == m16Upgrade.ammoCap.upgradedSkill.maxTier)
@@ -1593,7 +1593,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 100)
 								{
 									profile.money -= 100;
-									m16Upgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
+									m16Upgrade.totalAmmo.upgradedSkill.stat += 20;
 									m16Upgrade.totalAmmo.upgradedSkill.currTier++;
 
 									if (m16Upgrade.totalAmmo.upgradedSkill.currTier == m16Upgrade.totalAmmo.upgradedSkill.maxTier)
@@ -1732,7 +1732,7 @@ bool	ShopState::Input(void)
 								if (profile.money >= 600)
 								{
 									profile.money -= 600;
-									lmgUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+									lmgUpgrade.ammoCap.upgradedSkill.stat += 100;
 									lmgUpgrade.ammoCap.upgradedSkill.currTier++;
 
 									if (lmgUpgrade.ammoCap.upgradedSkill.currTier == lmgUpgrade.ammoCap.upgradedSkill.maxTier)
@@ -1746,10 +1746,10 @@ bool	ShopState::Input(void)
 								if (profile.money >= 100)
 								{
 									profile.money -= 100;
-									lmgUpgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
+									lmgUpgrade.totalAmmo.upgradedSkill.stat += 200;
 									lmgUpgrade.totalAmmo.upgradedSkill.currTier++;
 
-									if (lmgUpgrade.totalAmmo.upgradedSkill.currTier == lmgUpgrade.totalAmmo.upgradedSkill.maxTier)
+									if (lmgUpgrade.totalAmmo.upgradedSkill.stat >= lmgUpgrade.ammoCap.upgradedSkill.stat)
 										lmgUpgrade.totalAmmo.isMaxed = true;
 								}
 							}
@@ -1863,7 +1863,7 @@ bool	ShopState::Input(void)
 									if (profile.money >= 600)
 									{
 										profile.money -= 600;
-										sniperUpgrade.bulletSpread.upgradedSkill.stat -= 0.11f;
+										sniperUpgrade.bulletSpread.upgradedSkill.stat -= .2f;
 										sniperUpgrade.bulletSpread.upgradedSkill.currTier++;
 
 										if (sniperUpgrade.bulletSpread.upgradedSkill.currTier == sniperUpgrade.bulletSpread.upgradedSkill.maxTier)
@@ -1877,8 +1877,8 @@ bool	ShopState::Input(void)
 									if (profile.money >= 600)
 									{
 										profile.money -= 600;
-										sniperUpgrade.damage.upgradedSkill.stat++;
-										sniperUpgrade.damage.upgradedSkill.currTier++;
+										sniperUpgrade.damage.upgradedSkill.stat += 100;
+										sniperUpgrade.damage.upgradedSkill.currTier += 100;
 
 										if (sniperUpgrade.damage.upgradedSkill.currTier == sniperUpgrade.damage.upgradedSkill.maxTier)
 											sniperUpgrade.damage.isMaxed = true;
@@ -1891,7 +1891,7 @@ bool	ShopState::Input(void)
 									if (profile.money >= 600)
 									{
 										profile.money -= 600;
-										sniperUpgrade.penPower.upgradedSkill.stat -= 0.11f;
+										sniperUpgrade.penPower.upgradedSkill.stat += 1;
 										sniperUpgrade.penPower.upgradedSkill.currTier++;
 
 										if (sniperUpgrade.penPower.upgradedSkill.currTier == sniperUpgrade.penPower.upgradedSkill.maxTier)
@@ -1905,7 +1905,7 @@ bool	ShopState::Input(void)
 									if (profile.money >= 600)
 									{
 										profile.money -= 600;
-										sniperUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+										sniperUpgrade.ammoCap.upgradedSkill.stat += 10;
 										sniperUpgrade.ammoCap.upgradedSkill.currTier++;
 
 										if (sniperUpgrade.ammoCap.upgradedSkill.currTier == sniperUpgrade.ammoCap.upgradedSkill.maxTier)
@@ -1921,10 +1921,10 @@ bool	ShopState::Input(void)
 									if (profile.money >= 100)
 									{
 										profile.money -= 100;
-										sniperUpgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
+										sniperUpgrade.totalAmmo.upgradedSkill.stat += sniperUpgrade.magSize.upgradedSkill.stat;
 										sniperUpgrade.totalAmmo.upgradedSkill.currTier++;
 
-										if (sniperUpgrade.totalAmmo.upgradedSkill.currTier == sniperUpgrade.totalAmmo.upgradedSkill.maxTier)
+										if (sniperUpgrade.totalAmmo.upgradedSkill.stat >= sniperUpgrade.ammoCap.upgradedSkill.stat)
 											sniperUpgrade.totalAmmo.isMaxed = true;
 									}
 								}
@@ -1988,7 +1988,7 @@ bool	ShopState::Input(void)
 									{
 										profile.money -= 600;
 
-										flameUpgrade.magSize.upgradedSkill.stat += 5;
+										flameUpgrade.magSize.upgradedSkill.stat += 50;
 										flameUpgrade.magSize.upgradedSkill.currTier++;
 
 										if (flameUpgrade.magSize.upgradedSkill.currTier == flameUpgrade.magSize.upgradedSkill.maxTier)
@@ -2018,7 +2018,7 @@ bool	ShopState::Input(void)
 									if (profile.money >= 600)
 									{
 										profile.money -= 600;
-										flameUpgrade.bulletSpread.upgradedSkill.stat -= 0.11f;
+										flameUpgrade.bulletSpread.upgradedSkill.stat -= 1.0f;
 										flameUpgrade.bulletSpread.upgradedSkill.currTier++;
 
 										if (flameUpgrade.bulletSpread.upgradedSkill.currTier == flameUpgrade.bulletSpread.upgradedSkill.maxTier)
@@ -2046,7 +2046,7 @@ bool	ShopState::Input(void)
 									if (profile.money >= 600)
 									{
 										profile.money -= 600;
-										flameUpgrade.bulletVelocity.upgradedSkill.stat -= 0.11f;
+										flameUpgrade.bulletVelocity.upgradedSkill.stat += 100.0f;
 										flameUpgrade.bulletVelocity.upgradedSkill.currTier++;
 
 										if (flameUpgrade.bulletVelocity.upgradedSkill.currTier == flameUpgrade.bulletVelocity.upgradedSkill.maxTier)
@@ -2060,7 +2060,7 @@ bool	ShopState::Input(void)
 									if (profile.money >= 600)
 									{
 										profile.money -= 600;
-										flameUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+										flameUpgrade.ammoCap.upgradedSkill.stat += 100;
 										flameUpgrade.ammoCap.upgradedSkill.currTier++;
 
 										if (flameUpgrade.ammoCap.upgradedSkill.currTier == flameUpgrade.ammoCap.upgradedSkill.maxTier)
@@ -2074,10 +2074,10 @@ bool	ShopState::Input(void)
 									if (profile.money >= 100)
 									{
 										profile.money -= 100;
-										flameUpgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
+										flameUpgrade.totalAmmo.upgradedSkill.stat += 200;
 										flameUpgrade.totalAmmo.upgradedSkill.currTier++;
 
-										if (flameUpgrade.totalAmmo.upgradedSkill.currTier == flameUpgrade.totalAmmo.upgradedSkill.maxTier)
+										if (flameUpgrade.totalAmmo.upgradedSkill.stat >= flameUpgrade.ammoCap.upgradedSkill.stat)
 											flameUpgrade.totalAmmo.isMaxed = true;
 									}
 								}
@@ -2199,7 +2199,7 @@ bool	ShopState::Input(void)
 									if (profile.money >= 600)
 									{
 										profile.money -= 600;
-										nadeLauncherUpgrade.ammoCap.upgradedSkill.stat -= 0.11f;
+										nadeLauncherUpgrade.ammoCap.upgradedSkill.stat += 30;
 										nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier++;
 
 										if (nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier == nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier)
@@ -2213,7 +2213,7 @@ bool	ShopState::Input(void)
 									if (profile.money >= 100)
 									{
 										profile.money -= 100;
-										nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat -= 0.11f;
+										nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat += 10;
 										nadeLauncherUpgrade.totalAmmo.upgradedSkill.currTier++;
 
 										if (nadeLauncherUpgrade.totalAmmo.upgradedSkill.currTier == nadeLauncherUpgrade.totalAmmo.upgradedSkill.maxTier)
@@ -2476,7 +2476,7 @@ void	ShopState::Update(float elapsedTime)
 		}
 		if (barbWireCurrHealth / barbWireMaxHealth != 1)
 		{
-			barbedWireRepairCost = (barbWireCurrHealth / barbWireMaxHealth) * 500;
+			barbedWireRepairCost = (int)((barbWireCurrHealth / barbWireMaxHealth) * 500.0f);
 		}
 	}
 
@@ -2493,7 +2493,7 @@ void	ShopState::Update(float elapsedTime)
 
 		if (sandBagCurrHealth / sandBagMaxHealth != 1)
 		{
-			sandBagRepairCost = (sandBagCurrHealth / sandBagMaxHealth) * 500;
+			sandBagRepairCost = (int)((sandBagCurrHealth / sandBagMaxHealth) * 500.0f);
 		}
 	}
 
@@ -2510,7 +2510,7 @@ void	ShopState::Update(float elapsedTime)
 
 		if ((numLandMines / landMines.size()) != 1)
 		{
-			landMineRepairCost = (numLandMines / landMines.size()) * 100;
+			landMineRepairCost = (int)((numLandMines / landMines.size()) * 100.0f);
 
 		}
 	}
@@ -5286,9 +5286,9 @@ void ShopState::LoadShopStatus()
 
 #pragma region Revoler Loadin
 
-	revolverUpgrade.magSize.upgradedSkill.currTier = profile.revolver.reloadTime.upgradedSkill.currTier;
-	revolverUpgrade.magSize.upgradedSkill.maxTier = profile.revolver.reloadTime.upgradedSkill.maxTier;
-	revolverUpgrade.magSize.upgradedSkill.stat = profile.revolver.reloadTime.upgradedSkill.stat;
+	revolverUpgrade.magSize.upgradedSkill.currTier = profile.revolver.magSize.upgradedSkill.currTier;
+	revolverUpgrade.magSize.upgradedSkill.maxTier = profile.revolver.magSize.upgradedSkill.maxTier;
+	revolverUpgrade.magSize.upgradedSkill.stat = profile.revolver.magSize.upgradedSkill.stat;
 
 	if (revolverUpgrade.magSize.upgradedSkill.currTier == profile.revolver.magSize.upgradedSkill.maxTier)
 		revolverUpgrade.magSize.isMaxed = true;
@@ -5948,17 +5948,17 @@ void ShopState::UpdateProfile()
 
 #pragma region Revoler Loadin
 
-	profile.revolver.magSize.upgradedSkill.currTier = revolverUpgrade.reloadTime.upgradedSkill.currTier;
-	profile.revolver.magSize.upgradedSkill.maxTier = revolverUpgrade.reloadTime.upgradedSkill.maxTier;
-	profile.revolver.magSize.upgradedSkill.stat = revolverUpgrade.reloadTime.upgradedSkill.stat;
+	profile.revolver.magSize.upgradedSkill.currTier = revolverUpgrade.magSize.upgradedSkill.currTier;
+	profile.revolver.magSize.upgradedSkill.maxTier = revolverUpgrade.magSize.upgradedSkill.maxTier;
+	profile.revolver.magSize.upgradedSkill.stat = revolverUpgrade.magSize.upgradedSkill.stat;
 
 	profile.revolver.reloadTime.upgradedSkill.currTier = revolverUpgrade.reloadTime.upgradedSkill.currTier;
 	profile.revolver.reloadTime.upgradedSkill.maxTier = revolverUpgrade.reloadTime.upgradedSkill.maxTier;
 	profile.revolver.reloadTime.upgradedSkill.stat = revolverUpgrade.reloadTime.upgradedSkill.stat;
 
-	profile.revolver.recoilTime.upgradedSkill.currTier = revolverUpgrade.reloadTime.upgradedSkill.currTier;
-	profile.revolver.recoilTime.upgradedSkill.maxTier = revolverUpgrade.reloadTime.upgradedSkill.maxTier;
-	profile.revolver.recoilTime.upgradedSkill.stat = revolverUpgrade.reloadTime.upgradedSkill.stat;
+	profile.revolver.recoilTime.upgradedSkill.currTier = revolverUpgrade.recoilTime.upgradedSkill.currTier;
+	profile.revolver.recoilTime.upgradedSkill.maxTier = revolverUpgrade.recoilTime.upgradedSkill.maxTier;
+	profile.revolver.recoilTime.upgradedSkill.stat = revolverUpgrade.recoilTime.upgradedSkill.stat;
 
 	profile.revolver.penPower.upgradedSkill.currTier = revolverUpgrade.penPower.upgradedSkill.currTier;
 	profile.revolver.penPower.upgradedSkill.maxTier = revolverUpgrade.penPower.upgradedSkill.maxTier;
@@ -5991,13 +5991,13 @@ void ShopState::UpdateProfile()
 	profile.sawnoff.reloadTime.upgradedSkill.maxTier = sawnOffUpgrade.reloadTime.upgradedSkill.maxTier;
 	profile.sawnoff.reloadTime.upgradedSkill.stat = sawnOffUpgrade.reloadTime.upgradedSkill.stat;
 
-	profile.sawnoff.recoilTime.upgradedSkill.currTier = sawnOffUpgrade.reloadTime.upgradedSkill.currTier;
-	profile.sawnoff.recoilTime.upgradedSkill.maxTier = sawnOffUpgrade.reloadTime.upgradedSkill.maxTier;
-	profile.sawnoff.recoilTime.upgradedSkill.stat = sawnOffUpgrade.reloadTime.upgradedSkill.stat;
+	profile.sawnoff.recoilTime.upgradedSkill.currTier = sawnOffUpgrade.recoilTime.upgradedSkill.currTier;
+	profile.sawnoff.recoilTime.upgradedSkill.maxTier = sawnOffUpgrade.recoilTime.upgradedSkill.maxTier;
+	profile.sawnoff.recoilTime.upgradedSkill.stat = sawnOffUpgrade.recoilTime.upgradedSkill.stat;
 
-	profile.sawnoff.bulletSpread.upgradedSkill.currTier = sawnOffUpgrade.reloadTime.upgradedSkill.currTier;
-	profile.sawnoff.bulletSpread.upgradedSkill.maxTier = sawnOffUpgrade.reloadTime.upgradedSkill.maxTier;
-	profile.sawnoff.bulletSpread.upgradedSkill.stat = sawnOffUpgrade.reloadTime.upgradedSkill.stat;
+	profile.sawnoff.bulletSpread.upgradedSkill.currTier = sawnOffUpgrade.bulletSpread.upgradedSkill.currTier;
+	profile.sawnoff.bulletSpread.upgradedSkill.maxTier = sawnOffUpgrade.bulletSpread.upgradedSkill.maxTier;
+	profile.sawnoff.bulletSpread.upgradedSkill.stat = sawnOffUpgrade.bulletSpread.upgradedSkill.stat;
 
 	profile.sawnoff.damage.upgradedSkill.currTier = sawnOffUpgrade.damage.upgradedSkill.currTier;
 	profile.sawnoff.damage.upgradedSkill.maxTier = sawnOffUpgrade.damage.upgradedSkill.maxTier;
@@ -7005,7 +7005,7 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[REVOLVER]->SetRecoilTime(profile.revolver.recoilTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[REVOLVER]->SetMagSize(profile.revolver.magSize.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[REVOLVER]->SetDamage(profile.revolver.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[REVOLVER]->SetPenPower(profile.revolver.recoilTime.upgradedSkill.stat);
+			m_pWeapons->GetWeapons()[REVOLVER]->SetPenPower(profile.revolver.penPower.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[REVOLVER]->SetTotalAmmo(profile.revolver.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[REVOLVER]->SetAmmoCap(profile.revolver.ammoCap.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[REVOLVER]->SetEquipped(profile.revolver.isEquipt);

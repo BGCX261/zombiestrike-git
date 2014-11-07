@@ -159,8 +159,15 @@
 		? SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt")
 		: SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");;
 
+	if (m_bStoryMode == true)
+		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetStoryProfile().wavesComplete);
+
+	else
+		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetSurvivalProfile().wavesComplete);
+
 
 	SpawnManager::GetInstance()->Activate();
+	
 
 
 	// Music
@@ -311,6 +318,7 @@
 	// Shutdown & release the Map & Animation Managers
 	MapManager::GetInstance()->UnloadLevel();
 	AnimationManager::GetInstance()->Shutdown();
+	SpawnManager::GetInstance()->ShutDown();
 
 	
 

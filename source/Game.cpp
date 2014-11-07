@@ -1866,6 +1866,8 @@ void Game::CreateSurvivalProfiles()
 				fout << .33 << '\n';
 				fout << 1 << '\n';
 				fout << 3 << '\n';
+				fout << 1 << '\n';
+
 				//revolver
 				fout << 25 << '\n';
 				fout << 1 << '\n';
@@ -1889,6 +1891,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 #pragma endregion
 
 #pragma region SMGs
@@ -1912,6 +1916,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//Tech9
 				fout << 90 << '\n';
 				fout << 1 << '\n';
@@ -1932,6 +1938,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//p90
 				fout << 150 << '\n';
 				fout << 1 << '\n';
@@ -1952,6 +1960,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 
 #pragma endregion
 
@@ -1976,6 +1986,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//pump
 				fout << 24 << '\n';
 				fout << 1 << '\n';
@@ -1999,6 +2011,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//auto shotty
 				fout << 30 << '\n';
 				fout << 1 << '\n';
@@ -2022,6 +2036,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 
 
 
@@ -2053,6 +2069,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//m16
 				fout << 90 << '\n';
 				fout << 1 << '\n';
@@ -2076,6 +2094,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//LMG
 				fout << 200 << '\n';
 				fout << 1 << '\n';
@@ -2099,6 +2119,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 
 #pragma endregion
 
@@ -2130,6 +2152,7 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
 				//flamethrower
 				fout << 200 << '\n';
 				fout << 1 << '\n';
@@ -2153,6 +2176,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//grenade launcher
 				fout << 5 << '\n';
 				fout << 1 << '\n';
@@ -2173,6 +2198,8 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 
 				//barbedwire
 				fout << 100 << '\n';
@@ -2211,7 +2238,6 @@ void Game::CreateSurvivalProfiles()
 				}
 
 
-
 				//turrets
 				//numturrets
 				fout << 0 << '\n';
@@ -2220,10 +2246,6 @@ void Game::CreateSurvivalProfiles()
 
 				//num waves
 				fout << 0;
-
-#pragma endregion
-
-				fout.close();
 			}
 		}
 	}

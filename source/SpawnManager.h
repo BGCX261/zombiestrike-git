@@ -16,6 +16,9 @@ public:
 
 	void Update(float dt);
 
+	void ShutDown();
+
+
 	unsigned int GetNumWaves(void) const { return m_nNumWaves; }
 	int GetEnemyType(void) const { return m_nZombieType; }
 	int GetNumEnemies(void) const { return m_nNumEnemies; }
@@ -26,6 +29,8 @@ public:
 
 	void SetNumWaves(unsigned int nwaves) { m_nNumWaves = nwaves; }
 	void SetEnemiesKilled(int ekilled) { m_nEnemiesKilled = ekilled; }
+	void SetCurrWave(int wave) { m_nCurrWave = wave; }
+
 	void SetEnemyType(int enemyType){ m_nZombieType = enemyType; }
 	void SetNumEnemies(int enemyNum) { m_nNumEnemies = enemyNum; }
 	void SetWaveEnemies(int waveEnemies) { m_nWaveEnemies = waveEnemies; }

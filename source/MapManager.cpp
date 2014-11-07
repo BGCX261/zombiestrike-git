@@ -36,10 +36,8 @@ enum EntityBucket { BUCKET_BULLETS, BUCKET_PUKE, BUCKET_PLAYER, BUCKET_ENEMIES, 
 
 BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pEntities)
 {
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = Game::GetInstance()->GetStoryProfile();
-	else
-		profile = Game::GetInstance()->GetSurvivalProfile();
+	
+	profile = currProfile;
 	//EntityManager* m_pEntities = new EntityManager;
 	Player* player = nullptr;
 
@@ -299,6 +297,13 @@ void MapManager::UnloadLevel(void)
 	}
 	delete [] tStruct.layers.m_vTiles;
 
+	barbedWires.clear();
+	landMines.clear();
+
+	sandBags.clear();
+	currMine = 0;
+	currBarbWire = 0;
+	currSandBag = 0;
 }
 
 void MapManager::Render()
