@@ -294,6 +294,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].pistol.recoilTime.upgradedSkill.stat;
 			fin >> storyProfiles[i - 1].pistol.recoilTime.upgradedSkill.currTier;
 			fin >> storyProfiles[i - 1].pistol.recoilTime.upgradedSkill.maxTier;
+			fin >> storyProfiles[i - 1].pistol.isEquipt;
 
 			//revolver
 			fin >> storyProfiles[i - 1].revolver.totalAmmo.upgradedSkill.stat;
@@ -325,6 +326,8 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].revolver.damage.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].revolver.isBought;
+			fin >> storyProfiles[i - 1].revolver.isEquipt;
+
 
 
 #pragma endregion
@@ -360,7 +363,8 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].mac10.damage.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].mac10.isBought;
-		
+			fin >> storyProfiles[i - 1].mac10.isEquipt;
+
 			//Tech9
 			fin >> storyProfiles[i - 1].tech9.totalAmmo.upgradedSkill.stat;
 			fin >> storyProfiles[i - 1].tech9.totalAmmo.upgradedSkill.currTier;
@@ -387,6 +391,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].tech9.damage.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].tech9.isBought;
+			fin >> storyProfiles[i - 1].tech9.isEquipt;
 
 			//P90
 			fin >> storyProfiles[i - 1].p90.totalAmmo.upgradedSkill.stat;
@@ -414,6 +419,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].p90.damage.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].p90.isBought;
+			fin >> storyProfiles[i - 1].p90.isEquipt;
 
 #pragma endregion
 
@@ -446,6 +452,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].sawnoff.recoilTime.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].sawnoff.isBought;
+			fin >> storyProfiles[i - 1].sawnoff.isEquipt;
 
 
 			//Pump
@@ -478,6 +485,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].pumpShotgun.recoilTime.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].pumpShotgun.isBought;
+			fin >> storyProfiles[i - 1].pumpShotgun.isEquipt;
 
 			//Auto
 			fin >> storyProfiles[i - 1].autoShotgun.totalAmmo.upgradedSkill.stat;
@@ -509,6 +517,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].autoShotgun.recoilTime.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].autoShotgun.isBought;
+			fin >> storyProfiles[i - 1].autoShotgun.isEquipt;
 
 
 
@@ -546,6 +555,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].ak47.recoilTime.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].ak47.isBought;
+			fin >> storyProfiles[i - 1].ak47.isEquipt;
 
 			//M-16
 			fin >> storyProfiles[i - 1].m16.totalAmmo.upgradedSkill.stat;
@@ -577,6 +587,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].m16.recoilTime.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].m16.isBought;
+			fin >> storyProfiles[i - 1].m16.isEquipt;
 
 			//LMG
 			fin >> storyProfiles[i - 1].lmg.totalAmmo.upgradedSkill.stat;
@@ -608,6 +619,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].lmg.recoilTime.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].lmg.isBought;
+			fin >> storyProfiles[i - 1].lmg.isEquipt;
 
 #pragma endregion
 
@@ -648,6 +660,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].sniper.recoilTime.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].sniper.isBought;
+			fin >> storyProfiles[i - 1].sniper.isEquipt;
 
 			//Flamethrower
 
@@ -680,6 +693,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].flameThrower.bulletVelocity.upgradedSkill.maxTier;
 
 			fin >> storyProfiles[i - 1].flameThrower.isBought;
+			fin >> storyProfiles[i - 1].flameThrower.isEquipt;
 
 			//Grenade Launcher
 
@@ -708,6 +722,7 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].nadeLauncher.bulletVelocity.upgradedSkill.maxTier;
 		
 			fin >> storyProfiles[i - 1].nadeLauncher.isBought;
+			fin >> storyProfiles[i - 1].nadeLauncher.isEquipt;
 
 			//Barb Wire
 			fin >> storyProfiles[i - 1].barbWire.maxHealth.upgradedSkill.stat;
@@ -756,6 +771,9 @@ void Game::LoadStoryProfiles( void )
 			}
 
 			fin >> storyProfiles[i - 1].numTurrets;
+
+			fin >> storyProfiles[i - 1].maxNumTurrets;
+
 
 			fin >> storyProfiles[i - 1].wavesComplete;
 
@@ -834,6 +852,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].pistol.recoilTime.upgradedSkill.stat;
 			fin >> survivalProfiles[i - 1].pistol.recoilTime.upgradedSkill.currTier;
 			fin >> survivalProfiles[i - 1].pistol.recoilTime.upgradedSkill.maxTier;
+			fin >> survivalProfiles[i - 1].pistol.isEquipt;
 
 			//revolver
 			fin >> survivalProfiles[i - 1].revolver.totalAmmo.upgradedSkill.stat;
@@ -865,6 +884,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].revolver.damage.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].revolver.isBought;
+			fin >> survivalProfiles[i - 1].revolver.isEquipt;
 
 
 #pragma endregion
@@ -900,6 +920,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].mac10.damage.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].mac10.isBought;
+			fin >> survivalProfiles[i - 1].mac10.isEquipt;
 
 			//Tech9
 			fin >> survivalProfiles[i - 1].tech9.totalAmmo.upgradedSkill.stat;
@@ -927,6 +948,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].tech9.damage.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].tech9.isBought;
+			fin >> survivalProfiles[i - 1].tech9.isEquipt;
 
 			//P90
 			fin >> survivalProfiles[i - 1].p90.totalAmmo.upgradedSkill.stat;
@@ -954,6 +976,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].p90.damage.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].p90.isBought;
+			fin >> survivalProfiles[i - 1].p90.isEquipt;
 
 #pragma endregion
 
@@ -986,6 +1009,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].sawnoff.recoilTime.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].sawnoff.isBought;
+			fin >> survivalProfiles[i - 1].sawnoff.isEquipt;
 
 
 			//Pump
@@ -1018,6 +1042,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].pumpShotgun.recoilTime.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].pumpShotgun.isBought;
+			fin >> survivalProfiles[i - 1].pumpShotgun.isEquipt;
 
 			//Auto
 			fin >> survivalProfiles[i - 1].autoShotgun.totalAmmo.upgradedSkill.stat;
@@ -1049,6 +1074,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].autoShotgun.recoilTime.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].autoShotgun.isBought;
+			fin >> survivalProfiles[i - 1].autoShotgun.isEquipt;
 
 
 
@@ -1086,6 +1112,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].ak47.recoilTime.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].ak47.isBought;
+			fin >> survivalProfiles[i - 1].ak47.isEquipt;
 
 			//M-16
 			fin >> survivalProfiles[i - 1].m16.totalAmmo.upgradedSkill.stat;
@@ -1117,6 +1144,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].m16.recoilTime.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].m16.isBought;
+			fin >> survivalProfiles[i - 1].m16.isEquipt;
 
 			//LMG
 			fin >> survivalProfiles[i - 1].lmg.totalAmmo.upgradedSkill.stat;
@@ -1148,6 +1176,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].lmg.recoilTime.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].lmg.isBought;
+			fin >> survivalProfiles[i - 1].lmg.isEquipt;
 
 #pragma endregion
 
@@ -1188,6 +1217,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].sniper.recoilTime.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].sniper.isBought;
+			fin >> survivalProfiles[i - 1].sniper.isEquipt;
 
 			//Flamethrower
 
@@ -1220,6 +1250,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].flameThrower.bulletVelocity.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].flameThrower.isBought;
+			fin >> survivalProfiles[i - 1].flameThrower.isEquipt;
 
 			//Grenade Launcher
 
@@ -1248,6 +1279,7 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].nadeLauncher.bulletVelocity.upgradedSkill.maxTier;
 
 			fin >> survivalProfiles[i - 1].nadeLauncher.isBought;
+			fin >> survivalProfiles[i - 1].nadeLauncher.isEquipt;
 
 			//Barb Wire
 			fin >> survivalProfiles[i - 1].barbWire.maxHealth.upgradedSkill.stat;
@@ -1295,9 +1327,12 @@ void Game::LoadSurvivalProfiles(void)
 
 			}
 
-			fin >> survivalProfiles[i - 1].numTurrets;
+			fin >> storyProfiles[i - 1].numTurrets;
 
-			fin >> survivalProfiles[i - 1].wavesComplete;
+			fin >> storyProfiles[i - 1].maxNumTurrets;
+
+
+			fin >> storyProfiles[i - 1].wavesComplete;
 
 
 
@@ -1375,6 +1410,8 @@ void Game::CreateStoryProfiles()
 				fout << .33 << '\n';
 				fout << 1 << '\n';
 				fout << 3 << '\n';
+				fout << 1 << '\n';
+
 				//revolver
 				fout << 25 << '\n';
 				fout << 1 << '\n';
@@ -1398,6 +1435,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 #pragma endregion
 
 #pragma region SMGs
@@ -1421,6 +1460,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//Tech9
 				fout << 90 << '\n';
 				fout << 1 << '\n';
@@ -1441,6 +1482,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//p90
 				fout << 150 << '\n';
 				fout << 1 << '\n';
@@ -1461,6 +1504,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 
 #pragma endregion
 
@@ -1485,6 +1530,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//pump
 				fout << 24 << '\n';
 				fout << 1 << '\n';
@@ -1508,6 +1555,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//auto shotty
 				fout << 30 << '\n';
 				fout << 1 << '\n';
@@ -1531,6 +1580,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 
 			
 
@@ -1562,6 +1613,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//m16
 				fout << 90 << '\n';
 				fout << 1 << '\n';
@@ -1585,6 +1638,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n'; 
+				fout << 0 << '\n';
+
 				//LMG
 				fout << 200 << '\n';
 				fout << 1 << '\n';
@@ -1608,6 +1663,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 
 #pragma endregion
 
@@ -1639,6 +1696,7 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n'; 
 				//flamethrower
 				fout << 200 << '\n';
 				fout << 1 << '\n';
@@ -1662,6 +1720,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 				//grenade launcher
 				fout << 5 << '\n';
 				fout << 1 << '\n';
@@ -1682,6 +1742,8 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 				fout << 0 << '\n';
+				fout << 0 << '\n';
+
 
 				//barbedwire
 				fout << 100 << '\n';
@@ -1721,9 +1783,12 @@ void Game::CreateStoryProfiles()
 
 
 				//turrets
-
+				//numturrets
 				fout << 0 << '\n';
+				//max num turrets
+				fout << 3 << '\n';
 
+				//num waves
 				fout << 0;
 
 #pragma endregion
@@ -2137,10 +2202,14 @@ void Game::CreateSurvivalProfiles()
 				}
 
 
+
 				//turrets
-
+				//numturrets
 				fout << 0 << '\n';
+				//max num turrets
+				fout << 3 << '\n';
 
+				//num waves
 				fout << 0;
 
 #pragma endregion

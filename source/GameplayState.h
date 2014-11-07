@@ -139,11 +139,15 @@ private:
 	// Message Callback Function:
 	static void MessageProc( const SGD::Message* pMsg );
 
+	void UpdateWeaponManager();
+
+
 
 
 	/**********************************************************/
 	// Game Entities
 	enum EntityBucket { BUCKET_BULLETS, BUCKET_PUKE, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
+	enum Gun { GLOCK, REVOLVER, SAWN, PUMP, AUTO, MAC10, TECH9, SP90, M16, LIGHT_MG, AK47, SNIPER, FTHROWER, GLAUNCHER };
 
 	EntityManager*			m_pEntities			= nullptr;
 	AnimationManager*		m_pAnimManager		= nullptr;

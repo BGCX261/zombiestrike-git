@@ -121,6 +121,11 @@ void	ShopState::Exit(void)
 {
 	UpdateProfile();
 	SaveProfile();
+	if (GameplayState::GetInstance()->GetGameMode())
+		Game::GetInstance()->LoadStoryProfiles();
+	else
+		Game::GetInstance()->LoadSurvivalProfiles();
+
 	UpdateWeaponManager();
 
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hReticleImage);
@@ -267,12 +272,15 @@ bool	ShopState::Input(void)
 										{
 											if (pWeapons->GetWeapons()[i]->GetGunType() == GLOCK)
 											{
-												pWeapons->GetWeapons()[i]->SetEquipped(true);
+												//pWeapons->GetWeapons()[i]->SetEquipped(true);
+												pistolUpgrade.isEquipt = true;
 											}
 
 											if (pWeapons->GetWeapons()[i]->GetGunType() == REVOLVER)
 											{
-												pWeapons->GetWeapons()[i]->SetEquipped(false);
+												//pWeapons->GetWeapons()[i]->SetEquipped(false);
+												pistolUpgrade.isEquipt = false;
+
 											}
 										}
 									}
@@ -409,6 +417,7 @@ bool	ShopState::Input(void)
 									{
 										profile.money -= 2000;
 										revolverUpgrade.isBought = true;
+										
 									}
 								}
 								else
@@ -418,12 +427,15 @@ bool	ShopState::Input(void)
 									{
 										if (pWeapons->GetWeapons()[i]->GetGunType() == GLOCK)
 										{
-											pWeapons->GetWeapons()[i]->SetEquipped(false);
+											//pWeapons->GetWeapons()[i]->SetEquipped(false);
+											pistolUpgrade.isEquipt = false;
 										}
 
 										if (pWeapons->GetWeapons()[i]->GetGunType() == REVOLVER)
 										{
-											pWeapons->GetWeapons()[i]->SetEquipped(true);
+										//	pWeapons->GetWeapons()[i]->SetEquipped(true);
+											revolverUpgrade.isEquipt = true;
+
 										}
 									}
 								}
@@ -562,17 +574,22 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == SAWN)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(true);
+							//	pWeapons->GetWeapons()[i]->SetEquipped(true);
+								sawnOffUpgrade.isEquipt = true;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == PUMP)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								pumpShotgunUpgrade.isEquipt = true;
+
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == AUTO)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								autoShotgunUpgrade.isEquipt = true;
+
 							}
 						}
 					}
@@ -716,17 +733,22 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == SAWN)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								sawnOffUpgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == PUMP)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(true);
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								pumpShotgunUpgrade.isEquipt = true;
+
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == AUTO)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								autoShotgunUpgrade.isEquipt = false;
+
 							}
 						}
 					}
@@ -866,17 +888,22 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == SAWN)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								sawnOffUpgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == PUMP)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								pumpShotgunUpgrade.isEquipt = false;
+
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == AUTO)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(true);
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								autoShotgunUpgrade.isEquipt = true;
+
 							}
 						}
 					}
@@ -1006,17 +1033,21 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == MAC10)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(true);
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								uziUpgrade.isEquipt = true;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == TECH9)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								tech9Upgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == SP90)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								p90Upgrade.isEquipt = false;
+
 							}
 						}
 					}
@@ -1141,17 +1172,21 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == MAC10)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								uziUpgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == TECH9)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(true);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								tech9Upgrade.isEquipt = true;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == SP90)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								p90Upgrade.isEquipt = false;
+
 							}
 						}
 
@@ -1277,17 +1312,21 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == MAC10)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								uziUpgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == TECH9)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								tech9Upgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == SP90)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(true);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								p90Upgrade.isEquipt = true;
+
 							}
 						}
 					}
@@ -1431,17 +1470,20 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == AK47)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(true);
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								ak47Upgrade.isEquipt = true;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == M16)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								m16Upgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == LIGHT_MG)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								lmgUpgrade.isEquipt = false;
 							}
 						}
 					}
@@ -1580,17 +1622,20 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == AK47)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								ak47Upgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == M16)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(true);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								m16Upgrade.isEquipt = true;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == LIGHT_MG)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								lmgUpgrade.isEquipt = false;
 							}
 						}
 					}
@@ -1730,17 +1775,20 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == AK47)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								ak47Upgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == M16)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(false);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								m16Upgrade.isEquipt = false;
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == LIGHT_MG)
 							{
-								pWeapons->GetWeapons()[i]->SetEquipped(true);
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								lmgUpgrade.isEquipt = true;
 							}
 						}
 					}
@@ -1902,17 +1950,20 @@ bool	ShopState::Input(void)
 							{
 								if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
 								{
-									pWeapons->GetWeapons()[i]->SetEquipped(true);
+									//pWeapons->GetWeapons()[i]->SetEquipped(true);
+									sniperUpgrade.isEquipt = true;
 								}
 
 								if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
 								{
-									pWeapons->GetWeapons()[i]->SetEquipped(false);
+									//pWeapons->GetWeapons()[i]->SetEquipped(false);
+									flameUpgrade.isEquipt = false;
 								}
 
 								if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
 								{
-									pWeapons->GetWeapons()[i]->SetEquipped(false);
+									//pWeapons->GetWeapons()[i]->SetEquipped(false);
+									nadeLauncherUpgrade.isEquipt = false;
 								}
 							}
 						}
@@ -2052,17 +2103,20 @@ bool	ShopState::Input(void)
 							{
 								if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
 								{
-									pWeapons->GetWeapons()[i]->SetEquipped(false);
+									//pWeapons->GetWeapons()[i]->SetEquipped(true);
+									sniperUpgrade.isEquipt = false;
 								}
 
 								if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
 								{
-									pWeapons->GetWeapons()[i]->SetEquipped(true);
+									//pWeapons->GetWeapons()[i]->SetEquipped(false);
+									flameUpgrade.isEquipt = true;
 								}
 
 								if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
 								{
-									pWeapons->GetWeapons()[i]->SetEquipped(false);
+									//pWeapons->GetWeapons()[i]->SetEquipped(false);
+									nadeLauncherUpgrade.isEquipt = false;
 								}
 							}
 						}
@@ -2202,17 +2256,20 @@ bool	ShopState::Input(void)
 							{
 								if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
 								{
-									pWeapons->GetWeapons()[i]->SetEquipped(false);
+									//pWeapons->GetWeapons()[i]->SetEquipped(true);
+									sniperUpgrade.isEquipt = false;
 								}
 
 								if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
 								{
-									pWeapons->GetWeapons()[i]->SetEquipped(false);
+									//pWeapons->GetWeapons()[i]->SetEquipped(false);
+									flameUpgrade.isEquipt = false;
 								}
 
 								if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
 								{
-									pWeapons->GetWeapons()[i]->SetEquipped(true);
+									//pWeapons->GetWeapons()[i]->SetEquipped(false);
+									nadeLauncherUpgrade.isEquipt = true;
 								}
 							}
 						}
@@ -2396,8 +2453,9 @@ bool	ShopState::Input(void)
 			}
 						
 			break;
-
+		
 	}
+	
 
 	
 	return true;
@@ -2471,6 +2529,8 @@ void	ShopState::Update(float elapsedTime)
 	}
 	
 	m_tShopTimer.Update(elapsedTime);
+	UpdateProfile();
+	UpdateWeaponManager();
 }
 void	ShopState::Render(void)
 {
@@ -5880,6 +5940,8 @@ void ShopState::UpdateProfile()
 	profile.pistol.reloadTime.upgradedSkill.currTier = pistolUpgrade.reloadTime.upgradedSkill.currTier;
 	profile.pistol.reloadTime.upgradedSkill.maxTier = pistolUpgrade.reloadTime.upgradedSkill.maxTier;
 	profile.pistol.reloadTime.upgradedSkill.stat = pistolUpgrade.reloadTime.upgradedSkill.stat;
+	profile.pistol.isEquipt = pistolUpgrade.isEquipt;
+
 
 
 #pragma endregion
@@ -5915,6 +5977,8 @@ void ShopState::UpdateProfile()
 	profile.revolver.totalAmmo.upgradedSkill.stat = revolverUpgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.revolver.isBought = revolverUpgrade.isBought;
+	profile.revolver.isEquipt = revolverUpgrade.isEquipt;
+
 
 #pragma endregion
 
@@ -5948,6 +6012,7 @@ void ShopState::UpdateProfile()
 	profile.sawnoff.totalAmmo.upgradedSkill.stat = sawnOffUpgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.sawnoff.isBought = sawnOffUpgrade.isBought;
+	profile.sawnoff.isEquipt = sawnOffUpgrade.isEquipt;
 
 #pragma endregion
 
@@ -5983,6 +6048,7 @@ void ShopState::UpdateProfile()
 	profile.pumpShotgun.totalAmmo.upgradedSkill.stat = pumpShotgunUpgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.pumpShotgun.isBought = pumpShotgunUpgrade.isBought;
+	profile.pumpShotgun.isEquipt = pumpShotgunUpgrade.isEquipt;
 
 #pragma endregion
 
@@ -6018,6 +6084,7 @@ void ShopState::UpdateProfile()
 	profile.autoShotgun.totalAmmo.upgradedSkill.stat = autoShotgunUpgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.autoShotgun.isBought = autoShotgunUpgrade.isBought;
+	profile.autoShotgun.isEquipt = autoShotgunUpgrade.isEquipt;
 
 #pragma endregion
 
@@ -6049,6 +6116,7 @@ void ShopState::UpdateProfile()
 	profile.mac10.totalAmmo.upgradedSkill.stat = uziUpgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.mac10.isBought = uziUpgrade.isBought;
+	profile.mac10.isEquipt = uziUpgrade.isEquipt;
 
 #pragma endregion
 
@@ -6080,6 +6148,7 @@ void ShopState::UpdateProfile()
 	profile.tech9.totalAmmo.upgradedSkill.stat = tech9Upgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.tech9.isBought = tech9Upgrade.isBought;
+	profile.tech9.isEquipt = tech9Upgrade.isEquipt;
 
 #pragma endregion
 
@@ -6111,6 +6180,7 @@ void ShopState::UpdateProfile()
 	profile.p90.totalAmmo.upgradedSkill.stat = p90Upgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.p90.isBought = p90Upgrade.isBought;
+	profile.p90.isEquipt = p90Upgrade.isEquipt;
 
 #pragma endregion
 
@@ -6146,6 +6216,7 @@ void ShopState::UpdateProfile()
 	profile.ak47.totalAmmo.upgradedSkill.stat = ak47Upgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.ak47.isBought = ak47Upgrade.isBought;
+	profile.ak47.isEquipt = ak47Upgrade.isEquipt;
 
 #pragma endregion
 
@@ -6180,6 +6251,7 @@ void ShopState::UpdateProfile()
 	profile.m16.totalAmmo.upgradedSkill.stat = m16Upgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.m16.isBought = m16Upgrade.isBought;
+	profile.m16.isEquipt = m16Upgrade.isEquipt;
 
 #pragma endregion
 
@@ -6215,6 +6287,7 @@ void ShopState::UpdateProfile()
 	profile.lmg.totalAmmo.upgradedSkill.stat = lmgUpgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.lmg.isBought = lmgUpgrade.isBought;
+	profile.lmg.isEquipt = lmgUpgrade.isEquipt;
 
 #pragma endregion
 
@@ -6250,6 +6323,7 @@ void ShopState::UpdateProfile()
 	profile.flameThrower.totalAmmo.upgradedSkill.stat = flameUpgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.flameThrower.isBought = flameUpgrade.isBought;
+	profile.flameThrower.isEquipt = flameUpgrade.isEquipt;
 
 
 #pragma endregion
@@ -6289,6 +6363,7 @@ void ShopState::UpdateProfile()
 	profile.sniper.totalAmmo.upgradedSkill.maxTier = sniperUpgrade.totalAmmo.upgradedSkill.maxTier;
 	profile.sniper.totalAmmo.upgradedSkill.stat = sniperUpgrade.totalAmmo.upgradedSkill.stat;
 	profile.sniper.isBought = sniperUpgrade.isBought;
+	profile.sniper.isEquipt = sniperUpgrade.isEquipt;
 
 
 #pragma endregion
@@ -6320,6 +6395,7 @@ void ShopState::UpdateProfile()
 	profile.nadeLauncher.totalAmmo.upgradedSkill.stat = nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat;
 
 	profile.nadeLauncher.isBought = nadeLauncherUpgrade.isBought;
+	profile.nadeLauncher.isEquipt = nadeLauncherUpgrade.isEquipt;
 
 	//barbed wire
 	profile.barbWire.damage.upgradedSkill.currTier = barbedwire.damage.upgradedSkill.currTier;
@@ -6361,22 +6437,7 @@ void ShopState::UpdateProfile()
 
 	}
 	
-	for (unsigned int currBarb = 0; currBarb < barbedWires.size(); currBarb++)
-	{
-		profile.barbWireStates[currBarb] = barbedWires[currBarb]->IsActive();
-	}
 
-	for (unsigned int currSandBag = 0; currSandBag < sandBags.size(); currSandBag++)
-	{
-		profile.sandBagStates[currSandBag] = sandBags[currSandBag]->IsActive();
-
-	}
-
-	for (unsigned int currLandMine = 0; currLandMine < landMines.size(); currLandMine++)
-	{
-		profile.landMineStates[currLandMine] = landMines[currLandMine]->IsActive();
-
-	}
 
 	if (GameplayState::GetInstance()->GetGameMode() == true)
 		Game::GetInstance()->GetStoryProfile() = profile;
@@ -6415,6 +6476,11 @@ void ShopState::SaveProfile()
 				fout << profile.pistol.recoilTime.upgradedSkill.currTier << '\n';
 				fout << profile.pistol.recoilTime.upgradedSkill.maxTier << '\n';
 
+				fout << profile.pistol.isEquipt << '\n';
+
+
+
+
 				//revolver
 				fout << profile.revolver.totalAmmo.upgradedSkill.stat << '\n';
 				fout << profile.revolver.totalAmmo.upgradedSkill.currTier << '\n';
@@ -6445,6 +6511,9 @@ void ShopState::SaveProfile()
 				fout << profile.revolver.damage.upgradedSkill.maxTier << '\n';
 
 				fout << profile.revolver.isBought << '\n';
+				fout << profile.revolver.isEquipt << '\n';
+
+
 
 
 #pragma endregion
@@ -6480,6 +6549,8 @@ void ShopState::SaveProfile()
 				fout << profile.mac10.damage.upgradedSkill.maxTier << '\n';
 
 				fout << profile.mac10.isBought << '\n';
+				fout << profile.mac10.isEquipt << '\n';
+
 
 				//Tech9
 				fout << profile.tech9.totalAmmo.upgradedSkill.stat << '\n';
@@ -6507,6 +6578,8 @@ void ShopState::SaveProfile()
 				fout << profile.tech9.damage.upgradedSkill.maxTier << '\n';
 
 				fout << profile.tech9.isBought << '\n';
+				fout << profile.tech9.isEquipt << '\n';
+
 
 				//P90
 				fout << profile.p90.totalAmmo.upgradedSkill.stat << '\n';
@@ -6534,6 +6607,8 @@ void ShopState::SaveProfile()
 				fout << profile.p90.damage.upgradedSkill.maxTier << '\n';
 
 				fout << profile.p90.isBought << '\n';
+				fout << profile.p90.isEquipt << '\n';
+
 
 #pragma endregion
 
@@ -6566,6 +6641,8 @@ void ShopState::SaveProfile()
 				fout << profile.sawnoff.recoilTime.upgradedSkill.maxTier << '\n';
 
 				fout << profile.sawnoff.isBought << '\n';
+				fout << profile.sawnoff.isEquipt << '\n';
+
 
 
 				//Pump
@@ -6598,6 +6675,8 @@ void ShopState::SaveProfile()
 				fout << profile.pumpShotgun.recoilTime.upgradedSkill.maxTier << '\n';
 
 				fout << profile.pumpShotgun.isBought << '\n';
+				fout << profile.pumpShotgun.isEquipt << '\n';
+
 
 				//Auto
 				fout << profile.autoShotgun.totalAmmo.upgradedSkill.stat << '\n';
@@ -6629,6 +6708,8 @@ void ShopState::SaveProfile()
 				fout << profile.autoShotgun.recoilTime.upgradedSkill.maxTier << '\n';
 
 				fout << profile.autoShotgun.isBought << '\n';
+				fout << profile.autoShotgun.isEquipt << '\n';
+
 
 
 
@@ -6666,6 +6747,8 @@ void ShopState::SaveProfile()
 				fout << profile.ak47.recoilTime.upgradedSkill.maxTier << '\n';
 
 				fout << profile.ak47.isBought << '\n';
+				fout << profile.ak47.isEquipt << '\n';
+
 
 				//M-16
 				fout << profile.m16.totalAmmo.upgradedSkill.stat << '\n';
@@ -6697,6 +6780,8 @@ void ShopState::SaveProfile()
 				fout << profile.m16.recoilTime.upgradedSkill.maxTier << '\n';
 
 				fout << profile.m16.isBought << '\n';
+				fout << profile.m16.isEquipt << '\n';
+
 
 				//LMG
 				fout << profile.lmg.totalAmmo.upgradedSkill.stat << '\n';
@@ -6728,6 +6813,8 @@ void ShopState::SaveProfile()
 				fout << profile.lmg.recoilTime.upgradedSkill.maxTier << '\n';
 
 				fout << profile.lmg.isBought << '\n';
+				fout << profile.lmg.isEquipt << '\n';
+
 
 #pragma endregion
 
@@ -6768,6 +6855,8 @@ void ShopState::SaveProfile()
 				fout << profile.sniper.recoilTime.upgradedSkill.maxTier << '\n';
 
 				fout << profile.sniper.isBought << '\n';
+				fout << profile.sniper.isEquipt << '\n';
+
 
 				//Flamethrower
 
@@ -6800,6 +6889,8 @@ void ShopState::SaveProfile()
 				fout << profile.flameThrower.bulletVelocity.upgradedSkill.maxTier << '\n';
 
 				fout << profile.flameThrower.isBought << '\n';
+				fout << profile.flameThrower.isEquipt << '\n';
+
 
 				//Grenade Launcher
 
@@ -6828,6 +6919,8 @@ void ShopState::SaveProfile()
 				fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.maxTier << '\n';
 
 				fout << profile.nadeLauncher.isBought << '\n';
+				fout << profile.nadeLauncher.isEquipt << '\n';
+
 
 				//Barb Wire
 				fout << profile.barbWire.maxHealth.upgradedSkill.stat << '\n';
@@ -6839,7 +6932,7 @@ void ShopState::SaveProfile()
 				fout << profile.barbWire.damage.upgradedSkill.maxTier << '\n';
 
 				fout << profile.barbWire.isBought << '\n';
-				bool temp;
+				
 				
 				for (size_t j = 0; j < 30; j++)
 				{
@@ -6855,7 +6948,7 @@ void ShopState::SaveProfile()
 				fout << profile.sandBag.maxHealth.upgradedSkill.maxTier << '\n';
 
 
-				fout << profile.sandBag.isBought;
+				fout << profile.sandBag.isBought << '\n';
 
 				for (size_t j = 0; j < 30; j++)
 				{
@@ -6878,7 +6971,10 @@ void ShopState::SaveProfile()
 
 				fout << profile.numTurrets << '\n';
 
-				fout << profile.wavesComplete;
+				fout << profile.maxNumTurrets << '\n';
+
+
+				fout << profile.wavesComplete << '\n';
 
 
 				//LandMine
@@ -6902,6 +6998,8 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[GLOCK]->SetReloadTime(profile.pistol.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[GLOCK]->SetRecoilTime(profile.pistol.recoilTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[GLOCK]->SetMagSize(profile.pistol.magSize.upgradedSkill.stat);
+			m_pWeapons->GetWeapons()[GLOCK]->SetEquipped(profile.pistol.isEquipt);
+
 
 			m_pWeapons->GetWeapons()[REVOLVER]->SetReloadTime(profile.revolver.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[REVOLVER]->SetRecoilTime(profile.revolver.recoilTime.upgradedSkill.stat);
@@ -6910,15 +7008,20 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[REVOLVER]->SetPenPower(profile.revolver.recoilTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[REVOLVER]->SetTotalAmmo(profile.revolver.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[REVOLVER]->SetAmmoCap(profile.revolver.ammoCap.upgradedSkill.stat);
+			m_pWeapons->GetWeapons()[REVOLVER]->SetEquipped(profile.revolver.isEquipt);
+			m_pWeapons->GetWeapons()[REVOLVER]->SetObtained(profile.revolver.isBought);
 
 			m_pWeapons->GetWeapons()[MAC10]->SetReloadTime(profile.mac10.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[MAC10]->SetRecoilTime(0.2f);
+			m_pWeapons->GetWeapons()[MAC10]->SetRecoilTime(0.01f);
+			m_pWeapons->GetWeapons()[MAC10]->SetObtained(profile.mac10.isBought);
 
 			m_pWeapons->GetWeapons()[MAC10]->SetMagSize(profile.mac10.magSize.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[MAC10]->SetDamage(profile.mac10.damage.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[MAC10]->SetBulletSpread(profile.mac10.bulletSpread.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[MAC10]->SetTotalAmmo(profile.mac10.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[MAC10]->SetAmmoCap(profile.mac10.ammoCap.upgradedSkill.stat);
+			m_pWeapons->GetWeapons()[MAC10]->SetEquipped(profile.mac10.isEquipt);
+			m_pWeapons->GetWeapons()[MAC10]->SetObtained(profile.mac10.isBought);
 
 			m_pWeapons->GetWeapons()[TECH9]->SetReloadTime(profile.tech9.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[TECH9]->SetMagSize(profile.tech9.magSize.upgradedSkill.stat);
@@ -6926,7 +7029,9 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[TECH9]->SetBulletSpread(profile.tech9.bulletSpread.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[TECH9]->SetTotalAmmo(profile.tech9.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[TECH9]->SetAmmoCap(profile.tech9.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[TECH9]->SetRecoilTime(0.3f);
+			m_pWeapons->GetWeapons()[TECH9]->SetRecoilTime(0.02f);
+			m_pWeapons->GetWeapons()[TECH9]->SetEquipped(profile.tech9.isEquipt);
+			m_pWeapons->GetWeapons()[TECH9]->SetObtained(profile.tech9.isBought);
 
 			m_pWeapons->GetWeapons()[SP90]->SetReloadTime(profile.p90.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SP90]->SetMagSize(profile.p90.magSize.upgradedSkill.stat);
@@ -6934,7 +7039,9 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[SP90]->SetBulletSpread(profile.p90.bulletSpread.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SP90]->SetTotalAmmo(profile.p90.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SP90]->SetAmmoCap(profile.p90.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SP90]->SetRecoilTime(0.1f);
+			m_pWeapons->GetWeapons()[SP90]->SetRecoilTime(0.05f);
+			m_pWeapons->GetWeapons()[SP90]->SetEquipped(profile.p90.isEquipt);
+			m_pWeapons->GetWeapons()[SP90]->SetObtained(profile.p90.isBought);
 
 
 			m_pWeapons->GetWeapons()[SAWN]->SetReloadTime(profile.sawnoff.reloadTime.upgradedSkill.stat);
@@ -6943,7 +7050,9 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[SAWN]->SetBulletSpread(profile.sawnoff.bulletSpread.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SAWN]->SetTotalAmmo(profile.sawnoff.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SAWN]->SetAmmoCap(profile.sawnoff.ammoCap.upgradedSkill.stat);
-		
+			m_pWeapons->GetWeapons()[SAWN]->SetEquipped(profile.sawnoff.isEquipt);
+			m_pWeapons->GetWeapons()[SAWN]->SetObtained(profile.sawnoff.isBought);
+
 			m_pWeapons->GetWeapons()[PUMP]->SetReloadTime(profile.pumpShotgun.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[PUMP]->SetRecoilTime(profile.pumpShotgun.recoilTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[PUMP]->SetDamage(profile.pumpShotgun.damage.upgradedSkill.stat);
@@ -6951,7 +7060,9 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[PUMP]->SetTotalAmmo(profile.pumpShotgun.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[PUMP]->SetAmmoCap(profile.pumpShotgun.ammoCap.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[PUMP]->SetMagSize(profile.pumpShotgun.magSize.upgradedSkill.stat);
-		
+			m_pWeapons->GetWeapons()[PUMP]->SetEquipped(profile.pumpShotgun.isEquipt);
+			m_pWeapons->GetWeapons()[PUMP]->SetObtained(profile.pumpShotgun.isBought);
+
 
 			m_pWeapons->GetWeapons()[AUTO]->SetReloadTime(profile.autoShotgun.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[AUTO]->SetRecoilTime(profile.autoShotgun.recoilTime.upgradedSkill.stat);
@@ -6960,7 +7071,9 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[AUTO]->SetTotalAmmo(profile.autoShotgun.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[AUTO]->SetAmmoCap(profile.autoShotgun.ammoCap.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[AUTO]->SetMagSize(profile.autoShotgun.magSize.upgradedSkill.stat);
-		
+			m_pWeapons->GetWeapons()[AUTO]->SetEquipped(profile.autoShotgun.isEquipt);
+			m_pWeapons->GetWeapons()[AUTO]->SetObtained(profile.autoShotgun.isBought);
+
 			m_pWeapons->GetWeapons()[AK47]->SetReloadTime(profile.ak47.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[AK47]->SetRecoilTime(profile.ak47.recoilTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[AK47]->SetDamage(profile.ak47.damage.upgradedSkill.stat);
@@ -6968,7 +7081,9 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[AK47]->SetTotalAmmo(profile.ak47.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[AK47]->SetAmmoCap(profile.ak47.ammoCap.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[AK47]->SetMagSize(profile.ak47.magSize.upgradedSkill.stat);
-		
+			m_pWeapons->GetWeapons()[AK47]->SetEquipped(profile.ak47.isEquipt);
+			m_pWeapons->GetWeapons()[AK47]->SetObtained(profile.ak47.isBought);
+
 			m_pWeapons->GetWeapons()[M16]->SetReloadTime(profile.m16.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[M16]->SetRecoilTime(profile.m16.recoilTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[M16]->SetDamage(profile.m16.damage.upgradedSkill.stat);
@@ -6976,7 +7091,9 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[M16]->SetTotalAmmo(profile.m16.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[M16]->SetAmmoCap(profile.m16.ammoCap.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[M16]->SetMagSize(profile.m16.magSize.upgradedSkill.stat);
-		
+			m_pWeapons->GetWeapons()[M16]->SetEquipped(profile.m16.isEquipt);
+			m_pWeapons->GetWeapons()[M16]->SetObtained(profile.m16.isBought);
+
 			m_pWeapons->GetWeapons()[LIGHT_MG]->SetReloadTime(profile.lmg.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[LIGHT_MG]->SetRecoilTime(profile.lmg.recoilTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[LIGHT_MG]->SetDamage(profile.lmg.damage.upgradedSkill.stat);
@@ -6984,6 +7101,8 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[LIGHT_MG]->SetTotalAmmo(profile.lmg.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[LIGHT_MG]->SetAmmoCap(profile.lmg.ammoCap.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[LIGHT_MG]->SetMagSize(profile.lmg.magSize.upgradedSkill.stat);
+			m_pWeapons->GetWeapons()[LIGHT_MG]->SetEquipped(profile.lmg.isEquipt);
+			m_pWeapons->GetWeapons()[LIGHT_MG]->SetObtained(profile.lmg.isBought);
 
 			m_pWeapons->GetWeapons()[FTHROWER]->SetReloadTime(profile.flameThrower.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[FTHROWER]->SetDamage(profile.flameThrower.damage.upgradedSkill.stat);
@@ -6992,7 +7111,9 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[FTHROWER]->SetTotalAmmo(profile.flameThrower.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[FTHROWER]->SetAmmoCap(profile.flameThrower.ammoCap.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[FTHROWER]->SetMagSize(profile.flameThrower.magSize.upgradedSkill.stat);
-		
+			m_pWeapons->GetWeapons()[FTHROWER]->SetEquipped(profile.flameThrower.isEquipt);
+			m_pWeapons->GetWeapons()[FTHROWER]->SetObtained(profile.flameThrower.isBought);
+
 
 			m_pWeapons->GetWeapons()[GLAUNCHER]->SetReloadTime(profile.nadeLauncher.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[GLAUNCHER]->SetDamage(profile.nadeLauncher.damage.upgradedSkill.stat);
@@ -7000,7 +7121,10 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[GLAUNCHER]->SetTotalAmmo(profile.nadeLauncher.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[GLAUNCHER]->SetAmmoCap(profile.nadeLauncher.ammoCap.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[GLAUNCHER]->SetMagSize(profile.nadeLauncher.magSize.upgradedSkill.stat);
-		
+			m_pWeapons->GetWeapons()[GLAUNCHER]->SetEquipped(profile.nadeLauncher.isEquipt);
+			m_pWeapons->GetWeapons()[GLAUNCHER]->SetObtained(profile.nadeLauncher.isBought);
+
+
 			m_pWeapons->GetWeapons()[SNIPER]->SetReloadTime(profile.sniper.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SNIPER]->SetRecoilTime(profile.sniper.recoilTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SNIPER]->SetPenPower(profile.sniper.penPower.upgradedSkill.stat);
@@ -7008,5 +7132,7 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[SNIPER]->SetTotalAmmo(profile.sniper.totalAmmo.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SNIPER]->SetAmmoCap(profile.sniper.ammoCap.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SNIPER]->SetMagSize(profile.sniper.magSize.upgradedSkill.stat);
+			m_pWeapons->GetWeapons()[SNIPER]->SetEquipped(profile.sniper.isEquipt);
+			m_pWeapons->GetWeapons()[SNIPER]->SetObtained(profile.sniper.isBought);
 
 }
