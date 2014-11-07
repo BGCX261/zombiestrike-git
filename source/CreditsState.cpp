@@ -66,7 +66,7 @@
 // Update
 /*virtual*/ void CreditsState::Update( float elapsedTime )
 {
-	if (starting_y <= 120.0f)
+	if (starting_y <= -120.0f)
 	{
 		Game::GetInstance()->RemoveState();
 		//Game::GetInstance()->AddState(MainMenuState::GetInstance());
