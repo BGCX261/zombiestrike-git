@@ -113,22 +113,25 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 			const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
 			if (landMine->IsActive())
 			{
-				isAlive = false;
+			
 				SetAnimation("bloodExplosion");
 
 			}
 		}
+		else if (pOther->GetType() == OBJ_WALL)
+
+		{
+			
+			
+				
+				SetAnimation("bloodExplosion");
+
+			
+		}
 	}
 	else
 	{
-		if (pOther->GetType() == OBJ_SLOW_ZOMBIE ||
-			pOther->GetType() == OBJ_FAST_ZOMBIE || 
-			pOther->GetType() == OBJ_FAT_ZOMBIE || 
-			pOther->GetType() == OBJ_TANK_ZOMBIE || 
-			pOther->GetType() == OBJ_EXPLODING_ZOMBIE)
-		{
-
-		}
+		
 	}
 
 }
