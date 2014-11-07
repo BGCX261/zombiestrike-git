@@ -3833,7 +3833,7 @@ void	ShopState::Render(void)
 
 				//if (WeaponManager::GetInstance()->GetWeapons()[i]->GetGunType() == WeaponManager::GetInstance()->GetSelected()->GetGunType())
 				//{
-					pGraphics->DrawTextureSection(*WeaponManager::GetInstance()->GetWeaponImage(), { sWidth + size*j, sHeight - size },
+					pGraphics->DrawTextureSection(WeaponManager::GetInstance()->GetWeaponImage(), { sWidth + size*j, sHeight - size },
 						imageRect, {}, {}, {}, { .25f, .25f });
 				//}
 

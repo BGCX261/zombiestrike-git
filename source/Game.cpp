@@ -64,7 +64,6 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 		|| SGD::InputManager::GetInstance()->Initialize() == false )
 		return false;
 
-
 	// Store the size parameters
 	m_fScreenWidth	= width;
 	m_fScreenHeight = height;
@@ -78,6 +77,9 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	m_pFont = new BitmapFont;
 	m_pFont->Initialize("resource/bitmapfonts/MetalGearFont.xml", '\0', false);
 
+	m_hHudWpn = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/hudweapons.png");
+
+	m_hWpnSwitch = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/switchweapon.wav");
 
 	// Load assets
 	loadScreen = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/Loading.png");
@@ -133,16 +135,21 @@ int Game::Update( void )
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
 	// Let the current state handle input
-	IGameState* pCurrent = stateMachine.top();
-	if (pCurrent->Input() == false)
+	m_pCurrState = stateMachine.top();
+	if (m_pCurrState->Input() == false)
 		return 1;	// exit success!
 
 
 	// Update & render the current state if it was not changed
-	if (pCurrent == stateMachine.top())
+	if (m_pCurrState == stateMachine.top())
 	{
-		pCurrent->Update(elapsedTime);
-		pCurrent->Render();
+		m_pCurrState->Update(elapsedTime);
+
+		if (m_pCurrState != nullptr)
+		{
+			m_pCurrState->Render();
+		}
+		
 	}
 
 
@@ -156,11 +163,16 @@ int Game::Update( void )
 //	- terminate the SGD wrappers
 void Game::Terminate( void )
 {
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+
 	// Terminate & deallocate the font
 	m_pFont->Terminate();
 	delete m_pFont;
 	m_pFont = nullptr;
 
+	pGraphics->UnloadTexture(m_hHudWpn);
+	pAudio->UnloadAudio(m_hWpnSwitch);
 
 	// Exit the current state
 	IGameState* currState = stateMachine.top();
@@ -168,10 +180,8 @@ void Game::Terminate( void )
 	currState = nullptr;
 	stateMachine.pop();
 
-
 	// Unload assets
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(loadScreen);
-
 	
 	// Terminate the core SGD wrappers
 	SGD::AudioManager::GetInstance()->Terminate();
@@ -209,6 +219,8 @@ void Game::RemoveState( void )
 	m_pCurrState = stateMachine.top();
 	if (m_pCurrState != nullptr)
 		m_pCurrState->Exit();
+
+	m_pCurrState = nullptr;
 
 	stateMachine.pop();
 }

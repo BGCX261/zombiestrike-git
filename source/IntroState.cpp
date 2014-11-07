@@ -35,12 +35,12 @@
 
 	m_hBackgroundImage = pGraphics->LoadTexture("resource/graphics/emergencybroadcast.png");
 
-	//m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
+	m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
 
 	IntroTimer.AddTime(60);
 	ScreenTimer.AddTime(.1f);
 
-	//pAudio->PlayAudio(m_hEmergency, false);
+	pAudio->PlayAudio(m_hEmergency, false);
 
 	//m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/youLose.png");
 }
@@ -72,7 +72,7 @@
 	{
 
 		//COMMENT IN WHEN AUDIO ADDED
-//		pAudio->StopAudio(m_hEmergency);
+		pAudio->StopAudio(m_hEmergency);
 
 		Game::GetInstance()->RemoveState();
 		Game::GetInstance()->AddState(GameplayState::GetInstance());
@@ -94,10 +94,10 @@
 
 	if (IntroTimer.GetTime() < 0.0f)
 	{
-		//pAudio->StopAudio(m_hEmergency);
+		pAudio->StopAudio(m_hEmergency);
 
-		//Game::GetInstance()->RemoveState();
-		//Game::GetInstance()->AddState(GameplayState::GetInstance());
+		Game::GetInstance()->RemoveState();
+		Game::GetInstance()->AddState(GameplayState::GetInstance());
 	}
 
 	if (IntroTimer.GetTime() < 25.0f)
@@ -106,7 +106,6 @@
 		{
 			transBack -= 5;
 			transTextFirst += 5;
-
 			ScreenTimer.AddTime(.1f);
 		}
 

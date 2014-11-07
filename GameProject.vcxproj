@@ -127,6 +127,7 @@
     <ClCompile Include="source\Grenade.cpp" />
     <ClCompile Include="source\GrenadeLauncher.cpp" />
     <ClCompile Include="source\HowToPlayState.cpp" />
+    <ClCompile Include="source\HTPGameState.cpp" />
     <ClCompile Include="source\HUD.cpp" />
     <ClCompile Include="source\IntroState.cpp" />
     <ClCompile Include="source\LandMine.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="source\Grenade.h" />
     <ClInclude Include="source\GrenadeLauncher.h" />
     <ClInclude Include="source\HowToPlayState.h" />
+    <ClInclude Include="source\HTPGameState.h" />
     <ClInclude Include="source\HUD.h" />
     <ClInclude Include="source\IBase.h" />
     <ClInclude Include="source\IGameState.h" />

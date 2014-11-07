@@ -6,6 +6,7 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include <cassert>
 #include "GameplayState.h"
+#include "HTPGameState.h"
 
 
 
@@ -18,12 +19,23 @@ BaseObject::~BaseObject()
 {
 	SGD::Rectangle collisionRect = AnimationManager::GetInstance()->GetAnimation(animation.m_strCurrAnimation)->GetFrames()[animation.m_nCurrFrame]->GetCollisionRect();
 
-	SGD::Point renderPos = SGD::Point(m_ptPosition.x
-		
-		- GameplayState::GetInstance()->GetCamera()->GetPosition().x,
-		m_ptPosition.y 
-		
-		- GameplayState::GetInstance()->GetCamera()->GetPosition().y);
+	SGD::Point renderPos;
+
+	if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance())
+	{
+		renderPos = SGD::Point(m_ptPosition.x
+			- GameplayState::GetInstance()->GetCamera()->GetPosition().x,
+			m_ptPosition.y
+			- GameplayState::GetInstance()->GetCamera()->GetPosition().y);
+	}
+	else
+	{
+		renderPos = SGD::Point(m_ptPosition.x
+			- HTPGameState::GetInstance()->GetCamera()->GetPosition().x,
+			m_ptPosition.y
+			- HTPGameState::GetInstance()->GetCamera()->GetPosition().y);
+	}
+
 	SGD::Rectangle rect = SGD::Rectangle(renderPos - SGD::Size(collisionRect.right - collisionRect.left, collisionRect.bottom - collisionRect.top) *0.5f, SGD::Size(collisionRect.right - collisionRect.left, collisionRect.bottom - collisionRect.top));
 	return rect;
 	

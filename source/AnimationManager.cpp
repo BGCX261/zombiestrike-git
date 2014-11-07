@@ -15,6 +15,8 @@
 #include "AnimTimeStamp.h"
 #include "Frame.h"
 #include "GameplayState.h"
+#include "Game.h"
+#include "HTPGameState.h"
 
 
 /**************************************************************/
@@ -264,7 +266,16 @@ void AnimationManager::Render(AnimTimeStamp& ats, SGD::Point position, float rot
 	SGD::Point		anchor = pCurrFrame->GetAnchorPoint();
 	SGD::Rectangle	source = pCurrFrame->GetSourceRect();
 
-	SGD::Point renderPos = SGD::Point(position.x - anchor.x - GameplayState::GetInstance()->GetCamera()->GetPosition().x, position.y - anchor.y - GameplayState::GetInstance()->GetCamera()->GetPosition().y);
+	SGD::Point renderPos;
+	
+	if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance())
+	{
+		renderPos = SGD::Point(position.x - anchor.x - GameplayState::GetInstance()->GetCamera()->GetPosition().x, position.y - anchor.y - GameplayState::GetInstance()->GetCamera()->GetPosition().y);
+	}
+
+	else
+		renderPos = SGD::Point(position.x - anchor.x - HTPGameState::GetInstance()->GetCamera()->GetPosition().x, position.y - anchor.y - HTPGameState::GetInstance()->GetCamera()->GetPosition().y);
+	
 	// Offset the position by the frame's anchor-point to get to the top-left corner
 	SGD::GraphicsManager::GetInstance()->DrawTextureSection(
 		pCurrAnimation->GetImage(),

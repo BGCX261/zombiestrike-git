@@ -350,6 +350,7 @@
     <ClCompile Include="source\P90.cpp">
       <Filter>Weapons\SMGs</Filter>
     </ClCompile>
+    <ClCompile Include="source\HTPGameState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -667,6 +668,7 @@
     <ClInclude Include="source\P90.h">
       <Filter>Weapons\SMGs</Filter>
     </ClInclude>
+    <ClInclude Include="source\HTPGameState.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />

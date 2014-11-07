@@ -69,7 +69,7 @@ public:
 	GamerProfile		profiles[3];
 	unsigned int		selectedProfile	= 0;
 
-
+	IGameState* GetCurrState() const { return m_pCurrState; }
 
 	/**********************************************************/
 	// Game State Machine:
@@ -77,6 +77,9 @@ public:
 	void				AddState		( IGameState* pNewState );
 	void				RemoveState		( void );
 
+	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
+
+	SGD::HAudio m_hWpnSwitch = SGD::INVALID_HANDLE;
 
 
 private:
@@ -127,6 +130,7 @@ private:
 	/**********************************************************/
 	// Loading screen
 	SGD::HTexture			loadScreen		= SGD::INVALID_HANDLE;
+
 
 };
 

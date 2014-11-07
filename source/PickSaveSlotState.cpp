@@ -14,6 +14,8 @@
 #include "GameplayState.h"
 #include "MainMenuState.h"
 #include "OptionsState.h"
+#include "HTPGameState.h"
+#include "IntroState.h"
 
 
 
@@ -75,7 +77,7 @@ bool PickSaveSlotState::Input(void)
 			Game::GetInstance()->selectedProfile = m_nCursor;
 			Game::GetInstance()->RemoveState();
 			Game::GetInstance()->RemoveState();
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
+			Game::GetInstance()->AddState(IntroState::GetInstance());
 			return true;
 		}
 			break;
