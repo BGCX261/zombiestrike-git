@@ -115,13 +115,7 @@ void PickSaveSlotState::Render(void)
 	const wchar_t* title1 = L"Save Slots";	// 10
 	pFont->Draw(title1, { (width - (10 * 32 * 2.0f)) / 2, 50 }, 2.0f, { 255, 255, 255 });
 
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-	{
-		const wchar_t* saveSlot1;
-		const wchar_t* saveSlot2;
 
-	
-	}
 	
 
 

@@ -703,6 +703,11 @@
 	}
 		break;
 	case MessageID::MSG_CREATE_SLOW_ZOMBIE:
+	case MessageID::MSG_CREATE_FAST_ZOMBIE:
+	case MessageID::MSG_CREATE_FAT_ZOMBIE:
+	case MessageID::MSG_CREATE_TANK_ZOMBIE:
+	case MessageID::MSG_CREATE_EXPLODING_ZOMBIE:
+
 	{
 											  const CreateZombieMessage* pCreateBulletMsg = dynamic_cast<const CreateZombieMessage*>(pMsg);
 											  HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());

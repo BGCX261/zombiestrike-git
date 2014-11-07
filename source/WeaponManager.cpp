@@ -233,7 +233,7 @@ void WeaponManager::Input()
 	{
 		curIndex++;
 
-		if (curIndex > m_vWeapons.size() - 1)
+		if (curIndex > (int)m_vWeapons.size() - 1)
 		{
 			curIndex = 0;
 		}
@@ -247,7 +247,7 @@ void WeaponManager::Input()
 		{
 			curIndex++;
 
-			if (curIndex > m_vWeapons.size() - 1)
+			if (curIndex > (int)m_vWeapons.size() - 1)
 			{
 				curIndex = 0;
 			}
@@ -315,7 +315,7 @@ void WeaponManager::Exit()
 
 void WeaponManager::SelectWeapon(int index)
 {
-	if (index > 0 && index < m_vWeapons.size() - 1 && m_vWeapons[index]->GetObtained() == true)
+	if (index > 0 && index < (int)m_vWeapons.size() - 1 && m_vWeapons[index]->GetObtained() == true)
 	{
 		curIndex = index;
 	}
