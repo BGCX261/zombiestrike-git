@@ -29,15 +29,15 @@ void LandMine::Update( float dt )
 	BaseObject::Update(dt);
 
 
-	//// on last frame of expolsion animation
-	//int numframes = AnimationManager::GetInstance()->GetAnimation("explode")->GetFrames().size();
-	//numframes--;
+	// on last frame of expolsion animation
+	int numframes = AnimationManager::GetInstance()->GetAnimation("explosion")->GetFrames().size();
+	numframes--;
 
-	//if (this->GetAnimation() == "explode" && this->GetAnimationStamp().m_nCurrFrame == numframes)
-	//{
-	//	// deactivate landmine
-	//	this->isActive = false;
-	//}
+	if (this->GetAnimation() == "explosion" && this->GetAnimationStamp().m_nCurrFrame == numframes)
+	{
+		// deactivate landmine
+		this->isActive = false;
+	}
 
 
 }
@@ -66,16 +66,16 @@ void LandMine::HandleCollision( const IBase* pOther )
 		if (this->GetAnimation() == "testLandmine" || this->GetAnimation() == "landmine")
 		{
 			// trigger explosion
-		//	this->SetAnimation("explode");
+			this->SetAnimation("explosion");
 			SGD::AudioManager::GetInstance()->PlayAudio(GameplayState::GetInstance()->explosion, false);
 		}
 
 		// exploding mine
-		else if (this->GetAnimation() == "explode")
+		else if (this->GetAnimation() == "explosion")
 		{
 			// insta-kill zombies caught in explosion
 		}
-		isActive = false;
+		//isActive = false;
 	}
 
 }

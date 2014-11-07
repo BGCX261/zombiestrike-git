@@ -111,7 +111,6 @@
 
 
 	//std::string developers = "Developers: Ctrl the Source (formerly Gold Nugget Games)\n\tConner McLaine\n\tJoshua Griggs\n\tJason  Bloomfield\n\n";
-	// \n == 0
 	#pragma region Developers
 	std::string developers1 = "Developers: CTRL the Source ";
 	std::string developers2 = "(formerly Gold Nugget Games)";

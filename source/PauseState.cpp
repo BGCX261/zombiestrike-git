@@ -11,6 +11,8 @@
 #include "BitmapFont.h"
 #include "MainMenuState.h"
 #include "GameplayState.h"
+#include "HowToPlayState.h"
+#include "OptionsState.h"
 
 
 /**************************************************************/
@@ -88,18 +90,19 @@
 		}
 			break;
 
-		case 1: // restart from checkpoint
+		case 1: // controls
 		{
-					
+					Game::GetInstance()->AddState(HowToPlayState::GetInstance());
 					return true;
 		}
 			break;
-		case 2: // restart level
+		case 2: // options
 			
 		{
 					//Game::GetInstance()->RemoveState();
 					//Game::GetInstance()->RemoveState();
 					//Game::GetInstance()->AddState(GameplayState::GetInstance());
+					Game::GetInstance()->AddState(OptionsState::GetInstance());
 					return true;
 		}
 			break;
@@ -165,11 +168,21 @@
 
 	//pFont->Draw("?", { (width - (9 * 32 * scale)) / 2, height * 0.5F }, scale, { 255, 255, 0 });
 
+	/*
 	pFont->Draw("Resume", { (width*0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + 100.0f }, scale, { 0, 255, 0 });
 
 	pFont->Draw("Restart from Checkpoint", { (width*0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + 200.0f }, scale, { 0, 255, 0 });
 
 	pFont->Draw("Restart from Beginning", { (width*0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + 300.0f }, scale, { 0, 255, 0 });
+
+
+	pFont->Draw("Quit to Menu", { (width*0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + 400.0f }, scale, { 0, 255, 0 });
+	*/
+	pFont->Draw("Resume", { (width*0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + 100.0f }, scale, { 0, 255, 0 });
+
+	pFont->Draw("Controls", { (width*0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + 200.0f }, scale, { 0, 255, 0 });
+
+	pFont->Draw("Options", { (width*0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + 300.0f }, scale, { 0, 255, 0 });
 
 
 	pFont->Draw("Quit to Menu", { (width*0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + 400.0f }, scale, { 0, 255, 0 });

@@ -332,7 +332,7 @@
 	/**********************************************************/
 	// Press Escape to enter Pause menu
 	/**********************************************************/
-	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonDown(0, 9) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 9) == true)
 	{
 		SGD::Event msg("PAUSE");
 		msg.SendEventNow();
@@ -480,6 +480,9 @@
 
 			//Calls the shopstate//
 			Game::GetInstance()->AddState(ShopState::GetInstance());
+
+			m_pPlayer->SetPosition({ 200, 200 });
+
 		}
 	}
 
