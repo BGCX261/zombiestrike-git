@@ -7013,7 +7013,6 @@ void ShopState::SaveProfile()
 
 			m_pWeapons->GetWeapons()[MAC10]->SetReloadTime(profile.mac10.reloadTime.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[MAC10]->SetRecoilTime(0.01f);
-			m_pWeapons->GetWeapons()[MAC10]->SetObtained(profile.mac10.isBought);
 
 			m_pWeapons->GetWeapons()[MAC10]->SetMagSize(profile.mac10.magSize.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[MAC10]->SetDamage(profile.mac10.damage.upgradedSkill.stat);
