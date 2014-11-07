@@ -45,6 +45,7 @@ struct PistolUpgrade
 	ButtonN magSize;
 	ButtonF reloadTime;
 	ButtonF recoilTime;
+	bool isEquipt;
 
 
 };
@@ -59,6 +60,7 @@ struct RevolverUpgrade
 	ButtonF reloadTime;
 	ButtonN penPower;
 	ButtonF damage;
+	bool isEquipt;
 	bool isBought;
 
 };
@@ -72,6 +74,7 @@ struct SMGUpgrade
 	ButtonF bulletSpread;
 	ButtonF damage;
 	bool isBought;
+	bool isEquipt;
 
 };
 
@@ -86,6 +89,7 @@ struct AssualtRifleUpgrade
 	ButtonF damage;
 	ButtonF recoilTime;
 	bool isBought;
+	bool isEquipt;
 
 };
 
@@ -94,11 +98,13 @@ struct SawnOffUpgrade
 	ButtonN totalAmmo;
 
 	ButtonN ammoCap;
-	ButtonN reloadTime;
+	ButtonF reloadTime;
 	ButtonF bulletSpread;
 	ButtonF damage;
 	ButtonF recoilTime;
 	bool isBought;
+	bool isEquipt;
+
 
 
 
@@ -114,6 +120,7 @@ struct StdShotgunUpgrade
 	ButtonF damage;
 	ButtonF recoilTime;
 	bool isBought;
+	bool isEquipt;
 
 
 
@@ -136,6 +143,7 @@ struct SniperUpgrade
 	ButtonF recoilTime;
 
 	bool isBought;
+	bool isEquipt;
 
 
 
@@ -152,6 +160,7 @@ struct FlamethrowerUpgrade
 	ButtonF damage;
 	ButtonF bulletVelocity;
 	bool isBought;
+	bool isEquipt;
 
 };
 struct GrenadeLauncherUpgrade
@@ -164,6 +173,7 @@ struct GrenadeLauncherUpgrade
 	ButtonF damage;
 	ButtonF bulletVelocity;
 	bool isBought;
+	bool isEquipt;
 
 };
 
