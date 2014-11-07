@@ -178,6 +178,7 @@ private:
 
 	Timer m_tNextWave;
 	Timer m_tCompleteWave;
+	Timer m_tStartWave;
 
 	Timer m_tToWinState;
 

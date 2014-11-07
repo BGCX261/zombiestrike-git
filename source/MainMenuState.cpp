@@ -15,6 +15,7 @@
 #include "OptionsState.h"
 #include "ShopState.h"
 #include "IntroState.h"
+#include "HTPGameState.h"
 
 #include "../SGD Wrappers/SGD_EventManager.h"
 
@@ -48,8 +49,8 @@
 
 
 	// Load assets
-	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/Silent_Strike_menu.png");
-	m_hTitleImage		= pGraphics->LoadTexture("resource/graphics/Silent_Strike.png");
+	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/Zombie_Strike_menu_image.png");
+	m_hTitleImage		= pGraphics->LoadTexture("resource/graphics/Zombie_Strike_menu_title.png");
 	m_hReticleImage		= pGraphics->LoadTexture("resource/graphics/Reticle3.png", { 0, 0, 0 });
 	m_hButton1			= pGraphics->LoadTexture("resource/graphics/rectangle1.png");
 	m_hButton2			= pGraphics->LoadTexture("resource/graphics/rectangle2.png");
@@ -204,6 +205,7 @@
 			collided	= true;
 		}
 	}
+
 	selected = collided;
 
 	clicked = pInput->IsKeyDown(SGD::Key::LButton) == true ? true : false;
@@ -233,7 +235,7 @@
 		case MenuItems::STORY_MODE:
 			{
 				GameplayState::GetInstance()->SetGameMode(true);
-				//Game::GetInstance()->AddState(IntroState::GetInstance());
+
 				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
 				return true;
 			}
@@ -353,7 +355,7 @@
 
 	else
 	{
-		if (fadeTime.GetTime() <= 0.0f && trans != 0 && mTrans != 160)
+		if (fadeTime.GetTime() <= 0.0f && trans != 0 && mTrans != 175)
 		{
 			trans -= 5;
 			mTrans += 5;
@@ -430,17 +432,16 @@
 
 	// Draw the game title
 	// Align text based on window width
-	float width			= Game::GetInstance()->GetScreenWidth();
-	float titlescale	= 2.0f;
+	float width			= Game::GetInstance()->GetScreenWidth() / 2;
+	float titlescale	= .75f;
 	float xpos			= (width - (256.0f * titlescale)) * 0.5f;
-	pGraphics->DrawTextureSection(m_hTitleImage, { xpos, 10 }, { 3.0f, 76.0f, 256.0f, 174.0f }, 0.0f, {}, { 255, 255, 0, 0 }, { titlescale, titlescale });
-
-
+	pGraphics->DrawTexture(m_hTitleImage, { 100, -75 * titlescale }, 0.0f, {}, { 200, 150, 0, 150 }, { titlescale, titlescale });
 
 	// Display the menu options centered at 1x scale
 	std::string menuitems[NUM_CHOICES] = { "Story Mode", "Survival Mode", "How to Play", "Options", "Credits", "Exit" };
 
 	float offset = 100.0F;
+
 	for (size_t i = 0; i < NUM_CHOICES; i++)
 	{
 		SGD::Color clr_normal	= { 255, 255, 0, 0 };		// red

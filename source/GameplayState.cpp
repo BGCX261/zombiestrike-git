@@ -11,8 +11,9 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_String.h"
-
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_Event.h"
+
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_MessageManager.h"
 #include "../SGD Wrappers/SGD_Message.h"
@@ -157,6 +158,8 @@
 	m_bStoryMode == true
 		? SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt")
 		: SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");;
+
+
 	SpawnManager::GetInstance()->Activate();
 
 
@@ -174,10 +177,10 @@
 	playerHurt3			= pAudio->LoadAudio("resource/audio/player_grunt3.wav");
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
-	m_hWpnSwitch		= pAudio->LoadAudio("resource/audio/switchweapon.wav");
+	//m_hWpnSwitch		= Game::GetInstance()->m_hWpnSwitch;
 	m_hWaveChange		= pAudio->LoadAudio("resource/audio/wavechange.wav");
 
-	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/hudweapons.png");
+	//m_hHudWpn =				Game::GetInstance()
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
 
 	zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");

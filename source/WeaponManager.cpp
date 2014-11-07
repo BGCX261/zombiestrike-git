@@ -42,8 +42,8 @@ using namespace std;
 
 void WeaponManager::Initialize(MovingObject& owner)
 {
-	m_hHudWpn = &GameplayState::GetInstance()->m_hHudWpn;
-	m_hWpnSwitch = &GameplayState::GetInstance()->m_hWpnSwitch;
+	m_hHudWpn = Game::GetInstance()->m_hHudWpn;
+	m_hWpnSwitch = Game::GetInstance()->m_hWpnSwitch;
 
 	SetOwner(&owner);
 
@@ -80,7 +80,7 @@ void WeaponManager::Render()
 	{
 		if (m_vWeapons[curIndex]->GetGunType() == m_vWeapons[i]->GetGunType() && m_vWeapons[curIndex]->GetEquipped() == true)
 		{
-			pGraphics->DrawTextureSection(*m_hHudWpn, { Game::GetInstance()->GetScreenWidth() - 150.0f, Game::GetInstance()->GetScreenHeight() - 150.0f },
+			pGraphics->DrawTextureSection(m_hHudWpn, { Game::GetInstance()->GetScreenWidth() - 150.0f, Game::GetInstance()->GetScreenHeight() - 150.0f },
 				m_vWeapons[curIndex]->GetRenderRect(), {}, {}, {}, { .5f, .5f });
 
 			stringstream magSize;
@@ -121,6 +121,11 @@ void WeaponManager::Render()
 
 			else
 				bFont->Draw(ammoCap.str().c_str(), ammoPos, 1.0f, { 0, 0, 0 });
+
+			if (m_vWeapons[curIndex]->GetCurrAmmo() == 0)
+			{
+				bFont->Draw("RELOAD", { Game::GetInstance()->GetScreenWidth() - 250, Game::GetInstance()->GetScreenHeight() - 100 }, 1.5f, { 200, 0, 0 });
+			}
 		}
 	}
 
@@ -143,13 +148,13 @@ void WeaponManager::Render()
 
 				if (m_vWeapons[i]->GetGunType() == m_vWeapons[curIndex]->GetGunType())
 				{
-					pGraphics->DrawTextureSection(*m_hHudWpn, { sWidth + size*j, sHeight - size },
+					pGraphics->DrawTextureSection(m_hHudWpn, { sWidth + size*j, sHeight - size },
 						imageRect, {}, {}, {}, { .25f, .25f });
 				}
 
 				else
 				{
-					pGraphics->DrawTextureSection(*m_hHudWpn, { sWidth + size*j, sHeight - size },
+					pGraphics->DrawTextureSection(m_hHudWpn, { sWidth + size*j, sHeight - size },
 						imageRect, {}, {}, {}, { .25f, .25f });
 					pGraphics->DrawRectangle({ sWidth + size*j, sHeight - size, sWidth + size*j + size, sHeight }, { 175, 0, 0, 0 });
 				}
@@ -208,9 +213,9 @@ void WeaponManager::Input()
 		//	drawIndex[i]--;
 		//}
 
-		if (pAudio->IsAudioPlaying(*m_hWpnSwitch) == false)
+		if (pAudio->IsAudioPlaying(m_hWpnSwitch) == false)
 		{
-			pAudio->PlayAudio(*m_hWpnSwitch, false);
+			pAudio->PlayAudio(m_hWpnSwitch, false);
 		}
 
 		while (m_vWeapons[curIndex]->GetEquipped() != true)
@@ -233,9 +238,9 @@ void WeaponManager::Input()
 			curIndex = 0;
 		}
 
-		if (pAudio->IsAudioPlaying(*m_hWpnSwitch) == false)
+		if (pAudio->IsAudioPlaying(m_hWpnSwitch) == false)
 		{
-			pAudio->PlayAudio(*m_hWpnSwitch, false);
+			pAudio->PlayAudio(m_hWpnSwitch, false);
 		}
 
 		while (m_vWeapons[curIndex]->GetEquipped() != true)

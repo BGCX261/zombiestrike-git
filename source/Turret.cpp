@@ -13,6 +13,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "WeaponManager.h"
+#include "HTPGameState.h"
 
 
 Turret::Turret() : Listener(this)
@@ -115,7 +116,15 @@ Turret::~Turret()
 
 	if (m_pTarget != nullptr)
 	{
-		GameCamera* camera = GameplayState::GetInstance()->GetCamera();
+		GameCamera* camera;
+		if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance())
+		{
+			camera = GameplayState::GetInstance()->GetCamera();
+		}
+
+		else
+			camera = HTPGameState::GetInstance()->GetCamera();
+
 
 		// Draw the green line
 		SGD::Point drawpos;

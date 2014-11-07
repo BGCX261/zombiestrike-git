@@ -15,6 +15,8 @@
 #include "AnimationManager.h"
 #include "Animation.h"
 #include "Frame.h"
+#include "HTPGameState.h"
+
 //#include "../resource/config/"
 
 
@@ -308,7 +310,10 @@ void MapManager::Render()
 		for (int currCol = startCol; currCol < endCol; currCol++)
 		{
 			SGD::Point point = tStruct.layers.m_vTiles[currRow][currCol].worldPos;
-			point.Offset({ -GameplayState::GetInstance()->GetCamera()->GetPosition().x, -GameplayState::GetInstance()->GetCamera()->GetPosition().y });
+
+			Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
+				? point.Offset({ -GameplayState::GetInstance()->GetCamera()->GetPosition().x, -GameplayState::GetInstance()->GetCamera()->GetPosition().y })
+				: point.Offset({ -HTPGameState::GetInstance()->GetCamera()->GetPosition().x, -HTPGameState::GetInstance()->GetCamera()->GetPosition().y });
 
 			pGraphics->DrawTextureSection(tileTexture,
 			 point,
@@ -319,7 +324,11 @@ void MapManager::Render()
 
 void MapManager::Update(float elapsedTime)
 {
-	SGD::Rectangle cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect();
+	SGD::Rectangle cameraRect;
+
+	Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
+		? cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect()
+		: cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect();
 
 	startCol = (int)cameraRect.left / (int)tStruct.tileSize.width;
 	startRow = (int)cameraRect.top / (int)tStruct.tileSize.height;

@@ -18,10 +18,10 @@ class WeaponManager : public Weapon
 	int equipIndex = 0;
 	
 	//Image Assets
-	SGD::HTexture * m_hHudWpn = nullptr;
-	
-	//Sound Assets
-	SGD::HAudio * m_hWpnSwitch = nullptr;
+	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
+
+		//Sound Assets
+	SGD::HAudio m_hWpnSwitch = SGD::INVALID_HANDLE;
 	
 public:
 
@@ -37,7 +37,7 @@ public:
 	//Returns currently selected weapon
 	Weapon * GetSelected() { return m_vWeapons[curIndex]; }
 
-	SGD::HTexture * GetWeaponImage() { return m_hHudWpn; }
+	SGD::HTexture GetWeaponImage() { return m_hHudWpn; }
 
 	////Mutators////
 	//Sets currently selected weapon
@@ -46,7 +46,7 @@ public:
 	//Adds weapons to weapon vector
 	void AddWeapons(Weapon*);
 
-	void SetPistolImage(SGD::HTexture * hWpn) { m_hHudWpn = hWpn; }
+	void SetPistolImage(SGD::HTexture hWpn) { m_hHudWpn = hWpn; }
 
 	void Initialize(MovingObject& owner);
 	void Render();

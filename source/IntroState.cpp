@@ -124,7 +124,6 @@
 		{
 			transBack -= 5;
 			transTextFirst += 5;
-
 			ScreenTimer.AddTime(.1f);
 		}
 

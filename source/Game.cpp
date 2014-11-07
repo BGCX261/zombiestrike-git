@@ -64,7 +64,6 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 		|| SGD::InputManager::GetInstance()->Initialize() == false )
 		return false;
 
-
 	// Store the size parameters
 	m_fScreenWidth	= width;
 	m_fScreenHeight = height;
@@ -78,6 +77,9 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	m_pFont = new BitmapFont;
 	m_pFont->Initialize("resource/bitmapfonts/MetalGearFont.xml", '\0', false);
 
+	m_hHudWpn = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/hudweapons.png");
+
+	m_hWpnSwitch = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/switchweapon.wav");
 
 	// Load assets
 	loadScreen = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/Loading.png");
@@ -150,8 +152,6 @@ int Game::Update( void )
 
 
 	// Update & render the current state if it was not changed
-	
-	if (m_pCurrState == stateMachine.top())
 	{
 	
 		m_pCurrState->Update(elapsedTime);
@@ -171,11 +171,16 @@ int Game::Update( void )
 //	- terminate the SGD wrappers
 void Game::Terminate( void )
 {
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+
 	// Terminate & deallocate the font
 	m_pFont->Terminate();
 	delete m_pFont;
 	m_pFont = nullptr;
 
+	pGraphics->UnloadTexture(m_hHudWpn);
+	pAudio->UnloadAudio(m_hWpnSwitch);
 
 	// Exit the current state
 	
