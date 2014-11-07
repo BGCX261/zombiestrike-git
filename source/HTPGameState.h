@@ -104,6 +104,9 @@ public:
 	SGD::HAudio smg_fire = SGD::INVALID_HANDLE;
 	SGD::HAudio vomit_fire = SGD::INVALID_HANDLE;
 
+	SGD::HAudio	playerHurt1 = SGD::INVALID_HANDLE;
+	SGD::HAudio	playerHurt2 = SGD::INVALID_HANDLE;
+	SGD::HAudio	playerHurt3 = SGD::INVALID_HANDLE;
 	SGD::HAudio * m_hMain = nullptr;
 	SGD::HAudio * m_hSurvive = nullptr;
 

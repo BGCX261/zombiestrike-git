@@ -79,9 +79,9 @@ bool PickSaveSlotState::Input(void)
 //			Game::GetInstance()->AddState(GameplayState::GetInstance());
 
 			if (GameplayState::GetInstance()->GetGameMode() == false)
-				Game::GetInstance()->AddState(GameplayState::GetInstance());
-			else
 				Game::GetInstance()->AddState(IntroState::GetInstance());
+			else
+				Game::GetInstance()->AddState(GameplayState::GetInstance());
 
 			return true;
 		}

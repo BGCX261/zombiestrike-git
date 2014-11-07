@@ -129,16 +129,22 @@
 
 	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
 	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
+	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
+
 
 
 
 
 	// other animations
 	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml", "turret");
+	pAnimationManager->Load("resource/config/animations/House_Animation.xml", "house");
+
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
-
+	playerHurt1 = pAudio->LoadAudio("resource/audio/player_grunt1.wav");
+	playerHurt2 = pAudio->LoadAudio("resource/audio/player_grunt2.wav");
+	playerHurt3 = pAudio->LoadAudio("resource/audio/player_grunt3.wav");
 	if (m_bStoryMode == true)
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
 	else
@@ -256,7 +262,11 @@
 	pAudio->UnloadAudio(flamethrower_fire);
 	pAudio->UnloadAudio(smg_fire);
 	pAudio->UnloadAudio(vomit_fire);
+	pAudio->UnloadAudio(playerHurt1);
+	pAudio->UnloadAudio(playerHurt2);
+	pAudio->UnloadAudio(playerHurt3);
 
+	
 	//pAudio->UnloadAudio(*m_hMain);
 	//pAudio->UnloadAudio(*m_hSurvive);
 
@@ -703,13 +713,41 @@
 	}
 		break;
 	case MessageID::MSG_CREATE_SLOW_ZOMBIE:
+	{
+											  const CreateZombieMessage* pCreateBulletMsg = dynamic_cast<const CreateZombieMessage*>(pMsg);
+											  HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
+
+	}
+		break;
+
 	case MessageID::MSG_CREATE_FAST_ZOMBIE:
+	{
+											  const CreateFastZombieMsg* pCreateBulletMsg = dynamic_cast<const CreateFastZombieMsg*>(pMsg);
+											  HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
+
+	}
+		break;
+
 	case MessageID::MSG_CREATE_FAT_ZOMBIE:
+	{
+											 const CreateFatZombieMsg* pCreateBulletMsg = dynamic_cast<const CreateFatZombieMsg*>(pMsg);
+											 HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
+
+	}
+		break;
+
 	case MessageID::MSG_CREATE_TANK_ZOMBIE:
+	{
+											  const CreateTankZombieMsg* pCreateBulletMsg = dynamic_cast<const CreateTankZombieMsg*>(pMsg);
+											  HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
+
+	}
+		break;
+
 	case MessageID::MSG_CREATE_EXPLODING_ZOMBIE:
 
 	{
-											  const CreateZombieMessage* pCreateBulletMsg = dynamic_cast<const CreateZombieMessage*>(pMsg);
+												   const CreateExplodingZombieMsg* pCreateBulletMsg = dynamic_cast<const CreateExplodingZombieMsg*>(pMsg);
 											  HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
 	}
 		break;
