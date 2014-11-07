@@ -41,7 +41,7 @@ void Ak47::Fire(float dt)
 			pMsg = nullptr;
 
 			//if (pAudio->IsAudioPlaying(*fire_sound) == false)
-			pAudio->PlayAudio(*fire_sound, false);
+			voice = pAudio->PlayAudio(*fire_sound, false);
 
 			recoilTimer.AddTime(recoilTime);
 			currAmmo--;

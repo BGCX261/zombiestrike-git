@@ -49,6 +49,8 @@ public:
 	void LoadShopStatus();
 	void SaveProfile();
 	void UpdateProfile();
+	void UpdateWeaponManager();
+
 private:
 	PistolUpgrade pistolUpgrade;
 	RevolverUpgrade revolverUpgrade;
@@ -82,6 +84,8 @@ private:
 
 	int currPage = 0;
 	int currTab = 0;
+
+	SGD::Point mousePos;
 	SGD::HTexture weaponsImage = SGD::INVALID_HANDLE;
 	SGD::HTexture buyButton = SGD::INVALID_HANDLE;
 	SGD::HTexture upgradeButton = SGD::INVALID_HANDLE;
@@ -89,7 +93,7 @@ private:
 
 	GamerProfile profile;
 	SGD::Rectangle Buttons[9];
-	SGD::Rectangle DefenseButtons[7];
+	SGD::Rectangle DefenseButtons[8];
 
 	SGD::Size screenSize;
 

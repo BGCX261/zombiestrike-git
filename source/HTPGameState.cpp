@@ -139,7 +139,11 @@
 
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
 
-	MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetProfile(), m_pEntities);
+	if (m_bStoryMode == true)
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
+	else
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
+
 	SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
 
 	if (m_bIsChoiceScreen == true)
@@ -181,8 +185,8 @@
 	vomit_fire = pAudio->LoadAudio("resource/audio/vomit.wav");
 
 
-	m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
-	m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
+	//m_hMain = &Game::GetInstance()->m_hMainTheme;
+	//m_hSurvive = &Game::GetInstance()->m_hSurvivalTheme;
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
@@ -253,8 +257,8 @@
 	pAudio->UnloadAudio(smg_fire);
 	pAudio->UnloadAudio(vomit_fire);
 
-	pAudio->UnloadAudio(*m_hMain);
-	pAudio->UnloadAudio(*m_hSurvive);
+	//pAudio->UnloadAudio(*m_hMain);
+	//pAudio->UnloadAudio(*m_hSurvive);
 
 	camera.SetTarget(nullptr);
 
@@ -581,7 +585,7 @@
 		*/
 
 		stringstream moneyCount;
-		moneyCount << "$" << Game::GetInstance()->GetProfile().money;
+		//moneyCount << "$" << Game::GetInstance()->GetProfile().money;
 		pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0f, { 0, 255, 0 });
 
 
@@ -626,30 +630,30 @@
 
 										  BaseObject* ptr = pDestroyMsg->GetEntity();
 
-										  if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
-										  {
-											  Game::GetInstance()->GetProfile().money += 20;
-										  }
+										  //if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
+										  //{
+											 // Game::GetInstance()->GetProfile().money += 20;
+										  //}
 
-										  else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
-										  {
-											  Game::GetInstance()->GetProfile().money += 25;
-										  }
+										  //else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
+										  //{
+											 // Game::GetInstance()->GetProfile().money += 25;
+										  //}
 
-										  else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
-										  {
-											  Game::GetInstance()->GetProfile().money += 35;
-										  }
+										  //else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
+										  //{
+											 // Game::GetInstance()->GetProfile().money += 35;
+										  //}
 
-										  else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
-										  {
-											  Game::GetInstance()->GetProfile().money += 75;
-										  }
+										  //else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
+										  //{
+											 // Game::GetInstance()->GetProfile().money += 75;
+										  //}
 
-										  else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
-										  {
-											  Game::GetInstance()->GetProfile().money += 100;
-										  }
+										  //else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
+										  //{
+											 // Game::GetInstance()->GetProfile().money += 100;
+										  //}
 
 										  HTPGameState::GetInstance()->m_pEntities->RemoveEntity(ptr);
 	}

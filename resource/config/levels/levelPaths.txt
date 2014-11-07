@@ -1,1 +1,1 @@
-resource/config/levels/testLevel.xml
+resource/config/levels/testLevel2.xml

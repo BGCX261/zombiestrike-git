@@ -6,6 +6,8 @@
 #include "Game.h"
 #include <string>
 
+class Player;
+
 struct NotificationBar
 {
 	SGD::Rectangle textBar = { 0, 0, Game::GetInstance()->GetScreenWidth(), 0 };
@@ -18,12 +20,12 @@ class HUD
 {
 	SGD::HTexture	m_hBackgroundImage	= SGD::INVALID_HANDLE;
 
-
+	Player*			m_pPlayer			= nullptr;
 
 public:
 	NotificationBar nofiticationBar;
 
-	void Initialize();
+	void Initialize(Player* player);
 	void Shutdown();
 
 	void Update(float dt);

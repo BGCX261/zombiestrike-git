@@ -76,12 +76,16 @@ class Player : public MovingObject, public SGD::Listener
 	Timer			energyReboot;
 
 	SGD::HAudio*	m_hDeath			= nullptr;
+	SGD::HAudio*	m_hHurt				= nullptr;
 	SGD::HVoice		voice;
 
 	SGD::Point		m_rectAbilityPoint;
 	SGD::Size		m_rectAbilitySize;
 
-	int				m_nNumTurrets		= 0;
+	int				m_nNumTurrets		= 3;
+
+	float			m_fCurrHP			= 0.0f;
+	float			m_fMaxHP			= 100.0f;
 
 public:
 
@@ -103,7 +107,7 @@ public:
 	const Attributes*	GetAttributes		(void) const			{ return &m_Attributes; }
 	SGD::HAudio*		GetDeathSFX			(void) const			{ return m_hDeath; }
 	SGD::HVoice			GetVoice			(void) const			{ return voice; }
-
+	GamerProfile&		GetProfile()		{ return profile; }
 
 	// Mutators
 	void				RetrieveBehavior	(std::string name);
@@ -119,6 +123,14 @@ public:
 
 	int					GetNumTurrets		(void) const				{ return m_nNumTurrets; }
 	void				SetNumTurrets		(int tur)					{ m_nNumTurrets = tur; }
+
+	void				AddOneTurret		(void)						{ m_nNumTurrets++; }
+	void				MinusOneTurrets		(void)						{ m_nNumTurrets--; }
+
+	float				GetCurrHealth		(void) const				{ return m_fCurrHP; }
+	float				GetMaxHealth		(void) const				{ return m_fMaxHP; }
+
+	void				CheckDamage		(void);
 
 
 

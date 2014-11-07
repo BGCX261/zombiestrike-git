@@ -44,6 +44,7 @@ Turret::~Turret()
 	SetTarget(nullptr);
 
 	this->bulletmaker->SetOwner(nullptr);
+	//delete bulletmaker;
 	SetWeapon(nullptr);
 
 	SetOwner(nullptr);
@@ -72,7 +73,7 @@ Turret::~Turret()
 
 
 			// tell owner
-			m_pOwner->SetNumTurrets(m_pOwner->GetNumTurrets() - 1);
+			//m_pOwner->SetNumTurrets(m_pOwner->GetNumTurrets() - 1);
 		}
 	}
 
@@ -161,8 +162,8 @@ Turret::~Turret()
 	}
 	else if (pEvent->GetEventID() == "UNPAUSE")
 	{
-		if (isActive == true && m_pTarget != nullptr)
-			pAudio->PlayAudio(*fireSound, false);
+		//if (isActive == true && m_pTarget != nullptr)
+		//	pAudio->PlayAudio(*fireSound, false);
 	}
 	else if (pEvent->GetEventID() == "ASSESS_THREAT" && m_pTarget == nullptr)
 	{

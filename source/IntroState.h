@@ -3,6 +3,7 @@
 #include "IGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"			// uses HTexture & HAudio
 #include "Timer.h"
+#include "AnimTimeStamp.h"
 
 class IntroState : public IGameState
 {
@@ -34,9 +35,16 @@ private:
 	
 
 	/**********************************************************/
+	// Setup & workings
+	//float			starting_y			= 170.0F;
+	//AnimTimeStamp	animation;
+
+
+	/**********************************************************/
 	// Assets
 	SGD::HTexture	m_hBackgroundImage	= SGD::INVALID_HANDLE;
 	SGD::HTexture	m_hStaticImage		= SGD::INVALID_HANDLE;
+	SGD::HAudio		m_hBackgroundMusic	= SGD::INVALID_HANDLE;
 
 	SGD::HAudio		m_hEmergency		= SGD::INVALID_HANDLE;
 

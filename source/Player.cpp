@@ -13,6 +13,8 @@
 #include "../SGD Wrappers/SGD_Handle.h"
 #include "CreateTurretMessage.h"
 
+#include "Zombie.h"
+#include "Bullet.h"
 #include "Pistol.h"
 #include "Shotgun.h"
 #include "AssaultRifle.h"
@@ -40,7 +42,7 @@ Player::Player() : Listener(this)
 	voice		= SGD::INVALID_HANDLE;
 
 
-	//hud.Initialize();
+	hud.Initialize(this);
 	float rectoffset	= 9.0f;
 	float rectheight	= 112.0f;
 	m_rectAbilityPoint	= { 13.0f, Game::GetInstance()->GetScreenHeight() - 112.0f + 6.0f };
@@ -51,6 +53,9 @@ Player::Player() : Listener(this)
 	//arifle = new AssaultRifle(this);
 	//sniper = new Sniper(this);
 	//flameThrower = new FlameThrower(this);
+
+	m_fCurrHP = m_fMaxHP = 100.0f;
+
 
 
 
@@ -70,7 +75,7 @@ Player::~Player()
 	//delete shotgun;
 	//delete sniper;
 	//delete flameThrower;
-	//hud.Shutdown();
+	hud.Shutdown();
 
 }
 
@@ -241,35 +246,55 @@ void Player::Render()
 
 /*virtual*/ void Player::HandleCollision(const IBase* pOther) /*override*/
 {
-	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	if (m_bIsAlive == false)
+		return;
+
 
 	switch (pOther->GetType())
 	{
 		case ObjectType::OBJ_SLOW_ZOMBIE:
-		case ObjectType::OBJ_VOMIT:
+		case ObjectType::OBJ_FAST_ZOMBIE:
+		case ObjectType::OBJ_FAT_ZOMBIE:
+		case ObjectType::OBJ_TANK_ZOMBIE:
+		case ObjectType::OBJ_EXPLODING_ZOMBIE:
 		{
-			//if (pAudio->IsAudioPlaying(*m_hDeath) == false && m_bIsAlive == true)
-			//	voice = pAudio->PlayAudio(*m_hDeath, false);
-			//pAudio->SetVoiceVolume(voice);
+			// get zombie
+			const Zombie* zombie = dynamic_cast<const Zombie*>(pOther);
+			
+			// take damage
+			this->m_fCurrHP -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
 
-			//m_bIsAlive = false;
-
-			//SetVelocity({ 0, 0 });
+			// check death
+			CheckDamage();
 		}
 		break;
 
+
+		// vomit
+		case ObjectType::OBJ_VOMIT:
+		{
+			// get vomit
+			const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
+			
+			// take damage
+			this->m_fCurrHP -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+
+			// check death
+			CheckDamage();
+		}
+		break;
+
+
+		// environment
 		case OBJ_BARBEDWIRE:
 		case OBJ_SANDBAG:
+		case OBJ_WALL:
 		{
 			const EnvironmentalObject* temp = dynamic_cast<const EnvironmentalObject*>(pOther);
 			if (temp->IsActive())
 				MovingObject::HandleCollision(pOther);
 		}
 		break;
-
-
-
-
 	}
 }
 
@@ -291,7 +316,7 @@ void Player::RetrieveBehavior(std::string name)
 
 void Player::SpawnTurret(void)
 {
-	if (m_nNumTurrets == 3)
+	if (m_nNumTurrets == 0)
 		return;
 
 	// create turret message
@@ -299,6 +324,59 @@ void Player::SpawnTurret(void)
 	pMsg->QueueMessage();
 	pMsg = nullptr;
 
-	m_nNumTurrets++;
+	m_nNumTurrets--;
+}
+
+void Player::CheckDamage(void)
+{
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	GameplayState* pGameplay = GameplayState::GetInstance();
+
+
+	// dead, !hurt
+	if (m_fCurrHP <= 0.0f)
+	{
+		m_fCurrHP = 0.0f;
+
+		if (m_hHurt != nullptr && pAudio->IsAudioPlaying(*m_hHurt) == true)
+			pAudio->StopAudio(*m_hHurt);
+
+		if (pAudio->IsAudioPlaying(*m_hDeath) == false)
+			voice = pAudio->PlayAudio(*m_hDeath, false);
+		pAudio->SetVoiceVolume(voice);
+
+		m_bIsAlive = false;
+
+		SetVelocity({ 0, 0 });
+	}
+
+	// hurt, !dead
+	else
+	{
+		int sound = rand() % 3;
+
+		switch (sound)
+		{
+		case 0:
+			m_hHurt = &pGameplay->playerHurt1;
+			break;
+		case 1:
+			m_hHurt = &pGameplay->playerHurt2;
+			break;
+		case 2:
+			m_hHurt = &pGameplay->playerHurt3;
+			break;
+		default:
+			break;
+		}
+
+		if (pAudio->IsAudioPlaying(pGameplay->playerHurt1) == false &&
+			pAudio->IsAudioPlaying(pGameplay->playerHurt2) == false &&
+			pAudio->IsAudioPlaying(pGameplay->playerHurt3) == false)
+			voice = pAudio->PlayAudio(*m_hHurt, false);
+		pAudio->SetVoiceVolume(voice);
+
+		m_hHurt = nullptr;
+	}
 }
 

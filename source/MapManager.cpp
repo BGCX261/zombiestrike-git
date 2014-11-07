@@ -12,12 +12,18 @@
 #include "LandMine.h"
 #include "Spawner.h"
 #include "EntityManager.h"
+#include "AnimationManager.h"
+#include "Animation.h"
+#include "Frame.h"
 #include "HTPGameState.h"
 
 //#include "../resource/config/"
 
 
-enum EntityBucket {  BUCKET_ENEMIES, BUCKET_PLAYER, BUCKET_ENVIRO, BUCKET_BULLETS, BUCKET_SHADOWS, BUCKET_NONCOLLIDABLE };
+enum EntityBucket { BUCKET_BULLETS, BUCKET_PUKE, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
+
+
+
 
 
 
@@ -30,6 +36,10 @@ enum EntityBucket {  BUCKET_ENEMIES, BUCKET_PLAYER, BUCKET_ENVIRO, BUCKET_BULLET
 
 BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pEntities)
 {
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = Game::GetInstance()->GetStoryProfile();
+	else
+		profile = Game::GetInstance()->GetSurvivalProfile();
 	//EntityManager* m_pEntities = new EntityManager;
 	Player* player = nullptr;
 
@@ -208,6 +218,8 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 
 	TiXmlElement * objectList = root->FirstChildElement("objects_list");
 	TiXmlElement * objectInfo = objectList->FirstChildElement("object_info");
+	
+
 
 	while (objectInfo != nullptr)
 	{
@@ -243,7 +255,11 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 
 		switch (tileid)
 		{
+			case BaseObject::OBJ_WALL:
+				CreateHouse({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+				break;
 			case BaseObject::OBJ_SANDBAG:
+				
 				CreateSandBags({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
 				break;
 			case BaseObject::OBJ_BARBEDWIRE:
@@ -379,6 +395,8 @@ void MapManager::CreateLandMine(SGD::Point pos, EntityManager* entities)
 	//landmine->SetAnimation("testLandmine");
 	landmine->SetActive(true);
 	entities->AddEntity(landmine, BUCKET_ENVIRO);
+	landmine->SetActive(profile.landMineStates[currMine]);
+	currMine++;
 	landMines.push_back(landmine);
 	landmine->Release();
 	landmine = nullptr;
@@ -389,7 +407,8 @@ void MapManager::CreateSandBags(SGD::Point pos, EntityManager* entities)
 	SandBag* sandbag = new SandBag;
 	sandbag->SetPosition(pos);
 	sandbag->SetAnimation("testSandbag");
-
+	sandbag->SetActive(profile.sandBagStates[currSandBag]);
+	currSandBag++;
 	entities->AddEntity(sandbag, BUCKET_ENVIRO);
 	sandBags.push_back(sandbag);
 	sandbag->Release();
@@ -400,6 +419,8 @@ void MapManager::CreateBarbedWire(SGD::Point pos, EntityManager* entities)
 	BarbedWire* barbedWire = new BarbedWire;
 	barbedWire->SetPosition(pos);
 	barbedWire->SetAnimation("testBarbwire");
+	barbedWire->SetActive(profile.barbWireStates[currBarbWire]);
+	currBarbWire++;
 	barbedWires.push_back(barbedWire);
 	entities->AddEntity(barbedWire, BUCKET_ENVIRO);
 	barbedWire->Release();
@@ -411,7 +432,7 @@ void MapManager::CreateSpawner(SGD::Point pos, EntityManager* entities)
 	Spawner* spawnPoint = new Spawner;
 	spawnPoint->SetPosition(pos);
 	SpawnManager::GetInstance()->GetSpawnVector().push_back(spawnPoint);
-	entities->AddEntity(spawnPoint, BUCKET_NONCOLLIDABLE);
+	entities->AddEntity(spawnPoint, BUCKET_NONE_COLLIDABLE);
 
 	spawnPoint->Release();
 	spawnPoint = nullptr;
@@ -430,6 +451,20 @@ void MapManager::CreateEnvironment(SGD::Point pos, EntityManager* entities)
 	object = nullptr;
 	
 
+}
+
+
+void MapManager::CreateHouse(SGD::Point pos, EntityManager* entities)
+{
+	EnvironmentalObject* object = new EnvironmentalObject;
+	object->SetPosition(pos);
+	object->SetSize({ 32, 32 });
+	object->SetType(BaseObject::ObjectType::OBJ_WALL);
+	object->SetAnimation("house");
+
+	entities->AddEntity(object, 3);
+	object->Release();
+	object = nullptr;
 }
 
 

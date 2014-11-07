@@ -43,6 +43,7 @@ protected:
 	float lifeTime = 0.0f;
 	int penetratingPower = 0;
 	int type = OBJ_BULLET;
+	
 
 
 

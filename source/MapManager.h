@@ -5,6 +5,7 @@
 #include "IBase.h"
 #include "Graph.h"
 #include "GamerProfile.h"
+#include "Game.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -40,6 +41,13 @@ class MapManager : public IBase
 	std::vector<SandBag*> sandBags;
 	std::vector<BarbedWire*> barbedWires;
 	std::vector<LandMine*> landMines;
+
+	GamerProfile profile;
+
+	unsigned int currMine = 0;
+	unsigned int currBarbWire = 0;
+	unsigned int currSandBag = 0;
+
 	
 public:
 
@@ -75,6 +83,7 @@ public:
 	void CreateEnvironment(SGD::Point pos, EntityManager* entities);
 	void CreateSpawner(SGD::Point pos, EntityManager* entities);
 
+	void CreateHouse(SGD::Point pos, EntityManager* entities);
 
 
 

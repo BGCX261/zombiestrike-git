@@ -11,8 +11,9 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_String.h"
+#include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_Event.h"
 
-#include "../SGD Wrappers/SGD_EventManager.h" 
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_MessageManager.h"
 #include "../SGD Wrappers/SGD_Message.h"
@@ -110,6 +111,8 @@
 	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
 	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
 
+	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
+
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
 	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
@@ -119,6 +122,14 @@
 
 	// enemy animations
 
+	pAnimationManager->Load("resource/config/animations/ZombieWalker_Animation.xml", "slowZombie");
+	pAnimationManager->Load("resource/config/animations/ZombieRunner_Animation.xml", "fastZombie");
+	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
+	pAnimationManager->Load("resource/config/animations/ZombieSploder_Animation.xml", "explodingZombie");
+	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
+
+	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	/*
 	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
 	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
 	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
@@ -126,6 +137,7 @@
 	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
 
 	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	*/
 	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
 
 
@@ -133,12 +145,19 @@
 
 	// other animations
 	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml",		"turret");
+	pAnimationManager->Load("resource/config/animations/House_Animation.xml",		"house");
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
+	if (m_bStoryMode == true)
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
+	else
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
 
-	MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetProfile(), m_pEntities);
-	SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
+	//SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
+	m_bStoryMode == true
+		? SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt")
+		: SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");;
 
 
 	SpawnManager::GetInstance()->Activate();
@@ -153,6 +172,9 @@
 
 	// SFX
 	playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
+	playerHurt1			= pAudio->LoadAudio("resource/audio/player_grunt1.wav");
+	playerHurt2			= pAudio->LoadAudio("resource/audio/player_grunt2.wav");
+	playerHurt3			= pAudio->LoadAudio("resource/audio/player_grunt3.wav");
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
 	//m_hWpnSwitch		= Game::GetInstance()->m_hWpnSwitch;
@@ -163,7 +185,7 @@
 
 	zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");
 	bullet_hit_zombie	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
-	bullet_hit_house	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
+	bullet_hit_house	= pAudio->LoadAudio("resource/audio/bullet_hit_house.wav");
 	out_of_ammo			= pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
 	reload_begin		= pAudio->LoadAudio("resource/audio/reload_begin.wav");
 	reload_finish		= pAudio->LoadAudio("resource/audio/reload_finish.wav");
@@ -176,11 +198,12 @@
 	sniper_fire			= pAudio->LoadAudio("resource/audio/sniper_fire.wav");
 	flamethrower_fire	= pAudio->LoadAudio("resource/audio/fire_ignite_1.wav");
 	smg_fire			= pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
+	rpg_fire			= pAudio->LoadAudio("resource/audio/RocketLauncher.wav");
 	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
 
 
-	m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
-	m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
+	//m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
+	//m_hSurvive = &MainMenuState::GetInstance()->m_hSurvivalTheme;
 
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
@@ -191,7 +214,11 @@
 
 	MovingObject * pPlayer = dynamic_cast<MovingObject*>(m_pPlayer);
 	
+	
 	WeaponManager::GetInstance()->Initialize(*pPlayer);
+
+	//pPlayer->Release();
+	//pPlayer = nullptr;
 
 	m_tCompleteWave.AddTime(3);
 }
@@ -218,7 +245,6 @@
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
 	pGraphics->UnloadTexture(m_hReticleImage);
 	pGraphics->UnloadTexture(m_hHudWpn);
-	pGraphics->UnloadTexture(m_hReticleImage);
 
 
 
@@ -231,6 +257,9 @@
 	pAudio->UnloadAudio(survivalMusic);
 
 	pAudio->UnloadAudio(playerDeath);
+	pAudio->UnloadAudio(playerHurt1);
+	pAudio->UnloadAudio(playerHurt2);
+	pAudio->UnloadAudio(playerHurt3);
 	pAudio->UnloadAudio(cannot_use_skill);
 	pAudio->UnloadAudio(footstep);
 	pAudio->UnloadAudio(m_hWpnSwitch);
@@ -250,10 +279,11 @@
 	pAudio->UnloadAudio(sniper_fire);
 	pAudio->UnloadAudio(flamethrower_fire);
 	pAudio->UnloadAudio(smg_fire);
+	pAudio->UnloadAudio(rpg_fire);
 	pAudio->UnloadAudio(vomit_fire);
 
-	pAudio->UnloadAudio(*m_hMain);
-	pAudio->UnloadAudio(*m_hSurvive);
+	//pAudio->UnloadAudio(*m_hMain);
+	//pAudio->UnloadAudio(*m_hSurvive);
 
 	camera.SetTarget(nullptr);
 
@@ -303,7 +333,7 @@
 	/**********************************************************/
 	// Press Escape to enter Pause menu
 	/**********************************************************/
-	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonDown(0, 9) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 9) == true)
 	{
 		SGD::Event msg("PAUSE");
 		msg.SendEventNow();
@@ -347,6 +377,7 @@
 {
 	WeaponManager::GetInstance()->Update(dt);
 	SpawnManager * eSpawner = SpawnManager::GetInstance();
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
 	Player* player = dynamic_cast<Player*>(m_pPlayer);
 
@@ -354,24 +385,31 @@
 	if (player->isLevelCompleted() == false)
 	{
 		// Update the entities
-		SpawnManager::GetInstance()->Update(dt);
+		eSpawner->Update(dt);
 		m_pEntities->UpdateAll(dt);
+
 		
 
 		// Check collisions
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENEMIES);
-		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_BULLETS);
-		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PICKUPS);
+		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PUKE);
+		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENVIRO);
+
+		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENVIRO);
+		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENEMIES);
+
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
+		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_BULLETS);	// house + bullets
+		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_ENEMIES);	// house + zombies
 
 
 		// Center camera on the player
 		SGD::Point playerpos = m_pPlayer->GetPosition();
-		playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.5f;
-		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.5f;
+		playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.50f;
+		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.75f;
 		camera.SetPostion(playerpos);
 
-
+		
 		// Process the events & messages
 		SGD::EventManager::GetInstance()->Update();
 		SGD::MessageManager::GetInstance()->Update();
@@ -402,7 +440,25 @@
 
 		else if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
 		{
+			// start timer to go to WinState
+			if (SpawnManager::GetInstance()->GetGameWon() == false)
+				m_tToWinState.AddTime(5.0F);
+
+
+			// WinState sequence start
 			SpawnManager::GetInstance()->SetGameWon(true);
+
+
+			// go to WinState
+			if (m_tToWinState.Update(dt) == true)
+			{
+				if (pAudio->IsAudioPlaying(storyMusic) == true)
+					pAudio->StopAudio(storyMusic);
+				if (pAudio->IsAudioPlaying(survivalMusic) == true)
+					pAudio->StopAudio(survivalMusic);
+
+				Game::GetInstance()->AddState(WinGameState::GetInstance());
+			}
 		}
 
 		else
@@ -414,9 +470,19 @@
 
 			SGD::Event msg("PAUSE");
 			msg.SendEventNow();
+			if (m_bStoryMode == true)
+			{
+				Game::GetInstance()->GetStoryProfile().wavesComplete++;
+
+			}
+			else
+				Game::GetInstance()->GetSurvivalProfile().wavesComplete++;
+
 
 			//Calls the shopstate//
 			Game::GetInstance()->AddState(ShopState::GetInstance());
+
+			m_pPlayer->SetPosition({ 200, 200 });
 
 		}
 	}
@@ -498,17 +564,24 @@
 	*/
 
 	stringstream moneyCount;
-	moneyCount << "$" << Game::GetInstance()->GetProfile().money;
+	if (m_bStoryMode == true)
+	{
+		moneyCount << "$" << Game::GetInstance()->GetStoryProfile().money;
+	}
+	else
+		moneyCount << "$" << Game::GetInstance()->GetSurvivalProfile().money;
+
+	
 	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0f, { 0, 255, 0 });
 
 
 	
 	// Draw the reticle
 	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
-	float		retscale = 0.8f;
+	float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
 
-	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
-	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+	retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
+	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 0 }, { retscale, retscale });
 
 }
 
@@ -544,27 +617,45 @@
 
 			if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 20;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 20;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 20;
+
+				
 			}
 
 			else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 25;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 25;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 25;
+
 			}
 
 			else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 35;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 35;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 35;
 			}
 
 			else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 75;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 75;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 75;
 			}
 
 			else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
 			{
-				Game::GetInstance()->GetProfile().money += 100;
+				if (GameplayState::GetInstance()->GetGameMode() == true)
+					Game::GetInstance()->GetStoryProfile().money += 100;
+				else
+					Game::GetInstance()->GetSurvivalProfile().money += 100;
 			}
 			
 			GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
@@ -674,29 +765,7 @@ BaseObject* GameplayState::CreatePlayer( void )
 	return player;
 }
 
-void GameplayState::CreatePickUp( int type, SGD::Point pos )
-{
-	PickUp* pickup = new PickUp;
 
-	pickup->SetType(type);
-	pickup->SetPosition(pos);
-
-	//switch (type)
-	//{
-	//case BaseObject::OBJ_POWERCORE:
-	//	pickup->SetAnimation("powerCore");
-	//	break;
-
-	//case BaseObject::OBJ_STIMPACK:
-	//	pickup->SetAnimation("stimPack");
-	//	break;
-
-
-
-	m_pEntities->AddEntity(pickup, EntityBucket::BUCKET_PICKUPS);
-	pickup->Release();
-	pickup = nullptr;
-}
 
 void GameplayState::CreateTurret( MovingObject* owner )
 {
@@ -803,11 +872,11 @@ void GameplayState::CreatePukeyBullet(Weapon* owner)
 	bullet->SetDirection(direction);
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
 	bullet->SetType(BaseObject::ObjectType::OBJ_VOMIT);
-
+	bullet->SetLifeTime(700.0f);
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("puke");
 	bullet->SetDamage(owner->GetDamage());
-	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_PUKE);
 	bullet->Release();
 	bullet = nullptr;
 

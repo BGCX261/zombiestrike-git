@@ -126,6 +126,7 @@
     <ClCompile Include="source\GameplayState.cpp" />
     <ClCompile Include="source\Grenade.cpp" />
     <ClCompile Include="source\GrenadeLauncher.cpp" />
+    <ClCompile Include="source\HighScoreState.cpp" />
     <ClCompile Include="source\HowToPlayState.cpp" />
     <ClCompile Include="source\HTPGameState.cpp" />
     <ClCompile Include="source\HUD.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="source\Graph.h" />
     <ClInclude Include="source\Grenade.h" />
     <ClInclude Include="source\GrenadeLauncher.h" />
+    <ClInclude Include="source\HighScoreState.h" />
     <ClInclude Include="source\HowToPlayState.h" />
     <ClInclude Include="source\HTPGameState.h" />
     <ClInclude Include="source\HUD.h" />

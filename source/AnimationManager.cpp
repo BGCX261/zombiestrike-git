@@ -15,6 +15,7 @@
 #include "AnimTimeStamp.h"
 #include "Frame.h"
 #include "GameplayState.h"
+#include "BaseObject.h"
 #include "Game.h"
 #include "HTPGameState.h"
 
@@ -207,10 +208,16 @@ void AnimationManager::Update(AnimTimeStamp& ats, float dt, BaseObject* destinat
 			pEvent = nullptr;
 
 			// Send event immediately from Frame Trigger
-			/*
-			SGD::Event event = { pCurrFrame->GetTrigger().c_str(), nullptr, this };
-			event.SendEventNow(nullptr);
+			
+			/*SGD::Event event = { pCurrFrame->GetTrigger().c_str(), data, this };
+			event.SendEventNow(destination);
 			*/
+
+			if (destination != nullptr)
+			{
+				destination->Release();
+				destination = nullptr;
+			}
 		}
 
 
