@@ -27,6 +27,8 @@
 #include "CreateFlameBullet.h"
 #include "CreateGrenadeBullet.h"
 #include "CreatePukeBullet.h"
+#include "CreateBloodMsg.h"
+
 #include "Spawner.h"
 #include "SpawnManager.h"
 
@@ -48,6 +50,7 @@
 #include "FatZombie.h"
 #include "ExplodingZombie.h"
 #include "TankZombie.h"
+#include "BloodSplatter.h"
 
 #include "Turret.h"
 #include "Bullet.h"
@@ -129,16 +132,25 @@
 
 	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
 	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
+	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
 
-
+	//Blood Animation
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
 
 
 	// other animations
 	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml", "turret");
+	pAnimationManager->Load("resource/config/animations/House_Animation.xml", "house");
+
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
-
+	playerHurt1 = pAudio->LoadAudio("resource/audio/player_grunt1.wav");
+	playerHurt2 = pAudio->LoadAudio("resource/audio/player_grunt2.wav");
+	playerHurt3 = pAudio->LoadAudio("resource/audio/player_grunt3.wav");
 	if (m_bStoryMode == true)
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
 	else
@@ -256,7 +268,11 @@
 	pAudio->UnloadAudio(flamethrower_fire);
 	pAudio->UnloadAudio(smg_fire);
 	pAudio->UnloadAudio(vomit_fire);
+	pAudio->UnloadAudio(playerHurt1);
+	pAudio->UnloadAudio(playerHurt2);
+	pAudio->UnloadAudio(playerHurt3);
 
+	
 	//pAudio->UnloadAudio(*m_hMain);
 	//pAudio->UnloadAudio(*m_hSurvive);
 
@@ -721,13 +737,41 @@
 	}
 		break;
 	case MessageID::MSG_CREATE_SLOW_ZOMBIE:
+	{
+											  const CreateZombieMessage* pCreateBulletMsg = dynamic_cast<const CreateZombieMessage*>(pMsg);
+											  HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
+
+	}
+		break;
+
 	case MessageID::MSG_CREATE_FAST_ZOMBIE:
+	{
+											  const CreateFastZombieMsg* pCreateBulletMsg = dynamic_cast<const CreateFastZombieMsg*>(pMsg);
+											  HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
+
+	}
+		break;
+
 	case MessageID::MSG_CREATE_FAT_ZOMBIE:
+	{
+											 const CreateFatZombieMsg* pCreateBulletMsg = dynamic_cast<const CreateFatZombieMsg*>(pMsg);
+											 HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
+
+	}
+		break;
+
 	case MessageID::MSG_CREATE_TANK_ZOMBIE:
+	{
+											  const CreateTankZombieMsg* pCreateBulletMsg = dynamic_cast<const CreateTankZombieMsg*>(pMsg);
+											  HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
+
+	}
+		break;
+
 	case MessageID::MSG_CREATE_EXPLODING_ZOMBIE:
 
 	{
-											  const CreateZombieMessage* pCreateBulletMsg = dynamic_cast<const CreateZombieMessage*>(pMsg);
+												   const CreateExplodingZombieMsg* pCreateBulletMsg = dynamic_cast<const CreateExplodingZombieMsg*>(pMsg);
 											  HTPGameState::GetInstance()->CreateZombie(pCreateBulletMsg->GetOwner());
 	}
 		break;
@@ -738,7 +782,12 @@
 										 HTPGameState::GetInstance()->CreateTurret(pCreateTurretMsg->GetOwner());
 	}
 		break;
-
+	case MessageID::MSG_CREATE_BLOOD:
+	{
+										const CreateBloodMsg* pCreateBloodMsg = dynamic_cast<const CreateBloodMsg*>(pMsg);
+										HTPGameState::GetInstance()->CreateBlood(pCreateBloodMsg->GetSpawnPos());
+	}
+		break;
 	}
 
 	/* Restore previous warning levels */
@@ -759,6 +808,35 @@ BaseObject* HTPGameState::CreatePlayer(void)
 	player->SetAnimation("player");
 	return player;
 }
+
+void HTPGameState::CreateBlood(SGD::Point pos)
+{
+	BloodSplatter* blood = new BloodSplatter;
+	blood->SetPosition(pos);
+	
+	unsigned int choice = rand() % 4;
+
+	switch (choice)
+	{
+	case 0:
+		blood->SetAnimation("blood1");
+		break;
+	case 1:
+		blood->SetAnimation("blood2");
+		break;
+	case 2:
+		blood->SetAnimation("blood3");
+		break;
+	case 3:
+		blood->SetAnimation("blood4");
+		break;
+	}
+	
+	m_pEntities->AddEntity(blood, EntityBucket::BUCKET_BLOOD);
+	blood->Release();
+	blood = nullptr;
+}
+
 
 void HTPGameState::CreatePickUp(int type, SGD::Point pos)
 {

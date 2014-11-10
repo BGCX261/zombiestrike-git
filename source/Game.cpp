@@ -53,6 +53,7 @@
 //	- enter the Main Menu state
 bool Game::Initialize( float width, float height, const wchar_t* title )
 {
+	
 	// Seed First!
 	srand( (unsigned int)time( nullptr ) );
 	rand();
@@ -75,17 +76,15 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 
 	// Allocate & initialize the font
 	m_pFont = new BitmapFont;
-	m_pFont->Initialize("resource/bitmapfonts/MetalGearFont.xml", '\0', false);
+	m_pFont->Initialize("resource/bitmapfonts/Remains.xml", '\0', false);
 
 	m_hHudWpn = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/hudweapons.png");
 
 	m_hWpnSwitch = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/switchweapon.wav");
 
 	// Load assets
-	loadScreen = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/Loading.png");
 	m_hMainTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikemain.xwm");
 	m_hSurvivalTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikesurvival.xwm");
-
 
 
 	// Setup the profiles
@@ -287,6 +286,14 @@ void Game::LoadStoryProfiles( void )
 		if (fin.is_open())
 		{
 			getline(fin, storyProfiles[i - 1].path);
+
+			fin >> storyProfiles[i - 1].time.tm_year;
+
+			fin >> storyProfiles[i - 1].time.tm_mon;
+			fin >> storyProfiles[i - 1].time.tm_mday;
+			fin >> storyProfiles[i - 1].time.tm_hour;
+			fin >> storyProfiles[i - 1].time.tm_min;
+			fin >> storyProfiles[i - 1].time.tm_sec;
 
 #pragma region Pistols
 
@@ -846,6 +853,14 @@ void Game::LoadSurvivalProfiles(void)
 		{
 			getline(fin, survivalProfiles[i - 1].path);
 
+			fin >> survivalProfiles[i - 1].time.tm_year;
+
+			fin >> survivalProfiles[i-1].time.tm_mon;
+			fin >> survivalProfiles[i - 1].time.tm_mday;
+			fin >> survivalProfiles[i - 1].time.tm_hour;
+			fin >> survivalProfiles[i - 1].time.tm_min;
+			fin >> survivalProfiles[i - 1].time.tm_sec;
+
 #pragma region Pistols
 
 			//pistol
@@ -1362,12 +1377,21 @@ void Game::LoadSurvivalProfiles(void)
 // CreateProfiles
 void Game::CreateStoryProfiles()
 {
+
 	//* If using Wide characters under project settings *//
 	HRESULT hr;
 	ostringstream stringstream;
 	char path[MAX_PATH];
 	LPWSTR wszPath = NULL;
 	size_t   size;
+
+	time_t tempTime;
+	time(&tempTime);
+
+	tm localTime;
+	localtime_s(&localTime, &tempTime);
+
+
 
 
 	// Get the path to the app data folder
@@ -1406,6 +1430,14 @@ void Game::CreateStoryProfiles()
 			{
 				WeaponManager::GetInstance()->GetWeapons();
 				fout << filePath << '\n';
+
+				fout << (localTime.tm_year + 1900) << '\n';
+				fout << (localTime.tm_mon + 1) << '\n';
+				fout << localTime.tm_mday << '\n';
+				fout << localTime.tm_hour << '\n';
+				fout << localTime.tm_min << '\n';
+				fout << localTime.tm_sec << '\n';
+
 
 #pragma region Pistols
 
@@ -1816,6 +1848,12 @@ void Game::CreateSurvivalProfiles()
 	LPWSTR wszPath = NULL;
 	size_t   size;
 
+	time_t tempTime;
+	time(&tempTime);
+
+	tm localTime;
+	localtime_s(&localTime, &tempTime);
+
 
 	// Get the path to the app data folder
 	hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, 0, &wszPath);
@@ -1851,8 +1889,15 @@ void Game::CreateSurvivalProfiles()
 			fstream fout(filePath.c_str(), std::ios_base::out);
 			if (fout.is_open())
 			{
-				WeaponManager::GetInstance()->GetWeapons();
+				
 				fout << filePath << '\n';
+
+				fout << (localTime.tm_year + 1900) << '\n';
+				fout << (localTime.tm_mon + 1) << '\n';
+				fout << localTime.tm_mday << '\n';
+				fout << localTime.tm_hour << '\n';
+				fout << localTime.tm_min << '\n';
+				fout << localTime.tm_sec << '\n';
 
 #pragma region Pistols
 
@@ -2248,5 +2293,427 @@ void Game::CreateSurvivalProfiles()
 				fout << 0;
 			}
 		}
+	}
+}
+
+void Game::OverWriteProfile(GamerProfile& profile)
+{
+	time_t tempTime;
+	time(&tempTime);
+
+	tm localTime;
+	localtime_s(&localTime, &tempTime);
+
+	string filePath = profile.path;
+
+	fstream fout(filePath.c_str(), std::ios_base::out);
+	if (fout.is_open())
+	{
+		WeaponManager::GetInstance()->GetWeapons();
+		fout << filePath << '\n';
+
+
+		fout << (localTime.tm_year + 1900) << '\n';
+		fout << (localTime.tm_mon + 1) << '\n';
+		fout << localTime.tm_mday << '\n';
+		fout << localTime.tm_hour << '\n';
+		fout << localTime.tm_min << '\n';
+		fout << localTime.tm_sec << '\n';
+
+
+#pragma region Pistols
+
+		//pistol stats
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .33 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+
+		//revolver
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 50 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+#pragma endregion
+
+#pragma region SMGs
+		//Mac10
+		fout << 60 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 60 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//Tech9
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 35 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//p90
+		fout << 150 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 50 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 150 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 35 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+
+#pragma endregion
+
+#pragma region Shotguns
+		//sawn off
+		fout << 16 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 16 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 35 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//pump
+		fout << 24 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 6 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 24 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//auto shotty
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 15 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+
+
+
+
+#pragma endregion
+
+
+#pragma region Assault Rifles
+		//ak47
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 7 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 40 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .33 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//m16
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//LMG
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 100 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 6 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 75 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .33 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+
+#pragma endregion
+
+
+#pragma region Heavy Weapons
+		//sniper
+		fout << 15 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 15 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+		//flamethrower
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 100 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 300 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//grenade launcher
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 300 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+
+		//barbedwire
+		fout << 100 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+
+		fout << 0 << '\n';
+
+		for (size_t i = 0; i < 30; i++)
+		{
+			fout << 0 << '\n';
+		}
+
+		//sandbags
+		fout << 250 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+
+		fout << 0 << '\n';
+
+		for (size_t i = 0; i < 30; i++)
+		{
+			fout << 0 << '\n';
+		}
+
+		//landmines
+		fout << 0 << '\n';
+
+		for (size_t i = 0; i < 50; i++)
+		{
+			fout << 0 << '\n';
+		}
+
+
+		//turrets
+		//numturrets
+		fout << 0 << '\n';
+		//max num turrets
+		fout << 3 << '\n';
+
+		//num waves
+		fout << 0;
+
+		fout.close();
 	}
 }

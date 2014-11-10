@@ -8,7 +8,7 @@
 #include "GameplayState.h"
 #include "BarbedWire.h"
 #include "LandMine.h"
-
+#include "CreateBloodMsg.h"
 
 ExplodingZombie::ExplodingZombie()
 {
@@ -80,6 +80,10 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 
 			if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->zombie_pain) == false)
 				pAudio->PlayAudio(GameplayState::GetInstance()->zombie_pain, false);
+
+			CreateBloodMsg* msg = new CreateBloodMsg(m_ptPosition);
+			msg->QueueMessage();
+			msg = nullptr;
 		}
 		else if (pOther->GetType() == OBJ_BARBEDWIRE)
 		{
@@ -138,8 +142,6 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 
 
 		}
-
-
 	}
 	else
 	{

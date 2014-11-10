@@ -36,6 +36,7 @@
 #include "CreateExplodingZombieMsg.h"
 #include "CreateTankZombieMsg.h"
 #include "CreateTurretMessage.h"
+#include "CreateBloodMsg.h"
 #include "BitmapFont.h"
 
 #include "EntityManager.h"
@@ -52,6 +53,7 @@
 #include "Bullet.h"
 #include "PickUp.h"
 #include "Weapon.h"
+#include "BloodSplatter.h"
 
 #include "BehaviorManager.h"
 #include "AnimationManager.h"
@@ -117,6 +119,13 @@
 	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
 
+	//Blood Animation
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
+
+
 	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/crosshair.png");
 
 
@@ -166,7 +175,7 @@
 		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetSurvivalProfile().wavesComplete);
 
 
-	SpawnManager::GetInstance()->Activate();
+	
 	
 
 
@@ -229,6 +238,9 @@
 	//pPlayer->Release();
 	//pPlayer = nullptr;
 
+	
+	m_tNextWave.AddTime(3);
+	m_tStartWave.AddTime(3);
 	m_tCompleteWave.AddTime(3);
 }
 
@@ -423,7 +435,12 @@
 		// Process the events & messages
 		SGD::EventManager::GetInstance()->Update();
 		SGD::MessageManager::GetInstance()->Update();
-		MapManager::GetInstance()->Update(dt);
+		MapManager::GetInstance()->Update(dt); 
+		
+		if (m_tStartWave.Update(dt))
+		{
+			SpawnManager::GetInstance()->Activate();
+		}
 
 		// Update the Map Manager
 	//	MapManager::GetInstance()->Update(dt);
@@ -443,12 +460,11 @@
 	{
 		SpawnManager::GetInstance()->Deactivate();
 
-		if (m_tCompleteWave.GetTime() > 0.0f)
-		{
-			m_tCompleteWave.Update(dt);
-		}
+		
+	
+		
 
-		else if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
+		if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
 		{
 			// start timer to go to WinState
 			if (SpawnManager::GetInstance()->GetGameWon() == false)
@@ -468,15 +484,17 @@
 					pAudio->StopAudio(survivalMusic);
 
 				Game::GetInstance()->AddState(WinGameState::GetInstance());
+				return;
 			}
 		}
 
-		else
+		if (m_tNextWave.Update(dt))
 		{
 			m_bShopState = true;
 
-			m_tNextWave.AddTime(6);
-			m_tCompleteWave.AddTime(3);
+			m_tNextWave.AddTime(3);
+		
+			m_tStartWave.AddTime(3);
 
 			SGD::Event msg("PAUSE");
 			msg.SendEventNow();
@@ -497,8 +515,9 @@
 		}
 	}
 
+	
 	//ShopState::GetInstance()->Update(dt);
-	m_tNextWave.Update(dt);
+	
 
 }
 
@@ -529,7 +548,7 @@
 
 	WeaponManager::GetInstance()->Render();
 
-	if (m_tNextWave.GetTime() > 0.0f && m_bShopState == false && SpawnManager::GetInstance()->GetGameWon() == false)
+	if (m_tStartWave.GetTime() > 0.0f && m_bShopState == false && SpawnManager::GetInstance()->GetGameWon() == false)
 	{
 		stringstream nWave;
 		nWave << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1;
@@ -753,8 +772,15 @@
 			GameplayState::GetInstance()->CreateTurret(pCreateTurretMsg->GetOwner());
 		}
 		break;
-
+		case MessageID::MSG_CREATE_BLOOD:
+		{
+											const CreateBloodMsg* pCreateBloodMsg = dynamic_cast<const CreateBloodMsg*>(pMsg);
+											GameplayState::GetInstance()->CreateBlood(pCreateBloodMsg->GetSpawnPos());
+		}
+			break;
 	}
+
+	
 
 /* Restore previous warning levels */
 #pragma warning( pop )
@@ -812,7 +838,7 @@ void GameplayState::CreateBullet(Weapon* owner)
 		bullet->SetDirection(direction);
 		bullet->SetRotation(owner->GetOwner()->GetRotation());
 		bullet->SetDamage(owner->GetDamage());
-
+		bullet->SetPenPower(owner->GetPenetratingPower());
 		bullet->SetVelocity(direction * owner->GetSpeed());
 		bullet->SetAnimation("bullet");
 
@@ -949,6 +975,7 @@ void GameplayState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
 	bullet->SetDamage(owner->GetDamage());
+	bullet->SetPenPower(owner->GetPenetratingPower());
 
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
@@ -1188,4 +1215,32 @@ void GameplayState::UpdateWeaponManager()
 	m_pWeapons->GetWeapons()[SNIPER]->SetObtained(profile.sniper.isBought);
 	m_pWeapons->GetWeapons()[SNIPER]->SetEquipped(profile.sniper.isEquipt);
 
+}
+
+void GameplayState::CreateBlood(SGD::Point pos)
+{
+	BloodSplatter* blood = new BloodSplatter;
+	blood->SetPosition(pos);
+
+	unsigned int choice = rand() % 4;
+
+	switch (choice)
+	{
+	case 0:
+		blood->SetAnimation("blood1");
+		break;
+	case 1:
+		blood->SetAnimation("blood2");
+		break;
+	case 2:
+		blood->SetAnimation("blood3");
+		break;
+	case 3:
+		blood->SetAnimation("blood4");
+		break;
+	}
+
+	m_pEntities->AddEntity(blood, EntityBucket::BUCKET_BLOOD);
+	blood->Release();
+	blood = nullptr;
 }

@@ -61,22 +61,18 @@ Bullet::~Bullet()
 				if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->bullet_hit_zombie) == false)
 					pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_zombie, false);
 
-				DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
-				dMsg->QueueMessage();
-				dMsg = nullptr;
+				penetratingPower--;
+				if (penetratingPower < 0)
+				{
+					DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+					dMsg->QueueMessage();
+					dMsg = nullptr;
+				}
+				
 			}
 		}
 
 
-		// house
-		else if (pOther->GetType() == ObjectType::OBJ_WALL)
-		{
-			pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_house, false);
-
-			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
-			dMsg->QueueMessage();
-			dMsg = nullptr;
-		}
 	}
 	else if (this->type == ObjectType::OBJ_VOMIT)
 	{

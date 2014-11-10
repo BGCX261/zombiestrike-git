@@ -21,14 +21,15 @@
 // Preprocessor Constants
 #define WINDOW_CLASS_NAME	((const wchar_t*)L"Zombie Strike")		// window class name
 #define WINDOW_TITLE		((const wchar_t*)L"Zombie Strike")		// window title
-#define WINDOW_WIDTH		((int)1024)									// window width
-#define WINDOW_HEIGHT		((int)768)									// window height
+#define WINDOW_WIDTH		((int)1024)						// window width
+#define WINDOW_HEIGHT		((int)1024)									// window height
 
 
 //*********************************************************************//
 // Function Declarations
 int WINAPI			WinMain				( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow );
 bool				IsAlreadyRunning	( void );
+
 HWND				MakeWindow			( HINSTANCE hInstance );
 LRESULT CALLBACK	WindowProc			( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 

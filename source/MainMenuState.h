@@ -79,7 +79,7 @@ private:
 	float			starting_x		= 35.0F;
 	float			starting_y		= 200.0F;
 	float			vertical_offset	= 100.0F;
-	float			text_scale		= 0.67F;
+	float			text_scale		= 1.0F;
 
 	Timer fadeTime;
 	Timer lightningTime;

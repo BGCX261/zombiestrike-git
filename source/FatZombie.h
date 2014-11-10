@@ -16,7 +16,7 @@ public:
 
 private:
 
-	//Weapon* pukeBlaster = nullptr;
+	
 	PukerBlaster pukeBlaster = PukerBlaster(this);
 
 };

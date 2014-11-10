@@ -47,7 +47,7 @@ void FatZombie::Update(float dt)
 		if ((m_pTarget->GetPosition() - m_ptPosition).ComputeLength() <= 200.0f)
 		{
 
-	
+			pukeBlaster.Fire(dt);
 		}
 	}
 	else
