@@ -801,8 +801,6 @@ BaseObject* GameplayState::CreatePlayer( void )
 	return player;
 }
 
-
-
 void GameplayState::CreateTurret( MovingObject* owner )
 {
 	Turret* turret = new Turret;
@@ -855,8 +853,6 @@ void GameplayState::CreateGrenade(Weapon* owner)
 	bullet->SetOwner(owner->GetOwner());
 	bullet->SetPosition(owner->GetOwner()->GetPosition());
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
-
-	
 
 	bullet->SetDirection(direction);
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
