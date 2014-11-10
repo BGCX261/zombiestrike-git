@@ -15,6 +15,7 @@
 #include "LandMine.h"
 #include "SandBag.h"
 #include "SpawnManager.h"
+#include "CreateBloodMsg.h"
 
 
 Zombie::Zombie() : Listener(this)
@@ -101,6 +102,12 @@ void Zombie::RetrieveBehavior(std::string name)
 
 		if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->zombie_pain) == false)
 			pAudio->PlayAudio(GameplayState::GetInstance()->zombie_pain, false);
+
+		CreateBloodMsg* msg = new CreateBloodMsg(m_ptPosition);
+		msg->QueueMessage();
+		msg = nullptr;
+
+		
 	}
 	if (pOther->GetType() == OBJ_EXPLODING_ZOMBIE)
 	{

@@ -13,7 +13,8 @@
 #include "SandBag.h"
 #include "LandMine.h"
 #include <fstream>
-
+#include <sstream>
+#include <ctime>
 
 
 // Singleton Accessor
@@ -88,7 +89,9 @@ void	ShopState::Enter(void)
 	DefenseButtons[6] = DefenseButtons[5];
 	DefenseButtons[6].bottom += screenSize.height * 0.2f;
 	DefenseButtons[6].top += screenSize.height * 0.2f;
-
+	DefenseButtons[7] = DefenseButtons[6];
+	DefenseButtons[7].bottom += BUTTON_HEIGHT + 5;
+	DefenseButtons[7].top += BUTTON_HEIGHT + 5;
 
 	barbedWires = MapManager::GetInstance()->GetBaredWire(); 
 	sandBags = MapManager::GetInstance()->GetSandBags();
@@ -132,6 +135,8 @@ void	ShopState::Exit(void)
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(upgradeButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(buyButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(weaponsImage);
+
+	
 
 
 }
@@ -581,14 +586,14 @@ bool	ShopState::Input(void)
 							if (pWeapons->GetWeapons()[i]->GetGunType() == PUMP)
 							{
 								//pWeapons->GetWeapons()[i]->SetEquipped(false);
-								pumpShotgunUpgrade.isEquipt = true;
+								pumpShotgunUpgrade.isEquipt = false;
 
 							}
 
 							if (pWeapons->GetWeapons()[i]->GetGunType() == AUTO)
 							{
 								//pWeapons->GetWeapons()[i]->SetEquipped(false);
-								autoShotgunUpgrade.isEquipt = true;
+								autoShotgunUpgrade.isEquipt = false;
 
 							}
 						}
@@ -2283,7 +2288,7 @@ bool	ShopState::Input(void)
 		case DEFENSE:
 			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
-				for (unsigned int currButton = 0; currButton < 7; currButton++)
+				for (unsigned int currButton = 0; currButton < 8; currButton++)
 				{
 					if (mousePos.IsWithinRectangle(DefenseButtons[currButton]))
 					{
@@ -2566,25 +2571,34 @@ void	ShopState::Render(void)
 					if (currTab == 0)
 					{
 						//pistol
-						string pistolMagLevel = "LeveL ";
-						pistolMagLevel += std::to_string(pistolUpgrade.magSize.upgradedSkill.currTier);
-						pistolMagLevel += " ";
+						stringstream pistolMagLevel;
+						stringstream pistolMagSize;
 
-						string pistolReloadLevel = "LeveL ";
-						pistolReloadLevel += std::to_string(pistolUpgrade.reloadTime.upgradedSkill.currTier);
-						pistolReloadLevel += " ";
+						stringstream pistolReloadlevel;
+						stringstream pistolReloadStat;
 
-						string pistolRecoilLevel = "LeveL ";
-						pistolRecoilLevel += std::to_string(pistolUpgrade.recoilTime.upgradedSkill.currTier);
-						pistolRecoilLevel += " ";
+						stringstream pistolRecoilLevel;
+						stringstream pistolRecoilStat;
+
+						pistolMagLevel << "LeveL " << pistolUpgrade.magSize.upgradedSkill.currTier;
+						pistolMagSize << "Magezine Size: " << pistolUpgrade.magSize.upgradedSkill.stat;
+						
+						pistolReloadlevel << "LeveL " << pistolUpgrade.reloadTime.upgradedSkill.currTier;
+						pistolReloadStat << "Reload Speed: " << pistolUpgrade.reloadTime.upgradedSkill.stat;
+
+						pistolRecoilLevel << "LeveL " << pistolUpgrade.recoilTime.upgradedSkill.currTier;
+						pistolRecoilStat << "Rate of Fire: " << pistolUpgrade.recoilTime.upgradedSkill.stat;
+
+
+					
 
 						pFont->Draw("Pistol: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						pFont->Draw(pistolMagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw("Magezine Size: ", { screenSize.width *.3f, Buttons[0].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw(pistolReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw("ReLoaD SpeeD: ", { screenSize.width *.3f, Buttons[1].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw(pistolRecoilLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw("RaTe of Fire: ", { screenSize.width *.3f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+						pFont->Draw(pistolMagLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5, { 255, 255, 0, 0 });
+						pFont->Draw(pistolMagSize.str().c_str(), { screenSize.width *.3f, Buttons[0].top }, 0.5, { 255, 255, 0, 0 });
+						pFont->Draw(pistolReloadlevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5, { 255, 255, 0, 0 });
+						pFont->Draw(pistolReloadStat.str().c_str(), { screenSize.width *.3f, Buttons[1].top }, 0.5, { 255, 255, 0, 0 });
+						pFont->Draw(pistolRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+						pFont->Draw(pistolRecoilStat.str().c_str(), { screenSize.width *.3f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
 
 						pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
 						
@@ -2648,45 +2662,63 @@ void	ShopState::Render(void)
 					}
 					else
 					{
-						//Revolver
-						string revolverMagLevel = "LeveL ";
-						revolverMagLevel += std::to_string(revolverUpgrade.magSize.upgradedSkill.currTier);
-						revolverMagLevel += " ";
 
-						string revolverReloadLevel = "LeveL ";
-						revolverReloadLevel += std::to_string(revolverUpgrade.reloadTime.upgradedSkill.currTier);
-						revolverReloadLevel += " ";
+						//revolver
+						stringstream revolverMagLevel;
+						stringstream revolverMagStat;
 
-						string revolverRecoilLevel = "LeveL ";
-						revolverRecoilLevel += std::to_string(revolverUpgrade.recoilTime.upgradedSkill.currTier);
-						revolverRecoilLevel += " ";
+						revolverMagLevel << "LeveL " << revolverUpgrade.magSize.upgradedSkill.currTier;
+						revolverMagStat << "Magezine Size: " << revolverUpgrade.magSize.upgradedSkill.stat;
 
-						string revolverAmmoCapLevel = "LeveL ";
-						revolverAmmoCapLevel += std::to_string(revolverUpgrade.ammoCap.upgradedSkill.currTier);
-						revolverAmmoCapLevel += " ";
+						stringstream revolverReloadLevel;
+						stringstream revolverReloadStat;
+						revolverReloadLevel << "LeveL " << revolverUpgrade.reloadTime.upgradedSkill.currTier;
+						revolverReloadStat << "ReloadSpeed: " << revolverUpgrade.reloadTime.upgradedSkill.stat;
 
-						string revolverPenPowerLevel = "LeveL ";
-						revolverPenPowerLevel += std::to_string(revolverUpgrade.penPower.upgradedSkill.currTier);
-						revolverPenPowerLevel += " ";
 
-						string revolverDamageLevel = "LeveL ";
-						revolverDamageLevel += std::to_string(revolverUpgrade.damage.upgradedSkill.currTier);
-						revolverDamageLevel += " ";
+						stringstream revolverRecoilLevel;
+						stringstream revolverRecoilStat;
+						revolverRecoilLevel << "LeveL " << revolverUpgrade.recoilTime.upgradedSkill.currTier;
+						revolverRecoilStat << "Rate of Fire: " << revolverUpgrade.recoilTime.upgradedSkill.stat;
+
+						stringstream revolverAmmoCapLevel;
+						stringstream revolverAmmoCapStat;
+						revolverAmmoCapLevel << "LeveL " << revolverUpgrade.ammoCap.upgradedSkill.currTier;
+						revolverAmmoCapStat << "Ammo Cap: " << revolverUpgrade.ammoCap.upgradedSkill.stat;
+
+						stringstream revolverPenPowerLevel;
+						stringstream revolverPenPowerStat;
+						revolverPenPowerLevel << "LeveL " << revolverUpgrade.penPower.upgradedSkill.currTier;
+						revolverPenPowerStat << "PentratingPower: " << revolverUpgrade.penPower.upgradedSkill.stat;
+
+						stringstream revolverDamageLevel;
+						stringstream revolverDamageStat;
+						revolverDamageLevel << "LeveL " << revolverUpgrade.damage.upgradedSkill.currTier;
+						revolverDamageStat << "Damage: " << revolverUpgrade.damage.upgradedSkill.stat;
+
+						stringstream revolverAmmoStat;
+						revolverAmmoStat << "Ammo: " << revolverUpgrade.totalAmmo.upgradedSkill.stat;
+
+
+
+
+
+						
 
 						pFont->Draw("Revolver: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverMagLevel.c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw("Magezine Size: ", { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverReloadLevel.c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw("ReLoaD SpeeD: ", { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverRecoilLevel.c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw("RaTe of Fire: ", { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverPenPowerLevel.c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw("Penetrating Power: ", { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverDamageLevel.c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw("Damage: ", { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverAmmoCapLevel.c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw("Ammo Capacity: ", { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw("Ammo: ", { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverMagLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverMagStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+						pFont->Draw(revolverRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverPenPowerLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverPenPowerStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverAmmoStat.str().c_str(), { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
 
 
 						pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(315.0f, 560.0f), SGD::Size(180.0f, 95.0f)));
@@ -2846,38 +2878,49 @@ void	ShopState::Render(void)
 					 {
 					 case 0:
 					 {
-							   string sawnOffRecoilLevel = "LeveL ";
-							   sawnOffRecoilLevel += std::to_string(sawnOffUpgrade.recoilTime.upgradedSkill.currTier);
-							   sawnOffRecoilLevel += " ";
+							  
 
-							   string sawnOffReloadLevel = "LeveL ";
-							   sawnOffReloadLevel += std::to_string(sawnOffUpgrade.reloadTime.upgradedSkill.currTier);
-							   sawnOffReloadLevel += " ";
+							   stringstream sawnOffRecoilLevel;
+							   stringstream sawnOffRecoilStat;
+							   sawnOffRecoilLevel << "LeveL " << sawnOffUpgrade.recoilTime.upgradedSkill.currTier;
+							   sawnOffRecoilStat << "Rate of Fire: " << sawnOffUpgrade.recoilTime.upgradedSkill.stat;
 
-							   string sawnOffBullSpreadLevel = "LeveL ";
-							   sawnOffBullSpreadLevel += std::to_string(sawnOffUpgrade.bulletSpread.upgradedSkill.currTier);
-							   sawnOffBullSpreadLevel += " ";
 
-							   string sawnOffAmmoCapLevel = "LeveL ";
-							   sawnOffAmmoCapLevel += std::to_string(sawnOffUpgrade.ammoCap.upgradedSkill.currTier);
-							   sawnOffAmmoCapLevel += " ";
+							   stringstream sawnOffReloadLevel;
+							   stringstream sawnOffReloadStat;
+							   sawnOffReloadLevel << "LeveL " << sawnOffUpgrade.reloadTime.upgradedSkill.currTier;
+							   sawnOffReloadStat << "Reload Speed: " << sawnOffUpgrade.reloadTime.upgradedSkill.stat;
 
-							   string sawnOffDamageLevel = "LeveL ";
-							   sawnOffDamageLevel += std::to_string(sawnOffUpgrade.damage.upgradedSkill.currTier);
-							   sawnOffDamageLevel += " ";
+							   stringstream sawnOffBullSpreadLevel;
+							   stringstream sawnOffBullSpreadStat;
+							   sawnOffBullSpreadLevel << "LeveL " << sawnOffUpgrade.bulletSpread.upgradedSkill.currTier;
+							   sawnOffBullSpreadStat << "Shot Spread: " << sawnOffUpgrade.bulletSpread.upgradedSkill.stat;
+
+							   stringstream sawnOffAmmoCapLevel;
+							   stringstream sawnOffAmmoCapStat;
+							   sawnOffAmmoCapLevel << "LeveL " << sawnOffUpgrade.ammoCap.upgradedSkill.currTier;
+							   sawnOffAmmoCapStat << "Ammo Cap: " << sawnOffUpgrade.ammoCap.upgradedSkill.stat;
+
+							   stringstream sawnOffDamageLevel;
+							   stringstream sawnOffDamageStat;
+							   sawnOffDamageLevel << "LeveL " << sawnOffUpgrade.damage.upgradedSkill.currTier;
+							   sawnOffDamageStat << "Damage: " << sawnOffUpgrade.damage.upgradedSkill.stat;
+
+							   stringstream sawnOffAmmoStat;
+							   sawnOffAmmoStat << "Ammo: " << sawnOffUpgrade.totalAmmo.upgradedSkill.stat;
 
 							   pFont->Draw("Sawn-Off: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffRecoilLevel.c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Rate of Fire: ", { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffReloadLevel.c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Reload Speed: ", { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffBullSpreadLevel.c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-							   pFont->Draw("Shot Spread: ", { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffDamageLevel.c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Damage: ", { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffAmmoCapLevel.c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Ammo Capacity: ", { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Ammo: ", { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffBullSpreadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffBullSpreadStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffAmmoStat.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(515.0f, 575.0f), SGD::Size(240.0f, 75.0f)));
 							   for (size_t i = 0; i < 6; i++)
 								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
@@ -3028,44 +3071,55 @@ void	ShopState::Render(void)
 						 break;
 					 case 1:
 					 {
-							   string pumpMagSizeLevel = "LeveL ";
-							   pumpMagSizeLevel += std::to_string(pumpShotgunUpgrade.magSize.upgradedSkill.currTier);
-							   pumpMagSizeLevel += " ";
 
-							   string pumpRecoilLevel = "LeveL ";
-							   pumpRecoilLevel += std::to_string(pumpShotgunUpgrade.recoilTime.upgradedSkill.currTier);
-							   pumpRecoilLevel += " ";
+							   stringstream pumpMagSizeLevel;
+							   stringstream pumpMagSizeStat;
+							   pumpMagSizeLevel << "LeveL " << pumpShotgunUpgrade.recoilTime.upgradedSkill.currTier;
+							   pumpMagSizeStat << "Magazine Size: " << pumpShotgunUpgrade.recoilTime.upgradedSkill.stat;
 
-							   string pumpReloadLevel = "LeveL ";
-							   pumpReloadLevel += std::to_string(pumpShotgunUpgrade.reloadTime.upgradedSkill.currTier);
-							   pumpReloadLevel += " ";
+							   stringstream pumpRecoilLevel;
+							   stringstream pumpRecoilStat;
+							   pumpRecoilLevel << "LeveL " << pumpShotgunUpgrade.recoilTime.upgradedSkill.currTier;
+							   pumpRecoilStat << "Rate of Fire: " << pumpShotgunUpgrade.recoilTime.upgradedSkill.stat;
 
-							   string pumpBullSpreadLevel = "LeveL ";
-							   pumpBullSpreadLevel += std::to_string(pumpShotgunUpgrade.bulletSpread.upgradedSkill.currTier);
-							   pumpBullSpreadLevel += " ";
 
-							   string pumpAmmoCapLevel = "LeveL ";
-							   pumpAmmoCapLevel += std::to_string(pumpShotgunUpgrade.ammoCap.upgradedSkill.currTier);
-							   pumpAmmoCapLevel += " ";
+							   stringstream pumpReloadLevel;
+							   stringstream pumpReloadStat;
+							   pumpReloadLevel << "LeveL " << pumpShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+							   pumpReloadStat << "Reload Speed: " << pumpShotgunUpgrade.reloadTime.upgradedSkill.stat;
 
-							   string pumpDamageLevel = "LeveL ";
-							   pumpDamageLevel += std::to_string(pumpShotgunUpgrade.damage.upgradedSkill.currTier);
-							   pumpDamageLevel += " ";
+							   stringstream pumpBullSpreadLevel;
+							   stringstream pumpBullSpreadStat;
+							   pumpBullSpreadLevel << "LeveL " << pumpShotgunUpgrade.bulletSpread.upgradedSkill.currTier;
+							   pumpBullSpreadStat << "Shot Spread: " << pumpShotgunUpgrade.bulletSpread.upgradedSkill.stat;
+
+							   stringstream pumpAmmoCapLevel;
+							   stringstream pumpAmmoCapStat;
+							   pumpAmmoCapLevel << "LeveL " << pumpShotgunUpgrade.ammoCap.upgradedSkill.currTier;
+							   pumpAmmoCapStat << "Ammo Cap: " << pumpShotgunUpgrade.ammoCap.upgradedSkill.stat;
+
+							   stringstream pumpDamageLevel;
+							   stringstream pumpDamageStat;
+							   pumpDamageLevel << "LeveL " << pumpShotgunUpgrade.damage.upgradedSkill.currTier;
+							   pumpDamageStat << "Damage: " << pumpShotgunUpgrade.damage.upgradedSkill.stat;
+
+							   stringstream pumpAmmoStat;
+							   pumpAmmoStat << "Ammo: " << pumpShotgunUpgrade.totalAmmo.upgradedSkill.stat;
 
 							   pFont->Draw("Pump Action Shotgun: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpMagSizeLevel.c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Magezine Size: ", { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpRecoilLevel.c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Rate of Fire: ", { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpReloadLevel.c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Reload Speed: ", { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpBullSpreadLevel.c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-							   pFont->Draw("Shot Spread: ", { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpDamageLevel.c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Damage: ", { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpAmmoCapLevel.c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Ammo Capacity: ", { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Ammo: ", { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpMagSizeLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpMagSizeStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpBullSpreadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpBullSpreadStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpAmmoStat.str().c_str(), { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(15.0f, 225.0f), SGD::Size(218.0f, 70.0f)));
 							   for (size_t i = 0; i < 7; i++)
 								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
@@ -3199,44 +3253,56 @@ void	ShopState::Render(void)
 						 break;
 					 case 2:
 					 {
-							   string autoMagSizeLevel = "LeveL ";
-							   autoMagSizeLevel += std::to_string(autoShotgunUpgrade.magSize.upgradedSkill.currTier);
-							   autoMagSizeLevel += " ";
+				
 
-							   string autoRecoilLevel = "LeveL ";
-							   autoRecoilLevel += std::to_string(autoShotgunUpgrade.recoilTime.upgradedSkill.currTier);
-							   autoRecoilLevel += " ";
+							   stringstream autoShotgunMagSizeLevel;
+							   stringstream autoShotgunMagSizeStat;
+							   autoShotgunMagSizeLevel << "LeveL " << autoShotgunUpgrade.recoilTime.upgradedSkill.currTier;
+							   autoShotgunMagSizeStat << "Magazine Size: " << autoShotgunUpgrade.recoilTime.upgradedSkill.stat;
 
-							   string autoReloadLevel = "LeveL ";
-							   autoReloadLevel += std::to_string(autoShotgunUpgrade.reloadTime.upgradedSkill.currTier);
-							   autoReloadLevel += " ";
+							   stringstream autoShotgunRecoilLevel;
+							   stringstream autoShotgunRecoilStat;
+							   autoShotgunRecoilLevel << "LeveL " << autoShotgunUpgrade.recoilTime.upgradedSkill.currTier;
+							   autoShotgunRecoilStat << "Rate of Fire: " << autoShotgunUpgrade.recoilTime.upgradedSkill.stat;
 
-							   string autoBullSpreadLevel = "LeveL ";
-							   autoBullSpreadLevel += std::to_string(autoShotgunUpgrade.bulletSpread.upgradedSkill.currTier);
-							   autoBullSpreadLevel += " ";
 
-							   string autoAmmoCapLevel = "LeveL ";
-							   autoAmmoCapLevel += std::to_string(autoShotgunUpgrade.ammoCap.upgradedSkill.currTier);
-							   autoAmmoCapLevel += " ";
+							   stringstream autoShotgunReloadLevel;
+							   stringstream autoShotgunReloadStat;
+							   autoShotgunReloadLevel << "LeveL " << autoShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+							   autoShotgunReloadStat << "Reload Speed: " << autoShotgunUpgrade.reloadTime.upgradedSkill.stat;
 
-							   string autoDamageLevel = "LeveL ";
-							   autoDamageLevel += std::to_string(autoShotgunUpgrade.damage.upgradedSkill.currTier);
-							   autoDamageLevel += " ";
+							   stringstream autoShotgunBullSpreadLevel;
+							   stringstream autoShotgunBullSpreadStat;
+							   autoShotgunBullSpreadLevel << "LeveL " << autoShotgunUpgrade.bulletSpread.upgradedSkill.currTier;
+							   autoShotgunBullSpreadStat << "Shot Spread: " << autoShotgunUpgrade.bulletSpread.upgradedSkill.stat;
+
+							   stringstream autoShotgunAmmoCapLevel;
+							   stringstream autoShotgunAmmoCapStat;
+							   autoShotgunAmmoCapLevel << "LeveL " << autoShotgunUpgrade.ammoCap.upgradedSkill.currTier;
+							   autoShotgunAmmoCapStat << "Ammo Cap: " << autoShotgunUpgrade.ammoCap.upgradedSkill.stat;
+
+							   stringstream autoShotgunDamageLevel;
+							   stringstream autoShotgunDamageStat;
+							   autoShotgunDamageLevel << "LeveL " << autoShotgunUpgrade.damage.upgradedSkill.currTier;
+							   autoShotgunDamageStat << "Damage: " << autoShotgunUpgrade.damage.upgradedSkill.stat;
+
+							   stringstream autoShotgunAmmoStat;
+							   autoShotgunAmmoStat << "Ammo: " << autoShotgunUpgrade.totalAmmo.upgradedSkill.stat;
 
 							   pFont->Draw("Auto Shotgun: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoMagSizeLevel.c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Magezine Size: ", { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoRecoilLevel.c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Rate of Fire: ", { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoReloadLevel.c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Reload Speed: ", { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoBullSpreadLevel.c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-							   pFont->Draw("Shot Spread: ", { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoDamageLevel.c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Damage: ", { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoAmmoCapLevel.c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Ammo Capacity: ", { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw("Ammo: ", { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunMagSizeLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunMagSizeStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunBullSpreadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunBullSpreadStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunAmmoStat.str().c_str(), { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(514.0f, 228.0f), SGD::Size(228.0f, 82.0f)));
 							
 							   for (size_t i = 0; i < 7; i++)
@@ -3392,38 +3458,48 @@ void	ShopState::Render(void)
 				 case 0:
 				 {
 						   //UZI
-						   string uziMagLevel = "LeveL ";
-						   uziMagLevel += std::to_string(uziUpgrade.magSize.upgradedSkill.currTier);
-						   uziMagLevel += " ";
+					
 
-						   string uziReloadLevel = "LeveL ";
-						   uziReloadLevel += std::to_string(uziUpgrade.reloadTime.upgradedSkill.currTier);
-						   uziReloadLevel += " ";
+						   stringstream uziMagSizeLevel;
+						   stringstream uziMagSizeStat;
+						   uziMagSizeLevel << "LeveL " << uziUpgrade.magSize.upgradedSkill.currTier;
+						   uziMagSizeStat << "Magazine Size: " << uziUpgrade.magSize.upgradedSkill.stat;
 
-						   string uziBullSpreadLevel = "LeveL ";
-						   uziBullSpreadLevel += std::to_string(uziUpgrade.bulletSpread.upgradedSkill.currTier);
-						   uziBullSpreadLevel += " ";
+						   stringstream uziReloadLevel;
+						   stringstream uziReloadStat;
+						   uziReloadLevel << "LeveL " << uziUpgrade.reloadTime.upgradedSkill.currTier;
+						   uziReloadStat << "Reload Speed: " << uziUpgrade.reloadTime.upgradedSkill.stat;
 
-						   string uziAmmoCapLevel = "LeveL ";
-						   uziAmmoCapLevel += std::to_string(uziUpgrade.ammoCap.upgradedSkill.currTier);
-						   uziAmmoCapLevel += " ";
+						   stringstream uziBullSpreadLevel;
+						   stringstream uziBullSpreadStat;
+						   uziBullSpreadLevel << "LeveL " << uziUpgrade.bulletSpread.upgradedSkill.currTier;
+						   uziBullSpreadStat << "Stability: " << uziUpgrade.bulletSpread.upgradedSkill.stat;
 
-						   string uziDamageLevel = "LeveL ";
-						   uziDamageLevel += std::to_string(uziUpgrade.damage.upgradedSkill.currTier);
-						   uziDamageLevel += " ";
+						   stringstream uziAmmoCapLevel;
+						   stringstream uziAmmoCapStat;
+						   uziAmmoCapLevel << "LeveL " << uziUpgrade.ammoCap.upgradedSkill.currTier;
+						   uziAmmoCapStat << "Ammo Cap: " << uziUpgrade.ammoCap.upgradedSkill.stat;
+
+						   stringstream uziDamageLevel;
+						   stringstream uziDamageStat;
+						   uziDamageLevel << "LeveL " << uziUpgrade.damage.upgradedSkill.currTier;
+						   uziDamageStat << "Damage: " << uziUpgrade.damage.upgradedSkill.stat;
+
+						   stringstream uziAmmoStat;
+						   uziAmmoStat << "Ammo: " << uziUpgrade.totalAmmo.upgradedSkill.stat;
 
 						   pFont->Draw("MAC-10: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziMagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziBullSpreadLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						   pFont->Draw("Stability: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziDamageLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziAmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+						   pFont->Draw(uziBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
 
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(725.0f, 65.0f), SGD::Size(125.0f, 110.0f)));
 						 
@@ -3550,38 +3626,47 @@ void	ShopState::Render(void)
 				 case 1:
 				 {
 						   //Tech9
-						   string tech9MagLevel = "LeveL ";
-						   tech9MagLevel += std::to_string(tech9Upgrade.magSize.upgradedSkill.currTier);
-						   tech9MagLevel += " ";
 
-						   string tech9ReloadLevel = "LeveL ";
-						   tech9ReloadLevel += std::to_string(tech9Upgrade.reloadTime.upgradedSkill.currTier);
-						   tech9ReloadLevel += " ";
+						   stringstream tech9MagSizeLevel;
+						   stringstream tech9MagSizeStat;
+						   tech9MagSizeLevel << "LeveL " << tech9Upgrade.magSize.upgradedSkill.currTier;
+						   tech9MagSizeStat << "Magazine Size: " << tech9Upgrade.magSize.upgradedSkill.stat;
 
-						   string tech9BullSpreadLevel = "LeveL ";
-						   tech9BullSpreadLevel += std::to_string(tech9Upgrade.bulletSpread.upgradedSkill.currTier);
-						   tech9BullSpreadLevel += " ";
+						   stringstream tech9ReloadLevel;
+						   stringstream tech9ReloadStat;
+						   tech9ReloadLevel << "LeveL " << tech9Upgrade.reloadTime.upgradedSkill.currTier;
+						   tech9ReloadStat << "Reload Speed: " << tech9Upgrade.reloadTime.upgradedSkill.stat;
 
-						   string tech9AmmoCapLevel = "LeveL ";
-						   tech9AmmoCapLevel += std::to_string(tech9Upgrade.ammoCap.upgradedSkill.currTier);
-						   tech9AmmoCapLevel += " ";
+						   stringstream tech9BullSpreadLevel;
+						   stringstream tech9BullSpreadStat;
+						   tech9BullSpreadLevel << "LeveL " << tech9Upgrade.bulletSpread.upgradedSkill.currTier;
+						   tech9BullSpreadStat << "Stability: " << tech9Upgrade.bulletSpread.upgradedSkill.stat;
 
-						   string tech9DamageLevel = "LeveL ";
-						   tech9DamageLevel += std::to_string(tech9Upgrade.damage.upgradedSkill.currTier);
-						   tech9DamageLevel += " ";
+						   stringstream tech9AmmoCapLevel;
+						   stringstream tech9AmmoCapStat;
+						   tech9AmmoCapLevel << "LeveL " << tech9Upgrade.ammoCap.upgradedSkill.currTier;
+						   tech9AmmoCapStat << "Ammo Cap: " << tech9Upgrade.ammoCap.upgradedSkill.stat;
+
+						   stringstream tech9DamageLevel;
+						   stringstream tech9DamageStat;
+						   tech9DamageLevel << "LeveL " << tech9Upgrade.damage.upgradedSkill.currTier;
+						   tech9DamageStat << "Damage: " << tech9Upgrade.damage.upgradedSkill.stat;
+
+						   stringstream tech9AmmoStat;
+						   tech9AmmoStat << "Ammo: " << tech9Upgrade.totalAmmo.upgradedSkill.stat;
 
 						   pFont->Draw("Tech-9mm: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9MagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9ReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9BullSpreadLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						   pFont->Draw("Stability: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9DamageLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9AmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9MagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9MagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9ReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9ReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9BullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9BullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9DamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9DamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9AmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9AmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(335.0f, 670.0f), SGD::Size(165.0f, 100.0f)));
 						 
 						   for (size_t i = 0; i < 6; i++)
@@ -3705,39 +3790,46 @@ void	ShopState::Render(void)
 					 break;
 				 case 2:
 				 {
-						   //P90
-						   string p90MagLevel = "LeveL ";
-						   p90MagLevel += std::to_string(p90Upgrade.magSize.upgradedSkill.currTier);
-						   p90MagLevel += " ";
+						   stringstream p90MagSizeLevel;
+						   stringstream p90MagSizeStat;
+						   p90MagSizeLevel << "LeveL " << p90Upgrade.magSize.upgradedSkill.currTier;
+						   p90MagSizeStat << "Magazine Size: " << p90Upgrade.magSize.upgradedSkill.stat;
 
-						   string p90ReloadLevel = "LeveL ";
-						   p90ReloadLevel += std::to_string(p90Upgrade.reloadTime.upgradedSkill.currTier);
-						   p90ReloadLevel += " ";
+						   stringstream p90ReloadLevel;
+						   stringstream p90ReloadStat;
+						   p90ReloadLevel << "LeveL " << p90Upgrade.reloadTime.upgradedSkill.currTier;
+						   p90ReloadStat << "Reload Speed: " << p90Upgrade.reloadTime.upgradedSkill.stat;
 
-						   string p90BullSpreadLevel = "LeveL ";
-						   p90BullSpreadLevel += std::to_string(p90Upgrade.bulletSpread.upgradedSkill.currTier);
-						   p90BullSpreadLevel += " ";
+						   stringstream p90BullSpreadLevel;
+						   stringstream p90BullSpreadStat;
+						   p90BullSpreadLevel << "LeveL " << p90Upgrade.bulletSpread.upgradedSkill.currTier;
+						   p90BullSpreadStat << "Stability: " << p90Upgrade.bulletSpread.upgradedSkill.stat;
 
-						   string p90AmmoCapLevel = "LeveL ";
-						   p90AmmoCapLevel += std::to_string(p90Upgrade.ammoCap.upgradedSkill.currTier);
-						   p90AmmoCapLevel += " ";
+						   stringstream p90AmmoCapLevel;
+						   stringstream p90AmmoCapStat;
+						   p90AmmoCapLevel << "LeveL " << p90Upgrade.ammoCap.upgradedSkill.currTier;
+						   p90AmmoCapStat << "Ammo Cap: " << p90Upgrade.ammoCap.upgradedSkill.stat;
 
-						   string p90DamageLevel = "LeveL ";
-						   p90DamageLevel += std::to_string(p90Upgrade.damage.upgradedSkill.currTier);
-						   p90DamageLevel += " ";
+						   stringstream p90DamageLevel;
+						   stringstream p90DamageStat;
+						   p90DamageLevel << "LeveL " << p90Upgrade.damage.upgradedSkill.currTier;
+						   p90DamageStat << "Damage: " << p90Upgrade.damage.upgradedSkill.stat;
+
+						   stringstream p90AmmoStat;
+						   p90AmmoStat << "Ammo: " << p90Upgrade.totalAmmo.upgradedSkill.stat;
 
 						   pFont->Draw("P90: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90MagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90ReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90BullSpreadLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						   pFont->Draw("Stability: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90DamageLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90AmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90MagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90MagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90ReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90ReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90BullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+						   pFont->Draw(p90BullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90DamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90DamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90AmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90AmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(315.0f, 130.0f), SGD::Size(240.0f, 90.0f)));
 	
 						   for (size_t i = 0; i < 6; i++)
@@ -3878,44 +3970,54 @@ void	ShopState::Render(void)
 						   {
 						   case 0:
 						   {
-									 string akMagLevel = "LeveL ";
-									 akMagLevel += std::to_string(ak47Upgrade.magSize.upgradedSkill.currTier);
-									 akMagLevel += " ";
+									
+									 stringstream akMagSizeLevel;
+									 stringstream akMagSizeStat;
+									 akMagSizeLevel << "LeveL " << tech9Upgrade.magSize.upgradedSkill.currTier;
+									 akMagSizeStat << "Magazine Size: " << tech9Upgrade.magSize.upgradedSkill.stat;
 
-									 string akReloadLevel = "LeveL ";
-									 akReloadLevel += std::to_string(ak47Upgrade.reloadTime.upgradedSkill.currTier);
-									 akReloadLevel += " ";
+									 stringstream akReloadLevel;
+									 stringstream akReloadStat;
+									 akReloadLevel << "LeveL " << tech9Upgrade.reloadTime.upgradedSkill.currTier;
+									 akReloadStat << "Reload Speed: " << tech9Upgrade.reloadTime.upgradedSkill.stat;
 
-									 string akRecoilLevel = "LeveL ";
-									 akRecoilLevel += std::to_string(ak47Upgrade.recoilTime.upgradedSkill.currTier);
-									 akRecoilLevel += " ";
+									 stringstream akRecoilLevel;
+									 stringstream akRecoilStat;
+									 akRecoilLevel << "LeveL " << tech9Upgrade.reloadTime.upgradedSkill.currTier;
+									 akRecoilStat << "Rate of Fire: " << tech9Upgrade.reloadTime.upgradedSkill.stat;
 
-									 string akBullSpreadLevel = "LeveL ";
-									 akBullSpreadLevel += std::to_string(ak47Upgrade.bulletSpread.upgradedSkill.currTier);
-									 akBullSpreadLevel += " ";
+									 stringstream akBullSpreadLevel;
+									 stringstream akBullSpreadStat;
+									 akBullSpreadLevel << "LeveL " << tech9Upgrade.bulletSpread.upgradedSkill.currTier;
+									 akBullSpreadStat << "Stability: " << tech9Upgrade.bulletSpread.upgradedSkill.stat;
 
-									 string akAmmoCapLevel = "LeveL ";
-									 akAmmoCapLevel += std::to_string(ak47Upgrade.ammoCap.upgradedSkill.currTier);
-									 akAmmoCapLevel += " ";
+									 stringstream akAmmoCapLevel;
+									 stringstream akAmmoCapStat;
+									 akAmmoCapLevel << "LeveL " << tech9Upgrade.ammoCap.upgradedSkill.currTier;
+									 akAmmoCapStat << "Ammo Cap: " << tech9Upgrade.ammoCap.upgradedSkill.stat;
 
-									 string akDamageLevel = "LeveL ";
-									 akDamageLevel += std::to_string(ak47Upgrade.damage.upgradedSkill.currTier);
-									 akDamageLevel += " ";
+									 stringstream akDamageLevel;
+									 stringstream akDamageStat;
+									 akDamageLevel << "LeveL " << tech9Upgrade.damage.upgradedSkill.currTier;
+									 akDamageStat << "Damage: " << tech9Upgrade.damage.upgradedSkill.stat;
+
+									 stringstream akAmmoStat;
+									 akAmmoStat << "Ammo: " << tech9Upgrade.totalAmmo.upgradedSkill.stat;
 
 									 pFont->Draw("AK-47: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-									 pFont->Draw(akMagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akRecoilLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Rate of Fire: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akBullSpreadLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-									 pFont->Draw("Stability: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akDamageLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akAmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akRecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
+									 pFont->Draw(akBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(225.0f, 300.0f), SGD::Size(244.0f, 73.0f)));
 									
 									 for (size_t i = 0; i < 7; i++)
@@ -4052,44 +4154,55 @@ void	ShopState::Render(void)
 						
 						   case 1:
 						   {
-									 string m16MagLevel = "LeveL ";
-									 m16MagLevel += std::to_string(m16Upgrade.magSize.upgradedSkill.currTier);
-									 m16MagLevel += " ";
+							
 
-									 string m16ReloadLevel = "LeveL ";
-									 m16ReloadLevel += std::to_string(m16Upgrade.reloadTime.upgradedSkill.currTier);
-									 m16ReloadLevel += " ";
+									 stringstream m16MagSizeLevel;
+									 stringstream m16MagSizeStat;
+									 m16MagSizeLevel << "LeveL " << m16Upgrade.magSize.upgradedSkill.currTier;
+									 m16MagSizeStat << "Magazine Size: " << m16Upgrade.magSize.upgradedSkill.stat;
 
-									 string m16RecoilLevel = "LeveL ";
-									 m16RecoilLevel += std::to_string(m16Upgrade.recoilTime.upgradedSkill.currTier);
-									 m16RecoilLevel += " ";
+									 stringstream m16ReloadLevel;
+									 stringstream m16ReloadStat;
+									 m16ReloadLevel << "LeveL " << m16Upgrade.reloadTime.upgradedSkill.currTier;
+									 m16ReloadStat << "Reload Speed: " << m16Upgrade.reloadTime.upgradedSkill.stat;
 
-									 string m16BullSpreadLevel = "LeveL ";
-									 m16BullSpreadLevel += std::to_string(m16Upgrade.bulletSpread.upgradedSkill.currTier);
-									 m16BullSpreadLevel += " ";
+									 stringstream m16RecoilLevel;
+									 stringstream m16RecoilStat;
+									 m16RecoilLevel << "LeveL " << m16Upgrade.reloadTime.upgradedSkill.currTier;
+									 m16RecoilStat << "Rate of Fire: " << m16Upgrade.reloadTime.upgradedSkill.stat;
 
-									 string m16AmmoCapLevel = "LeveL ";
-									 m16AmmoCapLevel += std::to_string(m16Upgrade.ammoCap.upgradedSkill.currTier);
-									 m16AmmoCapLevel += " ";
+									 stringstream m16BullSpreadLevel;
+									 stringstream m16BullSpreadStat;
+									 m16BullSpreadLevel << "LeveL " << m16Upgrade.bulletSpread.upgradedSkill.currTier;
+									 m16BullSpreadStat << "Stability: " << m16Upgrade.bulletSpread.upgradedSkill.stat;
 
-									 string m16DamageLevel = "LeveL ";
-									 m16DamageLevel += std::to_string(m16Upgrade.damage.upgradedSkill.currTier);
-									 m16DamageLevel += " ";
+									 stringstream m16AmmoCapLevel;
+									 stringstream m16AmmoCapStat;
+									 m16AmmoCapLevel << "LeveL " << m16Upgrade.ammoCap.upgradedSkill.currTier;
+									 m16AmmoCapStat << "Ammo Cap: " << m16Upgrade.ammoCap.upgradedSkill.stat;
+
+									 stringstream m16DamageLevel;
+									 stringstream m16DamageStat;
+									 m16DamageLevel << "LeveL " << m16Upgrade.damage.upgradedSkill.currTier;
+									 m16DamageStat << "Damage: " << m16Upgrade.damage.upgradedSkill.stat;
+
+									 stringstream m16AmmoStat;
+									 m16AmmoStat << "Ammo: " << m16Upgrade.totalAmmo.upgradedSkill.stat;
 
 									 pFont->Draw("M-16: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16MagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16ReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16RecoilLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Rate of Fire: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16BullSpreadLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-									 pFont->Draw("Stability: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16DamageLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16AmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16MagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16MagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16ReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16ReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16RecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16RecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16BullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
+									 pFont->Draw(m16BullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16DamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16DamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16AmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16AmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(468.0f, 312.0f), SGD::Size(256.0f, 88.0f)));
 									
 									 for (size_t i = 0; i < 7; i++)
@@ -4225,44 +4338,54 @@ void	ShopState::Render(void)
 							   break;
 						   case 2:
 						   {
-									 string lmgMagLevel = "LeveL ";
-									 lmgMagLevel += std::to_string(lmgUpgrade.magSize.upgradedSkill.currTier);
-									 lmgMagLevel += " ";
+								
+									 stringstream lmgMagSizeLevel;
+									 stringstream lmgMagSizeStat;
+									 lmgMagSizeLevel << "LeveL " << lmgUpgrade.magSize.upgradedSkill.currTier;
+									 lmgMagSizeStat << "Magazine Size: " << lmgUpgrade.magSize.upgradedSkill.stat;
 
-									 string lmgReloadLevel = "LeveL ";
-									 lmgReloadLevel += std::to_string(lmgUpgrade.reloadTime.upgradedSkill.currTier);
-									 lmgReloadLevel += " ";
+									 stringstream lmgReloadLevel;
+									 stringstream lmgReloadStat;
+									 lmgReloadLevel << "LeveL " << lmgUpgrade.reloadTime.upgradedSkill.currTier;
+									 lmgReloadStat << "Reload Speed: " << lmgUpgrade.reloadTime.upgradedSkill.stat;
 
-									 string lmgRecoilLevel = "LeveL ";
-									 lmgRecoilLevel += std::to_string(lmgUpgrade.recoilTime.upgradedSkill.currTier);
-									 lmgRecoilLevel += " ";
+									 stringstream lmgRecoilLevel;
+									 stringstream lmgRecoilStat;
+									 lmgRecoilLevel << "LeveL " << lmgUpgrade.reloadTime.upgradedSkill.currTier;
+									 lmgRecoilStat << "Rate of Fire: " << lmgUpgrade.reloadTime.upgradedSkill.stat;
 
-									 string lmgBullSpreadLevel = "LeveL ";
-									 lmgBullSpreadLevel += std::to_string(lmgUpgrade.bulletSpread.upgradedSkill.currTier);
-									 lmgBullSpreadLevel += " ";
+									 stringstream lmgBullSpreadLevel;
+									 stringstream lmgBullSpreadStat;
+									 lmgBullSpreadLevel << "LeveL " << lmgUpgrade.bulletSpread.upgradedSkill.currTier;
+									 lmgBullSpreadStat << "Stability: " << lmgUpgrade.bulletSpread.upgradedSkill.stat;
 
-									 string lmgAmmoCapLevel = "LeveL ";
-									 lmgAmmoCapLevel += std::to_string(lmgUpgrade.ammoCap.upgradedSkill.currTier);
-									 lmgAmmoCapLevel += " ";
+									 stringstream lmgAmmoCapLevel;
+									 stringstream lmgAmmoCapStat;
+									 lmgAmmoCapLevel << "LeveL " << lmgUpgrade.ammoCap.upgradedSkill.currTier;
+									 lmgAmmoCapStat << "Ammo Cap: " << lmgUpgrade.ammoCap.upgradedSkill.stat;
 
-									 string lmgDamageLevel = "LeveL ";
-									 lmgDamageLevel += std::to_string(lmgUpgrade.damage.upgradedSkill.currTier);
-									 lmgDamageLevel += " ";
+									 stringstream lmgDamageLevel;
+									 stringstream lmgDamageStat;
+									 lmgDamageLevel << "LeveL " << lmgUpgrade.damage.upgradedSkill.currTier;
+									 lmgDamageStat << "Damage: " << lmgUpgrade.damage.upgradedSkill.stat;
+
+									 stringstream lmgAmmoStat;
+									 lmgAmmoStat << "Ammo: " << lmgUpgrade.totalAmmo.upgradedSkill.stat;
 
 									 pFont->Draw("LMG: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgMagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgRecoilLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Rate of Fire: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgBullSpreadLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-									 pFont->Draw("Stability: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgDamageLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgAmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgRecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(16.0f, 368.0f), SGD::Size(260.0f, 85.0f)));
 
 									 for (size_t i = 0; i < 7; i++)
@@ -4414,50 +4537,62 @@ void	ShopState::Render(void)
 				  {
 				  case 0:
 				  {
-							string sniperMagLevel = "LeveL ";
-							sniperMagLevel += std::to_string(sniperUpgrade.magSize.upgradedSkill.currTier);
-							sniperMagLevel += " ";
+					
 
-							string sniperReloadLevel = "LeveL ";
-							sniperReloadLevel += std::to_string(sniperUpgrade.reloadTime.upgradedSkill.currTier);
-							sniperReloadLevel += " ";
+							stringstream sniperMagSizeLevel;
+							stringstream sniperMagSizeStat;
+							sniperMagSizeLevel << "LeveL " << sniperUpgrade.magSize.upgradedSkill.currTier;
+							sniperMagSizeStat << "Magazine Size: " << sniperUpgrade.magSize.upgradedSkill.stat;
 
-							string sniperRecoilLevel = "LeveL ";
-							sniperRecoilLevel += std::to_string(sniperUpgrade.recoilTime.upgradedSkill.currTier);
-							sniperRecoilLevel += " ";
+							stringstream sniperReloadLevel;
+							stringstream sniperReloadStat;
+							sniperReloadLevel << "LeveL " << sniperUpgrade.reloadTime.upgradedSkill.currTier;
+							sniperReloadStat << "Reload Speed: " << sniperUpgrade.reloadTime.upgradedSkill.stat;
 
-							string sniperBullSpreadLevel = "LeveL ";
-							sniperBullSpreadLevel += std::to_string(sniperUpgrade.bulletSpread.upgradedSkill.currTier);
-							sniperBullSpreadLevel += " ";
+							stringstream sniperRecoilLevel;
+							stringstream sniperRecoilStat;
+							sniperRecoilLevel << "LeveL " << sniperUpgrade.reloadTime.upgradedSkill.currTier;
+							sniperRecoilStat << "Rate of Fire: " << sniperUpgrade.reloadTime.upgradedSkill.stat;
 
-							string sniperAmmoCapLevel = "LeveL ";
-							sniperAmmoCapLevel += std::to_string(sniperUpgrade.ammoCap.upgradedSkill.currTier);
-							sniperAmmoCapLevel += " ";
+							stringstream sniperBullSpreadLevel;
+							stringstream sniperBullSpreadStat;
+							sniperBullSpreadLevel << "LeveL " << sniperUpgrade.bulletSpread.upgradedSkill.currTier;
+							sniperBullSpreadStat << "Stability: " << sniperUpgrade.bulletSpread.upgradedSkill.stat;
 
-							string sniperPenPowerLevel = "LeveL ";
-							sniperPenPowerLevel += std::to_string(sniperUpgrade.penPower.upgradedSkill.currTier);
-							sniperPenPowerLevel += " ";
+							stringstream sniperAmmoCapLevel;
+							stringstream sniperAmmoCapStat;
+							sniperAmmoCapLevel << "LeveL " << sniperUpgrade.ammoCap.upgradedSkill.currTier;
+							sniperAmmoCapStat << "Ammo Cap: " << sniperUpgrade.ammoCap.upgradedSkill.stat;
 
-							string sniperDamageLevel = "LeveL ";
-							sniperDamageLevel += std::to_string(sniperUpgrade.damage.upgradedSkill.currTier);
-							sniperDamageLevel += " ";
+							stringstream sniperPenPowerLevel;
+							stringstream sniperPenPowerStat;
+							sniperPenPowerLevel << "LeveL " << sniperUpgrade.penPower.upgradedSkill.currTier;
+							sniperPenPowerStat << "Pentrating Power: " << sniperUpgrade.penPower.upgradedSkill.stat;
+
+							stringstream sniperDamageLevel;
+							stringstream sniperDamageStat;
+							sniperDamageLevel << "LeveL " << sniperUpgrade.damage.upgradedSkill.currTier;
+							sniperDamageStat << "Damage: " << sniperUpgrade.damage.upgradedSkill.stat;
+
+							stringstream sniperAmmoStat;
+							sniperAmmoStat << "Ammo: " << sniperUpgrade.totalAmmo.upgradedSkill.stat;
 
 							pFont->Draw("Sniper Rifler: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperMagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperRecoilLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Rate of Fire: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperBullSpreadLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-							pFont->Draw("Stability: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperDamageLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperPenPowerLevel.c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Penetration Power: ", { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperAmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[7].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperRecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
+							pFont->Draw(sniperBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperPenPowerLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperPenPowerStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[7].top }, 0.5f, { 255, 255, 0, 0 });
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(530.0f, 400.0f), SGD::Size(230.0f, 63.0f)));
 
 							for (size_t i = 0; i < 8; i++)
@@ -4606,44 +4741,55 @@ void	ShopState::Render(void)
 					  break;
 				  case 1:
 				  {
-							string flameMagLevel = "LeveL ";
-							flameMagLevel += std::to_string(flameUpgrade.magSize.upgradedSkill.currTier);
-							flameMagLevel += " ";
+						
 
-							string flameReloadLevel = "LeveL ";
-							flameReloadLevel += std::to_string(flameUpgrade.reloadTime.upgradedSkill.currTier);
-							flameReloadLevel += " ";
+							stringstream flameMagSizeLevel;
+							stringstream flameMagSizeStat;
+							flameMagSizeLevel << "LeveL " << flameUpgrade.magSize.upgradedSkill.currTier;
+							flameMagSizeStat << "Magazine Size: " << flameUpgrade.magSize.upgradedSkill.stat;
 
-							string flameBullSpreadLevel = "LeveL ";
-							flameBullSpreadLevel += std::to_string(flameUpgrade.bulletSpread.upgradedSkill.currTier);
-							flameBullSpreadLevel += " ";
+							stringstream flameReloadLevel;
+							stringstream flameReloadStat;
+							flameReloadLevel << "LeveL " << flameUpgrade.reloadTime.upgradedSkill.currTier;
+							flameReloadStat << "Reload Speed: " << flameUpgrade.reloadTime.upgradedSkill.stat;
 
-							string flameAmmoCapLevel = "LeveL ";
-							flameAmmoCapLevel += std::to_string(flameUpgrade.ammoCap.upgradedSkill.currTier);
-							flameAmmoCapLevel += " ";
+							stringstream flameBullSpreadLevel;
+							stringstream flameBullSpreadStat;
+							flameBullSpreadLevel << "LeveL " << flameUpgrade.bulletSpread.upgradedSkill.currTier;
+							flameBullSpreadStat << "Stability: " << flameUpgrade.bulletSpread.upgradedSkill.stat;
 
-							string flameDamageLevel = "LeveL ";
-							flameDamageLevel += std::to_string(flameUpgrade.damage.upgradedSkill.currTier);
-							flameDamageLevel += " ";
+							stringstream flameAmmoCapLevel;
+							stringstream flameAmmoCapStat;
+							flameAmmoCapLevel << "LeveL " << flameUpgrade.ammoCap.upgradedSkill.currTier;
+							flameAmmoCapStat << "Ammo Cap: " << flameUpgrade.ammoCap.upgradedSkill.stat;
 
-							string flameRangeLevel = "LeveL ";
-							flameRangeLevel += std::to_string(flameUpgrade.bulletVelocity.upgradedSkill.currTier);
-							flameRangeLevel += " ";
+							stringstream flameRangeLevel;
+							stringstream flameRangeStat;
+							flameRangeLevel << "LeveL " << flameUpgrade.bulletVelocity.upgradedSkill.currTier;
+							flameRangeStat << "Range: " << flameUpgrade.bulletVelocity.upgradedSkill.stat;
+
+							stringstream flameDamageLevel;
+							stringstream flameDamageStat;
+							flameDamageLevel << "LeveL " << flameUpgrade.damage.upgradedSkill.currTier;
+							flameDamageStat << "Damage: " << flameUpgrade.damage.upgradedSkill.stat;
+
+							stringstream flameAmmoStat;
+							flameAmmoStat << "Ammo: " << flameUpgrade.totalAmmo.upgradedSkill.stat;
 
 							pFont->Draw("Flame Thrower: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							pFont->Draw(flameMagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Fuel Tank Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameBullSpreadLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-							pFont->Draw("Stability: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameDamageLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameRangeLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Range: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameAmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+							pFont->Draw(flameBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameRangeLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameRangeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(8.0f, 550.0f), SGD::Size(274.0f, 142.0f)));
 							
 							for (size_t i = 0; i < 7; i++)
@@ -4779,38 +4925,48 @@ void	ShopState::Render(void)
 					  break;
 				  case 2:
 				  {
-							string nadeMagLevel = "LeveL ";
-							nadeMagLevel += std::to_string(nadeLauncherUpgrade.magSize.upgradedSkill.currTier);
-							nadeMagLevel += " ";
+							
+							stringstream nadeMagSizeLevel;
+							stringstream nadeMagSizeStat;
+							nadeMagSizeLevel << "LeveL " << nadeLauncherUpgrade.magSize.upgradedSkill.currTier;
+							nadeMagSizeStat << "Magazine Size: " << nadeLauncherUpgrade.magSize.upgradedSkill.stat;
 
-							string nadeReloadLevel = "LeveL ";
-							nadeReloadLevel += std::to_string(nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier);
-							nadeReloadLevel += " ";
+							stringstream nadeReloadLevel;
+							stringstream nadeReloadStat;
+							nadeReloadLevel << "LeveL " << nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier;
+							nadeReloadStat << "Reload Speed: " << nadeLauncherUpgrade.reloadTime.upgradedSkill.stat;
 
-							string nadeAmmoCapLevel = "LeveL ";
-							nadeAmmoCapLevel += std::to_string(nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier);
-							nadeAmmoCapLevel += " ";
 
-							string nadeDamageLevel = "LeveL ";
-							nadeDamageLevel += std::to_string(nadeLauncherUpgrade.damage.upgradedSkill.currTier);
-							nadeDamageLevel += " ";
+							stringstream nadeAmmoCapLevel;
+							stringstream nadeAmmoCapStat;
+							nadeAmmoCapLevel << "LeveL " << nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier;
+							nadeAmmoCapStat << "Ammo Cap: " << nadeLauncherUpgrade.ammoCap.upgradedSkill.stat;
 
-							string nadeRangeLevel = "LeveL ";
-							nadeRangeLevel += std::to_string(nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier);
-							nadeRangeLevel += " ";
+							stringstream nadeRangeLevel;
+							stringstream nadeRangeStat;
+							nadeRangeLevel << "LeveL " << nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier;
+							nadeRangeStat << "Range: " << nadeLauncherUpgrade.bulletVelocity.upgradedSkill.stat;
+
+							stringstream nadeDamageLevel;
+							stringstream nadeDamageStat;
+							nadeDamageLevel << "LeveL " << nadeLauncherUpgrade.damage.upgradedSkill.currTier;
+							nadeDamageStat << "Damage: " << nadeLauncherUpgrade.damage.upgradedSkill.stat;
+
+							stringstream nadeAmmoStat;
+							nadeAmmoStat << "Ammo: " << nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat;
 
 							pFont->Draw("Grenade Launcher: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeMagLevel.c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Magezine Size: ", { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeReloadLevel.c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Reload Speed: ", { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeDamageLevel.c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Damage: ", { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeRangeLevel.c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Range: ", { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeAmmoCapLevel.c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Ammo Capacity: ", { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw("Ammo: ", { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeRangeLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeRangeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(330.0f, 455.0f), SGD::Size(265.0f, 82.0f)));
 				
 							for (size_t i = 0; i < 6; i++)
@@ -4945,61 +5101,61 @@ void	ShopState::Render(void)
 					pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
 					pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });*/
 
-					string sandbagStatus = "";
+					/*string sandbagStatus = "";
 					sandbagStatus += std::to_string(sandBagCurrHealth);
 					sandbagStatus += " ";
 
 					string sandbagMaxHealth = "";
 					sandbagMaxHealth += std::to_string(sandBag.maxHealth.upgradedSkill.stat);
-					sandbagMaxHealth += " ";
+					sandbagMaxHealth += " ";*/
 
-					string barbedDamageStatus = "";
-					barbedDamageStatus += std::to_string(barbedwire.damage.upgradedSkill.stat);
-					barbedDamageStatus += " ";
+					
 
-					string barbedHeatlhStatus = "";
-					barbedHeatlhStatus += std::to_string(barbWireCurrHealth);
-					barbedHeatlhStatus += " ";
-
-					string barbedMaxHealth = "";
-					barbedMaxHealth += std::to_string(barbedwire.maxHealth.upgradedSkill.stat);
-					barbedMaxHealth += " ";
-
-					string landmineStatus = "LeveL ";
-					landmineStatus += std::to_string(numLandMines);
-					landmineStatus += " ";
+					
 
 					string turretInventory = "LeveL ";
 					turretInventory += std::to_string(profile.numTurrets);
 					turretInventory += " ";
 
+					stringstream sandBagHeathStat;
+					sandBagHeathStat << "Durability: " << sandBagCurrHealth;
+					stringstream sandBagMaxDurrStat;
+					sandBagMaxDurrStat << "Max Durability: " << sandBag.maxHealth.upgradedSkill.stat;
+
+					stringstream barbWireHeathStat;
+					barbWireHeathStat << "Durability: " << barbWireCurrHealth;
+					stringstream barbWireMaxDurrStat;
+					barbWireMaxDurrStat << "Max Durability: " << barbedwire.maxHealth.upgradedSkill.stat;
+					stringstream barbWireDamageStat;
+					barbWireDamageStat << "Damage: " << barbedwire.damage.upgradedSkill.stat;
+
+					stringstream landMineStat;
+					landMineStat << "Mines Left: " << numLandMines;
+
+					stringstream numTurrets;
+					numTurrets << "Inventory: " << profile.numTurrets;
+					stringstream maxNumTurrets;
+					maxNumTurrets << "Inventory Cap: " << profile.maxNumTurrets;
 
 					pFont->Draw("Sandbags: ", { screenSize.width *.1f, screenSize.height * 0.1f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(sandbagStatus.c_str(), { screenSize.width *.3f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw("Max Durability: ", { screenSize.width * 0.1f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(sandbagMaxHealth.c_str(), { screenSize.width *.3f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
-
-					pFont->Draw("Barbed Wire: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(barbedHeatlhStatus.c_str(), { screenSize.width *.3f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw("Max Durability: ", { screenSize.width * 0.1f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(barbedMaxHealth.c_str(), { screenSize.width *.3f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
-
-					pFont->Draw("Damage: ", { screenSize.width * 0.1f, DefenseButtons[4].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(barbedDamageStatus.c_str(), { screenSize.width *.3f, DefenseButtons[4].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(sandBagHeathStat.str().c_str() , { screenSize.width * 0.1f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(sandBagMaxDurrStat.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
 					
 
+					pFont->Draw("Barbed Wire: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
+					pFont->Draw(barbWireHeathStat.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(barbWireMaxDurrStat.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(barbWireDamageStat.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[4].top }, 0.5f, { 255, 255, 0, 0 });
+
 					pFont->Draw("Mine Field: ", { screenSize.width *.1f, screenSize.height * 0.5f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw("Durability: ", { screenSize.width * 0.1f, DefenseButtons[5].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(landmineStatus.c_str(), { screenSize.width *.3f, DefenseButtons[5].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(landMineStat.str().c_str(), { screenSize.width *.3f, DefenseButtons[5].top }, 0.5f, { 255, 255, 0, 0 });
 
 					pFont->Draw("Auto-Turrets: ", { screenSize.width *.1f, screenSize.height * 0.7f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw("Inventory: ", { screenSize.width * 0.1f, DefenseButtons[6].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(turretInventory.c_str(), { screenSize.width *.3f, DefenseButtons[6].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(numTurrets.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[6].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(maxNumTurrets.str().c_str(), { screenSize.width *.3f, DefenseButtons[7].top }, 0.5f, { 255, 255, 0, 0 });
 
 
-					for (size_t i = 0; i < 7; i++)
+					for (size_t i = 0; i < 8; i++)
 						pGraphics->DrawTexture(upgradeButton, { DefenseButtons[i].left, DefenseButtons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
 
 				
@@ -5099,11 +5255,11 @@ void	ShopState::Render(void)
 					}
 					else
 					{
-						if (mousePos.IsWithinRectangle(DefenseButtons[2]))
+						if (mousePos.IsWithinRectangle(DefenseButtons[0]))
 							pFont->Draw("Buy", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
-						else
-							pFont->Draw("Buy", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
+						else
+							pFont->Draw("Buy", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
 					}
 
 
@@ -5138,11 +5294,37 @@ void	ShopState::Render(void)
 
 
 					if (mousePos.IsWithinRectangle(DefenseButtons[6]))
+					{
+						if (profile.numTurrets < profile.maxNumTurrets)
 						pFont->Draw("Buy", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
 					else
-						pFont->Draw("Buy", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+						pFont->Draw("Full Inventory", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+					}
+					else
+					{
+						if (profile.numTurrets < profile.maxNumTurrets)
+							pFont->Draw("Buy", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+						else
+							pFont->Draw("Full Inventory", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					}
+						
 
-					
+					if (mousePos.IsWithinRectangle(DefenseButtons[7]))
+					{
+						if (profile.maxNumTurrets < 10)
+							pFont->Draw("Buy", { DefenseButtons[7].left + 25, DefenseButtons[7].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+						else
+							pFont->Draw("Maxed", { DefenseButtons[7].left + 25, DefenseButtons[7].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+					}
+					else
+					{
+						if (profile.maxNumTurrets < 10)
+							pFont->Draw("Buy", { DefenseButtons[7].left + 25, DefenseButtons[7].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+						else
+							pFont->Draw("Maxed", { DefenseButtons[7].left + 25, DefenseButtons[7].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					}
+						
+
 
 
 						
@@ -5282,6 +5464,9 @@ void ShopState::LoadShopStatus()
 	if (pistolUpgrade.reloadTime.upgradedSkill.currTier == profile.pistol.reloadTime.upgradedSkill.maxTier)
 		pistolUpgrade.reloadTime.isMaxed = true;
 
+	pistolUpgrade.isEquipt = profile.pistol.isEquipt;
+
+
 #pragma endregion
 
 #pragma region Revoler Loadin
@@ -5299,9 +5484,9 @@ void ShopState::LoadShopStatus()
 	if (revolverUpgrade.reloadTime.upgradedSkill.currTier == profile.revolver.reloadTime.upgradedSkill.maxTier)
 		revolverUpgrade.reloadTime.isMaxed = true;
 
-	revolverUpgrade.recoilTime.upgradedSkill.currTier = profile.revolver.reloadTime.upgradedSkill.currTier;
-	revolverUpgrade.recoilTime.upgradedSkill.maxTier = profile.revolver.reloadTime.upgradedSkill.maxTier;
-	revolverUpgrade.recoilTime.upgradedSkill.stat = profile.revolver.reloadTime.upgradedSkill.stat;
+	revolverUpgrade.recoilTime.upgradedSkill.currTier = profile.revolver.recoilTime.upgradedSkill.currTier;
+	revolverUpgrade.recoilTime.upgradedSkill.maxTier = profile.revolver.recoilTime.upgradedSkill.maxTier;
+	revolverUpgrade.recoilTime.upgradedSkill.stat = profile.revolver.recoilTime.upgradedSkill.stat;
 	if (revolverUpgrade.recoilTime.upgradedSkill.currTier == profile.revolver.recoilTime.upgradedSkill.maxTier)
 		revolverUpgrade.recoilTime.isMaxed = true;
 
@@ -5330,6 +5515,8 @@ void ShopState::LoadShopStatus()
 		revolverUpgrade.totalAmmo.isMaxed = true;
 
 	revolverUpgrade.isBought = profile.revolver.isBought;
+	revolverUpgrade.isEquipt = profile.revolver.isEquipt;
+
 
 #pragma endregion
 
@@ -5375,6 +5562,8 @@ void ShopState::LoadShopStatus()
 		sawnOffUpgrade.totalAmmo.isMaxed = true;
 
 	sawnOffUpgrade.isBought = profile.sawnoff.isBought;
+	sawnOffUpgrade.isEquipt = profile.sawnoff.isEquipt;
+
 
 #pragma endregion
 
@@ -5424,6 +5613,7 @@ void ShopState::LoadShopStatus()
 		pumpShotgunUpgrade.totalAmmo.isMaxed = true;
 
 	pumpShotgunUpgrade.isBought = profile.pumpShotgun.isBought;
+	pumpShotgunUpgrade.isEquipt = profile.pumpShotgun.isEquipt;
 
 #pragma endregion
 
@@ -5473,6 +5663,8 @@ void ShopState::LoadShopStatus()
 		autoShotgunUpgrade.totalAmmo.isMaxed = true;
 
 	autoShotgunUpgrade.isBought = profile.autoShotgun.isBought;
+	autoShotgunUpgrade.isEquipt = profile.autoShotgun.isEquipt;
+
 
 #pragma endregion
 
@@ -5515,6 +5707,8 @@ void ShopState::LoadShopStatus()
 		uziUpgrade.totalAmmo.isMaxed = true;
 
 	uziUpgrade.isBought = profile.mac10.isBought;
+	uziUpgrade.isEquipt = profile.mac10.isEquipt;
+
 
 #pragma endregion
 
@@ -5557,6 +5751,8 @@ void ShopState::LoadShopStatus()
 		tech9Upgrade.totalAmmo.isMaxed = true;
 
 	tech9Upgrade.isBought = profile.tech9.isBought;
+	tech9Upgrade.isEquipt = profile.tech9.isEquipt;
+
 
 #pragma endregion
 
@@ -5599,6 +5795,8 @@ void ShopState::LoadShopStatus()
 		p90Upgrade.totalAmmo.isMaxed = true;
 
 	p90Upgrade.isBought = profile.p90.isBought;
+	p90Upgrade.isEquipt = profile.p90.isEquipt;
+
 
 #pragma endregion
 
@@ -5648,6 +5846,8 @@ void ShopState::LoadShopStatus()
 		ak47Upgrade.totalAmmo.isMaxed = true;
 
 	ak47Upgrade.isBought = profile.ak47.isBought;
+	ak47Upgrade.isEquipt = profile.ak47.isEquipt;
+
 
 #pragma endregion
 
@@ -5696,6 +5896,8 @@ void ShopState::LoadShopStatus()
 		m16Upgrade.totalAmmo.isMaxed = true;
 
 	m16Upgrade.isBought = profile.m16.isBought;
+	m16Upgrade.isEquipt = profile.m16.isEquipt;
+
 
 #pragma endregion
 
@@ -5745,6 +5947,8 @@ void ShopState::LoadShopStatus()
 		lmgUpgrade.totalAmmo.isMaxed = true;
 
 	lmgUpgrade.isBought = profile.lmg.isBought;
+	lmgUpgrade.isEquipt = profile.lmg.isEquipt;
+
 
 #pragma endregion
 
@@ -5793,6 +5997,7 @@ void ShopState::LoadShopStatus()
 		flameUpgrade.totalAmmo.isMaxed = true;
 
 	flameUpgrade.isBought = profile.flameThrower.isBought;
+	flameUpgrade.isEquipt = profile.flameThrower.isEquipt;
 
 
 #pragma endregion
@@ -5848,6 +6053,9 @@ void ShopState::LoadShopStatus()
 	if (sniperUpgrade.totalAmmo.upgradedSkill.currTier == profile.sniper.totalAmmo.upgradedSkill.maxTier)
 		sniperUpgrade.totalAmmo.isMaxed = true;
 
+	sniperUpgrade.isBought = profile.sniper.isBought;
+	sniperUpgrade.isEquipt = profile.sniper.isEquipt;
+
 #pragma endregion
 
 #pragma region NadeLauncher Loadin
@@ -5889,6 +6097,8 @@ void ShopState::LoadShopStatus()
 		nadeLauncherUpgrade.totalAmmo.isMaxed = true;
 
 	nadeLauncherUpgrade.isBought = profile.nadeLauncher.isBought;
+	nadeLauncherUpgrade.isEquipt = profile.nadeLauncher.isEquipt;
+
 
 	//barbed wire
 	barbedwire.damage.upgradedSkill.currTier = profile.barbWire.damage.upgradedSkill.currTier;
@@ -6453,12 +6663,23 @@ void ShopState::SaveProfile()
 {
 	
 //	Game::GetInstance()->GetProfile() = profile;
+	time_t tempTime;
+	time(&tempTime);
+
+	tm localTime;
+	localtime_s(&localTime, &tempTime);
 
 			ofstream fout(profile.path.c_str());
 			if (fout.is_open())
 			{
 				fout << profile.path.c_str() << '\n';
 
+				fout << (localTime.tm_year + 1900) << '\n';
+				fout << (localTime.tm_mon + 1)<< '\n';
+				fout << localTime.tm_mday << '\n';
+				fout << localTime.tm_hour << '\n';
+				fout << localTime.tm_min << '\n';
+				fout << localTime.tm_sec << '\n';
 #pragma region Pistols
 
 				//pistol

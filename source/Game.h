@@ -63,12 +63,16 @@ public:
 	GamerProfile&		GetStoryProfile		( void )		{	return storyProfiles[selectedProfile];	}
 	GamerProfile&		GetSurvivalProfile(void)		{ return survivalProfiles[selectedProfile]; }
 
+	GamerProfile&		GetSpecStoryProfile(int index)		{ return storyProfiles[index]; }
+	GamerProfile&		GetSpecSurvialProfile(int index)		{ return survivalProfiles[index]; }
+
 	void				LoadStoryProfiles	( void );
 	void				LoadSurvivalProfiles(void);
 
 	void				CreateStoryProfiles	( void );
 	void				CreateSurvivalProfiles(void);
 
+	void				OverWriteProfile(GamerProfile& profile);
 
 	GamerProfile		storyProfiles[3];
 	GamerProfile		survivalProfiles[3];

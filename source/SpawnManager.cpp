@@ -27,7 +27,7 @@ void SpawnManager::Update(float dt)
 		{
 			m_nWaveEnemies = m_vEnemyWaves[m_nCurrWave];
 			
-			Activate();
+		
 		}
 
 		else
@@ -57,10 +57,10 @@ void SpawnManager::Update(float dt)
 				if (m_nZombieType % 20 == 0)				 //5% changes
 					m_nZombieType = BaseObject::OBJ_TANK_ZOMBIE;
 				else if (m_nZombieType % 10 == 0)				 //10% chance
-					m_nZombieType = BaseObject::OBJ_EXPLODING_ZOMBIE;
+					m_nZombieType = BaseObject::OBJ_FAT_ZOMBIE;
 
 				else if (m_nZombieType % 5 == 0)						//20% chance
-					m_nZombieType = BaseObject::OBJ_FAST_ZOMBIE;//BaseObject::OBJ_FAT_ZOMBIE;
+					m_nZombieType = BaseObject::OBJ_EXPLODING_ZOMBIE;//BaseObject::OBJ_FAT_ZOMBIE;
 
 				else if (m_nZombieType % 2 == 0)						//50% chance
 					m_nZombieType = BaseObject::OBJ_FAST_ZOMBIE;
@@ -123,5 +123,6 @@ void SpawnManager::ShutDown()
 	 isGameWon = false;
 	
 }
+
 
 
