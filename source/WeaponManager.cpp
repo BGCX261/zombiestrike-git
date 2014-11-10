@@ -62,6 +62,8 @@ void WeaponManager::Initialize(MovingObject& owner)
 	AddWeapons(CreateFlameThrower());
 	AddWeapons(CreateGrenadeLauncher());
 
+	//m_aWpnInventory[0] = m_vWeapons[0];
+
 
 	curIndex = 0;
 }

@@ -14,6 +14,8 @@ class WeaponManager : public Weapon
 
 	vector<Weapon*> m_vWeapons;
 
+	//Weapon * m_aWpnInventory[5];
+
 	int curIndex;
 	int equipIndex = 0;
 	

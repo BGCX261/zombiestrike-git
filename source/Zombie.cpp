@@ -94,8 +94,6 @@ void Zombie::RetrieveBehavior(std::string name)
 		const BaseObject* ptr = dynamic_cast<const BaseObject*>(pOther);
 		if (ptr->GetAnimation() == "bloodExplosion")
 		{
-			health -= 200 * Game::GetInstance()->DeltaTime();
-			if (health <= 0)
 				isAlive = false;
 		}
 	}

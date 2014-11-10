@@ -128,6 +128,18 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 
 			
 		}
+		else if (pOther->GetType() == OBJ_PLAYER)
+
+		{
+
+
+
+			SetAnimation("bloodExplosion");
+
+
+		}
+
+
 	}
 	else
 	{
