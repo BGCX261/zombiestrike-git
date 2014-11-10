@@ -476,7 +476,7 @@
 
 
 	// Display the cursor next to the option
-	pFont->Draw("=", { starting_x - 32.0F, starting_y + offset * m_nCursor - 8.0f }, 1.0f, { 0, 255, 0 });
+	//pFont->Draw("=", { starting_x - 32.0F, starting_y + offset * m_nCursor - 8.0f }, 1.0f, { 0, 255, 0 });
 
 
 	// Draw the reticle
