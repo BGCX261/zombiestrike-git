@@ -74,6 +74,8 @@ public:
 	void			CreateFireBullet(Weapon* owner);
 	void			CreatePukeyBullet(Weapon* owner);
 	void			CreateGrenade(Weapon* owner);
+	void			CreateBlood(SGD::Point pos);
+
 
 	/**********************************************************/
 	// Assets
@@ -130,7 +132,7 @@ private:
 
 	/**********************************************************/
 	// Game Entities
-	enum EntityBucket { BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PICKUPS, BUCKET_TURRETS };
+	enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PICKUPS, BUCKET_TURRETS };
 	EntityManager*			m_pEntities = nullptr;
 	AnimationManager*		m_pAnimManager = nullptr;
 

@@ -99,8 +99,10 @@
     <ClCompile Include="source\BaseObject.cpp" />
     <ClCompile Include="source\BehaviorManager.cpp" />
     <ClCompile Include="source\BitmapFont.cpp" />
+    <ClCompile Include="source\BloodSplatter.cpp" />
     <ClCompile Include="source\Bullet.cpp" />
     <ClCompile Include="source\CreateARifleBullet.cpp" />
+    <ClCompile Include="source\CreateBloodMsg.cpp" />
     <ClCompile Include="source\CreateExplodingZombieMsg.cpp" />
     <ClCompile Include="source\CreateFastZombieMsg.cpp" />
     <ClCompile Include="source\CreateFatZombieMsg.cpp" />
@@ -203,8 +205,10 @@
     <ClInclude Include="source\BaseObject.h" />
     <ClInclude Include="source\BehaviorManager.h" />
     <ClInclude Include="source\BitmapFont.h" />
+    <ClInclude Include="source\BloodSplatter.h" />
     <ClInclude Include="source\Bullet.h" />
     <ClInclude Include="source\CreateARifleBullet.h" />
+    <ClInclude Include="source\CreateBloodMsg.h" />
     <ClInclude Include="source\CreateExplodingZombieMsg.h" />
     <ClInclude Include="source\CreateFastZombieMsg.h" />
     <ClInclude Include="source\CreateFatZombieMsg.h" />

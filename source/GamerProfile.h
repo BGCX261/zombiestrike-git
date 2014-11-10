@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include "ShopStructures.h"
+#include <ctime> 
+#include <cwchar>
 
 struct GamerProfile
 {
@@ -31,6 +33,8 @@ struct GamerProfile
 	DefenseUpgrade barbWire;
 	DefenseUpgrade sandBag;
 	DefenseUpgrade landMine;
+	tm time;
+	
 
 	int money;
 	int numTurrets;

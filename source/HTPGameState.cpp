@@ -27,6 +27,8 @@
 #include "CreateFlameBullet.h"
 #include "CreateGrenadeBullet.h"
 #include "CreatePukeBullet.h"
+#include "CreateBloodMsg.h"
+
 #include "Spawner.h"
 #include "SpawnManager.h"
 
@@ -48,6 +50,7 @@
 #include "FatZombie.h"
 #include "ExplodingZombie.h"
 #include "TankZombie.h"
+#include "BloodSplatter.h"
 
 #include "Turret.h"
 #include "Bullet.h"
@@ -131,8 +134,11 @@
 	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
 	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
 
-
-
+	//Blood Animation
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
 
 
 	// other animations
@@ -758,7 +764,12 @@
 										 HTPGameState::GetInstance()->CreateTurret(pCreateTurretMsg->GetOwner());
 	}
 		break;
-
+	case MessageID::MSG_CREATE_BLOOD:
+	{
+										const CreateBloodMsg* pCreateBloodMsg = dynamic_cast<const CreateBloodMsg*>(pMsg);
+										HTPGameState::GetInstance()->CreateBlood(pCreateBloodMsg->GetSpawnPos());
+	}
+		break;
 	}
 
 	/* Restore previous warning levels */
@@ -779,6 +790,35 @@ BaseObject* HTPGameState::CreatePlayer(void)
 	player->SetAnimation("player");
 	return player;
 }
+
+void HTPGameState::CreateBlood(SGD::Point pos)
+{
+	BloodSplatter* blood = new BloodSplatter;
+	blood->SetPosition(pos);
+	
+	unsigned int choice = rand() % 4;
+
+	switch (choice)
+	{
+	case 0:
+		blood->SetAnimation("blood1");
+		break;
+	case 1:
+		blood->SetAnimation("blood2");
+		break;
+	case 2:
+		blood->SetAnimation("blood3");
+		break;
+	case 3:
+		blood->SetAnimation("blood4");
+		break;
+	}
+	
+	m_pEntities->AddEntity(blood, EntityBucket::BUCKET_BLOOD);
+	blood->Release();
+	blood = nullptr;
+}
+
 
 void HTPGameState::CreatePickUp(int type, SGD::Point pos)
 {
