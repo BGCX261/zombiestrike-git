@@ -124,11 +124,10 @@
 
 	pAnimationManager->Load("resource/config/animations/ZombieWalker_Animation.xml", "slowZombie");
 	pAnimationManager->Load("resource/config/animations/ZombieRunner_Animation.xml", "fastZombie");
-	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
+	pAnimationManager->Load("resource/config/animations/ZombieTank_Animation.xml", "tankZombie");
 	pAnimationManager->Load("resource/config/animations/ZombieSploder_Animation.xml", "explodingZombie");
 	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
-
-	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	pAnimationManager->Load("resource/config/animations/ZombieFat_Animation.xml", "fatZombie");
 	/*
 	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
 	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
@@ -140,7 +139,11 @@
 	*/
 	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
 
-
+	pAnimationManager->Load("resource/config/animations/ZombieWalker_Death1.xml", "slowZombieDeath");
+	pAnimationManager->Load("resource/config/animations/ZombieRunner_Death1.xml", "fastZombieDeath");
+	pAnimationManager->Load("resource/config/animations/ZombieSploder_Death1.xml", "explodingZombieDeath");
+	pAnimationManager->Load("resource/config/animations/ZombieTank_Death1.xml", "tankZombieDeath");
+	pAnimationManager->Load("resource/config/animations/ZombieFat_Death1.xml", "fatZombieDeath");
 
 
 	// other animations

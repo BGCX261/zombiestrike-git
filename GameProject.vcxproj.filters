@@ -353,6 +353,9 @@
     <ClCompile Include="source\HighScoreState.cpp">
       <Filter>Game States</Filter>
     </ClCompile>
+    <ClCompile Include="source\HTPGameState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -671,6 +674,9 @@
       <Filter>Weapons\SMGs</Filter>
     </ClInclude>
     <ClInclude Include="source\HighScoreState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\HTPGameState.h">
       <Filter>Game States</Filter>
     </ClInclude>
   </ItemGroup>
