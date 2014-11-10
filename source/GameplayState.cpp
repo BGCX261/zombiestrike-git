@@ -553,7 +553,7 @@
 		stringstream nWave;
 		nWave << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1;
 
-		pFont->Draw(nWave.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+		pFont->Draw(nWave.str().c_str(), textPos, 1.5f, { 155, 0, 0 });
 
 		if (pAudio->IsAudioPlaying(m_hWaveChange) == false)
 		{
@@ -566,7 +566,7 @@
 		stringstream nComplete;
 		nComplete << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1 << " Complete";
 
-		pFont->Draw(nComplete.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+		pFont->Draw(nComplete.str().c_str(), textPos, 1.5f, { 155, 0, 0 });
 	}
 
 	else if (SpawnManager::GetInstance()->GetGameWon() == true)
@@ -574,7 +574,7 @@
 		stringstream gameWin;
 		gameWin << "YOU WIN!";
 
-		pFont->Draw(gameWin.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+		pFont->Draw(gameWin.str().c_str(), textPos, 1.5f, { 155, 0, 0 });
 
 
 	}
@@ -601,7 +601,7 @@
 		moneyCount << "$" << Game::GetInstance()->GetSurvivalProfile().money;
 
 	
-	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0f, { 0, 255, 0 });
+	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 1.75f, { 0, 255, 0 });
 
 
 	
