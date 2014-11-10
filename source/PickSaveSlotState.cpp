@@ -379,18 +379,7 @@ void PickSaveSlotState::Render(void)
 
 
 
-		//// Display the cursor next to the option
-
-		//const char* output = "=           =";
-		//int length = 10;
-
-		//if (m_nCursor == MenuItems::EXIT_2)
-		//{
-		//	output = "=             =";
-		//	length = 12;
-		//}
-
-		//pFont->Draw(output, { (width - (length * 32)) / 2 - 32.0F, 300.0f + 50 * m_nCursor }, 1.0f, { 0, 255, 0 });
+		
 	}
 	
 
