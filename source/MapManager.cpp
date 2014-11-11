@@ -10,6 +10,7 @@
 #include "BarbedWire.h"
 #include "SandBag.h"
 #include "LandMine.h"
+#include "House.h"
 #include "Spawner.h"
 #include "EntityManager.h"
 #include "AnimationManager.h"
@@ -461,13 +462,14 @@ void MapManager::CreateEnvironment(SGD::Point pos, EntityManager* entities)
 
 void MapManager::CreateHouse(SGD::Point pos, EntityManager* entities)
 {
-	EnvironmentalObject* object = new EnvironmentalObject;
+	//EnvironmentalObject* object = new EnvironmentalObject;
+	House* object = new House;
 	object->SetPosition(pos);
 	object->SetSize({ 32, 32 });
 	object->SetType(BaseObject::ObjectType::OBJ_WALL);
 	object->SetAnimation("house");
 
-	entities->AddEntity(object, 3);
+	entities->AddEntity(object, BUCKET_PICKUPS);
 	object->Release();
 	object = nullptr;
 }

@@ -27,6 +27,7 @@
 #include "CreateFlameBullet.h"
 #include "CreateGrenadeBullet.h"
 #include "CreatePukeBullet.h"
+#include "CreateTurretBullet.h"
 #include "CreateBloodMsg.h"
 
 #include "Spawner.h"
@@ -764,6 +765,14 @@
 										 HTPGameState::GetInstance()->CreateTurret(pCreateTurretMsg->GetOwner());
 	}
 		break;
+
+	case MessageID::MSG_CREATE_TURRET_BLT:
+	{
+											 const CreateTurretBullet* pCreateBulletMsg = dynamic_cast<const CreateTurretBullet*>(pMsg);
+											 HTPGameState::GetInstance()->CreateTurretBullets(pCreateBulletMsg->GetOwner());
+	}
+		break;
+
 	case MessageID::MSG_CREATE_BLOOD:
 	{
 										const CreateBloodMsg* pCreateBloodMsg = dynamic_cast<const CreateBloodMsg*>(pMsg);
@@ -1016,6 +1025,25 @@ void HTPGameState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
 	bullet->SetDamage(owner->GetDamage());
+
+
+	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+	bullet->Release();
+	bullet = nullptr;
+}
+void HTPGameState::CreateTurretBullets(Turret* turret)
+{
+	Bullet* bullet = new Bullet;
+	bullet->SetRotation(turret->GetRotation());
+	bullet->SetOwner(turret);
+	bullet->SetPosition(turret->GetPosition());
+	SGD::Vector direction = turret->GetOwner()->GetDirection();
+	direction.Rotate(turret->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+	
+	bullet->SetDirection(direction);
+	bullet->SetVelocity(direction * turret->GetSpeed());
+	bullet->SetAnimation("bullet");
+	bullet->SetDamage(turret->GetDamage());
 
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
