@@ -89,6 +89,7 @@ Player::~Player()
 		controller->Update(dt, this, { 0, 0 });
 
 
+
 	//// camo
 	//if (m_bIsCamoOn)
 	//{
@@ -283,8 +284,11 @@ void Player::Render()
 			const Zombie* zombie = dynamic_cast<const Zombie*>(pOther);
 			
 			// take damage
-			this->m_fCurrHP -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
-
+			if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()->GetInstance())
+			{
+				this->m_fCurrHP -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
+			}
+			
 			// check death
 			CheckDamage();
 		}
@@ -429,6 +433,7 @@ bool Player::GoodTurretPosition(void) const
 
 	if (turretposP.IsWithinRectangle(world) == true)
 		return true;
+
 	return false;
 }
 

@@ -91,6 +91,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
 	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
 	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
+	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
 
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
 	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
@@ -121,6 +122,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
+
 
 
 	// other animations

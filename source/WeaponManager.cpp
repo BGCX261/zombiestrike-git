@@ -177,13 +177,12 @@ void WeaponManager::Render()
 				{
 					pGraphics->DrawTextureSection(m_hHudWpn, { sWidth + size*j, sHeight - size },
 						imageRect, {}, {}, {}, { .25f, .25f });
-
-
+					pGraphics->DrawRectangle({ sWidth + size*j, sHeight - size, sWidth + size*j + size, sHeight }, { 175, 0, 0, 0 });
 				}
-				
+
 				equipIndex++;
 				break;
-			} 
+			}
 
 			stringstream drawIndex;
 			drawIndex << j + 1;

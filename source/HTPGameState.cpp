@@ -455,10 +455,6 @@
 {
 	Player* player = dynamic_cast<Player*>(m_pPlayer);
 
-
-
-	
-
 	if (m_tStartTutorial.GetTime() > 0.0f && m_bIsChoiceScreen == false)
 		m_tStartTutorial.Update(dt);
 	
