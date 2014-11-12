@@ -366,6 +366,20 @@
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 	}
 
+
+	/**********************************************************/
+	// 'Alt + Tab' -> Pause Menu
+	/**********************************************************/
+	//if (pInput->IsKeyDown(SGD::Key::Alt) == true && pInput->IsKeyPressed(SGD::Key::Tab) == true)
+	//{
+	//	SGD::Event msg("PAUSE");
+	//	msg.SendEventNow();
+	//	Game::GetInstance()->AddState(PauseState::GetInstance());
+	//}
+
+
+
+
 	//WeaponManager::GetInstance()->Input();
 
 	/**********************************************************/
