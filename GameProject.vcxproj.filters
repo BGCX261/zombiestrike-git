@@ -707,8 +707,15 @@
     <ClInclude Include="source\House.h">
       <Filter>Objects\Environment</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameProject.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\graphics\zsicon.ico" />
   </ItemGroup>
 </Project>

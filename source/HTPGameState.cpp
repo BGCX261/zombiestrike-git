@@ -647,32 +647,50 @@
 
 										  BaseObject* ptr = pDestroyMsg->GetEntity();
 
-										  //if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 20;
-										  //}
+										  if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 20;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 20;
 
-										  //else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 25;
-										  //}
 
-										  //else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 35;
-										  //}
+										  }
 
-										  //else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 75;
-										  //}
+										  else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 25;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 25;
 
-										  //else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 100;
-										  //}
+										  }
 
-										  HTPGameState::GetInstance()->m_pEntities->RemoveEntity(ptr);
+										  else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 35;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 35;
+										  }
+
+										  else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 75;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 75;
+										  }
+
+										  else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 100;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 100;
+										  }
+
+										 // GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
 	}
 		break;
 

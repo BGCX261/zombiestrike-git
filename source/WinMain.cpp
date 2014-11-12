@@ -16,11 +16,11 @@
 #include <Windows.h>		// Win32 Application
 #include <vld.h>			// Visual Leak Detector!!!
 #include "Game.h"			// Our Game class
-
+#include "../resource.h"
 //*********************************************************************//
 // Preprocessor Constants
-#define WINDOW_CLASS_NAME	((const wchar_t*)L"SGD Game Project")		// window class name
-#define WINDOW_TITLE		((const wchar_t*)L"Silent Strike")		// window title
+#define WINDOW_CLASS_NAME	((const wchar_t*)L"Zombie Strike")		// window class name
+#define WINDOW_TITLE		((const wchar_t*)L"Zombie Strike")		// window title
 #define WINDOW_WIDTH		((int)1024)						// window width
 #define WINDOW_HEIGHT		((int)1024)									// window height
 
@@ -150,8 +150,8 @@ HWND MakeWindow( HINSTANCE hInstance )
 	winClassEx.cbClsExtra		= 0;
 	winClassEx.cbWndExtra		= 0;
 	winClassEx.hInstance		= hInstance;
-	winClassEx.hIcon			= LoadIconW( NULL, (LPWSTR)IDI_APPLICATION );
-	winClassEx.hIconSm			= LoadIconW( NULL, (LPWSTR)IDI_APPLICATION );
+	winClassEx.hIcon			= LoadIconW(hInstance, (LPWSTR)MAKEINTRESOURCE(IDI_ICON1));
+	winClassEx.hIconSm			= LoadIconW(hInstance, (LPWSTR)MAKEINTRESOURCE(IDI_ICON1));
 	winClassEx.hCursor			= LoadCursorW( NULL, (LPWSTR)IDC_ARROW );
 	winClassEx.hbrBackground	= (HBRUSH)(1+COLOR_WINDOW);
 	winClassEx.lpszMenuName		= NULL; 

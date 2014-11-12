@@ -154,8 +154,11 @@ int Game::Update( void )
 
 	// Update & render the current state if it was not changed
 	{
+	
 		if (m_pCurrState != nullptr)
 			m_pCurrState->Update(elapsedTime);
+
+
 
 
 		if (m_pCurrState != nullptr)
