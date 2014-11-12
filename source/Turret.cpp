@@ -3,7 +3,7 @@
 #include "BaseBehavior.h"
 #include "GameplayState.h"
 
-#include "CreateARifleBullet.h"
+#include "CreateTurretBullet.h"
 #include "DestroyObjectMessage.h"
 
 
@@ -24,12 +24,26 @@ Turret::Turret() : Listener(this)
 	RegisterForEvent("PAUSE");
 	RegisterForEvent("ASSESS_THREAT");
 
-	fireSound = &GameplayState::GetInstance()->rifle_fire;
-
 	this->SetAnimation("turret");
 
-	this->bulletmaker = WeaponManager::GetInstance()->CreateAssaultRifle();
-	this->bulletmaker->SetOwner(this);
+	//this->bulletmaker = WeaponManager::GetInstance()->CreateAssaultRifle();
+	//this->bulletmaker->SetOwner(this);
+
+	type = OBJ_TURRET;
+	reloadTime = 2.5f;
+	totalAmmo = 100;
+	currAmmo = totalAmmo;
+	magSize = 25;
+	ammoCapactity = 100;
+	recoilTime = 0.1f;
+	bulletSpread = 2.0f;
+	damage = 34.0f;
+	speed = 800.0f;
+	lifeTime = 1000.0f;
+	//m_pOwner = owner;
+	//owner->AddRef();
+	fire_sound = &GameplayState::GetInstance()->rifle_fire;
+
 }
 
 Turret::~Turret()
@@ -39,30 +53,37 @@ Turret::~Turret()
 	UnregisterFromEvent("UNPAUSE");
 	UnregisterFromEvent("PAUSE");
 
-	fireSound = nullptr;
+	currBehavior = nullptr;
 
 	SetTarget(nullptr);
 
-	this->bulletmaker->SetOwner(nullptr);
+	//this->bulletmaker->SetOwner(nullptr);
 	delete bulletmaker;
 
 	//delete bulletmaker;
-	SetWeapon(nullptr);
+	//SetWeapon(nullptr);
 
 	SetOwner(nullptr);
-
+	fire_sound = nullptr;
 }
 
 /*virtual*/ void Turret::Update(float dt)	 /*override*/
 {
 	if (isActive == false)
+	{
+		DestroyObjectMessage* pMsg = new DestroyObjectMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;
 		return;
+	}
+
 
 	// update weapon
+	Weapon::Update(dt);
+	/*
 	if (bulletmaker != nullptr)
 	{
 		bulletmaker->Update(dt);
-
 
 		// if out of ammo
 		if (bulletmaker->GetTotalAmmo() == 0)
@@ -73,15 +94,15 @@ Turret::~Turret()
 			dMsg->QueueMessage();
 			dMsg = nullptr;
 
-
 			// tell owner
 			//m_pOwner->SetNumTurrets(m_pOwner->GetNumTurrets() - 1);
 		}
 	}
+	*/
 
 
 	// check if target is still alive
-	if (m_pTarget != nullptr && m_pTarget->IsAlive() == false)
+	if (m_pTarget != nullptr && (m_pTarget->GetHealth() <= 0.0f || m_pTarget->IsAlive() == false)) //if (m_pTarget != nullptr && (m_pTarget->GetAnimation().find("Death") != string::npos || m_pTarget->IsAlive() == false)) //if (m_pTarget != nullptr && m_pTarget->IsAlive() == false)
 	{
 		SetTarget(nullptr);
 	}
@@ -94,15 +115,12 @@ Turret::~Turret()
 		{
 			if (currBehavior->Update(dt, this, m_pTarget->GetPosition()) == false)
 			{
-				if (bulletmaker != nullptr && bulletmaker->GetCurrAmmo() > 0)
-					bulletmaker->Fire(dt);
+				//if (bulletmaker != nullptr && bulletmaker->GetTotalAmmo() > 0)
+				//	bulletmaker->Fire(dt);
+				this->Fire(dt);
 			}
 		}
 	}
-	
-
-
-
 
 
 	MovingObject::Update(dt);
@@ -120,10 +138,7 @@ Turret::~Turret()
 	{
 		GameCamera* camera;
 		if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance())
-		{
 			camera = GameplayState::GetInstance()->GetCamera();
-		}
-
 		else
 			camera = HTPGameState::GetInstance()->GetCamera();
 
@@ -159,8 +174,8 @@ Turret::~Turret()
 	}
 	else if (pEvent->GetEventID() == "PAUSE")
 	{
-		if (pAudio->IsAudioPlaying(*fireSound) == true)
-			pAudio->StopAudio(*fireSound);
+		//if (pAudio->IsAudioPlaying(*fireSound) == true)
+		//	pAudio->StopAudio(*fireSound);
 	}
 	else if (pEvent->GetEventID() == "UNPAUSE")
 	{
@@ -169,6 +184,13 @@ Turret::~Turret()
 	}
 	else if (pEvent->GetEventID() == "ASSESS_THREAT" && m_pTarget == nullptr)
 	{
+		Zombie * sender = reinterpret_cast<Zombie*>(pEvent->GetSender());
+
+		if (sender->GetHealth() > 0.0f)
+		{
+			SetTarget(sender);
+		}
+		/*
 		Zombie * sender = reinterpret_cast<Zombie*>(pEvent->GetSender());
 		SGD::Vector vToSender = sender->GetPosition() - this->m_ptPosition;
 
@@ -183,6 +205,7 @@ Turret::~Turret()
 			if (vAIOrientation.ComputeDotProduct(vToSender) < 0.86F)
 				SetTarget(reinterpret_cast<Zombie*>(pEvent->GetSender()));
 		}
+		*/
 	}
 }
 
@@ -200,8 +223,32 @@ void Turret::RetrieveBehavior(std::string name)
 	currBehavior = BehaviorManager::GetInstance()->GetBehaviors()[name];
 }
 
-/*virtual*/ void Turret::Attack() /*override*/
+/*virtual*/ void Turret::Fire(float dt) /*override*/
 {
+	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
+	GameplayState*		pGameplay	= GameplayState::GetInstance();
+
+	if (totalAmmo > 0)
+	{
+		//create bullet message
+		if (recoilTimer.GetTime() == 0)
+		{
+			CreateTurretBullet* pMsg = new CreateTurretBullet(this);
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+
+			voice = pAudio->PlayAudio(*fire_sound, false);
+
+			recoilTimer.AddTime(recoilTime);
+			totalAmmo--;
+			if (totalAmmo == 0)
+				reloadTimer.AddTime(reloadTime);
+		}
+	}
+	else
+	{
+		isActive = false;
+	}
 }
 
 void Turret::SetTarget(Zombie * ptr)
@@ -213,19 +260,4 @@ void Turret::SetTarget(Zombie * ptr)
 
 	if( m_pTarget != nullptr )
 		m_pTarget->AddRef();
-}
-
-void Turret::SetOwner(MovingObject* owner)
-{
-	if (m_pOwner != nullptr)
-	{
-		m_pOwner->Release();
-		m_pOwner = nullptr;
-	}
-
-	m_pOwner = (Player*)owner;
-
-	if (m_pOwner != nullptr)
-		m_pOwner->AddRef();
-
 }

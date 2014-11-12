@@ -27,6 +27,7 @@
 #include "CreateFlameBullet.h"
 #include "CreateGrenadeBullet.h"
 #include "CreatePukeBullet.h"
+#include "CreateTurretBullet.h"
 #include "CreateBloodMsg.h"
 
 #include "Spawner.h"
@@ -646,32 +647,50 @@
 
 										  BaseObject* ptr = pDestroyMsg->GetEntity();
 
-										  //if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 20;
-										  //}
+										  if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 20;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 20;
 
-										  //else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 25;
-										  //}
 
-										  //else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 35;
-										  //}
+										  }
 
-										  //else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 75;
-										  //}
+										  else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 25;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 25;
 
-										  //else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
-										  //{
-											 // Game::GetInstance()->GetProfile().money += 100;
-										  //}
+										  }
 
-										  HTPGameState::GetInstance()->m_pEntities->RemoveEntity(ptr);
+										  else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 35;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 35;
+										  }
+
+										  else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 75;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 75;
+										  }
+
+										  else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
+										  {
+											  if (GameplayState::GetInstance()->GetGameMode() == true)
+												  Game::GetInstance()->GetStoryProfile().money += 100;
+											  else
+												  Game::GetInstance()->GetSurvivalProfile().money += 100;
+										  }
+
+										 // GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
 	}
 		break;
 
@@ -764,6 +783,14 @@
 										 HTPGameState::GetInstance()->CreateTurret(pCreateTurretMsg->GetOwner());
 	}
 		break;
+
+	case MessageID::MSG_CREATE_TURRET_BLT:
+	{
+											 const CreateTurretBullet* pCreateBulletMsg = dynamic_cast<const CreateTurretBullet*>(pMsg);
+											 HTPGameState::GetInstance()->CreateTurretBullets(pCreateBulletMsg->GetOwner());
+	}
+		break;
+
 	case MessageID::MSG_CREATE_BLOOD:
 	{
 										const CreateBloodMsg* pCreateBloodMsg = dynamic_cast<const CreateBloodMsg*>(pMsg);
@@ -1016,6 +1043,25 @@ void HTPGameState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
 	bullet->SetDamage(owner->GetDamage());
+
+
+	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+	bullet->Release();
+	bullet = nullptr;
+}
+void HTPGameState::CreateTurretBullets(Turret* turret)
+{
+	Bullet* bullet = new Bullet;
+	bullet->SetRotation(turret->GetRotation());
+	bullet->SetOwner(turret);
+	bullet->SetPosition(turret->GetPosition());
+	SGD::Vector direction = turret->GetOwner()->GetDirection();
+	direction.Rotate(turret->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+	
+	bullet->SetDirection(direction);
+	bullet->SetVelocity(direction * turret->GetSpeed());
+	bullet->SetAnimation("bullet");
+	bullet->SetDamage(turret->GetDamage());
 
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);

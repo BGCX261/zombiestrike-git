@@ -2571,6 +2571,7 @@ void	ShopState::Render(void)
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
 	WeaponManager* pWeaponManager = WeaponManager::GetInstance(); 
+	
 
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 });
 	pGraphics->DrawRectangle(SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight()), { 200, 0, 0, 0 });
@@ -5350,12 +5351,20 @@ void	ShopState::Render(void)
 	float sWidth = Game::GetInstance()->GetScreenWidth() / 2 - size * 2 - 50;
 	float sHeight = Game::GetInstance()->GetScreenHeight() - 10;
 
+	SGD::Rectangle unEquip;
+
+	for (unsigned int j = 0; j < 5; j++)
+	{
+		unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
+		pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
+	}
+
 	for (unsigned int j = 0; j < 5; j++)
 	{
 		for (unsigned int i = equipIndex; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
 		{
-			SGD::Rectangle unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
-			pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
+			unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
+			//pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
 
 			if (WeaponManager::GetInstance()->GetWeapons()[i]->GetObtained() == true && WeaponManager::GetInstance()->GetWeapons()[i]->GetEquipped() == true)
 			{

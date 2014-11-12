@@ -10,6 +10,7 @@
 #include "BarbedWire.h"
 #include "SandBag.h"
 #include "LandMine.h"
+#include "House.h"
 #include "Spawner.h"
 #include "EntityManager.h"
 #include "AnimationManager.h"
@@ -20,8 +21,8 @@
 //#include "../resource/config/"
 
 
-enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
 
+enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
 
 
 
@@ -462,7 +463,8 @@ void MapManager::CreateEnvironment(SGD::Point pos, EntityManager* entities)
 
 void MapManager::CreateHouse(SGD::Point pos, EntityManager* entities)
 {
-	EnvironmentalObject* object = new EnvironmentalObject;
+	//EnvironmentalObject* object = new EnvironmentalObject;
+	House* object = new House;
 	object->SetPosition(pos);
 	object->SetSize({ 32, 32 });
 	object->SetType(BaseObject::ObjectType::OBJ_WALL);

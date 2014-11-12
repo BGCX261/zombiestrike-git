@@ -87,6 +87,10 @@ public:
 	SGD::HAudio			m_hMainTheme		= SGD::INVALID_HANDLE;
 	SGD::HAudio			m_hSurvivalTheme	= SGD::INVALID_HANDLE;
 
+	SGD::HAudio			turret_good	= SGD::INVALID_HANDLE;
+	SGD::HAudio			turret_bad	= SGD::INVALID_HANDLE;
+
+
 
 	/**********************************************************/
 	// Game State Machine:

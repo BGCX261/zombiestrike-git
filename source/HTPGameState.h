@@ -20,6 +20,7 @@ class AnimationManager;
 class SandBag;
 class LandMine;
 class BarbedWire;
+class Turret;
 
 /**************************************************************/
 // GameplayState class
@@ -73,6 +74,7 @@ public:
 	void			CreateSnipeBullet(Weapon* owner);
 	void			CreateFireBullet(Weapon* owner);
 	void			CreatePukeyBullet(Weapon* owner);
+	void			CreateTurretBullets(Turret* turret);
 	void			CreateGrenade(Weapon* owner);
 	void			CreateBlood(SGD::Point pos);
 

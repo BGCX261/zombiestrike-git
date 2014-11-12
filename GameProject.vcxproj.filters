@@ -288,7 +288,6 @@
     <ClCompile Include="source\SpawnManager.cpp">
       <Filter>Spawn System</Filter>
     </ClCompile>
-    <ClCompile Include="source\ShopState.cpp" />
     <ClCompile Include="source\CreateGrenadeBullet.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
@@ -353,9 +352,24 @@
     <ClCompile Include="source\HighScoreState.cpp">
       <Filter>Game States</Filter>
     </ClCompile>
-    <ClCompile Include="source\HTPGameState.cpp" />
-    <ClCompile Include="source\BloodSplatter.cpp" />
-    <ClCompile Include="source\CreateBloodMsg.cpp" />
+    <ClCompile Include="source\CreateBloodMsg.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HTPGameState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ShopState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BloodSplatter.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateTurretBullet.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\House.cpp">
+      <Filter>Objects\Environment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h">
@@ -611,7 +625,6 @@
     <ClInclude Include="source\WeaponManager.h">
       <Filter>Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="source\ShopState.h" />
     <ClInclude Include="source\CreateGrenadeBullet.h">
       <Filter>Messages</Filter>
     </ClInclude>
@@ -676,11 +689,33 @@
     <ClInclude Include="source\HighScoreState.h">
       <Filter>Game States</Filter>
     </ClInclude>
-    <ClInclude Include="source\HTPGameState.h" />
-    <ClInclude Include="source\BloodSplatter.h" />
-    <ClInclude Include="source\CreateBloodMsg.h" />
+    <ClInclude Include="source\CreateBloodMsg.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\HTPGameState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ShopState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\BloodSplatter.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CreateTurretBullet.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\House.h">
+      <Filter>Objects\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameProject.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\graphics\zsicon.ico" />
   </ItemGroup>
 </Project>

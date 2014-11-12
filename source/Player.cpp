@@ -12,6 +12,8 @@
 #include <fstream>
 #include "../SGD Wrappers/SGD_Handle.h"
 #include "CreateTurretMessage.h"
+#include "AnimationManager.h"
+#include "AnimTimeStamp.h"
 
 #include "Zombie.h"
 #include "Bullet.h"
@@ -21,6 +23,7 @@
 #include "Sniper.h"
 #include "FlameThrower.h"
 #include "EnvironmentalObject.h"
+#include "House.h"
 
 
 
@@ -171,6 +174,24 @@ void Player::Render()
 {
 	// render player
 	BaseObject::Render();
+
+
+	// render good/bad turret location
+	if (m_nNumTurrets > 0)
+	{
+		// fake time stamp for animation
+		AnimTimeStamp ats;
+		ats.m_strCurrAnimation	= "turret";
+		ats.m_nCurrFrame		= 0;
+		ats.m_fCurrDuration		= 0.0f;
+
+		SGD::Point turretposP = GetTurretPosition();
+
+		GoodTurretPosition() == true
+			? AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 255, 0 })
+			: AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 0, 0 });
+	}
+
 
 
 	// render hud
@@ -329,8 +350,21 @@ void Player::RetrieveBehavior(std::string name)
 
 void Player::SpawnTurret(void)
 {
-	if (m_nNumTurrets == 0)
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	Game* pGame = Game::GetInstance();
+
+
+	if (m_nNumTurrets == 0 || GoodTurretPosition() == false)
+	{
+		if (pAudio->IsAudioPlaying(pGame->turret_bad) == false)
+			pAudio->PlayAudio(pGame->turret_bad, false);
 		return;
+	}
+
+
+	if (pAudio->IsAudioPlaying(pGame->turret_good) == false)
+		pAudio->PlayAudio(pGame->turret_good, false);
+
 
 	// create turret message
 	CreateTurretMessage* pMsg = new CreateTurretMessage(this);
@@ -391,5 +425,25 @@ void Player::CheckDamage(void)
 
 		m_hHurt = nullptr;
 	}
+}
+
+bool Player::GoodTurretPosition(void) const
+{
+	SGD::Point		turretposP	= GetTurretPosition();
+	SGD::Rectangle	world		= { 0, 0, GameplayState::GetInstance()->GetWorldSize().width, GameplayState::GetInstance()->GetWorldSize().height };
+
+	if (turretposP.IsWithinRectangle(world) == true)
+		return true;
+	return false;
+}
+
+SGD::Point Player::GetTurretPosition(void) const
+{
+	float		pixel_offset = 100.0f;
+	SGD::Vector	playerpos = { this->m_ptPosition.x, this->m_ptPosition.y };
+	SGD::Vector	turretposV = (this->direction * pixel_offset) + playerpos;
+	SGD::Point	turretposP = { turretposV.x, turretposV.y };
+
+	return turretposP;
 }
 

@@ -113,6 +113,7 @@
     <ClCompile Include="source\CreateShotgunBullet.cpp" />
     <ClCompile Include="source\CreateSniperBullet.cpp" />
     <ClCompile Include="source\CreateTankZombieMsg.cpp" />
+    <ClCompile Include="source\CreateTurretBullet.cpp" />
     <ClCompile Include="source\CreateTurretMessage.cpp" />
     <ClCompile Include="source\CreateZombieMessage.cpp" />
     <ClCompile Include="source\CreditsState.cpp" />
@@ -129,6 +130,7 @@
     <ClCompile Include="source\Grenade.cpp" />
     <ClCompile Include="source\GrenadeLauncher.cpp" />
     <ClCompile Include="source\HighScoreState.cpp" />
+    <ClCompile Include="source\House.cpp" />
     <ClCompile Include="source\HowToPlayState.cpp" />
     <ClCompile Include="source\HTPGameState.cpp" />
     <ClCompile Include="source\HUD.cpp" />
@@ -177,6 +179,7 @@
     <ClCompile Include="source\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_Color.h" />
     <ClInclude Include="SGD Wrappers\SGD_Declarations.h" />
@@ -219,6 +222,7 @@
     <ClInclude Include="source\CreateShotgunBullet.h" />
     <ClInclude Include="source\CreateSniperBullet.h" />
     <ClInclude Include="source\CreateTankZombieMsg.h" />
+    <ClInclude Include="source\CreateTurretBullet.h" />
     <ClInclude Include="source\CreateTurretMessage.h" />
     <ClInclude Include="source\CreateZombieMessage.h" />
     <ClInclude Include="source\CreditsState.h" />
@@ -239,6 +243,7 @@
     <ClInclude Include="source\Grenade.h" />
     <ClInclude Include="source\GrenadeLauncher.h" />
     <ClInclude Include="source\HighScoreState.h" />
+    <ClInclude Include="source\House.h" />
     <ClInclude Include="source\HowToPlayState.h" />
     <ClInclude Include="source\HTPGameState.h" />
     <ClInclude Include="source\HUD.h" />
@@ -289,6 +294,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameProject.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\graphics\zsicon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

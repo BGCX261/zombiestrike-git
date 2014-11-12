@@ -62,6 +62,8 @@ void WeaponManager::Initialize(MovingObject& owner)
 	AddWeapons(CreateFlameThrower());
 	AddWeapons(CreateGrenadeLauncher());
 
+	//m_aWpnInventory[0] = m_vWeapons[0];
+
 
 	curIndex = 0;
 }
@@ -133,14 +135,22 @@ void WeaponManager::Render()
 	float sWidth = Game::GetInstance()->GetScreenWidth() / 2 - size * 2 - 50;
 	float sHeight = Game::GetInstance()->GetScreenHeight() - 10;
 
+	SGD::Rectangle unEquip;
+
+	for (unsigned int j = 0; j < 5; j++)
+	{
+		unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
+		pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
+
+	}
 
 
 	for (unsigned int j = 0; j < 5; j++)
 	{
 		for (unsigned int i = equipIndex; i < m_vWeapons.size(); i++)
 		{
-			SGD::Rectangle unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
-			pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
+			unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
+			//pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
 
 			if (m_vWeapons[i]->GetObtained() == true && m_vWeapons[i]->GetEquipped() == true)
 			{
