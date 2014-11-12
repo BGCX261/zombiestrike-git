@@ -4,6 +4,8 @@ class PlayerController :
 	public BaseBehavior
 {
 public:
+	enum Type { PISTOL, SHOTGUN, SMG, ASSUALT_RIFLE, SPECIAL, NONE };
+
 	PlayerController();
 	~PlayerController();
 

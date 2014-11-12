@@ -21,13 +21,7 @@
 //#include "../resource/config/"
 
 
-//enum EntityBucket { BUCKET_BULLETS, BUCKET_PUKE, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
 enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
-
-
-
-
-
 
 /*static*/ MapManager * MapManager::GetInstance()
 {
@@ -68,7 +62,12 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 	{
 		return nullptr;
 	}*/
-	if (doc.LoadFile(levels[0].c_str()) == false)
+
+	if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
+	{
+		doc.LoadFile(levels[1].c_str());
+	}
+	else if (doc.LoadFile(levels[0].c_str()) == false)
 	{
 		return nullptr;
 	}
@@ -335,7 +334,7 @@ void MapManager::Update(float elapsedTime)
 
 	Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
 		? cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect()
-		: cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect();
+		: cameraRect = HTPGameState::GetInstance()->GetCamera()->GetRect();
 
 	startCol = (int)cameraRect.left / (int)tStruct.tileSize.width;
 	startRow = (int)cameraRect.top / (int)tStruct.tileSize.height;
@@ -343,6 +342,7 @@ void MapManager::Update(float elapsedTime)
 	endRow = (int)(Game::GetInstance()->GetScreenHeight() + cameraRect.top) / (int)tStruct.tileSize.height;
 	endRow++;
 	endCol++;
+
 	if (startCol < 0)
 	{
 		startCol = 0;
@@ -352,6 +352,7 @@ void MapManager::Update(float elapsedTime)
 	{
 		startRow = 0;
 	}
+
 	if (endCol > (int)tStruct.map.GetMapWidth())
 	{
 		endCol = (int)tStruct.map.GetMapWidth();
@@ -361,6 +362,8 @@ void MapManager::Update(float elapsedTime)
 	{
 		endRow = (int)tStruct.map.GetMapHeight();
 	}
+
+
 }
 
 void MapManager::HandleCollision(const IBase* pOther)
@@ -469,6 +472,7 @@ void MapManager::CreateHouse(SGD::Point pos, EntityManager* entities)
 	object->SetSize({ 32, 32 });
 	object->SetType(BaseObject::ObjectType::OBJ_WALL);
 	object->SetAnimation("house");
+	object->SetActive(true);
 
 	entities->AddEntity(object, BUCKET_PICKUPS);
 	object->Release();

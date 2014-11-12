@@ -5,6 +5,7 @@
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "Timer.h"
 
+
 /**************************************************************/
 // MainMenuState class
 //	- handles the main menu
@@ -65,7 +66,7 @@ private:
 	SGD::HTexture	m_hTitleImage		= SGD::INVALID_HANDLE;
 
 	SGD::HTexture	m_hReticleImage		= SGD::INVALID_HANDLE;
-	SGD::HTexture	m_hButton1			= SGD::INVALID_HANDLE;
+	//SGD::HTexture	m_hButton1			= SGD::INVALID_HANDLE;
 	SGD::HTexture	m_hButton2			= SGD::INVALID_HANDLE;
 
 	SGD::HAudio		m_hButtonSwitchSFX	= SGD::INVALID_HANDLE;
@@ -76,8 +77,9 @@ private:
 	// Selection rectangles stuff
 	SGD::Rectangle*	selectonrects	= nullptr;
 	int*			stringlengths	= nullptr;	// [NUM_CHOICES] = { 9, 11, 7, 7, 4 };
-	float			starting_x		= 35.0F;
-	float			starting_y		= 200.0F;
+	float			starting_x;
+	float			starting_y;
+
 	float			vertical_offset	= 100.0F;
 	float			text_scale		= 1.0F;
 

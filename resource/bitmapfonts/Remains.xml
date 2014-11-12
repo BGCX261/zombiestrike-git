@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <font_info>
-  <image_info>resource/graphics/Remains_0.png </image_info>
+  <image_info>resource/graphics/Fonts/Remains_0.png </image_info>
     <letter_info symbol ="32" sRectL="39" sRectT="29" width="3" height="1" xoffset="-1" yoffset="31" xadvance="8" page="0" chnl="15" />
     <letter_info symbol ="33" sRectL="161" sRectT="70" width="5" height="22" xoffset="2" yoffset="4" xadvance="10" page="0" chnl="15" />
     <letter_info symbol ="34" sRectL="30" sRectT="119" width="10" height="9" xoffset="0" yoffset="2" xadvance="10" page="0" chnl="15" />

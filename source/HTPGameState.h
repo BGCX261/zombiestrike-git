@@ -52,15 +52,17 @@ public:
 	void			PauseAudio(bool);
 
 	bool			GetGameMode(void) const	{ return m_bStoryMode; }
+	bool			GetTutorialMode(void) const { return m_bTutorialMode; }
+	bool			GetChoiceScreen() const { return m_bIsChoiceScreen; }
 	void			SetGameMode(bool m)		{ m_bStoryMode = m; }
 
 
 	bool GetShopState() const { return m_bShopState; }
-	Timer GetWaveTimer() const { return m_tNextWave; }
-	Timer GetWaveEndTimer() const { return m_tCompleteWave; }
+	//Timer GetWaveTimer() const { return m_tNextWave; }
+	//Timer GetWaveEndTimer() const { return m_tCompleteWave; }
 
 	void SetShopState(bool shopState) { m_bShopState = shopState; }
-	void SetWaveTimer(Timer nwave) { m_tNextWave = nwave; }
+	//void SetWaveTimer(Timer nwave) { m_tNextWave = nwave; }
 
 	/**********************************************************/
 	// Factory Methods:
@@ -81,41 +83,45 @@ public:
 
 	/**********************************************************/
 	// Assets
-	SGD::HAudio playerDeath = SGD::INVALID_HANDLE;
-	SGD::HAudio cannot_use_skill = SGD::INVALID_HANDLE;
-	SGD::HAudio footstep = SGD::INVALID_HANDLE;
-	SGD::HAudio turretfire = SGD::INVALID_HANDLE;
-	//SGD::HAudio m_hWpnSwitch = SGD::INVALID_HANDLE;
-	SGD::HAudio m_hWaveChange = SGD::INVALID_HANDLE;
+	//SGD::HAudio playerDeath = SGD::INVALID_HANDLE;
+	//SGD::HAudio cannot_use_skill = SGD::INVALID_HANDLE;
+	//SGD::HAudio footstep = SGD::INVALID_HANDLE;
+	//SGD::HAudio turretfire = SGD::INVALID_HANDLE;
+	////SGD::HAudio m_hWpnSwitch = SGD::INVALID_HANDLE;
+	//SGD::HAudio m_hWaveChange = SGD::INVALID_HANDLE;
 
-	//SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
-	SGD::HAudio storyMusic = SGD::INVALID_HANDLE;
-	SGD::HAudio survivalMusic = SGD::INVALID_HANDLE;
-	SGD::HAudio zombie_pain = SGD::INVALID_HANDLE;
-	SGD::HAudio bullet_hit_zombie = SGD::INVALID_HANDLE;
-	SGD::HAudio bullet_hit_house = SGD::INVALID_HANDLE;
-	SGD::HAudio out_of_ammo = SGD::INVALID_HANDLE;
-	SGD::HAudio reload_begin = SGD::INVALID_HANDLE;
-	SGD::HAudio reload_finish = SGD::INVALID_HANDLE;
-	SGD::HAudio explosion = SGD::INVALID_HANDLE;
-	SGD::HAudio vomit_hit_player = SGD::INVALID_HANDLE;
+	////SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
+	//SGD::HAudio storyMusic = SGD::INVALID_HANDLE;
+	//SGD::HAudio survivalMusic = SGD::INVALID_HANDLE;
+	//SGD::HAudio zombie_pain = SGD::INVALID_HANDLE;
+	//SGD::HAudio bullet_hit_zombie = SGD::INVALID_HANDLE;
+	//SGD::HAudio bullet_hit_house = SGD::INVALID_HANDLE;
+	//SGD::HAudio out_of_ammo = SGD::INVALID_HANDLE;
+	//SGD::HAudio reload_begin = SGD::INVALID_HANDLE;
+	//SGD::HAudio reload_finish = SGD::INVALID_HANDLE;
+	//SGD::HAudio explosion = SGD::INVALID_HANDLE;
+	//SGD::HAudio vomit_hit_player = SGD::INVALID_HANDLE;
 
-	SGD::HAudio pistol_fire = SGD::INVALID_HANDLE;
-	SGD::HAudio shotgun_fire = SGD::INVALID_HANDLE;
-	SGD::HAudio rifle_fire = SGD::INVALID_HANDLE;
-	SGD::HAudio sniper_fire = SGD::INVALID_HANDLE;
-	SGD::HAudio flamethrower_fire = SGD::INVALID_HANDLE;
-	SGD::HAudio smg_fire = SGD::INVALID_HANDLE;
-	SGD::HAudio vomit_fire = SGD::INVALID_HANDLE;
+	//SGD::HAudio pistol_fire = SGD::INVALID_HANDLE;
+	//SGD::HAudio shotgun_fire = SGD::INVALID_HANDLE;
+	//SGD::HAudio rifle_fire = SGD::INVALID_HANDLE;
+	//SGD::HAudio sniper_fire = SGD::INVALID_HANDLE;
+	//SGD::HAudio flamethrower_fire = SGD::INVALID_HANDLE;
+	//SGD::HAudio smg_fire = SGD::INVALID_HANDLE;
+	//SGD::HAudio vomit_fire = SGD::INVALID_HANDLE;
 
-	SGD::HAudio	playerHurt1 = SGD::INVALID_HANDLE;
-	SGD::HAudio	playerHurt2 = SGD::INVALID_HANDLE;
-	SGD::HAudio	playerHurt3 = SGD::INVALID_HANDLE;
-	SGD::HAudio * m_hMain = nullptr;
-	SGD::HAudio * m_hSurvive = nullptr;
+	//SGD::HAudio	playerHurt1 = SGD::INVALID_HANDLE;
+	//SGD::HAudio	playerHurt2 = SGD::INVALID_HANDLE;
+	//SGD::HAudio	playerHurt3 = SGD::INVALID_HANDLE;
+	//SGD::HAudio * m_hMain = nullptr;
+	//SGD::HAudio * m_hSurvive = nullptr;
 
+	bool GetChoiceScreen() { return m_bIsChoiceScreen; }
 
+	void SetChoiceScreen(bool choice) { m_bIsChoiceScreen = choice; }
+	bool GetIsCurrState(void) const { return isActive; }
 
+	void SetIsCurrState(bool state) { isActive = state; }
 private:
 	/**********************************************************/
 	// SINGLETON (not-dynamically allocated)
@@ -145,26 +151,34 @@ private:
 
 	/**********************************************************/
 	// World size
-	SGD::Size				m_szWorldSize = { 1024, 768 };
+	SGD::Size				m_szWorldSize = { 1536, 1536 };
 
 
 	//Textures
-	SGD::HTexture	m_hReticleImage = SGD::INVALID_HANDLE;
+	//SGD::HTexture	m_hReticleImage = SGD::INVALID_HANDLE;
 
 
 
 	/**********************************************************/
 	// Game mode: Story/Survival
 	bool					m_bStoryMode = true;
+	bool					m_bTutorialMode = true;
 
 	bool m_bShopState = false;
 	bool m_bIsChoiceScreen = true;
 	bool m_bIsHowToPlay = false;
+	bool m_bIsTutorial = false;
 
-	Timer m_tNextWave;
-	Timer m_tCompleteWave;
-	Timer m_tStartWave;
+	Timer m_tStartTutorial;
 
 	int m_nCursor = 0;
+	int m_nCurPage = 0;
+
+	string iTutorial[20];
+
+	SGD::Rectangle tutRect;
+
+	bool isActive = false;
+
 };
 

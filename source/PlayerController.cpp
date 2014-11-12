@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "GameplayState.h"
+#include "HTPGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
@@ -28,24 +29,63 @@ PlayerController::~PlayerController()
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
-
-	// rotate to face mouse
-	SGD::Vector toMouse = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
-	if (m_Player->m_bIsAlive == true)
+	if (pInput->IsControllerConnected(0) == true)
 	{
-		toMouse.Normalize();
-		if (toMouse.ComputeDotProduct(toUpdate->GetDirection()) < 0.999f)
+		if (pInput->GetRightJoystick(0).x != 0.0f && pInput->GetRightJoystick(0).y != 0.0f)
 		{
-			if (toUpdate->GetDirection().ComputeSteering(toMouse) > 0)
-				toUpdate->SetRotation(toUpdate->GetRotation() + (SGD::PI*2.0f  * dt)); //Turn left
+			SGD::Vector toCursor;
+			// rotate to face mouse
+			if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
+				toCursor = SGD::Point(pInput->GetMousePosition().x + HTPGameState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + HTPGameState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+			else
+				toCursor = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
 
-			else if (toUpdate->GetDirection().ComputeSteering(toMouse) < 0)
-				toUpdate->SetRotation(toUpdate->GetRotation() - (SGD::PI*2.0f  * dt)); //Turn right
+			if (m_Player->m_bIsAlive == true)
+			{
+				toCursor.Normalize();
+				if (toCursor.ComputeDotProduct(toUpdate->GetDirection()) < 0.999f)
+				{
+					if (toUpdate->GetDirection().ComputeSteering(toCursor) > 0)
+						toUpdate->SetRotation(toUpdate->GetRotation() + (SGD::PI*2.0f  * dt)); //Turn left
 
-			SGD::Vector orientation = { 0, -1 };
-			orientation.Rotate(toUpdate->GetRotation());
-			toUpdate->SetDirection(orientation);
+					else if (toUpdate->GetDirection().ComputeSteering(toCursor) < 0)
+						toUpdate->SetRotation(toUpdate->GetRotation() - (SGD::PI*2.0f  * dt)); //Turn right
+
+					SGD::Vector orientation = { 0, -1 };
+					orientation.Rotate(toUpdate->GetRotation());
+					toUpdate->SetDirection(orientation);
+				}
+			}
 		}
+		
+	}
+	else
+	{
+		SGD::Vector toMouse;
+		// rotate to face mouse
+		if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
+			toMouse = SGD::Point(pInput->GetMousePosition().x + HTPGameState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + HTPGameState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+		else
+			toMouse = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+
+		
+		if (m_Player->m_bIsAlive == true)
+		{
+			toMouse.Normalize();
+			if (toMouse.ComputeDotProduct(toUpdate->GetDirection()) < 0.999f)
+			{
+				if (toUpdate->GetDirection().ComputeSteering(toMouse) > 0)
+					toUpdate->SetRotation(toUpdate->GetRotation() + (SGD::PI*2.0f  * dt)); //Turn left
+
+				else if (toUpdate->GetDirection().ComputeSteering(toMouse) < 0)
+					toUpdate->SetRotation(toUpdate->GetRotation() - (SGD::PI*2.0f  * dt)); //Turn right
+
+				SGD::Vector orientation = { 0, -1 };
+				orientation.Rotate(toUpdate->GetRotation());
+				toUpdate->SetDirection(orientation);
+			}
+		}
+
 	}
 	
 
@@ -55,184 +95,127 @@ PlayerController::~PlayerController()
 
 
 	// player is walking(playerWalk) OR running(playerRun)
-	if ((pInput->IsKeyDown(SGD::Key::Shift) == true || pInput->IsButtonDown(0, 6) == true) && m_Player->m_bMoving == true && m_Player->m_bIsAlive == true)
-	{
-		if (m_Player->m_bIsCamoOn == false)
-		{
-			if (m_Player->m_Attributes.m_fCurrStamina > 0)
-			{
-				m_Player->m_bIsSprinting = true;
-				//animation = "playerRun";
-			}
-			else
-			{
-				m_Player->m_bIsSprinting = false;
-			//	animation = "playerWalk";
-			}
+	if ((pInput->IsKeyDown(SGD::Key::Shift) == true || pInput->IsButtonDown(0, 6) == true)  && m_Player->m_bIsAlive == true)
+		m_Player->m_bIsSprinting = true;
 
-		}
-	} 
-	else if ((pInput->IsKeyDown(SGD::Key::Shift) == false || pInput->IsButtonDown(0, 6) == false) && m_Player->m_bMoving == true && m_Player->m_bIsAlive == true)
-	{
+	else if ((pInput->IsKeyDown(SGD::Key::Shift) == false || pInput->IsButtonDown(0, 6) == false) && m_Player->m_bIsAlive == true)
 		m_Player->m_bIsSprinting = false;
-	//	animation = "playerWalk";
-	} 
 
 
+	SGD::Vector newVelocity = { 0, 0 };
 
 	// player moves forward/backward
 	if ((pInput->IsKeyDown(SGD::Key::W) == true || pInput->GetLeftJoystick(0).y < 0) &&
 		m_Player->m_bIsAlive == true)
 	{
-		if (m_Player->m_bIsSprinting == true)
-			m_Player->SetVelocity(toMouse * m_Player->GetMoveSpeed() * 2);
-		else
-			m_Player->SetVelocity(toMouse* m_Player->GetMoveSpeed());
-
+		newVelocity += {0, -1};
 		m_Player->m_bMoving = true;
 	}
-	else if (pInput->IsKeyDown(SGD::Key::S) == true && m_Player->m_bIsAlive == true)
+	if (pInput->IsKeyDown(SGD::Key::S) || pInput->GetLeftJoystick(0).y > 0 && m_Player->m_bIsAlive == true)
 	{
-		if (m_Player->m_bIsSprinting == true)
-			m_Player->SetVelocity(-toMouse * m_Player->GetMoveSpeed() * 2);
-		else
-			m_Player->SetVelocity(-toMouse * m_Player->GetMoveSpeed());
-
+		newVelocity += {0, 1};
 		m_Player->m_bMoving = true;
 	}
 
 
 	// player strafes left/right
-	if (pInput->IsKeyDown(SGD::Key::A) == true && m_Player->m_bIsAlive == true)
+	if (pInput->IsKeyDown(SGD::Key::A) == true || pInput->GetLeftJoystick(0).x < 0 && m_Player->m_bIsAlive == true)
 	{
-		SGD::Vector strafeLeftVect = m_Player->GetDirection();
-		strafeLeftVect.Rotate(SGD::PI*0.5f);
-
-		if (m_Player->m_bIsSprinting == true)
-			m_Player->SetVelocity(-strafeLeftVect * m_Player->GetMoveSpeed() * 2);
-		else
-			m_Player->SetVelocity(-strafeLeftVect * m_Player->GetMoveSpeed());
-
+		newVelocity += {-1, 0};
 		m_Player->m_bMoving = true;
 	}
-	else if (pInput->IsKeyDown(SGD::Key::D) == true && m_Player->m_bIsAlive == true)
-	{
-		SGD::Vector strafeLeftVect = m_Player->GetDirection();
-		strafeLeftVect.Rotate(SGD::PI*0.5f);
-
-		if (m_Player->m_bIsSprinting == true)
-			m_Player->SetVelocity(strafeLeftVect * m_Player->GetMoveSpeed() * 2);
-		else
-			m_Player->SetVelocity(strafeLeftVect * m_Player->GetMoveSpeed());
-
+	if (pInput->IsKeyDown(SGD::Key::D) == true || pInput->GetLeftJoystick(0).x > 0 && m_Player->m_bIsAlive == true)
+	{	
+		newVelocity += {1, 0};
 		m_Player->m_bMoving = true;
 	}
 
+	 if (pInput->IsControllerConnected(0) == true)
+	 {
+		 if (pInput->GetLeftJoystick(0).y == 0 && pInput->GetLeftJoystick(0).x == 0)
+		 {
+			 //animation = "playerIdle";
+			 m_Player->m_bMoving = false;
+		 } 
+	 }
+	 else
+	 {
+		 // player not moving
+		 if ((pInput->IsKeyDown(SGD::Key::W) == false && pInput->IsKeyDown(SGD::Key::A) == false && pInput->IsKeyDown(SGD::Key::S) == false && pInput->IsKeyDown(SGD::Key::D) == false))
 
-	// player not moving
-	if (pInput->IsKeyDown(SGD::Key::W) == false && pInput->IsKeyDown(SGD::Key::A) == false && pInput->IsKeyDown(SGD::Key::S) == false && pInput->IsKeyDown(SGD::Key::D) == false)
-	{
-		//animation = "playerIdle";
-		m_Player->m_bMoving = false;
-	}
+		 {
+			 //animation = "playerIdle";
+			 m_Player->m_bMoving = false;
+		 }
+
+	 }
+	
+	if (m_Player->IsSprinting() == true)
+		m_Player->SetVelocity(newVelocity * m_Player->GetMoveSpeed() * 2);
+	else
+		m_Player->SetVelocity(newVelocity * m_Player->GetMoveSpeed());
+
+	
+	WeaponManager*		pWeaponManager = WeaponManager::GetInstance();
 
 	// selecting abilities
 	if (pInput->IsKeyPressed(SGD::Key::N1) == true)
-		m_Player->m_unCurrAbility = 0;
+		pWeaponManager->SelectWeapon(PISTOL);
 	else if (pInput->IsKeyPressed(SGD::Key::N2) == true)
-		m_Player->m_unCurrAbility = 1;
+		pWeaponManager->SelectWeapon(SHOTGUN);
+
 	else if(pInput->IsKeyPressed(SGD::Key::N3) == true)
-		m_Player->m_unCurrAbility = 2;
+		pWeaponManager->SelectWeapon(SMG);
+
 	else if (pInput->IsKeyPressed(SGD::Key::N4) == true)
-		m_Player->m_unCurrAbility = 3;
+		pWeaponManager->SelectWeapon(ASSUALT_RIFLE);
+
+	else if (pInput->IsKeyPressed(SGD::Key::N5) == true)
+		pWeaponManager->SelectWeapon(SPECIAL);
 
 
-	WeaponManager*		pWeaponManager = WeaponManager::GetInstance();
+	
+
+
+
 
 	
 		//m_Player->flameThrower->Fire(dt);
+	if (m_Player->isPlacingTurret() == false)
+	{
 		if (WeaponManager::GetInstance()->GetSelected()->GetAutomatic())
 		{
-			if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true))
+			if ((pInput->IsKeyDown(SGD::Key::MouseLeft) == true) || (pInput->IsButtonDown(0, 7) == true))
 				pWeaponManager->GetSelected()->Fire(dt);
-			
+
 
 		}
 		else
 		{
-			if ((pInput->IsKeyPressed(SGD::Key::MouseLeft) == true))
+			if ((pInput->IsKeyPressed(SGD::Key::MouseLeft) == true) || (pInput->IsButtonPressed(0, 7) == true))
 				pWeaponManager->GetSelected()->Fire(dt);
 		}
-		
 
-	if (pInput->IsKeyPressed(SGD::Key::R) == true && pWeaponManager->GetSelected()->IsReloading() == false)
-	{
-		pWeaponManager->GetSelected()->ReloadNeeded();
+
+		if ((pInput->IsKeyPressed(SGD::Key::R) == true || (pInput->IsButtonPressed(0, 0) == true)) && pWeaponManager->GetSelected()->IsReloading() == false)
+			pWeaponManager->GetSelected()->ReloadNeeded();
+
 	}
+	else
+	{
+		if ((pInput->IsKeyPressed(SGD::Key::MouseLeft) == true) || (pInput->IsButtonPressed(0, 1) == true))
+			m_Player->SpawnTurret();
+
+	}
+
+		
 
 
 	// spawning turrets
-	if (pInput->IsKeyPressed(SGD::Key::G) == true)
-	{
-		m_Player->SpawnTurret();
-	}
+	if (pInput->IsKeyPressed(SGD::Key::T) == true || (pInput->IsButtonPressed(0, 3) == true))
+		m_Player->SetIsPlacingTurret(!m_Player->isPlacingTurret());
+	
 
-
-
-	// player activates an ability
-	if ((pInput->IsKeyPressed(SGD::Key::Space) == true || pInput->IsButtonPressed(0, 0) == true) && m_Player->m_bIsAlive == true)
-	{
-		switch (m_Player->GetCurrAbility())
-		{
-		case 0: // Camo
-			if ( m_Player->m_bIsCamoOn == false)
-			{
-				if (m_Player->m_Attributes.m_fCurrEnergy > 0.0f)
-				{
- 					m_Player->m_bIsCamoOn = true;
-					m_Player->m_bIsSprinting = false; 
-					m_Player->SetAlpha(125);
-				}
-				else
-				{
-					SGD::HAudio cannotuse = GameplayState::GetInstance()->cannot_use_skill;
-
-					if (pAudio->IsAudioPlaying(cannotuse) == false)
-						m_Player->SetVoice(pAudio->PlayAudio(cannotuse, false));
-
-					pAudio->SetVoiceVolume(m_Player->GetVoice());
-				}
-			}
-			else
-			{
-				m_Player->m_bIsCamoOn = false;
-				m_Player->SetAlpha(255);
-
-			}
-			break;
-
-		case 1: // ppp
-			break;
-
-		case 2: // ppp
-			break;
-
-		case 3: // ppp
-			break;
-
-		default:
-			break;
-		}
-	}
-
-
-	// stun
-	if (pInput->IsKeyPressed(SGD::Key::M) == true)
-	{
-		SGD::Event* msg = new SGD::Event("STUNNED");
-		msg->QueueEvent();
-		msg = nullptr;
-	}
 
 
 	// not sure
@@ -244,36 +227,18 @@ PlayerController::~PlayerController()
 
 
 
-	// player suicide
-	if (pInput->IsKeyPressed(SGD::Key::Eight) == true && m_Player->m_bIsAlive == true)
-	{
-		SGD::HAudio * death = m_Player->GetDeathSFX();
-
-		if (pAudio->IsAudioPlaying(*death) == false)
-			m_Player->SetVoice(pAudio->PlayAudio(*death, false)); //voice = pAudio->PlayAudio(*alarmSound, true);
-		pAudio->SetVoiceVolume(m_Player->GetVoice());
-
-		animation = "playerDeath";
-		m_Player->SetVelocity({ 0, 0 });
-		m_Player->m_bMoving = false;
-		m_Player->m_bIsAlive = false;
-	}
+	
 
 
 	// player not doing anything (playerIdle)
-	if ((pInput->IsAnyKeyDown() == false || m_Player->m_bMoving == false) && m_Player->m_bIsAlive == true)
+	if (m_Player->m_bMoving == false)
 	{
 		m_Player->SetVelocity({ 0, 0 });
 	//	animation = "playerIdle";
 		m_Player->m_bMoving = false;
 	}
 
-	else if ((pInput->IsAnyKeyDown() == false || m_Player->m_bMoving == false) && m_Player->m_bIsAlive == false)
-	{
-		m_Player->SetVelocity({ 0, 0 });
-	//	animation = "playerDeath";
-		m_Player->m_bMoving = false;
-	}
+
 
 
 

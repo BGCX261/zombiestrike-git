@@ -29,10 +29,10 @@ FatZombie::FatZombie()
 
 FatZombie::~FatZombie()
 {
+	SetTarget(nullptr);
 	UnregisterFromEvent("GAME_OVER");
-	//pukeBlaster->SetOwner(nullptr);
-	//delete pukeBlaster;
-	//pukeBlaster = nullptr;
+
+	
 }
 void FatZombie::Update(float dt)
 {

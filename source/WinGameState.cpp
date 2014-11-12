@@ -65,8 +65,23 @@
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
 
+
 	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
 	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+		{
+			Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetStoryProfile());
+			Game::GetInstance()->LoadStoryProfiles();
+
+		}
+
+		else
+		{
+			Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetSurvivalProfile());
+			Game::GetInstance()->LoadSurvivalProfiles();
+
+		}
+
 		switch (m_nCursor)
 		{
 		case 0: // gameplay
@@ -111,26 +126,19 @@
 {
 	SGD::GraphicsManager*	pGraphics = SGD::GraphicsManager::GetInstance();
 
-
+	float width = Game::GetInstance()->GetScreenWidth();
+	float height = Game::GetInstance()->GetScreenHeight();
+	float scale = 1.25f;
 	// Draw the background image
-	pGraphics->DrawTexture(m_hBackgroundImage, { 0, -60 });
+	pGraphics->DrawTexture(m_hBackgroundImage, {width * 0.1f , -60 });
 
 
 	// Use the game's font
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
 
-	// Align text based on window width
-	float width		= Game::GetInstance()->GetScreenWidth();
-	float height	= Game::GetInstance()->GetScreenHeight();
-	float scale		= 0.9f;
-	float left_start = 50.0F;
+	
 
-
-	// Display the text centered
-	//pFont->Draw("YOU WIN!", { (width - (8 * 32 * 3.0f)) / 2, height * 0.25F - (26.0F * 3.0F) }, 3.0f, { 255, 255, 255 });
-
-
-	pFont->Draw("Play Again?", { (width - (11 * 25 * scale)) / 2, height * 0.5F }, scale, { 255, 255, 0 });
+	pFont->Draw("Play Again?", { (width - (11 * 20* scale)) / 2, height * 0.5F }, scale, { 255, 255, 0 });
 	pFont->Draw("YES", { (width - (3 * 32 * scale)) / 2, (height * 0.5F) + 100.0f }, scale, { 0, 255, 0 });
 	pFont->Draw("NO", { (width - (2 * 32 * scale)) / 2, (height * 0.5F) + 200.0f }, scale, { 0, 255, 0 });
 

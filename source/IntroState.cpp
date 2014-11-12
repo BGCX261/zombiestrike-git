@@ -45,7 +45,7 @@
 	//pAnimationManager->Load("resource/config/animations/Zombie_Animation_New.xml", "zombie");
 	//animation.m_strCurrAnimation = "zombie";
 
-	m_hBackgroundImage = pGraphics->LoadTexture("resource/graphics/emergencybroadcast.png");
+	m_hBackgroundImage = pGraphics->LoadTexture("resource/graphics/MenuImages/emergencybroadcast.png");
 
 	m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
 
@@ -72,7 +72,6 @@
 	// Unload assets
 	pGraphics->UnloadTexture(m_hBackgroundImage);
 	//pAudio->UnloadAudio(m_hBackgroundMusic);
-	AnimationManager::GetInstance()->Shutdown();
 
 	pAudio->UnloadAudio(m_hEmergency);
 }
@@ -192,7 +191,7 @@
 
 	SGD::Color backColor(transBack, 255, 255, 255);
 	// Draw the background image
-	pGraphics->DrawTexture(m_hBackgroundImage, { -175, 100 }, 0.0f, {}, backColor);
+	pGraphics->DrawTexture(m_hBackgroundImage, { 0, 0 }, 0.0f, {}, backColor);
 
 	if (IntroTimer.GetTime() < 20.0f)
 	{

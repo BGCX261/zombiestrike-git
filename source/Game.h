@@ -51,6 +51,7 @@ public:
 	/**********************************************************/
 	// Font Accessor: (#include "BitmapFont.h" to use!)
 	const BitmapFont*	GetFont			( void ) const	{	return m_pFont;			}
+	const BitmapFont*	GetShopFont(void) const	{ return m_pFont2; }
 
 
 	/**********************************************************/
@@ -63,19 +64,26 @@ public:
 	GamerProfile&		GetStoryProfile		( void )		{	return storyProfiles[selectedProfile];	}
 	GamerProfile&		GetSurvivalProfile(void)		{ return survivalProfiles[selectedProfile]; }
 
+	GamerProfile&		GetTutorialProfile(void)		{ return tutorialProfile; }
+
+
+
+
 	GamerProfile&		GetSpecStoryProfile(int index)		{ return storyProfiles[index]; }
 	GamerProfile&		GetSpecSurvialProfile(int index)		{ return survivalProfiles[index]; }
 
 	void				LoadStoryProfiles	( void );
 	void				LoadSurvivalProfiles(void);
+	void				LoadTutorialProfiles(void);
+
 
 	void				CreateStoryProfiles	( void );
 	void				CreateSurvivalProfiles(void);
+	void				CreateTutorialProfile(void);
 
 	void				OverWriteProfile(GamerProfile& profile);
 
-	GamerProfile		storyProfiles[3];
-	GamerProfile		survivalProfiles[3];
+
 
 	unsigned int		selectedProfile	= 0;
 
@@ -88,6 +96,31 @@ public:
 
 	SGD::HAudio			turret_good	= SGD::INVALID_HANDLE;
 	SGD::HAudio			turret_bad	= SGD::INVALID_HANDLE;
+	SGD::HAudio playerDeath			= SGD::INVALID_HANDLE;
+	SGD::HAudio playerHurt1			= SGD::INVALID_HANDLE;
+	SGD::HAudio playerHurt2			= SGD::INVALID_HANDLE;
+	SGD::HAudio playerHurt3			= SGD::INVALID_HANDLE;
+	SGD::HAudio cannot_use_skill	= SGD::INVALID_HANDLE;
+	SGD::HAudio footstep			= SGD::INVALID_HANDLE;
+	SGD::HAudio zombie_pain			= SGD::INVALID_HANDLE;
+	SGD::HAudio bullet_hit_zombie	= SGD::INVALID_HANDLE;
+	SGD::HAudio bullet_hit_house	= SGD::INVALID_HANDLE;
+	SGD::HAudio out_of_ammo			= SGD::INVALID_HANDLE;
+	SGD::HAudio reload_begin		= SGD::INVALID_HANDLE;
+	SGD::HAudio reload_finish		= SGD::INVALID_HANDLE;
+	SGD::HAudio explosion			= SGD::INVALID_HANDLE;
+	SGD::HAudio vomit_hit_player	= SGD::INVALID_HANDLE;
+	SGD::HAudio pistol_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio shotgun_fire		= SGD::INVALID_HANDLE;
+	SGD::HAudio rifle_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio sniper_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio flamethrower_fire	= SGD::INVALID_HANDLE;
+	SGD::HAudio smg_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio rpg_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio vomit_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio storyMusic			= SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWpnSwitch		= SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWaveChange		= SGD::INVALID_HANDLE;
 
 
 
@@ -98,8 +131,8 @@ public:
 	void				RemoveState		( void );
 
 	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hReticleImage = SGD::INVALID_HANDLE;
 
-	SGD::HAudio m_hWpnSwitch = SGD::INVALID_HANDLE;
 
 
 private:
@@ -129,6 +162,8 @@ private:
 	/**********************************************************/
 	// Game Font
 	BitmapFont*				m_pFont			= nullptr;
+	BitmapFont*				m_pFont2		= nullptr;
+
 
 
 	/**********************************************************/
@@ -151,7 +186,9 @@ private:
 	// Loading screen
 	SGD::HTexture			loadScreen		= SGD::INVALID_HANDLE;
 
-
+	GamerProfile		storyProfiles[3];
+	GamerProfile		survivalProfiles[3];
+	GamerProfile		tutorialProfile;
 };
 
 #endif //GAME_H

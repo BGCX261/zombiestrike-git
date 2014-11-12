@@ -90,8 +90,8 @@ void BitmapFont::Initialize( const char* path, char firstchar, bool onlyuppercas
 
 	}
 
-	SpaceWidth = (int)(letters['L'].renderRect.right - letters['L'].renderRect.left);
-	SpaceHeight = (int)(letters['['].renderRect.bottom - letters['['].renderRect.top);
+	SpaceWidth = (int)(letters['A'].renderRect.right - letters['A'].renderRect.left);
+	SpaceHeight = (int)(letters['A'].renderRect.bottom - letters['A'].renderRect.top);
 
 	// Load the image
 
@@ -271,11 +271,11 @@ void BitmapFont::Draw( const wchar_t* output, SGD::Point position, float scale, 
 
 		
 
-		// Draw the character
 		SGD::GraphicsManager::GetInstance()->DrawTextureSection(
-			m_hImage, position, 
-			letters[ch].renderRect, 0.0f, {}, 
-			color, {scale, scale} );
+			m_hImage, { position.x + letters[ch].xOffset, position.y + letters[ch].yOffset },
+			letters[ch].renderRect, 0.0f, {},
+			color, { scale, scale });
+
 
 		
 		// Move to the next position

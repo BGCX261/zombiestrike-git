@@ -17,7 +17,7 @@ GrenadeLauncher::GrenadeLauncher(MovingObject* owner)
 	lifeTime = 1000.0f;
 	m_pOwner = owner;
 	owner->AddRef();
-	fire_sound = &GameplayState::GetInstance()->rpg_fire;
+	fire_sound = &Game::GetInstance()->rpg_fire;
 }
 
 
@@ -28,7 +28,7 @@ GrenadeLauncher::~GrenadeLauncher()
 void GrenadeLauncher::Fire(float dt)
 {
 	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
-	GameplayState*		pGameplay	= GameplayState::GetInstance();
+	Game*		pGame	= Game::GetInstance();
 
 	if (currAmmo > 0)
 	{
@@ -50,9 +50,9 @@ void GrenadeLauncher::Fire(float dt)
 	}
 	else
 	{
-		if (pAudio->IsAudioPlaying(pGameplay->out_of_ammo) == false && pAudio->IsAudioPlaying(*fire_sound) == false
-			&& pAudio->IsAudioPlaying(pGameplay->reload_begin) == false
-			&& pAudio->IsAudioPlaying(pGameplay->reload_finish) == false)
-			pAudio->PlayAudio(pGameplay->out_of_ammo, false);
+		if (pAudio->IsAudioPlaying(pGame->out_of_ammo) == false && pAudio->IsAudioPlaying(*fire_sound) == false
+			&& pAudio->IsAudioPlaying(pGame->reload_begin) == false
+			&& pAudio->IsAudioPlaying(pGame->reload_finish) == false)
+			pAudio->PlayAudio(pGame->out_of_ammo, false);
 	}
 }

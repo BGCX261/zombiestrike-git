@@ -47,14 +47,17 @@
 	selected	= false;
 	//pInput->CheckForNewControllers();
 
+	starting_x = Game::GetInstance()->GetScreenWidth() * .10f;
+	starting_y = Game::GetInstance()->GetScreenHeight() * .2f;
+
 
 	// Load assets
-	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/Zombie_Strike_menu_image.png");
-	m_hTitleImage		= pGraphics->LoadTexture("resource/graphics/Zombie_Strike_menu_title.png");
-	m_hReticleImage		= pGraphics->LoadTexture("resource/graphics/Reticle3.png", { 0, 0, 0 });
-	m_hButton1			= pGraphics->LoadTexture("resource/graphics/rectangle1.png");
-	m_hButton2			= pGraphics->LoadTexture("resource/graphics/rectangle2.png");
-	m_hLightning		= pGraphics->LoadTexture("resource/graphics/lightning2.png");
+	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_image.png");
+	m_hTitleImage		= pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_title.png");
+	m_hReticleImage		= pGraphics->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
+
+	m_hButton2			= pGraphics->LoadTexture("resource/graphics/MenuImages/rectangle2.png");
+	m_hLightning		= pGraphics->LoadTexture("resource/graphics/MenuImages/lightning2.png");
 
 	m_hButtonSwitchSFX	= pAudio->LoadAudio("resource/audio/button_switch.wav");
 	m_hMenuChangeSFX	= pAudio->LoadAudio("resource/audio/menu_change.wav");
@@ -112,7 +115,7 @@
 	pGraphics->UnloadTexture(m_hBackgroundImage);
 	pGraphics->UnloadTexture(m_hTitleImage);
 	pGraphics->UnloadTexture(m_hReticleImage);
-	pGraphics->UnloadTexture(m_hButton1);
+	//pGraphics->UnloadTexture(m_hButton1);
 	pGraphics->UnloadTexture(m_hButton2);
 	pGraphics->UnloadTexture(m_hLightning);
 
@@ -423,19 +426,22 @@
 
 	// Draw the buttons
 	for (size_t i = 0; i < NUM_CHOICES; i++)
-		pGraphics->DrawTexture(m_hButton2, selectonrects[i].GetTopLeft(), 0.0f, {}, {}, { 1.0f, 1.0f });
+		pGraphics->DrawTexture(m_hButton2, selectonrects[i].GetTopLeft(), 0.0f, {}, {155,155,155}, { 1.0f, 1.0f });
 
 
 	// Use the game's font
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
+	const BitmapFont* pFont2 = Game::GetInstance()->GetShopFont();
+
 
 
 	// Draw the game title
 	// Align text based on window width
-	float width			= Game::GetInstance()->GetScreenWidth() / 2;
+	float screenWidth			= Game::GetInstance()->GetScreenWidth();
+	float screenHeight = Game::GetInstance()->GetScreenHeight();
+
 	float titlescale	= .75f;
-	float xpos			= (width - (256.0f * titlescale)) * 0.5f;
-	pGraphics->DrawTexture(m_hTitleImage, { 100, -75 * titlescale }, 0.0f, {}, { 200, 150, 0, 150 }, { titlescale, titlescale });
+	pGraphics->DrawTexture(m_hTitleImage, { screenWidth * 0.2f, -(screenHeight * 0.09375f)* titlescale }, 0.0f, {},{ 200, 150, 0, 150 }, { titlescale, titlescale });
 
 	// Display the menu options centered at 1x scale
 	std::string menuitems[NUM_CHOICES] = { "Story Mode", "Survival Mode", "How to Play", "Options", "Credits", "Exit" };
@@ -475,8 +481,6 @@
 	}
 
 
-	// Display the cursor next to the option
-	//pFont->Draw("=", { starting_x - 32.0F, starting_y + offset * m_nCursor - 8.0f }, 1.0f, { 0, 255, 0 });
 
 
 	// Draw the reticle
@@ -485,4 +489,6 @@
 
 	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
 	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+
+
 }

@@ -37,7 +37,7 @@
 	// Load assets
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
-	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/youLose.png");
+	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/MenuImages/youLose.png");
 }
 
 
@@ -195,8 +195,8 @@
 	// Align text based on window width
 	float width		= Game::GetInstance()->GetScreenWidth();
 	float height	= Game::GetInstance()->GetScreenHeight();
-	float scale		= 0.9f;
-	float left_start = 50.0F;
+	float scale		= 1.25f;
+	
 
 	if (GameplayState::GetInstance()->GetGameMode() == false)
 	{

@@ -86,6 +86,9 @@
 //	- set up entities
 /*virtual*/ void HTPGameState::Enter(void)
 {
+	isActive = true;
+
+
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor({ 0, 0, 0 });	// black
 
@@ -93,6 +96,7 @@
 	SGD::EventManager::GetInstance()->Initialize();
 	SGD::MessageManager::GetInstance()->Initialize(&MessageProc);
 
+	tutRect = { Game::GetInstance()->GetScreenWidth() / 2 - 350.0f, Game::GetInstance()->GetScreenHeight() / 2 - 200, Game::GetInstance()->GetScreenWidth() / 2 + 350.0f, Game::GetInstance()->GetScreenHeight() / 2 + 200 };
 	// Allocate the Entity Manager
 	m_pEntities = new EntityManager;
 
@@ -107,80 +111,80 @@
 	SGD::GraphicsManager*	pGraphics = SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager*		pAudio = SGD::AudioManager::GetInstance();
 	SGD::InputManager*		pInput = SGD::InputManager::GetInstance();
-	AnimationManager*		pAnimationManager = AnimationManager::GetInstance();
+	//AnimationManager*		pAnimationManager = AnimationManager::GetInstance();
 
-	// player animations
-	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
-	pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
-	pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
-	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
-	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
+	//// player animations
+	//pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
+	//pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
+	//pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
+	//pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
+	//pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
 
-	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
-	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
-	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
-
-	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/crosshair.png");
+	//pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
+	//pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
+	//pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
 
 
-	// enemy animations
+	//// enemy animations
 
-	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
-	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
-	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
-	pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
-	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
+	//pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
+	//pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
+	//pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
+	//pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
+	//pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
 
-	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
-	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
-	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
+	//pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	//pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
+	//pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
 
-	//Blood Animation
-	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
-	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
-	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
-	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
+	////Blood Animation
+	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
+	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
+	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
+	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
 
 
-	// other animations
-	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml", "turret");
-	pAnimationManager->Load("resource/config/animations/House_Animation.xml", "house");
+	//// other animations
+	//pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml", "turret");
+	//pAnimationManager->Load("resource/config/animations/House_Animation.xml", "house");
 
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
 	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
-	playerHurt1 = pAudio->LoadAudio("resource/audio/player_grunt1.wav");
-	playerHurt2 = pAudio->LoadAudio("resource/audio/player_grunt2.wav");
-	playerHurt3 = pAudio->LoadAudio("resource/audio/player_grunt3.wav");
-	if (m_bStoryMode == true)
+	//playerHurt1 = pAudio->LoadAudio("resource/audio/player_grunt1.wav");
+	//playerHurt2 = pAudio->LoadAudio("resource/audio/player_grunt2.wav");
+	//playerHurt3 = pAudio->LoadAudio("resource/audio/player_grunt3.wav");
+	if (m_bTutorialMode == true)
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetTutorialProfile(), m_pEntities);
+	else if (m_bStoryMode == true)
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
 	else
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
 
-	SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
+	SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/tutwaves.txt");
 
 	if (m_bIsChoiceScreen == true)
 	{
 		SpawnManager::GetInstance()->Activate();
 	}
-	
+
 	// Music
-	storyMusic = pAudio->LoadAudio("resource/audio/AmbienceDrama.xwm");
-	survivalMusic = pAudio->LoadAudio("resource/audio/AmbienceDungeon.xwm");
+	//storyMusic = pAudio->LoadAudio("resource/audio/AmbienceDrama.xwm");
+	//survivalMusic = pAudio->LoadAudio("resource/audio/AmbienceDungeon.xwm");
 	//m_bStoryMode == true ? pAudio->PlayAudio(storyMusic, true) : pAudio->PlayAudio(survivalMusic, true);
-	pAudio->PlayAudio(m_bStoryMode == true ? storyMusic : survivalMusic, true);
+	pAudio->PlayAudio(Game::GetInstance()->storyMusic, true);
 
 	// SFX
-	playerDeath = pAudio->LoadAudio("resource/audio/player_death1.wav");
-	cannot_use_skill = pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
-	footstep = pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
+	//playerDeath = pAudio->LoadAudio("resource/audio/player_death1.wav");
+	//cannot_use_skill = pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
+	//footstep = pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
 	//m_hWpnSwitch = pAudio->LoadAudio("resource/audio/switchweapon.wav");
 	//m_hWaveChange = pAudio->LoadAudio("resource/audio/wavechange.wav");
 
 	//m_hHudWpn = Game::GetInstance()->m_hHudWpn;
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
 
-	zombie_pain = pAudio->LoadAudio("resource/audio/zombie_howl.wav");
+	/*zombie_pain = pAudio->LoadAudio("resource/audio/zombie_howl.wav");
 	bullet_hit_zombie = pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
 	bullet_hit_house = pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
 	out_of_ammo = pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
@@ -195,7 +199,7 @@
 	sniper_fire = pAudio->LoadAudio("resource/audio/sniper_fire.wav");
 	flamethrower_fire = pAudio->LoadAudio("resource/audio/fire_ignite_1.wav");
 	smg_fire = pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
-	vomit_fire = pAudio->LoadAudio("resource/audio/vomit.wav");
+	vomit_fire = pAudio->LoadAudio("resource/audio/vomit.wav");*/
 
 
 	//m_hMain = &Game::GetInstance()->m_hMainTheme;
@@ -212,7 +216,25 @@
 
 	WeaponManager::GetInstance()->Initialize(*pPlayer);
 
-	m_tCompleteWave.AddTime(3);
+	iTutorial[0] = "Controls";
+	iTutorial[1] = "Practice your shot at the shooting range.";
+	iTutorial[2] = "If you would like to check out any"; 
+	iTutorial[3] = "merchandise feel free to press the buy ";
+	iTutorial[4] = "button If you kill a zombie... Don't"; 
+	iTutorial[5] = "worry we'll send out more.";
+	iTutorial[6] = "Usually these zombies are carrying money."; 
+	iTutorial[7] = "I guess they won't be needing it anymore."; 
+	iTutorial[8] = "So you might as well spend it at the shop.";
+	iTutorial[9] = "You can buy weapons and upgrade them"; 
+	iTutorial[10] = "from the shop.";
+	iTutorial[11] = "Next to continue to the shooting range";
+	iTutorial[12] = "               -OR-                   ";
+	iTutorial[13] = "     Previous to go to last page      ";
+	iTutorial[14] = "    PREV";
+	iTutorial[15] = "NEXT          ";
+
+	m_tStartTutorial.AddTime(1.0f);
+
 }
 
 
@@ -234,48 +256,7 @@
 	SGD::InputManager*		pInput = SGD::InputManager::GetInstance();
 
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
-	pGraphics->UnloadTexture(m_hReticleImage);
-	//pGraphics->UnloadTexture(m_hHudWpn);
-	pGraphics->UnloadTexture(m_hReticleImage);
-
-
-
-	if (pAudio->IsAudioPlaying(storyMusic) == true)
-		pAudio->StopAudio(storyMusic);
-	if (pAudio->IsAudioPlaying(survivalMusic) == true)
-		pAudio->StopAudio(survivalMusic);
-
-	pAudio->UnloadAudio(storyMusic);
-	pAudio->UnloadAudio(survivalMusic);
-
-	pAudio->UnloadAudio(playerDeath);
-	pAudio->UnloadAudio(cannot_use_skill);
-	pAudio->UnloadAudio(footstep);
-	//pAudio->UnloadAudio(m_hWpnSwitch);
-	pAudio->UnloadAudio(zombie_pain);
-	pAudio->UnloadAudio(bullet_hit_zombie);
-	pAudio->UnloadAudio(bullet_hit_house);
-	pAudio->UnloadAudio(out_of_ammo);
-	pAudio->UnloadAudio(reload_begin);
-	pAudio->UnloadAudio(reload_finish);
-	pAudio->UnloadAudio(explosion);
-	//pAudio->UnloadAudio(m_hWaveChange);
-	pAudio->UnloadAudio(vomit_hit_player);
-
-	pAudio->UnloadAudio(pistol_fire);
-	pAudio->UnloadAudio(shotgun_fire);
-	pAudio->UnloadAudio(rifle_fire);
-	pAudio->UnloadAudio(sniper_fire);
-	pAudio->UnloadAudio(flamethrower_fire);
-	pAudio->UnloadAudio(smg_fire);
-	pAudio->UnloadAudio(vomit_fire);
-	pAudio->UnloadAudio(playerHurt1);
-	pAudio->UnloadAudio(playerHurt2);
-	pAudio->UnloadAudio(playerHurt3);
-
 	
-	//pAudio->UnloadAudio(*m_hMain);
-	//pAudio->UnloadAudio(*m_hSurvive);
 
 	camera.SetTarget(nullptr);
 
@@ -306,7 +287,12 @@
 	SGD::MessageManager::DeleteInstance();
 
 	MapManager::GetInstance()->UnloadLevel();
-	AnimationManager::GetInstance()->Shutdown();
+
+
+	Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetTutorialProfile());
+
+	isActive = false;
+
 }
 /**************************************************************/
 // Input
@@ -371,6 +357,19 @@
 		}
 	}
 
+	else if (m_bIsChoiceScreen == false && m_tStartTutorial.GetTime() <= 0.0f && m_bIsTutorial == true)
+	{
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		{
+			m_nCurPage++;
+		}
+
+		if (pInput->IsKeyPressed(SGD::Key::MouseRight) == true)
+		{
+			m_nCurPage--;
+		}
+	}
+
 	else
 	{
 		/**********************************************************/
@@ -397,11 +396,8 @@
 			msg.SendEventNow();
 			Game::GetInstance()->AddState(LoseGameState::GetInstance());
 
-
-			if (pAudio->IsAudioPlaying(storyMusic) == true)
-				pAudio->StopAudio(storyMusic);
-			if (pAudio->IsAudioPlaying(survivalMusic) == true)
-				pAudio->StopAudio(survivalMusic);
+			if (pAudio->IsAudioPlaying(Game::GetInstance()->storyMusic) == true)
+				pAudio->StopAudio(Game::GetInstance()->storyMusic);
 		}
 
 		if (pInput->IsKeyPressed(SGD::Key::B) == true)
@@ -412,7 +408,6 @@
 			//Calls the shopstate//
 			Game::GetInstance()->AddState(ShopState::GetInstance());
 		}
-
 
 	}
 
@@ -426,11 +421,33 @@
 /*virtual*/ void HTPGameState::Update(float dt)
 {
 	Player* player = dynamic_cast<Player*>(m_pPlayer);
+
+
+
 	
 
-	if (m_bIsChoiceScreen == true)
-	{
+	if (m_tStartTutorial.GetTime() > 0.0f && m_bIsChoiceScreen == false)
+		m_tStartTutorial.Update(dt);
+	
+	if (m_bIsChoiceScreen == true){}
 
+	else if (m_bIsChoiceScreen == false && m_tStartTutorial.GetTime() <= 0.0f && m_bIsTutorial == false && m_bIsHowToPlay == false)
+	{
+		m_bIsTutorial = true;
+		m_bIsHowToPlay = true;
+	}
+
+	else if (m_bIsTutorial == true)
+	{
+		if (m_nCurPage > 3)
+		{
+			m_bIsTutorial = false;
+		}
+
+		if (m_nCurPage < 0)
+		{
+			m_nCurPage = 0;
+		}
 	}
 
 	else
@@ -467,6 +484,7 @@
 			// Update the Map Manager
 			//	MapManager::GetInstance()->Update(dt);
 
+
 		}
 
 		else
@@ -480,35 +498,43 @@
 
 		if (SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies())
 		{
+
+
 			SpawnManager::GetInstance()->Deactivate();
+			
+			SpawnManager::GetInstance()->SetNumEnemies(0);
+			SpawnManager::GetInstance()->SetEnemiesKilled(0);
 
-			if (m_tCompleteWave.GetTime() > 0.0f)
-			{
-				m_tCompleteWave.Update(dt);
-			}
+			SpawnManager::GetInstance()->Activate();
 
-			else if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
-			{
-				SpawnManager::GetInstance()->SetGameWon(true);
-			}
+			//if (m_tCompleteWave.GetTime() > 0.0f)
+			//{
+			//	m_tCompleteWave.Update(dt);
+			//}
 
-			else
-			{
-				m_bShopState = true;
+			//else if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
+			//{
+			//	SpawnManager::GetInstance()->SetGameWon(true);
+			//}
 
-				m_tNextWave.AddTime(6);
-				m_tCompleteWave.AddTime(3);
+			//else
+			//{
+			//	m_bShopState = true;
 
-				SGD::Event msg("PAUSE");
-				msg.SendEventNow();
+			//	m_tNextWave.AddTime(6);
+			//	m_tCompleteWave.AddTime(3);
 
-				//Calls the shopstate//
-				Game::GetInstance()->AddState(ShopState::GetInstance());
-			}
+			//	SGD::Event msg("PAUSE");
+			//	msg.SendEventNow();
+
+			//	//Calls the shopstate//
+			//	Game::GetInstance()->AddState(ShopState::GetInstance());
+			//}
+
 		}
 
 		//ShopState::GetInstance()->Update(dt);
-		m_tNextWave.Update(dt);
+		//m_tNextWave.Update(dt);
 	}
 }
 
@@ -522,24 +548,30 @@
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 	const BitmapFont * pFont = Game::GetInstance()->GetFont();
 	
+
+
 	if (m_bIsChoiceScreen == true)
 	{
-		pFont->Draw("YES", { Game::GetInstance()->GetScreenWidth() / 2 - 100, Game::GetInstance()->GetScreenHeight() / 2 }, 1.0f, { 100, 0, 0 });
-		pFont->Draw("NO", { Game::GetInstance()->GetScreenWidth() / 2 + 100, Game::GetInstance()->GetScreenHeight() / 2 }, 1.0f, { 100, 0, 0 });
+		pFont->Draw("Would you like to try the firing range", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 - 45}, 1.25f, { 100, 0, 0 });
+		pFont->Draw("before playing?", { Game::GetInstance()->GetScreenWidth() / 2 - 128 , Game::GetInstance()->GetScreenHeight() / 2 }, 1.25f, { 100, 0, 0 });
+		pFont->Draw("Yes", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 100, 0, 0 });
+		pFont->Draw("No", { Game::GetInstance()->GetScreenWidth() / 2 + 210, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 100, 0, 0 });
 
 		if (m_nCursor == 0)
 		{
-			pFont->Draw("()", { Game::GetInstance()->GetScreenWidth() / 2 - 125, Game::GetInstance()->GetScreenHeight() / 2 }, 1.0f, { 0, 100, 0 });
+			pFont->Draw("()", { Game::GetInstance()->GetScreenWidth() / 2 - 340, Game::GetInstance()->GetScreenHeight() / 2 + 75 }, 1.0f, { 0, 100, 0 });
 		}
 
 		if (m_nCursor == 1)
 		{
-			pFont->Draw("()", { Game::GetInstance()->GetScreenWidth() / 2 + 75, Game::GetInstance()->GetScreenHeight() / 2 }, 1.0f, { 0, 100, 0 });
+			pFont->Draw("()", { Game::GetInstance()->GetScreenWidth() / 2 + 190, Game::GetInstance()->GetScreenHeight() / 2 + 75 }, 1.0f, { 0, 100, 0 });
 		}
 	}
 
 	else
 	{
+
+
 		SGD::Point textPos({ Game::GetInstance()->GetScreenWidth() / 2, Game::GetInstance()->GetScreenHeight() / 2 });
 
 		// Draw background
@@ -557,36 +589,36 @@
 
 		WeaponManager::GetInstance()->Render();
 
-		if (m_tNextWave.GetTime() > 0.0f && m_bShopState == false && SpawnManager::GetInstance()->GetGameWon() == false)
-		{
-			stringstream nWave;
-			nWave << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1;
+		//if (m_tNextWave.GetTime() > 0.0f && m_bShopState == false && SpawnManager::GetInstance()->GetGameWon() == false)
+		//{
+		//	stringstream nWave;
+		//	nWave << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1;
 
-			pFont->Draw(nWave.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+		//	pFont->Draw(nWave.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
 
-			if (pAudio->IsAudioPlaying(m_hWaveChange) == false)
-			{
-				pAudio->PlayAudio(m_hWaveChange, false);
-			}
-		}
+		//	if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hWaveChange) == false)
+		//	{
+		//		pAudio->PlayAudio(Game::GetInstance()->m_hWaveChange, false);
+		//	}
+		//}
 
-		else if (m_bShopState == false && SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies() && SpawnManager::GetInstance()->GetGameWon() == false)
-		{
-			stringstream nComplete;
-			nComplete << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1 << " Complete";
+		//if (m_bShopState == false && SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies() && SpawnManager::GetInstance()->GetGameWon() == false)
+		//{
+		//	stringstream nComplete;
+		//	nComplete << "Wave " << SpawnManager::GetInstance()->GetCurrWave() + 1 << " Complete";
 
-			pFont->Draw(nComplete.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
-		}
+		//	pFont->Draw(nComplete.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+		//}
 
-		else if (SpawnManager::GetInstance()->GetGameWon() == true)
-		{
-			stringstream gameWin;
-			gameWin << "YOU WIN!";
+		//else if (SpawnManager::GetInstance()->GetGameWon() == true)
+		//{
+		//	stringstream gameWin;
+		//	gameWin << "YOU WIN!";
 
-			pFont->Draw(gameWin.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
+		//	pFont->Draw(gameWin.str().c_str(), textPos, 1.0f, { 155, 0, 0 });
 
 
-		}
+		//}
 
 		if (SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies())
 		{
@@ -608,11 +640,83 @@
 
 
 		// Draw the reticle
-		SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
-		float		retscale = 0.8f;
 
-		retpos.Offset(-32.0F * retscale, -32.0F * retscale);
-		pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+		SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+		float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
+
+		retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
+		pGraphics->DrawTexture(Game::GetInstance()->m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 0 }, { retscale, retscale });
+
+		if (m_bIsTutorial == true)
+		{
+
+			if (m_nCurPage == 0)
+			{
+				SGD::Point pos = { 0, 0 };
+
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2);
+
+				pFont->Draw(iTutorial[0].c_str(), { (tutRect.left + tutRect.right) / 2 - 100.0f, tutRect.top + 15 + pos.y }, 1.25f, { 200, 0, 0 });
+
+				pFont->Draw(iTutorial[14].c_str(), { tutRect.left, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[15].c_str(), { tutRect.right - 150, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+
+			}
+
+			else if (m_nCurPage == 1)
+			{
+
+				SGD::Point pos = { 0, 0 };
+
+				pGraphics->DrawRectangle(tutRect, {155,155,155}, { 255, 255, 255 }, 2);
+
+				pFont->Draw(iTutorial[1].c_str(), { tutRect.left + 15 + pos.x, tutRect.top + 15 + pos.y}, 1.25f, { 200, 0, 0 });
+
+				for (unsigned int i = 2; i < 6; i++)
+				{
+					pFont->Draw(iTutorial[i].c_str(), { tutRect.left + 15, tutRect.top + pos.y + 30*i}, 1.25f, { 200, 0, 0 });
+
+					pos.y += 15.0f;
+				}
+
+				pFont->Draw(iTutorial[14].c_str(), { tutRect.left, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[15].c_str(), { tutRect.right - 150, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				
+			}
+
+			else if (m_nCurPage == 2)
+			{
+				SGD::Point pos = { 0, 0 };
+
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2);
+
+				pFont->Draw(iTutorial[6].c_str(), { tutRect.left + 15, tutRect.top + 15}, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[7].c_str(), { tutRect.left + 15, tutRect.top + 60 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[8].c_str(), { tutRect.left + 15, tutRect.top + 105 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[9].c_str(), { tutRect.left + 15, tutRect.top + 150 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[10].c_str(), { tutRect.left + 15, tutRect.top + 195 }, 1.25f, { 200, 0, 0 });
+
+				pFont->Draw(iTutorial[14].c_str(), { tutRect.left, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[15].c_str(), { tutRect.right - 150, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+			}
+
+			else if (m_nCurPage == 3)
+			{
+				float yVal = ((tutRect.bottom - tutRect.top) / 2);
+				SGD::Point pos = { 0, yVal };
+
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2);
+
+				pFont->Draw(iTutorial[11].c_str(), { tutRect.left + 25 + pos.x, tutRect.top + 15 + pos.y - 100 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[12].c_str(), { tutRect.left + 25 + pos.x, tutRect.top + 15 + pos.y - 40 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[13].c_str(), { tutRect.left + 25 + pos.x, tutRect.top + 15 + pos.y + 20 }, 1.25f, { 200, 0, 0 });
+
+				pFont->Draw(iTutorial[14].c_str(), { tutRect.left, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[15].c_str(), { tutRect.right - 150, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+
+			}
+
+		}
 	}
 
 }
@@ -649,7 +753,7 @@
 
 										  if (ptr->GetType() == BaseObject::OBJ_SLOW_ZOMBIE)
 										  {
-											  if (GameplayState::GetInstance()->GetGameMode() == true)
+											  if (HTPGameState::GetInstance()->GetGameMode() == true)
 												  Game::GetInstance()->GetStoryProfile().money += 20;
 											  else
 												  Game::GetInstance()->GetSurvivalProfile().money += 20;
@@ -659,7 +763,7 @@
 
 										  else if (ptr->GetType() == BaseObject::OBJ_FAST_ZOMBIE)
 										  {
-											  if (GameplayState::GetInstance()->GetGameMode() == true)
+											  if (HTPGameState::GetInstance()->GetGameMode() == true)
 												  Game::GetInstance()->GetStoryProfile().money += 25;
 											  else
 												  Game::GetInstance()->GetSurvivalProfile().money += 25;
@@ -668,7 +772,7 @@
 
 										  else if (ptr->GetType() == BaseObject::OBJ_EXPLODING_ZOMBIE)
 										  {
-											  if (GameplayState::GetInstance()->GetGameMode() == true)
+											  if (HTPGameState::GetInstance()->GetGameMode() == true)
 												  Game::GetInstance()->GetStoryProfile().money += 35;
 											  else
 												  Game::GetInstance()->GetSurvivalProfile().money += 35;
@@ -676,7 +780,7 @@
 
 										  else if (ptr->GetType() == BaseObject::OBJ_FAT_ZOMBIE)
 										  {
-											  if (GameplayState::GetInstance()->GetGameMode() == true)
+											  if (HTPGameState::GetInstance()->GetGameMode() == true)
 												  Game::GetInstance()->GetStoryProfile().money += 75;
 											  else
 												  Game::GetInstance()->GetSurvivalProfile().money += 75;
@@ -684,13 +788,13 @@
 
 										  else if (ptr->GetType() == BaseObject::OBJ_TANK_ZOMBIE)
 										  {
-											  if (GameplayState::GetInstance()->GetGameMode() == true)
+											  if (HTPGameState::GetInstance()->GetGameMode() == true)
 												  Game::GetInstance()->GetStoryProfile().money += 100;
 											  else
 												  Game::GetInstance()->GetSurvivalProfile().money += 100;
 										  }
 
-										 // GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
+										  HTPGameState::GetInstance()->m_pEntities->RemoveEntity(ptr);
 	}
 		break;
 
@@ -1049,15 +1153,16 @@ void HTPGameState::CreateSnipeBullet(Weapon* owner)
 	bullet->Release();
 	bullet = nullptr;
 }
+
 void HTPGameState::CreateTurretBullets(Turret* turret)
 {
 	Bullet* bullet = new Bullet;
 	bullet->SetRotation(turret->GetRotation());
 	bullet->SetOwner(turret);
 	bullet->SetPosition(turret->GetPosition());
-	SGD::Vector direction = turret->GetOwner()->GetDirection();
+	SGD::Vector direction = turret->GetDirection();
 	direction.Rotate(turret->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
-	
+
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * turret->GetSpeed());
 	bullet->SetAnimation("bullet");
@@ -1074,7 +1179,7 @@ void HTPGameState::CreateZombie(Spawner* owner)
 	Zombie* zombie = new Zombie;
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
-	zombie->SetHealth((float)INT_MAX);
+	//zombie->SetHealth();
 
 	zombie->SetAnimation("slowZombie");
 	zombie->SetMoveSpeed(64.0f);
