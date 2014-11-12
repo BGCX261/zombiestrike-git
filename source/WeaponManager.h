@@ -41,7 +41,9 @@ public:
 
 	////Mutators////
 	//Sets currently selected weapon
-	void SelectWeapon(int index);
+	void SelectWeapon(int type);
+	void SetCurrIndex(int index) { curIndex = index; }
+	
 
 	//Adds weapons to weapon vector
 	void AddWeapons(Weapon*);

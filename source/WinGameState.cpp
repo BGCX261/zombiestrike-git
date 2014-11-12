@@ -71,6 +71,22 @@
 		{
 		case 0: // gameplay
 			{
+					if (GameplayState::GetInstance()->GetGameMode() == true)
+					{
+						Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetStoryProfile());
+						Game::GetInstance()->LoadStoryProfiles();
+
+					}
+
+					else
+					{
+						Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetSurvivalProfile());
+						Game::GetInstance()->LoadSurvivalProfiles();
+
+					}
+
+
+
 				SGD::Event msg("UNPAUSE");
 				msg.SendEventNow();
 				Game::GetInstance()->RemoveState();
@@ -122,9 +138,8 @@
 	// Align text based on window width
 	float width		= Game::GetInstance()->GetScreenWidth();
 	float height	= Game::GetInstance()->GetScreenHeight();
-	float scale		= 0.9f;
-	float left_start = 50.0F;
-
+	float scale		= 1.25f;
+	
 
 	// Display the text centered
 	//pFont->Draw("YOU WIN!", { (width - (8 * 32 * 3.0f)) / 2, height * 0.25F - (26.0F * 3.0F) }, 3.0f, { 255, 255, 255 });

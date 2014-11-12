@@ -76,8 +76,12 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 
 	// Allocate & initialize the font
 	m_pFont = new BitmapFont;
-	m_pFont->Initialize("resource/bitmapfonts/Remains.xml", '\0', false);
+	m_pFont2 = new BitmapFont;
 
+	m_pFont->Initialize("resource/bitmapfonts/Remains.xml", '\0', false);
+	//m_pFont->Initialize("resource/bitmapfonts/Arial.xml", '\0', false);
+
+	m_pFont2->Initialize("resource/bitmapfonts/Arial.xml", '\0', false);
 	m_hHudWpn = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/hudweapons.png");
 
 	m_hWpnSwitch = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/switchweapon.wav");
@@ -178,6 +182,10 @@ void Game::Terminate( void )
 	m_pFont->Terminate();
 	delete m_pFont;
 	m_pFont = nullptr;
+
+	m_pFont2->Terminate();
+	delete m_pFont2;
+	m_pFont2 = nullptr;
 
 	pGraphics->UnloadTexture(m_hHudWpn);
 	pAudio->UnloadAudio(m_hWpnSwitch);
@@ -291,6 +299,8 @@ void Game::LoadStoryProfiles( void )
 			fin >> storyProfiles[i - 1].time.tm_hour;
 			fin >> storyProfiles[i - 1].time.tm_min;
 			fin >> storyProfiles[i - 1].time.tm_sec;
+
+			fin >> storyProfiles[i - 1].health;
 
 #pragma region Pistols
 
@@ -858,6 +868,9 @@ void Game::LoadSurvivalProfiles(void)
 			fin >> survivalProfiles[i - 1].time.tm_min;
 			fin >> survivalProfiles[i - 1].time.tm_sec;
 
+			fin >> survivalProfiles[i - 1].health;
+
+
 #pragma region Pistols
 
 			//pistol
@@ -1348,12 +1361,12 @@ void Game::LoadSurvivalProfiles(void)
 
 			}
 
-			fin >> storyProfiles[i - 1].numTurrets;
+			fin >> survivalProfiles[i - 1].numTurrets;
 
-			fin >> storyProfiles[i - 1].maxNumTurrets;
+			fin >> survivalProfiles[i - 1].maxNumTurrets;
 
 
-			fin >> storyProfiles[i - 1].wavesComplete;
+			fin >> survivalProfiles[i - 1].wavesComplete;
 
 
 
@@ -1434,6 +1447,9 @@ void Game::CreateStoryProfiles()
 				fout << localTime.tm_hour << '\n';
 				fout << localTime.tm_min << '\n';
 				fout << localTime.tm_sec << '\n';
+
+				//health
+				fout << 100  << '\n';
 
 
 #pragma region Pistols
@@ -1896,6 +1912,9 @@ void Game::CreateSurvivalProfiles()
 				fout << localTime.tm_min << '\n';
 				fout << localTime.tm_sec << '\n';
 
+				fout << 100 << '\n';
+
+
 #pragma region Pistols
 
 				//pistol stats
@@ -2317,6 +2336,7 @@ void Game::OverWriteProfile(GamerProfile& profile)
 		fout << localTime.tm_min << '\n';
 		fout << localTime.tm_sec << '\n';
 
+		fout << 100 << '\n';
 
 #pragma region Pistols
 

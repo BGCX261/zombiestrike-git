@@ -179,11 +179,6 @@ void WeaponManager::Render()
 		{
 			SGD::Rectangle unEquip = { sWidth + size*i, sHeight - 75, sWidth + size*i + size, sHeight };
 
-			//if (m_vWeapons[j]->GetGunType() == m_vWeapons[curIndex]->GetGunType() && m_vWeapons[curIndex]->GetEquipped() == true)
-			//{
-			//	pGraphics->DrawRectangle({ sWidth + size*i, sHeight - size, sWidth + size*i + size, sHeight }, { 0, 0, 0, 0 }, { 0, 100, 0 }, 6);
-			//}
-
 			stringstream drawIndex;
 			drawIndex << i + 1;
 
@@ -199,7 +194,7 @@ void WeaponManager::Input()
 	SGD::InputManager * pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
-	if (pInput->IsKeyPressed(SGD::Key::Q) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Q) == true || pInput->IsButtonPressed(0, 4) == true)
 	{
 		curIndex--;
 
@@ -208,10 +203,6 @@ void WeaponManager::Input()
 			curIndex = m_vWeapons.size() - 1;
 		}
 
-		//for (unsigned int i = 0; i < 4; i++)
-		//{
-		//	drawIndex[i]--;
-		//}
 
 		if (pAudio->IsAudioPlaying(m_hWpnSwitch) == false)
 		{
@@ -229,9 +220,10 @@ void WeaponManager::Input()
 		}
 	}
 
-	if (pInput->IsKeyPressed(SGD::Key::E) == true)
+	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsButtonPressed(0, 5) == true)
 	{
 		curIndex++;
+
 
 		if (curIndex > (int)m_vWeapons.size() - 1)
 		{
@@ -315,10 +307,16 @@ void WeaponManager::Exit()
 
 void WeaponManager::SelectWeapon(int index)
 {
-	if (index > 0 && index < (int)m_vWeapons.size() - 1 && m_vWeapons[index]->GetObtained() == true)
+
+	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
 	{
-		curIndex = index;
+		if (m_vWeapons[i]->GetType() == index && m_vWeapons[i]->GetEquipped() == true)
+		{
+			curIndex = i;
+			break;
+		}
 	}
+	
 }
 
 void WeaponManager::AddWeapons(Weapon* wpn)
@@ -534,7 +532,6 @@ Weapon * WeaponManager::CreateSawnOff()
 	Shotgun * shotty = new Shotgun(GetOwner());
 
 	shotty->SetObtained(profile->sawnoff.isBought);
-
 	shotty->SetAutomatic(false);
 	shotty->SetEquipped(false);
 	shotty->SetGunType(SAWN);
@@ -546,6 +543,9 @@ Weapon * WeaponManager::CreateSawnOff()
 	shotty->SetAmmoCap(profile->sawnoff.ammoCap.upgradedSkill.stat);
 	shotty->SetDamage(profile->sawnoff.damage.upgradedSkill.stat);
 	shotty->SetTotalAmmo(profile->sawnoff.totalAmmo.upgradedSkill.stat);
+	shotty->SetCurrAmmo(2);
+	shotty->SetMagSize(2);
+
 
 	return shotty;
 }

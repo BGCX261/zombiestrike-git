@@ -383,7 +383,7 @@
 			pAudio->StopAudio(survivalMusic);
 	}
 	
-
+	
 
 
 
@@ -428,7 +428,7 @@
 		// Center camera on the player
 		SGD::Point playerpos = m_pPlayer->GetPosition();
 		playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.50f;
-		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.75f;
+		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.50f;
 		camera.SetPostion(playerpos);
 
 		
@@ -527,6 +527,8 @@
 //	- render the game entities
 /*virtual*/ void GameplayState::Render( void )
 {
+	Player* player = dynamic_cast<Player*>(m_pPlayer);
+
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 	const BitmapFont * pFont = Game::GetInstance()->GetFont();
@@ -604,9 +606,20 @@
 	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 1.75f, { 0, 255, 0 });
 
 
-	
-	// Draw the reticle
-	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+	SGD::Point	retpos = { 0.0f, 0.0f };
+
+	if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == true)
+	{
+		retpos = { (player->GetPosition().x + (player->GetDirection().x * 300.0f)), (player->GetPosition().y + (player->GetDirection().y * 300.0f)) };
+		retpos.Offset(-camera.GetPosition().x, -camera.GetPosition().y);
+	}
+
+	else
+		retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+
+		
+
+
 	float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
 
 	retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
@@ -798,6 +811,12 @@ BaseObject* GameplayState::CreatePlayer( void )
 	player->SetMoveSpeed(180.0f);
 	player->RetrieveBehavior("playerController");
 	player->SetAnimation("player");
+	if (m_bStoryMode == true)
+		player->SetHealth(Game::GetInstance()->GetStoryProfile().health);
+	else
+		player->SetHealth(Game::GetInstance()->GetSurvivalProfile().health);
+
+	
 	return player;
 }
 

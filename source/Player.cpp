@@ -56,6 +56,12 @@ Player::Player() : Listener(this)
 
 	m_fCurrHP = m_fMaxHP = 100.0f;
 
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		profile = Game::GetInstance()->GetStoryProfile();
+	else
+		profile = Game::GetInstance()->GetSurvivalProfile();
+
+
 
 
 
@@ -84,6 +90,12 @@ Player::~Player()
 	// controller
 	if (controller != nullptr)
 		controller->Update(dt, this, { 0, 0 });
+
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		Game::GetInstance()->GetStoryProfile().health = m_fCurrHP = profile.health;
+	else
+		Game::GetInstance()->GetSurvivalProfile().health = m_fCurrHP = profile.health;
+
 
 
 	//// camo
@@ -262,7 +274,7 @@ void Player::Render()
 			const Zombie* zombie = dynamic_cast<const Zombie*>(pOther);
 			
 			// take damage
-			this->m_fCurrHP -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
+			profile.health -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
 
 			// check death
 			CheckDamage();
@@ -277,7 +289,8 @@ void Player::Render()
 			const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
 			
 			// take damage
-			this->m_fCurrHP -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			profile.health -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			
 
 			// check death
 			CheckDamage();
@@ -334,9 +347,9 @@ void Player::CheckDamage(void)
 
 
 	// dead, !hurt
-	if (m_fCurrHP <= 0.0f)
+	if (profile.health <= 0.0f)
 	{
-		m_fCurrHP = 0.0f;
+		profile.health = 0.0f;
 
 		if (m_hHurt != nullptr && pAudio->IsAudioPlaying(*m_hHurt) == true)
 			pAudio->StopAudio(*m_hHurt);

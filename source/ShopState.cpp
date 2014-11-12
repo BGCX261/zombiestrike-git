@@ -39,6 +39,7 @@ void	ShopState::Enter(void)
 		m_tShopTimer.AddTime(theTime);
 	}
 
+
 	if (GameplayState::GetInstance()->GetGameMode() == true)
 		profile = Game::GetInstance()->GetStoryProfile();
 	else
@@ -52,6 +53,8 @@ void	ShopState::Enter(void)
 	buyButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/rectangle1.png");
 	upgradeButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/rectangle2.png");
 	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/crosshair.png");
+	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/shopBackground.jpg");
+
 
 	barbedwire.isBought = true;
 	sandBag.isBought = true;
@@ -135,6 +138,8 @@ void	ShopState::Exit(void)
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(upgradeButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(buyButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(weaponsImage);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
+
 
 	
 
@@ -160,55 +165,67 @@ bool	ShopState::Input(void)
 		currPage--;
 		if (currPage < 0)
 			currPage = 5;
-		
+		currTab = 0;
+
 	}
 	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsButtonPressed(0, 5) == true)
 	{
 		currPage++;
 		if (currPage > 5)
 			currPage = 0;
+		currTab = 0;
 
 	}
-	if (pInput->IsKeyPressed(SGD::Key::Tab) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
+	if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
 		currTab++;
+	if (pInput->IsKeyPressed(SGD::Key::LeftArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true)
+		currTab--;
 
-	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	if (pInput->IsControllerConnected(0) == true)
 	{
-		SGD::Point	mpoint		= pInput->GetMousePosition();
-		SGD::Vector	joystick	= pInput->GetLeftJoystick(0);
-		float		stickmin	= 0.250f;
-		float		mousevel	= 4.0f;
+		if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+		{
+			SGD::Point	mpoint = pInput->GetMousePosition();
+			SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+			float		stickmin = 0.250f;
+			float		mousevel = 4.0f;
 
-		if (joystick.x > stickmin)
-			mpoint.x += mousevel;
-		else if (joystick.x < stickmin * -1.0f)
-			mpoint.x -= mousevel;
-		
-		if (joystick.y > stickmin)
-			mpoint.y += mousevel;
-		else if (joystick.y < stickmin * -1.0f)
-			mpoint.y -= mousevel;
+			if (joystick.x > stickmin)
+				mpoint.x += mousevel;
+			else if (joystick.x < stickmin * -1.0f)
+				mpoint.x -= mousevel;
 
-		if (mpoint.x < 0.0F)
-			mpoint.x = 0.0F;
-		if (mpoint.y < 0.0F)
-			mpoint.y = 0.0F;
-		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
-			mpoint.x = Game::GetInstance()->GetScreenWidth();
-		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
-			mpoint.y = Game::GetInstance()->GetScreenHeight();
+			if (joystick.y > stickmin)
+				mpoint.y += mousevel;
+			else if (joystick.y < stickmin * -1.0f)
+				mpoint.y -= mousevel;
 
-		pInput->SetMousePosition(mpoint);
+			if (mpoint.x < 0.0F)
+				mpoint.x = 0.0F;
+			if (mpoint.y < 0.0F)
+				mpoint.y = 0.0F;
+			if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+				mpoint.x = Game::GetInstance()->GetScreenWidth();
+			if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+				mpoint.y = Game::GetInstance()->GetScreenHeight();
+
+			pInput->SetMousePosition(mpoint);
+		}
+
 	}
-		
-	SGD::Point mousePos = pInput->GetMousePosition();
+	
+	mousePos = pInput->GetMousePosition();
 
 	switch (currPage)
 	{
 	case PISTOLS:
+#pragma region Handguns
 	{
 					if (currTab > 1)
 						currTab = 0;
+
+					if (currTab < 0)
+						currTab = 1;
 
 					if (currTab == 0)
 					{
@@ -448,15 +465,15 @@ bool	ShopState::Input(void)
 							}
 						}
 					}
-									
-					
-
 	}
-		
+#pragma endregion
 		break;
 	case SHOTGUNS:
+#pragma region Shotguns
 		if (currTab > 2)
 			currTab = 0;
+		if (currTab < 0)
+			currTab = 2;
 
 		if (currTab == 0)
 		{
@@ -916,11 +933,15 @@ bool	ShopState::Input(void)
 				}
 			}
 		}
+#pragma endregion
 		break;
+
 	case SMGS:
+#pragma region SMGs
 		if (currTab > 2)
 			currTab = 0;
-
+		if (currTab < 0)
+			currTab = 2;
 		if (currTab == 0)
 		{
 			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
@@ -1339,10 +1360,14 @@ bool	ShopState::Input(void)
 				}
 			}
 		}
+#pragma endregion
 		break;
 	case ASSAULT_RIFLES:
+#pragma region Assault Rifles
 		if (currTab > 2)
 			currTab = 0;
+		if (currTab < 0)
+			currTab = 2;
 
 		if (currTab == 0)
 		{
@@ -1801,12 +1826,15 @@ bool	ShopState::Input(void)
 				}
 			}
 		}
+#pragma endregion
 		break;
 
 	case HEAVY:
-	
-			if (currTab > 2)
-				currTab = 0;
+#pragma region Heavy Weapons
+		if (currTab > 2)
+			currTab = 0;
+		if (currTab < 0)
+			currTab = 2;
 
 			if (currTab == 0)
 			{
@@ -1883,7 +1911,7 @@ bool	ShopState::Input(void)
 									{
 										profile.money -= 600;
 										sniperUpgrade.damage.upgradedSkill.stat += 100;
-										sniperUpgrade.damage.upgradedSkill.currTier += 100;
+										sniperUpgrade.damage.upgradedSkill.currTier++;
 
 										if (sniperUpgrade.damage.upgradedSkill.currTier == sniperUpgrade.damage.upgradedSkill.maxTier)
 											sniperUpgrade.damage.isMaxed = true;
@@ -2282,10 +2310,11 @@ bool	ShopState::Input(void)
 					}
 				}
 			}
-		
+#pragma endregion
 		break;
 
 		case DEFENSE:
+#pragma region Defense
 			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 8; currButton++)
@@ -2456,7 +2485,7 @@ bool	ShopState::Input(void)
 					}
 				}
 			}
-						
+#pragma endregion
 			break;
 		
 	}
@@ -2543,10 +2572,19 @@ void	ShopState::Render(void)
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
 	WeaponManager* pWeaponManager = WeaponManager::GetInstance(); 
 
+	pGraphics->DrawTexture(m_hBackground, { 0, 0 });
+	pGraphics->DrawRectangle(SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight()), { 200, 0, 0, 0 });
 
 	stringstream moneyCount;
 	moneyCount << "$" << profile.money;
 	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0, { 0, 255, 0 });
+
+	SGD::Color  m_cInActive = { 255, 0, 255, 0 };
+	SGD::Color m_cActive = { 255, 255, 255, 255 };
+	SGD::Color m_cMaxed = { 255, 255, 0, 0 };
+
+	
+
 
 
 	stringstream wave;
@@ -2558,104 +2596,107 @@ void	ShopState::Render(void)
 	pFont->Draw(wave.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 175, Game::GetInstance()->GetScreenHeight() - 150 }, .5f, { 155, 0, 0 });
 	pFont->Draw(timer.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 150, Game::GetInstance()->GetScreenHeight() - 100 }, 2.0f, { 155, 0, 0 });
 
+	float scale = .8f;
+	int xOffset = 25;
+	int yOffset = 3;
 
 
 	switch (currPage)
 	{
 	case PISTOLS:
 {
-					pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
-					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
-					pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+					pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, .8f, m_cMaxed);
+					pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, .8f, m_cMaxed);
 					if (currTab == 0)
 					{
 						//pistol
 						stringstream pistolMagLevel;
 						stringstream pistolMagSize;
 
-						stringstream pistolReloadlevel;
+						stringstream pistolReloadLevel;
 						stringstream pistolReloadStat;
 
 						stringstream pistolRecoilLevel;
 						stringstream pistolRecoilStat;
 
-						pistolMagLevel << "LeveL " << pistolUpgrade.magSize.upgradedSkill.currTier;
-						pistolMagSize << "Magezine Size: " << pistolUpgrade.magSize.upgradedSkill.stat;
+						pistolMagLevel << "Level " << pistolUpgrade.magSize.upgradedSkill.currTier;
+						pistolMagSize << "Magezine Size:\t" << pistolUpgrade.magSize.upgradedSkill.stat;
 						
-						pistolReloadlevel << "LeveL " << pistolUpgrade.reloadTime.upgradedSkill.currTier;
-						pistolReloadStat << "Reload Speed: " << pistolUpgrade.reloadTime.upgradedSkill.stat;
+						pistolReloadLevel << "Level " << pistolUpgrade.reloadTime.upgradedSkill.currTier;
+						pistolReloadStat << "Reload Speed:\t" << pistolUpgrade.reloadTime.upgradedSkill.stat;
 
-						pistolRecoilLevel << "LeveL " << pistolUpgrade.recoilTime.upgradedSkill.currTier;
-						pistolRecoilStat << "Rate of Fire: " << pistolUpgrade.recoilTime.upgradedSkill.stat;
+						pistolRecoilLevel << "Level " << pistolUpgrade.recoilTime.upgradedSkill.currTier;
+						pistolRecoilStat << "Rate of Fire:\t" << pistolUpgrade.recoilTime.upgradedSkill.stat;
 
 
 					
 
 						pFont->Draw("Pistol: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						pFont->Draw(pistolMagLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw(pistolMagSize.str().c_str(), { screenSize.width *.3f, Buttons[0].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw(pistolReloadlevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw(pistolReloadStat.str().c_str(), { screenSize.width *.3f, Buttons[1].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw(pistolRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw(pistolRecoilStat.str().c_str(), { screenSize.width *.3f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
+						pFont->Draw(pistolMagLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(pistolMagSize.str().c_str(), { screenSize.width *.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(pistolReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(pistolReloadStat.str().c_str(), { screenSize.width *.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(pistolRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(pistolRecoilStat.str().c_str(), { screenSize.width *.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
 
 						pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
 						
 						for (size_t i = 0; i < 3; i++)
-							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
-						pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {155,155,155}, { 0.5f, 0.5f });
+						pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 
 						if (mousePos.IsWithinRectangle(Buttons[0]))
 						{
 							if (pistolUpgrade.magSize.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (pistolUpgrade.magSize.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(Buttons[1]))
 						{
 							if (pistolUpgrade.reloadTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (pistolUpgrade.reloadTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(Buttons[2]))
 						{
 							if (pistolUpgrade.recoilTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (pistolUpgrade.recoilTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(Buttons[8]))
-							pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+							pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						else
-							pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+							pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 						
 						
 
@@ -2667,37 +2708,37 @@ void	ShopState::Render(void)
 						stringstream revolverMagLevel;
 						stringstream revolverMagStat;
 
-						revolverMagLevel << "LeveL " << revolverUpgrade.magSize.upgradedSkill.currTier;
-						revolverMagStat << "Magezine Size: " << revolverUpgrade.magSize.upgradedSkill.stat;
+						revolverMagLevel << "Level " << revolverUpgrade.magSize.upgradedSkill.currTier;
+						revolverMagStat << "Magezine Size:\t" << revolverUpgrade.magSize.upgradedSkill.stat;
 
 						stringstream revolverReloadLevel;
 						stringstream revolverReloadStat;
-						revolverReloadLevel << "LeveL " << revolverUpgrade.reloadTime.upgradedSkill.currTier;
-						revolverReloadStat << "ReloadSpeed: " << revolverUpgrade.reloadTime.upgradedSkill.stat;
+						revolverReloadLevel << "Level " << revolverUpgrade.reloadTime.upgradedSkill.currTier;
+						revolverReloadStat << "Reload Speed:\t" << revolverUpgrade.reloadTime.upgradedSkill.stat;
 
 
 						stringstream revolverRecoilLevel;
 						stringstream revolverRecoilStat;
-						revolverRecoilLevel << "LeveL " << revolverUpgrade.recoilTime.upgradedSkill.currTier;
-						revolverRecoilStat << "Rate of Fire: " << revolverUpgrade.recoilTime.upgradedSkill.stat;
+						revolverRecoilLevel << "Level " << revolverUpgrade.recoilTime.upgradedSkill.currTier;
+						revolverRecoilStat << "Rate of Fire:\t" << revolverUpgrade.recoilTime.upgradedSkill.stat;
 
 						stringstream revolverAmmoCapLevel;
 						stringstream revolverAmmoCapStat;
-						revolverAmmoCapLevel << "LeveL " << revolverUpgrade.ammoCap.upgradedSkill.currTier;
-						revolverAmmoCapStat << "Ammo Cap: " << revolverUpgrade.ammoCap.upgradedSkill.stat;
+						revolverAmmoCapLevel << "Level " << revolverUpgrade.ammoCap.upgradedSkill.currTier;
+						revolverAmmoCapStat << "Ammo Cap:\t\t" << revolverUpgrade.ammoCap.upgradedSkill.stat;
 
 						stringstream revolverPenPowerLevel;
 						stringstream revolverPenPowerStat;
-						revolverPenPowerLevel << "LeveL " << revolverUpgrade.penPower.upgradedSkill.currTier;
-						revolverPenPowerStat << "PentratingPower: " << revolverUpgrade.penPower.upgradedSkill.stat;
+						revolverPenPowerLevel << "Level " << revolverUpgrade.penPower.upgradedSkill.currTier;
+						revolverPenPowerStat << "Pentrating Power:\t" << revolverUpgrade.penPower.upgradedSkill.stat;
 
 						stringstream revolverDamageLevel;
 						stringstream revolverDamageStat;
-						revolverDamageLevel << "LeveL " << revolverUpgrade.damage.upgradedSkill.currTier;
-						revolverDamageStat << "Damage: " << revolverUpgrade.damage.upgradedSkill.stat;
+						revolverDamageLevel << "Level " << revolverUpgrade.damage.upgradedSkill.currTier;
+						revolverDamageStat << "Damage:\t\t" << revolverUpgrade.damage.upgradedSkill.stat;
 
 						stringstream revolverAmmoStat;
-						revolverAmmoStat << "Ammo: " << revolverUpgrade.totalAmmo.upgradedSkill.stat;
+						revolverAmmoStat << "Ammo:\t\t" << revolverUpgrade.totalAmmo.upgradedSkill.stat;
 
 
 
@@ -2706,118 +2747,118 @@ void	ShopState::Render(void)
 						
 
 						pFont->Draw("Revolver: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverMagLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverMagStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						pFont->Draw(revolverRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverPenPowerLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverPenPowerStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-						pFont->Draw(revolverAmmoStat.str().c_str(), { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+						pFont->Draw(revolverMagLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverMagStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverPenPowerLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverPenPowerStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+						pFont->Draw(revolverAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 
 
 						pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(315.0f, 560.0f), SGD::Size(180.0f, 95.0f)));
 
 						for (size_t i = 0; i < 7; i++)
-							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
-						pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+						pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 
 
 						if (mousePos.IsWithinRectangle(Buttons[0]))
 						{
 							if (revolverUpgrade.magSize.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.magSize.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(Buttons[1]))
 						{
 							if (revolverUpgrade.reloadTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.reloadTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(Buttons[2]))
 						{
 							if (revolverUpgrade.recoilTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.recoilTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(Buttons[3]))
 						{
 							if (revolverUpgrade.penPower.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.penPower.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(Buttons[4]))
 						{
 							if (revolverUpgrade.damage.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 
 							if (revolverUpgrade.damage.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(Buttons[5]))
 						{
 							if (revolverUpgrade.ammoCap.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.ammoCap.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 
@@ -2825,31 +2866,31 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[6]))
 						{
 							if (revolverUpgrade.ammoCap.isMaxed == false)
-								pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.ammoCap.isMaxed == false)
-								pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(Buttons[8]))
 						{
 							if (revolverUpgrade.isBought == false)
-								pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.isBought == false)
-								pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+								pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
 						}
 
 
@@ -2865,14 +2906,14 @@ void	ShopState::Render(void)
 		break;
 	case SHOTGUNS:
 	{
-					 pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
-					 pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
-					 pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
-					 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+					 pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+					 pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+					 pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+					 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-					 pFont->Draw("Sawn Off", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-					 pFont->Draw("P. AcTion", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-					 pFont->Draw("AuTo", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+					 pFont->Draw("Sawn Off", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
+					 pFont->Draw("P. Action", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
+					 pFont->Draw("Auto", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
 					 //Revolver
 					 switch (currTab)
 					 {
@@ -2882,190 +2923,156 @@ void	ShopState::Render(void)
 
 							   stringstream sawnOffRecoilLevel;
 							   stringstream sawnOffRecoilStat;
-							   sawnOffRecoilLevel << "LeveL " << sawnOffUpgrade.recoilTime.upgradedSkill.currTier;
-							   sawnOffRecoilStat << "Rate of Fire: " << sawnOffUpgrade.recoilTime.upgradedSkill.stat;
+							   sawnOffRecoilLevel << "Level " << sawnOffUpgrade.recoilTime.upgradedSkill.currTier;
+							   sawnOffRecoilStat << "Rate of Fire:\t" << sawnOffUpgrade.recoilTime.upgradedSkill.stat;
 
 
 							   stringstream sawnOffReloadLevel;
 							   stringstream sawnOffReloadStat;
-							   sawnOffReloadLevel << "LeveL " << sawnOffUpgrade.reloadTime.upgradedSkill.currTier;
-							   sawnOffReloadStat << "Reload Speed: " << sawnOffUpgrade.reloadTime.upgradedSkill.stat;
+							   sawnOffReloadLevel << "Level " << sawnOffUpgrade.reloadTime.upgradedSkill.currTier;
+							   sawnOffReloadStat << "Reload Speed:\t" << sawnOffUpgrade.reloadTime.upgradedSkill.stat;
 
 							   stringstream sawnOffBullSpreadLevel;
 							   stringstream sawnOffBullSpreadStat;
-							   sawnOffBullSpreadLevel << "LeveL " << sawnOffUpgrade.bulletSpread.upgradedSkill.currTier;
-							   sawnOffBullSpreadStat << "Shot Spread: " << sawnOffUpgrade.bulletSpread.upgradedSkill.stat;
+							   sawnOffBullSpreadLevel << "Level " << sawnOffUpgrade.bulletSpread.upgradedSkill.currTier;
+							   sawnOffBullSpreadStat << "Shot Spread:\t" << sawnOffUpgrade.bulletSpread.upgradedSkill.stat;
 
 							   stringstream sawnOffAmmoCapLevel;
 							   stringstream sawnOffAmmoCapStat;
-							   sawnOffAmmoCapLevel << "LeveL " << sawnOffUpgrade.ammoCap.upgradedSkill.currTier;
-							   sawnOffAmmoCapStat << "Ammo Cap: " << sawnOffUpgrade.ammoCap.upgradedSkill.stat;
+							   sawnOffAmmoCapLevel << "Level " << sawnOffUpgrade.ammoCap.upgradedSkill.currTier;
+							   sawnOffAmmoCapStat << "Ammo Cap:\t\t" << sawnOffUpgrade.ammoCap.upgradedSkill.stat;
 
 							   stringstream sawnOffDamageLevel;
 							   stringstream sawnOffDamageStat;
-							   sawnOffDamageLevel << "LeveL " << sawnOffUpgrade.damage.upgradedSkill.currTier;
-							   sawnOffDamageStat << "Damage: " << sawnOffUpgrade.damage.upgradedSkill.stat;
+							   sawnOffDamageLevel << "Level " << sawnOffUpgrade.damage.upgradedSkill.currTier;
+							   sawnOffDamageStat << "Damage:\t\t" << sawnOffUpgrade.damage.upgradedSkill.stat;
 
 							   stringstream sawnOffAmmoStat;
-							   sawnOffAmmoStat << "Ammo: " << sawnOffUpgrade.totalAmmo.upgradedSkill.stat;
+							   sawnOffAmmoStat << "Ammo:\t\t" << sawnOffUpgrade.totalAmmo.upgradedSkill.stat;
 
 							   pFont->Draw("Sawn-Off: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffBullSpreadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffBullSpreadStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(sawnOffAmmoStat.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffBullSpreadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffBullSpreadStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(sawnOffAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(515.0f, 575.0f), SGD::Size(240.0f, 75.0f)));
 							   for (size_t i = 0; i < 6; i++)
-								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 
 
 							   if (mousePos.IsWithinRectangle(Buttons[1]))
 							   {
 								   if (sawnOffUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
 							   {
 								   if (sawnOffUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 
 							   if (mousePos.IsWithinRectangle(Buttons[2]))
 							   {
 								   if (sawnOffUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[3]))
 							   {
 								   if (sawnOffUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 							   if (mousePos.IsWithinRectangle(Buttons[4]))
 							   {
 								   if (sawnOffUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 							   if (mousePos.IsWithinRectangle(Buttons[5]))
 							   {
 								   if (sawnOffUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Buy Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Ammo Full", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Ammo Full", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Buy Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Ammo Full", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Ammo Full", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							 
 							   if (mousePos.IsWithinRectangle(Buttons[8]))
 							   {
 								   if (sawnOffUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + 5 }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + 5 }, scale, { 255, 0, 0, 255 });
 							   }
 
-							   //if (sawnOffUpgrade.recoilTime.isMaxed == false)
-							   //	   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-							   //   else
-							   //	   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-							   //   if (sawnOffUpgrade.reloadTime.isMaxed == false)
-							   //	   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-							   //   else
-							   //	   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-							   //  
-							   //   if (sawnOffUpgrade.bulletSpread.isMaxed == false)
-							   //	   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-							   //   else
-							   //	   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-							   // 
-							   //   if (sawnOffUpgrade.damage.isMaxed == false)
-							   //	   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-							   //   else
-							   //	   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-							   //   if (sawnOffUpgrade.ammoCap.isMaxed == false)
-							   //	   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-							   //   else
-							   //	   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-							   //   if (sawnOffUpgrade.totalAmmo.isMaxed == false)
-							   //	   pFont->Draw("Buy Ammo", { Buttons[5].left + 18, Buttons[5].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-							   //   else
-							   //	   pFont->Draw("Ammo Full", { Buttons[5].left + 18, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-							   //   if (sawnOffUpgrade.isBought == false)
-							   //	   pFont->Draw("Buy Gun", { Buttons[8].left + 18, Buttons[8].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-							   //   else
-							   //	   pFont->Draw("Equipt", { Buttons[8].left + 18, Buttons[8].top + 5 }, 0.5f, { 255, 255, 0, 0 });
 
 					 }
 						 break;
@@ -3074,146 +3081,146 @@ void	ShopState::Render(void)
 
 							   stringstream pumpMagSizeLevel;
 							   stringstream pumpMagSizeStat;
-							   pumpMagSizeLevel << "LeveL " << pumpShotgunUpgrade.recoilTime.upgradedSkill.currTier;
-							   pumpMagSizeStat << "Magazine Size: " << pumpShotgunUpgrade.recoilTime.upgradedSkill.stat;
+							   pumpMagSizeLevel << "Level " << pumpShotgunUpgrade.recoilTime.upgradedSkill.currTier;
+							   pumpMagSizeStat << "Magazine Size:\t" << pumpShotgunUpgrade.recoilTime.upgradedSkill.stat;
 
 							   stringstream pumpRecoilLevel;
 							   stringstream pumpRecoilStat;
-							   pumpRecoilLevel << "LeveL " << pumpShotgunUpgrade.recoilTime.upgradedSkill.currTier;
-							   pumpRecoilStat << "Rate of Fire: " << pumpShotgunUpgrade.recoilTime.upgradedSkill.stat;
+							   pumpRecoilLevel << "Level " << pumpShotgunUpgrade.recoilTime.upgradedSkill.currTier;
+							   pumpRecoilStat << "Rate of Fire:\t" << pumpShotgunUpgrade.recoilTime.upgradedSkill.stat;
 
 
 							   stringstream pumpReloadLevel;
 							   stringstream pumpReloadStat;
-							   pumpReloadLevel << "LeveL " << pumpShotgunUpgrade.reloadTime.upgradedSkill.currTier;
-							   pumpReloadStat << "Reload Speed: " << pumpShotgunUpgrade.reloadTime.upgradedSkill.stat;
+							   pumpReloadLevel << "Level " << pumpShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+							   pumpReloadStat << "Reload Speed:\t" << pumpShotgunUpgrade.reloadTime.upgradedSkill.stat;
 
 							   stringstream pumpBullSpreadLevel;
 							   stringstream pumpBullSpreadStat;
-							   pumpBullSpreadLevel << "LeveL " << pumpShotgunUpgrade.bulletSpread.upgradedSkill.currTier;
-							   pumpBullSpreadStat << "Shot Spread: " << pumpShotgunUpgrade.bulletSpread.upgradedSkill.stat;
+							   pumpBullSpreadLevel << "Level " << pumpShotgunUpgrade.bulletSpread.upgradedSkill.currTier;
+							   pumpBullSpreadStat << "Shot Spread:\t" << pumpShotgunUpgrade.bulletSpread.upgradedSkill.stat;
 
 							   stringstream pumpAmmoCapLevel;
 							   stringstream pumpAmmoCapStat;
-							   pumpAmmoCapLevel << "LeveL " << pumpShotgunUpgrade.ammoCap.upgradedSkill.currTier;
-							   pumpAmmoCapStat << "Ammo Cap: " << pumpShotgunUpgrade.ammoCap.upgradedSkill.stat;
+							   pumpAmmoCapLevel << "Level " << pumpShotgunUpgrade.ammoCap.upgradedSkill.currTier;
+							   pumpAmmoCapStat << "Ammo Cap:\t\t" << pumpShotgunUpgrade.ammoCap.upgradedSkill.stat;
 
 							   stringstream pumpDamageLevel;
 							   stringstream pumpDamageStat;
-							   pumpDamageLevel << "LeveL " << pumpShotgunUpgrade.damage.upgradedSkill.currTier;
-							   pumpDamageStat << "Damage: " << pumpShotgunUpgrade.damage.upgradedSkill.stat;
+							   pumpDamageLevel << "Level " << pumpShotgunUpgrade.damage.upgradedSkill.currTier;
+							   pumpDamageStat << "Damage:\t\t" << pumpShotgunUpgrade.damage.upgradedSkill.stat;
 
 							   stringstream pumpAmmoStat;
-							   pumpAmmoStat << "Ammo: " << pumpShotgunUpgrade.totalAmmo.upgradedSkill.stat;
+							   pumpAmmoStat << "Ammo:\t\t" << pumpShotgunUpgrade.totalAmmo.upgradedSkill.stat;
 
 							   pFont->Draw("Pump Action Shotgun: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpMagSizeLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpMagSizeStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpBullSpreadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpBullSpreadStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(pumpAmmoStat.str().c_str(), { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpMagSizeLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpMagSizeStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpBullSpreadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpBullSpreadStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(pumpAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(15.0f, 225.0f), SGD::Size(218.0f, 70.0f)));
 							   for (size_t i = 0; i < 7; i++)
-								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 							  
 
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
 							   {
 								   if (pumpShotgunUpgrade.magSize.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.magSize.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[1]))
 							   {
 								   if (pumpShotgunUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[2]))
 							   {
 								   if (pumpShotgunUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[3]))
 							   {
 								   if (pumpShotgunUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[4]))
 							   {
 								   if (pumpShotgunUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 
 								   if (pumpShotgunUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[5]))
 							   {
 								   if (pumpShotgunUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 
@@ -3221,31 +3228,31 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[6]))
 							   {
 								   if (pumpShotgunUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[8]))
 							   {
 								   if (pumpShotgunUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   }
 
 					 
@@ -3257,146 +3264,146 @@ void	ShopState::Render(void)
 
 							   stringstream autoShotgunMagSizeLevel;
 							   stringstream autoShotgunMagSizeStat;
-							   autoShotgunMagSizeLevel << "LeveL " << autoShotgunUpgrade.recoilTime.upgradedSkill.currTier;
-							   autoShotgunMagSizeStat << "Magazine Size: " << autoShotgunUpgrade.recoilTime.upgradedSkill.stat;
+							   autoShotgunMagSizeLevel << "Level " << autoShotgunUpgrade.recoilTime.upgradedSkill.currTier;
+							   autoShotgunMagSizeStat << "Magazine Size:\t" << autoShotgunUpgrade.recoilTime.upgradedSkill.stat;
 
 							   stringstream autoShotgunRecoilLevel;
 							   stringstream autoShotgunRecoilStat;
-							   autoShotgunRecoilLevel << "LeveL " << autoShotgunUpgrade.recoilTime.upgradedSkill.currTier;
-							   autoShotgunRecoilStat << "Rate of Fire: " << autoShotgunUpgrade.recoilTime.upgradedSkill.stat;
+							   autoShotgunRecoilLevel << "Level " << autoShotgunUpgrade.recoilTime.upgradedSkill.currTier;
+							   autoShotgunRecoilStat << "Rate of Fire:\t" << autoShotgunUpgrade.recoilTime.upgradedSkill.stat;
 
 
 							   stringstream autoShotgunReloadLevel;
 							   stringstream autoShotgunReloadStat;
-							   autoShotgunReloadLevel << "LeveL " << autoShotgunUpgrade.reloadTime.upgradedSkill.currTier;
-							   autoShotgunReloadStat << "Reload Speed: " << autoShotgunUpgrade.reloadTime.upgradedSkill.stat;
+							   autoShotgunReloadLevel << "Level " << autoShotgunUpgrade.reloadTime.upgradedSkill.currTier;
+							   autoShotgunReloadStat << "Reload Speed:\t" << autoShotgunUpgrade.reloadTime.upgradedSkill.stat;
 
 							   stringstream autoShotgunBullSpreadLevel;
 							   stringstream autoShotgunBullSpreadStat;
-							   autoShotgunBullSpreadLevel << "LeveL " << autoShotgunUpgrade.bulletSpread.upgradedSkill.currTier;
-							   autoShotgunBullSpreadStat << "Shot Spread: " << autoShotgunUpgrade.bulletSpread.upgradedSkill.stat;
+							   autoShotgunBullSpreadLevel << "Level " << autoShotgunUpgrade.bulletSpread.upgradedSkill.currTier;
+							   autoShotgunBullSpreadStat << "Shot Spread:\t" << autoShotgunUpgrade.bulletSpread.upgradedSkill.stat;
 
 							   stringstream autoShotgunAmmoCapLevel;
 							   stringstream autoShotgunAmmoCapStat;
-							   autoShotgunAmmoCapLevel << "LeveL " << autoShotgunUpgrade.ammoCap.upgradedSkill.currTier;
-							   autoShotgunAmmoCapStat << "Ammo Cap: " << autoShotgunUpgrade.ammoCap.upgradedSkill.stat;
+							   autoShotgunAmmoCapLevel << "Level " << autoShotgunUpgrade.ammoCap.upgradedSkill.currTier;
+							   autoShotgunAmmoCapStat << "Ammo Cap:\t\t" << autoShotgunUpgrade.ammoCap.upgradedSkill.stat;
 
 							   stringstream autoShotgunDamageLevel;
 							   stringstream autoShotgunDamageStat;
-							   autoShotgunDamageLevel << "LeveL " << autoShotgunUpgrade.damage.upgradedSkill.currTier;
-							   autoShotgunDamageStat << "Damage: " << autoShotgunUpgrade.damage.upgradedSkill.stat;
+							   autoShotgunDamageLevel << "Level " << autoShotgunUpgrade.damage.upgradedSkill.currTier;
+							   autoShotgunDamageStat << "Damage:\t\t" << autoShotgunUpgrade.damage.upgradedSkill.stat;
 
 							   stringstream autoShotgunAmmoStat;
-							   autoShotgunAmmoStat << "Ammo: " << autoShotgunUpgrade.totalAmmo.upgradedSkill.stat;
+							   autoShotgunAmmoStat << "Ammo:\t\t" << autoShotgunUpgrade.totalAmmo.upgradedSkill.stat;
 
 							   pFont->Draw("Auto Shotgun: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunMagSizeLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunMagSizeStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunBullSpreadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunBullSpreadStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							   pFont->Draw(autoShotgunAmmoStat.str().c_str(), { screenSize.width *0.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunMagSizeLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunMagSizeStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunRecoilLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunRecoilStat.str().c_str(), { screenSize.width *0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunReloadStat.str().c_str(), { screenSize.width *0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunBullSpreadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunBullSpreadStat.str().c_str(), { screenSize.width *0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunDamageLevel.str().c_str(), { screenSize.width *0.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunDamageStat.str().c_str(), { screenSize.width *0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunAmmoCapLevel.str().c_str(), { screenSize.width *0.1f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+							   pFont->Draw(autoShotgunAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(514.0f, 228.0f), SGD::Size(228.0f, 82.0f)));
 							
 							   for (size_t i = 0; i < 7; i++)
-								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 					
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
 							   {
 								   if (autoShotgunUpgrade.magSize.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.magSize.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[1]))
 							   {
 								   if (autoShotgunUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[2]))
 							   {
 								   if (autoShotgunUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[3]))
 							   {
 								   if (autoShotgunUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[4]))
 							   {
 								   if (autoShotgunUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 
 								   if (autoShotgunUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[5]))
 							   {
 								   if (autoShotgunUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 
@@ -3404,31 +3411,31 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[6]))
 							   {
 								   if (autoShotgunUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									   pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
 							   if (mousePos.IsWithinRectangle(Buttons[8]))
 							   {
 								   if (autoShotgunUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
-									   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
 							   }
 					 
 					 }
@@ -3443,12 +3450,12 @@ void	ShopState::Render(void)
 	case SMGS:
 	{
 
-				 pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
-				 pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
-				 pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
-				 pFont->Draw("MAC-10", { shotTab1.left + 30, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-				 pFont->Draw("Tech-9mm", { shotTab2.left + 15, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-				 pFont->Draw("P90", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+				 pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+				 pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+				 pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+				 pFont->Draw("MAC-10", { shotTab1.left + 30, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
+				 pFont->Draw("Tech-9mm", { shotTab2.left + 15, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
+				 pFont->Draw("P90", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
 
 				
 				
@@ -3462,142 +3469,142 @@ void	ShopState::Render(void)
 
 						   stringstream uziMagSizeLevel;
 						   stringstream uziMagSizeStat;
-						   uziMagSizeLevel << "LeveL " << uziUpgrade.magSize.upgradedSkill.currTier;
-						   uziMagSizeStat << "Magazine Size: " << uziUpgrade.magSize.upgradedSkill.stat;
+						   uziMagSizeLevel << "Level " << uziUpgrade.magSize.upgradedSkill.currTier;
+						   uziMagSizeStat << "Magazine Size:\t" << uziUpgrade.magSize.upgradedSkill.stat;
 
 						   stringstream uziReloadLevel;
 						   stringstream uziReloadStat;
-						   uziReloadLevel << "LeveL " << uziUpgrade.reloadTime.upgradedSkill.currTier;
-						   uziReloadStat << "Reload Speed: " << uziUpgrade.reloadTime.upgradedSkill.stat;
+						   uziReloadLevel << "Level " << uziUpgrade.reloadTime.upgradedSkill.currTier;
+						   uziReloadStat << "Reload Speed:\t" << uziUpgrade.reloadTime.upgradedSkill.stat;
 
 						   stringstream uziBullSpreadLevel;
 						   stringstream uziBullSpreadStat;
-						   uziBullSpreadLevel << "LeveL " << uziUpgrade.bulletSpread.upgradedSkill.currTier;
-						   uziBullSpreadStat << "Stability: " << uziUpgrade.bulletSpread.upgradedSkill.stat;
+						   uziBullSpreadLevel << "Level " << uziUpgrade.bulletSpread.upgradedSkill.currTier;
+						   uziBullSpreadStat << "Stability:\t\t" << uziUpgrade.bulletSpread.upgradedSkill.stat;
 
 						   stringstream uziAmmoCapLevel;
 						   stringstream uziAmmoCapStat;
-						   uziAmmoCapLevel << "LeveL " << uziUpgrade.ammoCap.upgradedSkill.currTier;
-						   uziAmmoCapStat << "Ammo Cap: " << uziUpgrade.ammoCap.upgradedSkill.stat;
+						   uziAmmoCapLevel << "Level " << uziUpgrade.ammoCap.upgradedSkill.currTier;
+						   uziAmmoCapStat << "Ammo Cap:\t\t" << uziUpgrade.ammoCap.upgradedSkill.stat;
 
 						   stringstream uziDamageLevel;
 						   stringstream uziDamageStat;
-						   uziDamageLevel << "LeveL " << uziUpgrade.damage.upgradedSkill.currTier;
-						   uziDamageStat << "Damage: " << uziUpgrade.damage.upgradedSkill.stat;
+						   uziDamageLevel << "Level " << uziUpgrade.damage.upgradedSkill.currTier;
+						   uziDamageStat << "Damage:\t\t" << uziUpgrade.damage.upgradedSkill.stat;
 
 						   stringstream uziAmmoStat;
-						   uziAmmoStat << "Ammo: " << uziUpgrade.totalAmmo.upgradedSkill.stat;
+						   uziAmmoStat << "Ammo:\t\t" << uziUpgrade.totalAmmo.upgradedSkill.stat;
 
 						   pFont->Draw("MAC-10: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						   pFont->Draw(uziBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(uziAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(uziMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(uziAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(725.0f, 65.0f), SGD::Size(125.0f, 110.0f)));
 						 
 						   for (size_t i = 0; i < 6; i++)
-							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
-						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 
 
 						   if (mousePos.IsWithinRectangle(Buttons[0]))
 						   {
 							   if (uziUpgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[1]))
 						   {
 							   if (uziUpgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[2]))
 						   {
 							   if (uziUpgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[3]))
 						   {
 							   if (uziUpgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[4]))
 						   {
 							   if (uziUpgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 
 							   if (uziUpgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[5]))
 						   {
 							   if (uziUpgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 
@@ -3607,16 +3614,16 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[8]))
 						   {
 							   if (uziUpgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
 						   }
 						  
 
@@ -3629,142 +3636,142 @@ void	ShopState::Render(void)
 
 						   stringstream tech9MagSizeLevel;
 						   stringstream tech9MagSizeStat;
-						   tech9MagSizeLevel << "LeveL " << tech9Upgrade.magSize.upgradedSkill.currTier;
-						   tech9MagSizeStat << "Magazine Size: " << tech9Upgrade.magSize.upgradedSkill.stat;
+						   tech9MagSizeLevel << "Level " << tech9Upgrade.magSize.upgradedSkill.currTier;
+						   tech9MagSizeStat << "Magazine Size:\t" << tech9Upgrade.magSize.upgradedSkill.stat;
 
 						   stringstream tech9ReloadLevel;
 						   stringstream tech9ReloadStat;
-						   tech9ReloadLevel << "LeveL " << tech9Upgrade.reloadTime.upgradedSkill.currTier;
-						   tech9ReloadStat << "Reload Speed: " << tech9Upgrade.reloadTime.upgradedSkill.stat;
+						   tech9ReloadLevel << "Level " << tech9Upgrade.reloadTime.upgradedSkill.currTier;
+						   tech9ReloadStat << "Reload Speed:\t" << tech9Upgrade.reloadTime.upgradedSkill.stat;
 
 						   stringstream tech9BullSpreadLevel;
 						   stringstream tech9BullSpreadStat;
-						   tech9BullSpreadLevel << "LeveL " << tech9Upgrade.bulletSpread.upgradedSkill.currTier;
-						   tech9BullSpreadStat << "Stability: " << tech9Upgrade.bulletSpread.upgradedSkill.stat;
+						   tech9BullSpreadLevel << "Level " << tech9Upgrade.bulletSpread.upgradedSkill.currTier;
+						   tech9BullSpreadStat << "Stability:\t\t" << tech9Upgrade.bulletSpread.upgradedSkill.stat;
 
 						   stringstream tech9AmmoCapLevel;
 						   stringstream tech9AmmoCapStat;
-						   tech9AmmoCapLevel << "LeveL " << tech9Upgrade.ammoCap.upgradedSkill.currTier;
-						   tech9AmmoCapStat << "Ammo Cap: " << tech9Upgrade.ammoCap.upgradedSkill.stat;
+						   tech9AmmoCapLevel << "Level " << tech9Upgrade.ammoCap.upgradedSkill.currTier;
+						   tech9AmmoCapStat << "Ammo Cap:\t\t" << tech9Upgrade.ammoCap.upgradedSkill.stat;
 
 						   stringstream tech9DamageLevel;
 						   stringstream tech9DamageStat;
-						   tech9DamageLevel << "LeveL " << tech9Upgrade.damage.upgradedSkill.currTier;
-						   tech9DamageStat << "Damage: " << tech9Upgrade.damage.upgradedSkill.stat;
+						   tech9DamageLevel << "Level " << tech9Upgrade.damage.upgradedSkill.currTier;
+						   tech9DamageStat << "Damage:\t\t" << tech9Upgrade.damage.upgradedSkill.stat;
 
 						   stringstream tech9AmmoStat;
-						   tech9AmmoStat << "Ammo: " << tech9Upgrade.totalAmmo.upgradedSkill.stat;
+						   tech9AmmoStat << "Ammo:\t\t" << tech9Upgrade.totalAmmo.upgradedSkill.stat;
 
 						   pFont->Draw("Tech-9mm: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9MagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9MagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9ReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9ReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9BullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9BullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9DamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9DamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9AmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(tech9AmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9MagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9MagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9ReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9ReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9BullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9BullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9DamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9DamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9AmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(tech9AmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(335.0f, 670.0f), SGD::Size(165.0f, 100.0f)));
 						 
 						   for (size_t i = 0; i < 6; i++)
-							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 
 
 						   if (mousePos.IsWithinRectangle(Buttons[0]))
 						   {
 							   if (tech9Upgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[1]))
 						   {
 							   if (tech9Upgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[2]))
 						   {
 							   if (tech9Upgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[3]))
 						   {
 							   if (tech9Upgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[4]))
 						   {
 							   if (tech9Upgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 
 							   if (tech9Upgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[5]))
 						   {
 							   if (tech9Upgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 
@@ -3774,16 +3781,16 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[8]))
 						   {
 							   if (tech9Upgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 0, 255 });
+								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
 						   }
 
 				 }
@@ -3792,140 +3799,140 @@ void	ShopState::Render(void)
 				 {
 						   stringstream p90MagSizeLevel;
 						   stringstream p90MagSizeStat;
-						   p90MagSizeLevel << "LeveL " << p90Upgrade.magSize.upgradedSkill.currTier;
-						   p90MagSizeStat << "Magazine Size: " << p90Upgrade.magSize.upgradedSkill.stat;
+						   p90MagSizeLevel << "Level " << p90Upgrade.magSize.upgradedSkill.currTier;
+						   p90MagSizeStat << "Magazine Size:\t" << p90Upgrade.magSize.upgradedSkill.stat;
 
 						   stringstream p90ReloadLevel;
 						   stringstream p90ReloadStat;
-						   p90ReloadLevel << "LeveL " << p90Upgrade.reloadTime.upgradedSkill.currTier;
-						   p90ReloadStat << "Reload Speed: " << p90Upgrade.reloadTime.upgradedSkill.stat;
+						   p90ReloadLevel << "Level " << p90Upgrade.reloadTime.upgradedSkill.currTier;
+						   p90ReloadStat << "Reload Speed:\t" << p90Upgrade.reloadTime.upgradedSkill.stat;
 
 						   stringstream p90BullSpreadLevel;
 						   stringstream p90BullSpreadStat;
-						   p90BullSpreadLevel << "LeveL " << p90Upgrade.bulletSpread.upgradedSkill.currTier;
-						   p90BullSpreadStat << "Stability: " << p90Upgrade.bulletSpread.upgradedSkill.stat;
+						   p90BullSpreadLevel << "Level " << p90Upgrade.bulletSpread.upgradedSkill.currTier;
+						   p90BullSpreadStat << "Stability:\t\t" << p90Upgrade.bulletSpread.upgradedSkill.stat;
 
 						   stringstream p90AmmoCapLevel;
 						   stringstream p90AmmoCapStat;
-						   p90AmmoCapLevel << "LeveL " << p90Upgrade.ammoCap.upgradedSkill.currTier;
-						   p90AmmoCapStat << "Ammo Cap: " << p90Upgrade.ammoCap.upgradedSkill.stat;
+						   p90AmmoCapLevel << "Level " << p90Upgrade.ammoCap.upgradedSkill.currTier;
+						   p90AmmoCapStat << "Ammo Cap:\t\t" << p90Upgrade.ammoCap.upgradedSkill.stat;
 
 						   stringstream p90DamageLevel;
 						   stringstream p90DamageStat;
-						   p90DamageLevel << "LeveL " << p90Upgrade.damage.upgradedSkill.currTier;
-						   p90DamageStat << "Damage: " << p90Upgrade.damage.upgradedSkill.stat;
+						   p90DamageLevel << "Level " << p90Upgrade.damage.upgradedSkill.currTier;
+						   p90DamageStat << "Damage:\t\t" << p90Upgrade.damage.upgradedSkill.stat;
 
 						   stringstream p90AmmoStat;
-						   p90AmmoStat << "Ammo: " << p90Upgrade.totalAmmo.upgradedSkill.stat;
+						   p90AmmoStat << "Ammo:\t\t" << p90Upgrade.totalAmmo.upgradedSkill.stat;
 
 						   pFont->Draw("P90: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90MagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90MagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90ReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90ReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90BullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-						   pFont->Draw(p90BullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90DamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90DamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90AmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw(p90AmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+						   pFont->Draw(p90MagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90MagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90ReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90ReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90BullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90BullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90DamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90DamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90AmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw(p90AmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(315.0f, 130.0f), SGD::Size(240.0f, 90.0f)));
 	
 						   for (size_t i = 0; i < 6; i++)
-							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 						   if (mousePos.IsWithinRectangle(Buttons[0]))
 						   {
 							   if (p90Upgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[1]))
 						   {
 							   if (p90Upgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[2]))
 						   {
 							   if (p90Upgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[3]))
 						   {
 							   if (p90Upgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[4]))
 						   {
 							   if (p90Upgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 
 							   if (p90Upgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 						   if (mousePos.IsWithinRectangle(Buttons[5]))
 						   {
 							   if (p90Upgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 
@@ -3935,16 +3942,16 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[8]))
 						   {
 							   if (p90Upgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 				 }
 					 break;
@@ -3959,12 +3966,12 @@ void	ShopState::Render(void)
 		break;
 	case ASSAULT_RIFLES:
 	{
-						   pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
-						   pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
-						   pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
-						   pFont->Draw("AK-47", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("M16", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-						   pFont->Draw("LMG", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+						   pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+						   pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+						   pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+						   pFont->Draw("AK-47", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw("M16", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw("LMG", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
 
 						   switch (currTab)
 						   {
@@ -3973,148 +3980,148 @@ void	ShopState::Render(void)
 									
 									 stringstream akMagSizeLevel;
 									 stringstream akMagSizeStat;
-									 akMagSizeLevel << "LeveL " << tech9Upgrade.magSize.upgradedSkill.currTier;
-									 akMagSizeStat << "Magazine Size: " << tech9Upgrade.magSize.upgradedSkill.stat;
+									 akMagSizeLevel << "Level " << tech9Upgrade.magSize.upgradedSkill.currTier;
+									 akMagSizeStat << "Magazine Size:\t" << tech9Upgrade.magSize.upgradedSkill.stat;
 
 									 stringstream akReloadLevel;
 									 stringstream akReloadStat;
-									 akReloadLevel << "LeveL " << tech9Upgrade.reloadTime.upgradedSkill.currTier;
-									 akReloadStat << "Reload Speed: " << tech9Upgrade.reloadTime.upgradedSkill.stat;
+									 akReloadLevel << "Level " << tech9Upgrade.reloadTime.upgradedSkill.currTier;
+									 akReloadStat << "Reload Speed:\t" << tech9Upgrade.reloadTime.upgradedSkill.stat;
 
 									 stringstream akRecoilLevel;
 									 stringstream akRecoilStat;
-									 akRecoilLevel << "LeveL " << tech9Upgrade.reloadTime.upgradedSkill.currTier;
-									 akRecoilStat << "Rate of Fire: " << tech9Upgrade.reloadTime.upgradedSkill.stat;
+									 akRecoilLevel << "Level " << tech9Upgrade.reloadTime.upgradedSkill.currTier;
+									 akRecoilStat << "Rate of Fire:\t" << tech9Upgrade.reloadTime.upgradedSkill.stat;
 
 									 stringstream akBullSpreadLevel;
 									 stringstream akBullSpreadStat;
-									 akBullSpreadLevel << "LeveL " << tech9Upgrade.bulletSpread.upgradedSkill.currTier;
-									 akBullSpreadStat << "Stability: " << tech9Upgrade.bulletSpread.upgradedSkill.stat;
+									 akBullSpreadLevel << "Level " << tech9Upgrade.bulletSpread.upgradedSkill.currTier;
+									 akBullSpreadStat << "Stability:\t\t" << tech9Upgrade.bulletSpread.upgradedSkill.stat;
 
 									 stringstream akAmmoCapLevel;
 									 stringstream akAmmoCapStat;
-									 akAmmoCapLevel << "LeveL " << tech9Upgrade.ammoCap.upgradedSkill.currTier;
-									 akAmmoCapStat << "Ammo Cap: " << tech9Upgrade.ammoCap.upgradedSkill.stat;
+									 akAmmoCapLevel << "Level " << tech9Upgrade.ammoCap.upgradedSkill.currTier;
+									 akAmmoCapStat << "Ammo Cap:\t\t" << tech9Upgrade.ammoCap.upgradedSkill.stat;
 
 									 stringstream akDamageLevel;
 									 stringstream akDamageStat;
-									 akDamageLevel << "LeveL " << tech9Upgrade.damage.upgradedSkill.currTier;
-									 akDamageStat << "Damage: " << tech9Upgrade.damage.upgradedSkill.stat;
+									 akDamageLevel << "Level " << tech9Upgrade.damage.upgradedSkill.currTier;
+									 akDamageStat << "Damage:\t\t" << tech9Upgrade.damage.upgradedSkill.stat;
 
 									 stringstream akAmmoStat;
-									 akAmmoStat << "Ammo: " << tech9Upgrade.totalAmmo.upgradedSkill.stat;
+									 akAmmoStat << "Ammo:\t\t" << tech9Upgrade.totalAmmo.upgradedSkill.stat;
 
 									 pFont->Draw("AK-47: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-									 pFont->Draw(akMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akRecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-									 pFont->Draw(akBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(akAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(akMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akRecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(akAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(225.0f, 300.0f), SGD::Size(244.0f, 73.0f)));
 									
 									 for (size_t i = 0; i < 7; i++)
-										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 
 									 if (mousePos.IsWithinRectangle(Buttons[0]))
 									 {
 										 if (ak47Upgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[1]))
 									 {
 										 if (ak47Upgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[2]))
 									 {
 										 if (ak47Upgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[3]))
 									 {
 										 if (ak47Upgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[4]))
 									 {
 										 if (ak47Upgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 
 										 if (ak47Upgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[5]))
 									 {
 										 if (ak47Upgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 
@@ -4122,31 +4129,31 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[6]))
 									 {
 										 if (ak47Upgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[8]))
 									 {
 										 if (ak47Upgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 									 }
 
 						   }
@@ -4158,148 +4165,148 @@ void	ShopState::Render(void)
 
 									 stringstream m16MagSizeLevel;
 									 stringstream m16MagSizeStat;
-									 m16MagSizeLevel << "LeveL " << m16Upgrade.magSize.upgradedSkill.currTier;
-									 m16MagSizeStat << "Magazine Size: " << m16Upgrade.magSize.upgradedSkill.stat;
+									 m16MagSizeLevel << "Level " << m16Upgrade.magSize.upgradedSkill.currTier;
+									 m16MagSizeStat << "Magazine Size:\t" << m16Upgrade.magSize.upgradedSkill.stat;
 
 									 stringstream m16ReloadLevel;
 									 stringstream m16ReloadStat;
-									 m16ReloadLevel << "LeveL " << m16Upgrade.reloadTime.upgradedSkill.currTier;
-									 m16ReloadStat << "Reload Speed: " << m16Upgrade.reloadTime.upgradedSkill.stat;
+									 m16ReloadLevel << "Level " << m16Upgrade.reloadTime.upgradedSkill.currTier;
+									 m16ReloadStat << "Reload Speed:\t" << m16Upgrade.reloadTime.upgradedSkill.stat;
 
 									 stringstream m16RecoilLevel;
 									 stringstream m16RecoilStat;
-									 m16RecoilLevel << "LeveL " << m16Upgrade.reloadTime.upgradedSkill.currTier;
-									 m16RecoilStat << "Rate of Fire: " << m16Upgrade.reloadTime.upgradedSkill.stat;
+									 m16RecoilLevel << "Level " << m16Upgrade.reloadTime.upgradedSkill.currTier;
+									 m16RecoilStat << "Rate of Fire:\t" << m16Upgrade.reloadTime.upgradedSkill.stat;
 
 									 stringstream m16BullSpreadLevel;
 									 stringstream m16BullSpreadStat;
-									 m16BullSpreadLevel << "LeveL " << m16Upgrade.bulletSpread.upgradedSkill.currTier;
-									 m16BullSpreadStat << "Stability: " << m16Upgrade.bulletSpread.upgradedSkill.stat;
+									 m16BullSpreadLevel << "Level " << m16Upgrade.bulletSpread.upgradedSkill.currTier;
+									 m16BullSpreadStat << "Stability:\t\t" << m16Upgrade.bulletSpread.upgradedSkill.stat;
 
 									 stringstream m16AmmoCapLevel;
 									 stringstream m16AmmoCapStat;
-									 m16AmmoCapLevel << "LeveL " << m16Upgrade.ammoCap.upgradedSkill.currTier;
-									 m16AmmoCapStat << "Ammo Cap: " << m16Upgrade.ammoCap.upgradedSkill.stat;
+									 m16AmmoCapLevel << "Level " << m16Upgrade.ammoCap.upgradedSkill.currTier;
+									 m16AmmoCapStat << "Ammo Cap:\t\t" << m16Upgrade.ammoCap.upgradedSkill.stat;
 
 									 stringstream m16DamageLevel;
 									 stringstream m16DamageStat;
-									 m16DamageLevel << "LeveL " << m16Upgrade.damage.upgradedSkill.currTier;
-									 m16DamageStat << "Damage: " << m16Upgrade.damage.upgradedSkill.stat;
+									 m16DamageLevel << "Level " << m16Upgrade.damage.upgradedSkill.currTier;
+									 m16DamageStat << "Damage:\t\t" << m16Upgrade.damage.upgradedSkill.stat;
 
 									 stringstream m16AmmoStat;
-									 m16AmmoStat << "Ammo: " << m16Upgrade.totalAmmo.upgradedSkill.stat;
+									 m16AmmoStat << "Ammo:\t\t" << m16Upgrade.totalAmmo.upgradedSkill.stat;
 
 									 pFont->Draw("M-16: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16MagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16MagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16ReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16ReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16RecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16RecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16BullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-									 pFont->Draw(m16BullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16DamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16DamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16AmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(m16AmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(m16MagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16MagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16ReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16ReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16RecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16RecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16BullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16BullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16DamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16DamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16AmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(m16AmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(468.0f, 312.0f), SGD::Size(256.0f, 88.0f)));
 									
 									 for (size_t i = 0; i < 7; i++)
-										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 
 									 if (mousePos.IsWithinRectangle(Buttons[0]))
 									 {
 										 if (m16Upgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[1]))
 									 {
 										 if (m16Upgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f,  { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[2]))
 									 {
 										 if (m16Upgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[3]))
 									 {
 										 if (m16Upgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[4]))
 									 {
 										 if (m16Upgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 
 										 if (m16Upgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[5]))
 									 {
 										 if (m16Upgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 
@@ -4307,31 +4314,31 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[6]))
 									 {
 										 if (m16Upgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[8]))
 									 {
 										 if (m16Upgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 									 }
 
 						   }
@@ -4341,149 +4348,149 @@ void	ShopState::Render(void)
 								
 									 stringstream lmgMagSizeLevel;
 									 stringstream lmgMagSizeStat;
-									 lmgMagSizeLevel << "LeveL " << lmgUpgrade.magSize.upgradedSkill.currTier;
-									 lmgMagSizeStat << "Magazine Size: " << lmgUpgrade.magSize.upgradedSkill.stat;
+									 lmgMagSizeLevel << "Level " << lmgUpgrade.magSize.upgradedSkill.currTier;
+									 lmgMagSizeStat << "Magazine Size:\t" << lmgUpgrade.magSize.upgradedSkill.stat;
 
 									 stringstream lmgReloadLevel;
 									 stringstream lmgReloadStat;
-									 lmgReloadLevel << "LeveL " << lmgUpgrade.reloadTime.upgradedSkill.currTier;
-									 lmgReloadStat << "Reload Speed: " << lmgUpgrade.reloadTime.upgradedSkill.stat;
+									 lmgReloadLevel << "Level " << lmgUpgrade.reloadTime.upgradedSkill.currTier;
+									 lmgReloadStat << "Reload Speed:\t" << lmgUpgrade.reloadTime.upgradedSkill.stat;
 
 									 stringstream lmgRecoilLevel;
 									 stringstream lmgRecoilStat;
-									 lmgRecoilLevel << "LeveL " << lmgUpgrade.reloadTime.upgradedSkill.currTier;
-									 lmgRecoilStat << "Rate of Fire: " << lmgUpgrade.reloadTime.upgradedSkill.stat;
+									 lmgRecoilLevel << "Level " << lmgUpgrade.reloadTime.upgradedSkill.currTier;
+									 lmgRecoilStat << "Rate of Fire:\t" << lmgUpgrade.reloadTime.upgradedSkill.stat;
 
 									 stringstream lmgBullSpreadLevel;
 									 stringstream lmgBullSpreadStat;
-									 lmgBullSpreadLevel << "LeveL " << lmgUpgrade.bulletSpread.upgradedSkill.currTier;
-									 lmgBullSpreadStat << "Stability: " << lmgUpgrade.bulletSpread.upgradedSkill.stat;
+									 lmgBullSpreadLevel << "Level " << lmgUpgrade.bulletSpread.upgradedSkill.currTier;
+									 lmgBullSpreadStat << "Stability:\t\t" << lmgUpgrade.bulletSpread.upgradedSkill.stat;
 
 									 stringstream lmgAmmoCapLevel;
 									 stringstream lmgAmmoCapStat;
-									 lmgAmmoCapLevel << "LeveL " << lmgUpgrade.ammoCap.upgradedSkill.currTier;
-									 lmgAmmoCapStat << "Ammo Cap: " << lmgUpgrade.ammoCap.upgradedSkill.stat;
+									 lmgAmmoCapLevel << "Level " << lmgUpgrade.ammoCap.upgradedSkill.currTier;
+									 lmgAmmoCapStat << "Ammo Cap:\t\t" << lmgUpgrade.ammoCap.upgradedSkill.stat;
 
 									 stringstream lmgDamageLevel;
 									 stringstream lmgDamageStat;
-									 lmgDamageLevel << "LeveL " << lmgUpgrade.damage.upgradedSkill.currTier;
-									 lmgDamageStat << "Damage: " << lmgUpgrade.damage.upgradedSkill.stat;
+									 lmgDamageLevel << "Level " << lmgUpgrade.damage.upgradedSkill.currTier;
+									 lmgDamageStat << "Damage:\t\t" << lmgUpgrade.damage.upgradedSkill.stat;
 
 									 stringstream lmgAmmoStat;
-									 lmgAmmoStat << "Ammo: " << lmgUpgrade.totalAmmo.upgradedSkill.stat;
+									 lmgAmmoStat << "Ammo:\t\t" << lmgUpgrade.totalAmmo.upgradedSkill.stat;
 
 									 pFont->Draw("LMG: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgRecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-									 pFont->Draw(lmgAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgRecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw(lmgAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(16.0f, 368.0f), SGD::Size(260.0f, 85.0f)));
 
 									 for (size_t i = 0; i < 7; i++)
-										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 
 
 									 if (mousePos.IsWithinRectangle(Buttons[0]))
 									 {
 										 if (lmgUpgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[1]))
 									 {
 										 if (lmgUpgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[2]))
 									 {
 										 if (lmgUpgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[3]))
 									 {
 										 if (lmgUpgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[4]))
 									 {
 										 if (lmgUpgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 
 										 if (lmgUpgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[5]))
 									 {
 										 if (lmgUpgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 
@@ -4491,31 +4498,31 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[6]))
 									 {
 										 if (lmgUpgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
 
 									 if (mousePos.IsWithinRectangle(Buttons[8]))
 									 {
 										 if (lmgUpgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
-											 pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
-											 pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 									 }
 						   }
 							   break;
@@ -4526,12 +4533,12 @@ void	ShopState::Render(void)
 		break;
 	case HEAVY:
 	{
-				  pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
-				  pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
-				  pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
-				  pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-				  pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-				  pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+				  pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+				  pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+				  pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+				  pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.8f, { 255, 255, 0, 0 });
+				  pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.8f, { 255, 255, 0, 0 });
+				  pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.8f, { 255, 255, 0, 0 });
 				  //Revolver
 				  switch (currTab)
 				  {
@@ -4541,155 +4548,155 @@ void	ShopState::Render(void)
 
 							stringstream sniperMagSizeLevel;
 							stringstream sniperMagSizeStat;
-							sniperMagSizeLevel << "LeveL " << sniperUpgrade.magSize.upgradedSkill.currTier;
-							sniperMagSizeStat << "Magazine Size: " << sniperUpgrade.magSize.upgradedSkill.stat;
+							sniperMagSizeLevel << "Level " << sniperUpgrade.magSize.upgradedSkill.currTier;
+							sniperMagSizeStat << "Magazine Size:\t" << sniperUpgrade.magSize.upgradedSkill.stat;
 
 							stringstream sniperReloadLevel;
 							stringstream sniperReloadStat;
-							sniperReloadLevel << "LeveL " << sniperUpgrade.reloadTime.upgradedSkill.currTier;
-							sniperReloadStat << "Reload Speed: " << sniperUpgrade.reloadTime.upgradedSkill.stat;
+							sniperReloadLevel << "Level " << sniperUpgrade.reloadTime.upgradedSkill.currTier;
+							sniperReloadStat << "Reload Speed:\t" << sniperUpgrade.reloadTime.upgradedSkill.stat;
 
 							stringstream sniperRecoilLevel;
 							stringstream sniperRecoilStat;
-							sniperRecoilLevel << "LeveL " << sniperUpgrade.reloadTime.upgradedSkill.currTier;
-							sniperRecoilStat << "Rate of Fire: " << sniperUpgrade.reloadTime.upgradedSkill.stat;
+							sniperRecoilLevel << "Level " << sniperUpgrade.reloadTime.upgradedSkill.currTier;
+							sniperRecoilStat << "Rate of Fire\t" << sniperUpgrade.reloadTime.upgradedSkill.stat;
 
 							stringstream sniperBullSpreadLevel;
 							stringstream sniperBullSpreadStat;
-							sniperBullSpreadLevel << "LeveL " << sniperUpgrade.bulletSpread.upgradedSkill.currTier;
-							sniperBullSpreadStat << "Stability: " << sniperUpgrade.bulletSpread.upgradedSkill.stat;
+							sniperBullSpreadLevel << "Level " << sniperUpgrade.bulletSpread.upgradedSkill.currTier;
+							sniperBullSpreadStat << "Stability:\t\t" << sniperUpgrade.bulletSpread.upgradedSkill.stat;
 
 							stringstream sniperAmmoCapLevel;
 							stringstream sniperAmmoCapStat;
-							sniperAmmoCapLevel << "LeveL " << sniperUpgrade.ammoCap.upgradedSkill.currTier;
-							sniperAmmoCapStat << "Ammo Cap: " << sniperUpgrade.ammoCap.upgradedSkill.stat;
+							sniperAmmoCapLevel << "Level " << sniperUpgrade.ammoCap.upgradedSkill.currTier;
+							sniperAmmoCapStat << "Ammo Cap:\t\t" << sniperUpgrade.ammoCap.upgradedSkill.stat;
 
 							stringstream sniperPenPowerLevel;
 							stringstream sniperPenPowerStat;
-							sniperPenPowerLevel << "LeveL " << sniperUpgrade.penPower.upgradedSkill.currTier;
-							sniperPenPowerStat << "Pentrating Power: " << sniperUpgrade.penPower.upgradedSkill.stat;
+							sniperPenPowerLevel << "Level " << sniperUpgrade.penPower.upgradedSkill.currTier;
+							sniperPenPowerStat << "Pentrating Power:\t" << sniperUpgrade.penPower.upgradedSkill.stat;
 
 							stringstream sniperDamageLevel;
 							stringstream sniperDamageStat;
-							sniperDamageLevel << "LeveL " << sniperUpgrade.damage.upgradedSkill.currTier;
-							sniperDamageStat << "Damage: " << sniperUpgrade.damage.upgradedSkill.stat;
+							sniperDamageLevel << "Level " << sniperUpgrade.damage.upgradedSkill.currTier;
+							sniperDamageStat << "Damage:\t\t" << sniperUpgrade.damage.upgradedSkill.stat;
 
 							stringstream sniperAmmoStat;
-							sniperAmmoStat << "Ammo: " << sniperUpgrade.totalAmmo.upgradedSkill.stat;
+							sniperAmmoStat << "Ammo:\t\t" << sniperUpgrade.totalAmmo.upgradedSkill.stat;
 
 							pFont->Draw("Sniper Rifler: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperRecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5, { 255, 255, 0, 0 });
-							pFont->Draw(sniperBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperPenPowerLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperPenPowerStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(sniperAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[7].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(sniperMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperRecoilLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperRecoilStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperPenPowerLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperPenPowerStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(sniperAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[7].top }, scale, { 255, 255, 0, 0 });
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(530.0f, 400.0f), SGD::Size(230.0f, 63.0f)));
 
 							for (size_t i = 0; i < 8; i++)
-								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 							
 							if (mousePos.IsWithinRectangle(Buttons[0]))
 							{
 								if (sniperUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[1]))
 							{
 								if (sniperUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[2]))
 							{
 								if (sniperUpgrade.recoilTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.recoilTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[3]))
 							{
 								if (sniperUpgrade.bulletSpread.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.bulletSpread.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[4]))
 							{
 								if (sniperUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 
 								if (sniperUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[5]))
 							{
 								if (sniperUpgrade.penPower.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.penPower.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 
@@ -4697,45 +4704,45 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[6]))
 							{
 								if (sniperUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[7]))
 							{
 								if (sniperUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[7].left + 5, Buttons[7].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Buy Ammo", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Ammo Full", { Buttons[7].left + 25, Buttons[7].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Ammo Full", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[7].left + 5, Buttons[7].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Buy Ammo", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Ammo Full", { Buttons[7].left + 25, Buttons[7].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Ammo Full", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 							if (mousePos.IsWithinRectangle(Buttons[8]))
 							{
 								if (sniperUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							}
 				  }
 					  break;
@@ -4745,148 +4752,148 @@ void	ShopState::Render(void)
 
 							stringstream flameMagSizeLevel;
 							stringstream flameMagSizeStat;
-							flameMagSizeLevel << "LeveL " << flameUpgrade.magSize.upgradedSkill.currTier;
-							flameMagSizeStat << "Magazine Size: " << flameUpgrade.magSize.upgradedSkill.stat;
+							flameMagSizeLevel << "Level " << flameUpgrade.magSize.upgradedSkill.currTier;
+							flameMagSizeStat << "Magazine Size:\t" << flameUpgrade.magSize.upgradedSkill.stat;
 
 							stringstream flameReloadLevel;
 							stringstream flameReloadStat;
-							flameReloadLevel << "LeveL " << flameUpgrade.reloadTime.upgradedSkill.currTier;
-							flameReloadStat << "Reload Speed: " << flameUpgrade.reloadTime.upgradedSkill.stat;
+							flameReloadLevel << "Level " << flameUpgrade.reloadTime.upgradedSkill.currTier;
+							flameReloadStat << "Reload Speed:\t" << flameUpgrade.reloadTime.upgradedSkill.stat;
 
 							stringstream flameBullSpreadLevel;
 							stringstream flameBullSpreadStat;
-							flameBullSpreadLevel << "LeveL " << flameUpgrade.bulletSpread.upgradedSkill.currTier;
-							flameBullSpreadStat << "Stability: " << flameUpgrade.bulletSpread.upgradedSkill.stat;
+							flameBullSpreadLevel << "Level " << flameUpgrade.bulletSpread.upgradedSkill.currTier;
+							flameBullSpreadStat << "Stability:\t\t" << flameUpgrade.bulletSpread.upgradedSkill.stat;
 
 							stringstream flameAmmoCapLevel;
 							stringstream flameAmmoCapStat;
-							flameAmmoCapLevel << "LeveL " << flameUpgrade.ammoCap.upgradedSkill.currTier;
-							flameAmmoCapStat << "Ammo Cap: " << flameUpgrade.ammoCap.upgradedSkill.stat;
+							flameAmmoCapLevel << "Level " << flameUpgrade.ammoCap.upgradedSkill.currTier;
+							flameAmmoCapStat << "Ammo Cap:\t\t" << flameUpgrade.ammoCap.upgradedSkill.stat;
 
 							stringstream flameRangeLevel;
 							stringstream flameRangeStat;
-							flameRangeLevel << "LeveL " << flameUpgrade.bulletVelocity.upgradedSkill.currTier;
-							flameRangeStat << "Range: " << flameUpgrade.bulletVelocity.upgradedSkill.stat;
+							flameRangeLevel << "Level " << flameUpgrade.bulletVelocity.upgradedSkill.currTier;
+							flameRangeStat << "Range:\t\t" << flameUpgrade.bulletVelocity.upgradedSkill.stat;
 
 							stringstream flameDamageLevel;
 							stringstream flameDamageStat;
-							flameDamageLevel << "LeveL " << flameUpgrade.damage.upgradedSkill.currTier;
-							flameDamageStat << "Damage: " << flameUpgrade.damage.upgradedSkill.stat;
+							flameDamageLevel << "Level " << flameUpgrade.damage.upgradedSkill.currTier;
+							flameDamageStat << "Damage:\t\t" << flameUpgrade.damage.upgradedSkill.stat;
 
 							stringstream flameAmmoStat;
-							flameAmmoStat << "Ammo: " << flameUpgrade.totalAmmo.upgradedSkill.stat;
+							flameAmmoStat << "Ammo:\t\t" << flameUpgrade.totalAmmo.upgradedSkill.stat;
 
 							pFont->Draw("Flame Thrower: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							pFont->Draw(flameMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5, { 255, 255, 0, 0 });
-							pFont->Draw(flameBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameRangeLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameRangeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(flameAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[6].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(flameMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameBullSpreadLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameBullSpreadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameRangeLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameRangeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(flameAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(8.0f, 550.0f), SGD::Size(274.0f, 142.0f)));
 							
 							for (size_t i = 0; i < 7; i++)
-								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 							
 
 							if (mousePos.IsWithinRectangle(Buttons[0]))
 							{
 								if (flameUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[1]))
 							{
 								if (flameUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[2]))
 							{
 								if (flameUpgrade.bulletSpread.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.bulletSpread.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[3]))
 							{
 								if (flameUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[4]))
 							{
 								if (flameUpgrade.bulletVelocity.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 
 								if (flameUpgrade.bulletVelocity.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[5]))
 							{
 								if (flameUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 
@@ -4894,32 +4901,32 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[6]))
 							{
 								if (flameUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Ammo Full", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							
 							if (mousePos.IsWithinRectangle(Buttons[8]))
 							{
 								if (flameUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							}
 				  }
 					  break;
@@ -4928,141 +4935,141 @@ void	ShopState::Render(void)
 							
 							stringstream nadeMagSizeLevel;
 							stringstream nadeMagSizeStat;
-							nadeMagSizeLevel << "LeveL " << nadeLauncherUpgrade.magSize.upgradedSkill.currTier;
-							nadeMagSizeStat << "Magazine Size: " << nadeLauncherUpgrade.magSize.upgradedSkill.stat;
+							nadeMagSizeLevel << "Level " << nadeLauncherUpgrade.magSize.upgradedSkill.currTier;
+							nadeMagSizeStat << "Magazine Size:\t" << nadeLauncherUpgrade.magSize.upgradedSkill.stat;
 
 							stringstream nadeReloadLevel;
 							stringstream nadeReloadStat;
-							nadeReloadLevel << "LeveL " << nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier;
-							nadeReloadStat << "Reload Speed: " << nadeLauncherUpgrade.reloadTime.upgradedSkill.stat;
+							nadeReloadLevel << "Level " << nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier;
+							nadeReloadStat << "Reload Speed:\t" << nadeLauncherUpgrade.reloadTime.upgradedSkill.stat;
 
 
 							stringstream nadeAmmoCapLevel;
 							stringstream nadeAmmoCapStat;
-							nadeAmmoCapLevel << "LeveL " << nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier;
-							nadeAmmoCapStat << "Ammo Cap: " << nadeLauncherUpgrade.ammoCap.upgradedSkill.stat;
+							nadeAmmoCapLevel << "Level " << nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier;
+							nadeAmmoCapStat << "Ammo Cap:\t\t" << nadeLauncherUpgrade.ammoCap.upgradedSkill.stat;
 
 							stringstream nadeRangeLevel;
 							stringstream nadeRangeStat;
-							nadeRangeLevel << "LeveL " << nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier;
-							nadeRangeStat << "Range: " << nadeLauncherUpgrade.bulletVelocity.upgradedSkill.stat;
+							nadeRangeLevel << "Level " << nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier;
+							nadeRangeStat << "Range:\t\t" << nadeLauncherUpgrade.bulletVelocity.upgradedSkill.stat;
 
 							stringstream nadeDamageLevel;
 							stringstream nadeDamageStat;
-							nadeDamageLevel << "LeveL " << nadeLauncherUpgrade.damage.upgradedSkill.currTier;
-							nadeDamageStat << "Damage: " << nadeLauncherUpgrade.damage.upgradedSkill.stat;
+							nadeDamageLevel << "Level " << nadeLauncherUpgrade.damage.upgradedSkill.currTier;
+							nadeDamageStat << "Damage:\t\t" << nadeLauncherUpgrade.damage.upgradedSkill.stat;
 
 							stringstream nadeAmmoStat;
-							nadeAmmoStat << "Ammo: " << nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat;
+							nadeAmmoStat << "Ammo:\t\t" << nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat;
 
 							pFont->Draw("Grenade Launcher: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeRangeLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeRangeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, 0.5f, { 255, 255, 0, 0 });
-							pFont->Draw(nadeAmmoStat.str().c_str(), { screenSize.width *.1f, Buttons[5].top }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw(nadeMagSizeLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeMagSizeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeReloadStat.str().c_str(), { screenSize.width * 0.3f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeDamageLevel.str().c_str(), { screenSize.width *.1f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeDamageStat.str().c_str(), { screenSize.width * 0.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeRangeLevel.str().c_str(), { screenSize.width *.1f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeRangeStat.str().c_str(), { screenSize.width * 0.3f, Buttons[3].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeAmmoCapLevel.str().c_str(), { screenSize.width *.1f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
+							pFont->Draw(nadeAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(330.0f, 455.0f), SGD::Size(265.0f, 82.0f)));
 				
 							for (size_t i = 0; i < 6; i++)
-								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, {}, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 							if (mousePos.IsWithinRectangle(Buttons[0]))
 							{
 								if (nadeLauncherUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + 5, Buttons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[0].left + 25, Buttons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[1]))
 							{
 								if (nadeLauncherUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[2]))
 							{
 								if (nadeLauncherUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[3]))
 							{
 								if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[4]))
 							{
 								if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 
 								if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[5]))
 							{
 								if (nadeLauncherUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 
@@ -5073,16 +5080,16 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[8]))
 							{
 								if (nadeLauncherUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + 5, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Equipt", { Buttons[8].left + 25, Buttons[8].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							}
 
 				  }
@@ -5113,50 +5120,50 @@ void	ShopState::Render(void)
 
 					
 
-					string turretInventory = "LeveL ";
+					string turretInventory = "Level ";
 					turretInventory += std::to_string(profile.numTurrets);
 					turretInventory += " ";
 
 					stringstream sandBagHeathStat;
-					sandBagHeathStat << "Durability: " << sandBagCurrHealth;
+					sandBagHeathStat << "Durability:\t\t" << sandBagCurrHealth;
 					stringstream sandBagMaxDurrStat;
-					sandBagMaxDurrStat << "Max Durability: " << sandBag.maxHealth.upgradedSkill.stat;
+					sandBagMaxDurrStat << "Max Durability:\t" << sandBag.maxHealth.upgradedSkill.stat;
 
 					stringstream barbWireHeathStat;
-					barbWireHeathStat << "Durability: " << barbWireCurrHealth;
+					barbWireHeathStat << "Durability:\t\t" << barbWireCurrHealth;
 					stringstream barbWireMaxDurrStat;
-					barbWireMaxDurrStat << "Max Durability: " << barbedwire.maxHealth.upgradedSkill.stat;
+					barbWireMaxDurrStat << "Max Durability:\t" << barbedwire.maxHealth.upgradedSkill.stat;
 					stringstream barbWireDamageStat;
-					barbWireDamageStat << "Damage: " << barbedwire.damage.upgradedSkill.stat;
+					barbWireDamageStat << "Damage:\t\t" << barbedwire.damage.upgradedSkill.stat;
 
 					stringstream landMineStat;
-					landMineStat << "Mines Left: " << numLandMines;
+					landMineStat << "Mines Left:\t\t" << numLandMines;
 
 					stringstream numTurrets;
-					numTurrets << "Inventory: " << profile.numTurrets;
+					numTurrets << "Inventory:\t\t" << profile.numTurrets;
 					stringstream maxNumTurrets;
-					maxNumTurrets << "Inventory Cap: " << profile.maxNumTurrets;
+					maxNumTurrets << "Inventory Cap:\t" << profile.maxNumTurrets;
 
 					pFont->Draw("Sandbags: ", { screenSize.width *.1f, screenSize.height * 0.1f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw(sandBagHeathStat.str().c_str() , { screenSize.width * 0.1f, DefenseButtons[0].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(sandBagMaxDurrStat.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[1].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(sandBagHeathStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[0].top }, scale, { 255, 255, 0, 0 });
+					pFont->Draw(sandBagMaxDurrStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[1].top }, scale, { 255, 255, 0, 0 });
 					
 
 					pFont->Draw("Barbed Wire: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw(barbWireHeathStat.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[2].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(barbWireMaxDurrStat.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[3].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(barbWireDamageStat.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[4].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(barbWireHeathStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[2].top }, scale, { 255, 255, 0, 0 });
+					pFont->Draw(barbWireMaxDurrStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[3].top }, scale, { 255, 255, 0, 0 });
+					pFont->Draw(barbWireDamageStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[4].top }, scale, { 255, 255, 0, 0 });
 
 					pFont->Draw("Mine Field: ", { screenSize.width *.1f, screenSize.height * 0.5f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw(landMineStat.str().c_str(), { screenSize.width *.3f, DefenseButtons[5].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(landMineStat.str().c_str(), { screenSize.width *.3f, DefenseButtons[5].top }, scale, { 255, 255, 0, 0 });
 
 					pFont->Draw("Auto-Turrets: ", { screenSize.width *.1f, screenSize.height * 0.7f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw(numTurrets.str().c_str(), { screenSize.width * 0.1f, DefenseButtons[6].top }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw(maxNumTurrets.str().c_str(), { screenSize.width *.3f, DefenseButtons[7].top }, 0.5f, { 255, 255, 0, 0 });
+					pFont->Draw(numTurrets.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[6].top }, scale, { 255, 255, 0, 0 });
+					pFont->Draw(maxNumTurrets.str().c_str(), { screenSize.width *.3f, DefenseButtons[7].top }, scale, { 255, 255, 0, 0 });
 
 
 					for (size_t i = 0; i < 8; i++)
-						pGraphics->DrawTexture(upgradeButton, { DefenseButtons[i].left, DefenseButtons[i].top }, {}, {}, {}, { 0.5f, 0.5f });
+						pGraphics->DrawTexture(upgradeButton, { DefenseButtons[i].left, DefenseButtons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 				
 					if (sandBag.isBought == true)
@@ -5164,31 +5171,31 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(DefenseButtons[0]))
 						{
 							if (sandBagCurrHealth < sandBagMaxHealth)
-								pFont->Draw("Repair", { DefenseButtons[0].left + 5, DefenseButtons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Repair", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[0].left + 25, DefenseButtons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (sandBagCurrHealth < sandBagMaxHealth)
-								pFont->Draw("Repair", { DefenseButtons[0].left + 5, DefenseButtons[0].top + 5 }, 0.5f, { 255, 0, 255,0 });
+								pFont->Draw("Repair", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[0].left + 25, DefenseButtons[0].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(DefenseButtons[1]))
 						{
 							if (sandBag.maxHealth.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[1].left + 5, DefenseButtons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[1].left + 25, DefenseButtons[1].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (sandBag.maxHealth.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[1].left + 5, DefenseButtons[1].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[1].left + 25, DefenseButtons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						
@@ -5196,10 +5203,10 @@ void	ShopState::Render(void)
 					else
 					{
 						if (mousePos.IsWithinRectangle(DefenseButtons[0]))
-							pFont->Draw("Buy", { DefenseButtons[0].left + 25, DefenseButtons[0].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+							pFont->Draw("Buy", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 
 						else
-							pFont->Draw("Buy", { DefenseButtons[0].left + 25, DefenseButtons[0].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+							pFont->Draw("Buy", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 					}
 					
 
@@ -5209,46 +5216,46 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(DefenseButtons[2]))
 						{
 							if (barbWireCurrHealth < barbWireMaxHealth)
-								pFont->Draw("Repair", { DefenseButtons[2].left + 5, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Repair", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (barbWireCurrHealth < barbWireMaxHealth)
-								pFont->Draw("Repair", { DefenseButtons[2].left + 5, DefenseButtons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Repair", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 
 						if (mousePos.IsWithinRectangle(DefenseButtons[3]))
 						{
 							if (barbedwire.maxHealth.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[3].left + 5, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[3].left + 25, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 255, 255 } );
+								pFont->Draw("Maxed", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (barbedwire.maxHealth.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[3].left + 5, DefenseButtons[3].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[3].left + 25, DefenseButtons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 						
 						if (mousePos.IsWithinRectangle(DefenseButtons[4]))
 						{
 							if (barbedwire.damage.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[4].left + 5, DefenseButtons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Upgrade", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						else
-							pFont->Draw("Maxed", { DefenseButtons[4].left + 25, DefenseButtons[4].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+							pFont->Draw("Maxed", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (barbedwire.damage.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[4].left + 5, DefenseButtons[4].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Upgrade", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[4].left + 25, DefenseButtons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 						
 						
@@ -5256,10 +5263,10 @@ void	ShopState::Render(void)
 					else
 					{
 						if (mousePos.IsWithinRectangle(DefenseButtons[0]))
-							pFont->Draw("Buy", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+							pFont->Draw("Buy", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 
 						else
-							pFont->Draw("Buy", { DefenseButtons[2].left + 25, DefenseButtons[2].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+							pFont->Draw("Buy", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 					}
 
 
@@ -5270,25 +5277,25 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(DefenseButtons[5]))
 						{
 							if (numLandMines < landMines.size())
-								pFont->Draw("Repair", { DefenseButtons[5].left + 5, DefenseButtons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Repair", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[5].left + 25, DefenseButtons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+								pFont->Draw("Maxed", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (numLandMines < landMines.size())
-								pFont->Draw("Repair", { DefenseButtons[5].left + 5, DefenseButtons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+								pFont->Draw("Repair", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Maxed", { DefenseButtons[5].left + 25, DefenseButtons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+								pFont->Draw("Maxed", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
 						
 					}
 					else
 					{
 						if (mousePos.IsWithinRectangle(DefenseButtons[5]))
-							pFont->Draw("Buy", { DefenseButtons[5].left + 25, DefenseButtons[5].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+							pFont->Draw("Buy", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						else
-							pFont->Draw("Buy", { DefenseButtons[5].left + 25, DefenseButtons[5].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+							pFont->Draw("Buy", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 
 					}
 
@@ -5296,78 +5303,39 @@ void	ShopState::Render(void)
 					if (mousePos.IsWithinRectangle(DefenseButtons[6]))
 					{
 						if (profile.numTurrets < profile.maxNumTurrets)
-						pFont->Draw("Buy", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+							pFont->Draw("Buy", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 					else
-						pFont->Draw("Full Inventory", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+						pFont->Draw("Full Inventory", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 					}
 					else
 					{
 						if (profile.numTurrets < profile.maxNumTurrets)
-							pFont->Draw("Buy", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+							pFont->Draw("Buy", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 						else
-							pFont->Draw("Full Inventory", { DefenseButtons[6].left + 25, DefenseButtons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw("Full Inventory", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 					}
 						
 
 					if (mousePos.IsWithinRectangle(DefenseButtons[7]))
 					{
 						if (profile.maxNumTurrets < 10)
-							pFont->Draw("Buy", { DefenseButtons[7].left + 25, DefenseButtons[7].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+							pFont->Draw("Buy", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 						else
-							pFont->Draw("Maxed", { DefenseButtons[7].left + 25, DefenseButtons[7].top + 5 }, 0.5f, { 255, 255, 255, 255 });
+							pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 					}
 					else
 					{
 						if (profile.maxNumTurrets < 10)
-							pFont->Draw("Buy", { DefenseButtons[7].left + 25, DefenseButtons[7].top + 5 }, 0.5f, { 255, 0, 255, 0 });
+							pFont->Draw("Buy", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 0, 255, 0 });
 						else
-							pFont->Draw("Maxed", { DefenseButtons[7].left + 25, DefenseButtons[7].top + 5 }, 0.5f, { 255, 255, 0, 0 });
+							pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 0, 0 });
 					}
 						
 
 
 
+	
 						
-						/*if (sniperUpgrade.reloadTime.isMaxed == false)
-						pFont->Draw("Upgrade", { Buttons[1].left + 5, Buttons[1].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-						else
-						pFont->Draw("Maxed", { Buttons[1].left + 25, Buttons[1].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-						if (sniperUpgrade.recoilTime.isMaxed == false)
-						pFont->Draw("Upgrade", { Buttons[2].left + 5, Buttons[2].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-						else
-						pFont->Draw("Maxed", { Buttons[2].left + 25, Buttons[2].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-						if (sniperUpgrade.bulletSpread.isMaxed == false)
-						pFont->Draw("Upgrade", { Buttons[3].left + 5, Buttons[3].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-						else
-						pFont->Draw("Maxed", { Buttons[3].left + 25, Buttons[3].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-						if (sniperUpgrade.damage.isMaxed == false)
-						pFont->Draw("Upgrade", { Buttons[4].left + 5, Buttons[4].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-						else
-						pFont->Draw("Maxed", { Buttons[4].left + 25, Buttons[4].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-						if (sniperUpgrade.penPower.isMaxed == false)
-						pFont->Draw("Upgrade", { Buttons[5].left + 5, Buttons[5].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-						else
-						pFont->Draw("Maxed", { Buttons[5].left + 25, Buttons[5].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-						if (sniperUpgrade.ammoCap.isMaxed == false)
-						pFont->Draw("Upgrade", { Buttons[6].left + 5, Buttons[6].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-						else
-						pFont->Draw("Maxed", { Buttons[6].left + 25, Buttons[6].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-						if (sniperUpgrade.totalAmmo.isMaxed == false)
-						pFont->Draw("Buy Ammo", { Buttons[7].left + 18, Buttons[7].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-						else
-						pFont->Draw("Ammo Full", { Buttons[7].left + 18, Buttons[7].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-
-						if (sniperUpgrade.isBought == false)
-						pFont->Draw("Buy Gun", { Buttons[8].left + 18, Buttons[8].top + 5 }, 0.5f, { 255, 0, 0, 255 });
-						else
-						pFont->Draw("Equipt", { Buttons[8].left + 18, Buttons[8].top + 5 }, 0.5f, { 255, 255, 0, 0 });
-						*/
 						break;
 						}
 	
@@ -5412,7 +5380,7 @@ void	ShopState::Render(void)
 
 			stringstream drawIndex;
 			drawIndex << j + 1;
-			pFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, .5f, { 150, 155, 155 });
+			pFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, scale, { 150, 155, 155 });
 
 			equipIndex++;
 		}
@@ -5434,7 +5402,7 @@ void	ShopState::Render(void)
 			stringstream drawIndex;
 			drawIndex << i + 1;
 
-			pFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, .5f, { 150, 155, 155 });
+			pFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, scale, { 150, 155, 155 });
 		}
 	}
 
@@ -5443,6 +5411,7 @@ void	ShopState::Render(void)
 void ShopState::LoadShopStatus()
 {
 	
+
 
 #pragma region Pistol
 	pistolUpgrade.magSize.upgradedSkill.currTier = profile.pistol.magSize.upgradedSkill.currTier;
@@ -6680,6 +6649,8 @@ void ShopState::SaveProfile()
 				fout << localTime.tm_hour << '\n';
 				fout << localTime.tm_min << '\n';
 				fout << localTime.tm_sec << '\n';
+
+				fout << profile.health << '\n';
 #pragma region Pistols
 
 				//pistol
@@ -6738,10 +6709,6 @@ void ShopState::SaveProfile()
 
 
 #pragma endregion
-
-
-
-
 
 #pragma region SMGs
 				//Mac10

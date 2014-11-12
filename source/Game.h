@@ -51,6 +51,7 @@ public:
 	/**********************************************************/
 	// Font Accessor: (#include "BitmapFont.h" to use!)
 	const BitmapFont*	GetFont			( void ) const	{	return m_pFont;			}
+	const BitmapFont*	GetShopFont(void) const	{ return m_pFont2; }
 
 
 	/**********************************************************/
@@ -125,6 +126,8 @@ private:
 	/**********************************************************/
 	// Game Font
 	BitmapFont*				m_pFont			= nullptr;
+	BitmapFont*				m_pFont2		= nullptr;
+
 
 
 	/**********************************************************/

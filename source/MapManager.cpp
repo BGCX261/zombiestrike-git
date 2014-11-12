@@ -20,7 +20,8 @@
 //#include "../resource/config/"
 
 
-enum EntityBucket { BUCKET_BULLETS, BUCKET_PUKE, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
+enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
+
 
 
 
@@ -466,8 +467,9 @@ void MapManager::CreateHouse(SGD::Point pos, EntityManager* entities)
 	object->SetSize({ 32, 32 });
 	object->SetType(BaseObject::ObjectType::OBJ_WALL);
 	object->SetAnimation("house");
+	object->SetActive(true);
 
-	entities->AddEntity(object, 3);
+	entities->AddEntity(object, BUCKET_PICKUPS);
 	object->Release();
 	object = nullptr;
 }

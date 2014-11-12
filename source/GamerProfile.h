@@ -39,7 +39,7 @@ struct GamerProfile
 	int money;
 	int numTurrets;
 	int maxNumTurrets;
-	
+	float health;
 	
 	bool sandBagStates[30];
 	bool landMineStates[50];

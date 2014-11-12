@@ -44,6 +44,8 @@ Turret::~Turret()
 	SetTarget(nullptr);
 
 	this->bulletmaker->SetOwner(nullptr);
+	delete bulletmaker;
+
 	//delete bulletmaker;
 	SetWeapon(nullptr);
 
