@@ -61,9 +61,9 @@ void	ShopState::Enter(void)
 	screenSize = SGD::Size( Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() );
 
 	weaponsImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/weapons.png");
-	buyButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/rectangle1.png");
-	upgradeButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/rectangle2.png");
-	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/crosshair.png");
+	buyButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/MenuImages/rectangle1.png");
+	upgradeButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/MenuImages/rectangle2.png");
+	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/Weapons/crosshair.png");
 	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/shopBackground.jpg");
 
 

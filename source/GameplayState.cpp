@@ -61,6 +61,7 @@
 #include "Animation.h"
 #include "Frame.h"
 #include "MapManager.h"
+#include "HTPGameState.h"
 
 #include <Windows.h>
 #include <cstdlib>
@@ -84,6 +85,9 @@
 //	- set up entities
 /*virtual*/ void GameplayState::Enter( void )
 {
+	SpawnManager::GetInstance()->ShutDown();
+	HTPGameState::GetInstance()->SetChoiceScreen(true);
+
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor( {0, 0, 0} );	// black
 
@@ -105,60 +109,48 @@
 	SGD::GraphicsManager*	pGraphics			= SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager*		pAudio				= SGD::AudioManager::GetInstance();
 	SGD::InputManager*		pInput				= SGD::InputManager::GetInstance();
-	AnimationManager*		pAnimationManager	= AnimationManager::GetInstance();
+	//AnimationManager*		pAnimationManager	= AnimationManager::GetInstance();
 
-	// player animations
-	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
-	pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
-	pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
-	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
-	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
+	//// player animations
+	//pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
+	//pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
+	//pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
+	//pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
+	//pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
 
-	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
+	//pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
 
-	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
-	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
-	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
+	//pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
+	//pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
+	//pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
 
-	//Blood Animation
-	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
-	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
-	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
-	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
+	////Blood Animation
+	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
+	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
+	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
+	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
 
+	//// enemy animations
 
-	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/crosshair.png");
+	//pAnimationManager->Load("resource/config/animations/ZombieWalker_Animation.xml", "slowZombie");
+	//pAnimationManager->Load("resource/config/animations/ZombieRunner_Animation.xml", "fastZombie");
+	//pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
+	//pAnimationManager->Load("resource/config/animations/ZombieSploder_Animation.xml", "explodingZombie");
+	//pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
 
+	//pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	///*
+	//pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
+	//pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
+	//pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
+	//pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
+	//pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
 
-	// enemy animations
-
-	pAnimationManager->Load("resource/config/animations/ZombieWalker_Animation.xml", "slowZombie");
-	pAnimationManager->Load("resource/config/animations/ZombieRunner_Animation.xml", "fastZombie");
-	pAnimationManager->Load("resource/config/animations/ZombieTank_Animation.xml", "tankZombie");
-	pAnimationManager->Load("resource/config/animations/ZombieSploder_Animation.xml", "explodingZombie");
-	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
-	pAnimationManager->Load("resource/config/animations/ZombieFat_Animation.xml", "fatZombie");
-	/*
-	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
-	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
-	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
-	pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
-	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
-
-	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
-	*/
-	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
-
-	pAnimationManager->Load("resource/config/animations/ZombieWalker_Death1.xml", "slowZombieDeath");
-	pAnimationManager->Load("resource/config/animations/ZombieRunner_Death1.xml", "fastZombieDeath");
-	pAnimationManager->Load("resource/config/animations/ZombieSploder_Death1.xml", "explodingZombieDeath");
-	pAnimationManager->Load("resource/config/animations/ZombieTank_Death1.xml", "tankZombieDeath");
-	pAnimationManager->Load("resource/config/animations/ZombieFat_Death1.xml", "fatZombieDeath");
+	//pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	//*/
+	//pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
 
 
-	// other animations
-	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml",		"turret");
-	pAnimationManager->Load("resource/config/animations/House_Animation.xml",		"house");
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
 
@@ -186,42 +178,42 @@
 
 
 	// Music
-	storyMusic		= pAudio->LoadAudio("resource/audio/AmbienceDrama.xwm");
+	//storyMusic		= pAudio->LoadAudio("resource/audio/AmbienceDrama.xwm");
 	survivalMusic	= pAudio->LoadAudio("resource/audio/AmbienceDungeon.xwm");
 	//m_bStoryMode == true ? pAudio->PlayAudio(storyMusic, true) : pAudio->PlayAudio(survivalMusic, true);
-	pAudio->PlayAudio(m_bStoryMode == true ? storyMusic : survivalMusic, true);
+	pAudio->PlayAudio(m_bStoryMode == true ? Game::GetInstance()->storyMusic : survivalMusic, true);
 
 
 	// SFX
-	playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
-	playerHurt1			= pAudio->LoadAudio("resource/audio/player_grunt1.wav");
-	playerHurt2			= pAudio->LoadAudio("resource/audio/player_grunt2.wav");
-	playerHurt3			= pAudio->LoadAudio("resource/audio/player_grunt3.wav");
-	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
-	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
+	//playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
+	//playerHurt1			= pAudio->LoadAudio("resource/audio/player_grunt1.wav");
+	//playerHurt2			= pAudio->LoadAudio("resource/audio/player_grunt2.wav");
+	//playerHurt3			= pAudio->LoadAudio("resource/audio/player_grunt3.wav");
+	//cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
+	//footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
 	//m_hWpnSwitch		= Game::GetInstance()->m_hWpnSwitch;
-	m_hWaveChange		= pAudio->LoadAudio("resource/audio/wavechange.wav");
+	
 
 	//m_hHudWpn =				Game::GetInstance()
 	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
 
-	zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");
-	bullet_hit_zombie	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
-	bullet_hit_house	= pAudio->LoadAudio("resource/audio/bullet_hit_house.wav");
-	out_of_ammo			= pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
-	reload_begin		= pAudio->LoadAudio("resource/audio/reload_begin.wav");
-	reload_finish		= pAudio->LoadAudio("resource/audio/reload_finish.wav");
-	explosion			= pAudio->LoadAudio("resource/audio/Splode2.wav");
-	vomit_hit_player	= pAudio->LoadAudio("resource/audio/splat.wav");
+	//zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");
+	//bullet_hit_zombie	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
+	//bullet_hit_house	= pAudio->LoadAudio("resource/audio/bullet_hit_house.wav");
+	//out_of_ammo			= pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
+	//reload_begin		= pAudio->LoadAudio("resource/audio/reload_begin.wav");
+	//reload_finish		= pAudio->LoadAudio("resource/audio/reload_finish.wav");
+	//explosion			= pAudio->LoadAudio("resource/audio/Splode2.wav");
+	//vomit_hit_player	= pAudio->LoadAudio("resource/audio/splat.wav");
 
-	pistol_fire			= pAudio->LoadAudio("resource/audio/pistol_fire.wav");
-	shotgun_fire		= pAudio->LoadAudio("resource/audio/shotgun_fire.wav");
-	rifle_fire			= pAudio->LoadAudio("resource/audio/rifle_fire.wav");
-	sniper_fire			= pAudio->LoadAudio("resource/audio/sniper_fire.wav");
-	flamethrower_fire	= pAudio->LoadAudio("resource/audio/fire_ignite_1.wav");
-	smg_fire			= pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
-	rpg_fire			= pAudio->LoadAudio("resource/audio/RocketLauncher.wav");
-	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
+	//pistol_fire			= pAudio->LoadAudio("resource/audio/pistol_fire.wav");
+	//shotgun_fire		= pAudio->LoadAudio("resource/audio/shotgun_fire.wav");
+	//rifle_fire			= pAudio->LoadAudio("resource/audio/rifle_fire.wav");
+	//sniper_fire			= pAudio->LoadAudio("resource/audio/sniper_fire.wav");
+	//flamethrower_fire	= pAudio->LoadAudio("resource/audio/fire_ignite_1.wav");
+	//smg_fire			= pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
+	//rpg_fire			= pAudio->LoadAudio("resource/audio/RocketLauncher.wav");
+	//vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
 
 
 	//m_hMain = &MainMenuState::GetInstance()->m_hMainTheme;
@@ -267,47 +259,18 @@
 	SGD::GraphicsManager*	pGraphics	= SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager*		pAudio		= SGD::AudioManager::GetInstance();
 	SGD::InputManager*		pInput		= SGD::InputManager::GetInstance();
-
 	
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
-	pGraphics->UnloadTexture(m_hReticleImage);
-	pGraphics->UnloadTexture(m_hHudWpn);
+	//pGraphics->UnloadTexture(Game::GetInstance()->m_hReticleImage);
 
-
-
-	if (pAudio->IsAudioPlaying(storyMusic) == true)
-		pAudio->StopAudio(storyMusic);
+	if (pAudio->IsAudioPlaying(Game::GetInstance()->storyMusic) == true)
+		pAudio->StopAudio(Game::GetInstance()->storyMusic);
 	if (pAudio->IsAudioPlaying(survivalMusic) == true)
 		pAudio->StopAudio(survivalMusic);
 
-	pAudio->UnloadAudio(storyMusic);
 	pAudio->UnloadAudio(survivalMusic);
-
-	pAudio->UnloadAudio(playerDeath);
-	pAudio->UnloadAudio(playerHurt1);
-	pAudio->UnloadAudio(playerHurt2);
-	pAudio->UnloadAudio(playerHurt3);
-	pAudio->UnloadAudio(cannot_use_skill);
-	pAudio->UnloadAudio(footstep);
-	pAudio->UnloadAudio(m_hWpnSwitch);
-	pAudio->UnloadAudio(zombie_pain);
-	pAudio->UnloadAudio(bullet_hit_zombie);
-	pAudio->UnloadAudio(bullet_hit_house);
-	pAudio->UnloadAudio(out_of_ammo);
-	pAudio->UnloadAudio(reload_begin);
-	pAudio->UnloadAudio(reload_finish);
-	pAudio->UnloadAudio(explosion);
-	pAudio->UnloadAudio(m_hWaveChange);
-	pAudio->UnloadAudio(vomit_hit_player);
-
-	pAudio->UnloadAudio(pistol_fire);
-	pAudio->UnloadAudio(shotgun_fire);
-	pAudio->UnloadAudio(rifle_fire);
-	pAudio->UnloadAudio(sniper_fire);
-	pAudio->UnloadAudio(flamethrower_fire);
-	pAudio->UnloadAudio(smg_fire);
-	pAudio->UnloadAudio(rpg_fire);
-	pAudio->UnloadAudio(vomit_fire);
+	
+	
 
 	//pAudio->UnloadAudio(*m_hMain);
 	//pAudio->UnloadAudio(*m_hSurvive);
@@ -335,7 +298,7 @@
 
 	// Shutdown & release the Map & Animation Managers
 	MapManager::GetInstance()->UnloadLevel();
-	AnimationManager::GetInstance()->Shutdown();
+	//AnimationManager::GetInstance()->Shutdown();
 	SpawnManager::GetInstance()->ShutDown();
 
 	
@@ -383,8 +346,8 @@
 		Game::GetInstance()->AddState(LoseGameState::GetInstance());
 
 
-		if (pAudio->IsAudioPlaying(storyMusic) == true)
-			pAudio->StopAudio(storyMusic);
+		if (pAudio->IsAudioPlaying(Game::GetInstance()->storyMusic) == true)
+			pAudio->StopAudio(Game::GetInstance()->storyMusic);
 		if (pAudio->IsAudioPlaying(survivalMusic) == true)
 			pAudio->StopAudio(survivalMusic);
 	}
@@ -478,8 +441,8 @@
 			// go to WinState
 			if (m_tToWinState.Update(dt) == true)
 			{
-				if (pAudio->IsAudioPlaying(storyMusic) == true)
-					pAudio->StopAudio(storyMusic);
+				if (pAudio->IsAudioPlaying(Game::GetInstance()->storyMusic) == true)
+					pAudio->StopAudio(Game::GetInstance()->storyMusic);
 				if (pAudio->IsAudioPlaying(survivalMusic) == true)
 					pAudio->StopAudio(survivalMusic);
 
@@ -565,9 +528,9 @@
 
 		pFont->Draw(nWave.str().c_str(), textPos, 1.5f, { 155, 0, 0 });
 
-		if (pAudio->IsAudioPlaying(m_hWaveChange) == false)
+		if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hWaveChange) == false)
 		{
-			pAudio->PlayAudio(m_hWaveChange, false);
+			pAudio->PlayAudio(Game::GetInstance()->m_hWaveChange, false);
 		}
 	}
 
@@ -631,7 +594,7 @@
 	float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
 
 	retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
-	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 0 }, { retscale, retscale });
+	pGraphics->DrawTexture(Game::GetInstance()->m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 0 }, { retscale, retscale });
 
 }
 
@@ -1051,7 +1014,7 @@ void GameplayState::CreateZombie(Spawner* owner)
 }
 void GameplayState::CreateFatZombie(Spawner* owner)
 {
-	FatZombie* zombie = new FatZombie;
+	FatZombie* zombie = new FatZombie();
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
 
@@ -1082,7 +1045,7 @@ void GameplayState::CreateFastZombie(Spawner* owner)
 
 void GameplayState::CreateExplodingZombie(Spawner* owner)
 {
-	ExplodingZombie* zombie = new ExplodingZombie;
+	ExplodingZombie* zombie = new ExplodingZombie();
 	zombie->SetPosition(owner->GetPosition());
 	zombie->SetRotation(0.0f);
 
@@ -1109,8 +1072,6 @@ void GameplayState::CreateTankZombie(Spawner* owner)
 	zombie->Release();
 	zombie = nullptr;
 }
-
-
 void GameplayState::UpdateWeaponManager()
 {
 	GamerProfile profile;

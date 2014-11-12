@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "GameplayState.h"
+#include "HTPGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 

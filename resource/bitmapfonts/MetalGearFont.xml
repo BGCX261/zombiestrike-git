@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
   <font_info>
-    <image_info>resource/graphics/MetalGear.png </image_info>
+    <image_info>resource/graphics/Fonts/MetalGear.png </image_info>
     <letter_info symbol="32" sRectL="251" sRectT="0" width="3" height="1" xoffset="-1" yoffset="31" xadvance="11" page="0" chnl="15" />
     <letter_info symbol="33" sRectL="176" sRectT="158" width="11" height="19" xoffset="-1" yoffset="7" xadvance="8" page="0" chnl="15" />
     <letter_info symbol="34" sRectL="234" sRectT="146" width="19" height="8" xoffset="1" yoffset="5" xadvance="18" page="0" chnl="15" />

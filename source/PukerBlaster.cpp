@@ -18,7 +18,7 @@ PukerBlaster::PukerBlaster(MovingObject* owner)
 	
 	m_pOwner = owner;
 	owner->AddRef();
-	fire_sound = &GameplayState::GetInstance()->vomit_fire;
+	fire_sound = &Game::GetInstance()->vomit_fire;
 }
 
 

@@ -13,6 +13,8 @@
 #include "GameplayState.h"
 #include "HowToPlayState.h"
 #include "OptionsState.h"
+#include "HTPGameState.h"
+#include "IntroState.h"
 
 
 /**************************************************************/
@@ -108,10 +110,21 @@
 			break;
 		case 3: // main menu
 		{
-					Game::GetInstance()->RemoveState();
-					Game::GetInstance()->RemoveState();
-					Game::GetInstance()->AddState(MainMenuState::GetInstance());
-					return true;
+					if (HTPGameState::GetInstance()->GetChoiceScreen() == true)
+					{
+						Game::GetInstance()->RemoveState();
+						Game::GetInstance()->RemoveState();
+						Game::GetInstance()->AddState(MainMenuState::GetInstance());
+						return true;
+					}
+
+					else
+					{
+						Game::GetInstance()->RemoveState();
+						Game::GetInstance()->RemoveState();
+						Game::GetInstance()->AddState(IntroState::GetInstance());
+						return true;
+					}
 		}
 			break;
 		}
@@ -139,9 +152,15 @@
 
 	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
 
-	GameplayState::GetInstance()->Render();
-	pGraphics->DrawRectangle({ 0, 0, width, height }, { 210, 0, 0, 0 });
+	if (HTPGameState::GetInstance()->GetChoiceScreen() == false)
+	{
+		HTPGameState::GetInstance()->Render();
+		pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+	}
 
+	else
+		GameplayState::GetInstance()->Render();
+		pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
 
 	// Use the game's font
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();

@@ -24,6 +24,8 @@ Turret::Turret() : Listener(this)
 	RegisterForEvent("PAUSE");
 	RegisterForEvent("ASSESS_THREAT");
 
+	fireSound = &Game::GetInstance()->rifle_fire;
+
 	this->SetAnimation("turret");
 
 	//this->bulletmaker = WeaponManager::GetInstance()->CreateAssaultRifle();
@@ -42,7 +44,7 @@ Turret::Turret() : Listener(this)
 	lifeTime = 1000.0f;
 	//m_pOwner = owner;
 	//owner->AddRef();
-	fire_sound = &GameplayState::GetInstance()->rifle_fire;
+	fire_sound = &Game::GetInstance()->rifle_fire;
 
 }
 

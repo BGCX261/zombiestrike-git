@@ -24,7 +24,7 @@
 #include "FlameThrower.h"
 #include "EnvironmentalObject.h"
 #include "House.h"
-
+#include "HTPGameState.h"
 
 
 Player::Player()
@@ -41,7 +41,7 @@ Player::Player()
 	//RegisterForEvent("HIT");
 
 
-	m_hDeath	= &GameplayState::GetInstance()->playerDeath;
+	m_hDeath	= &Game::GetInstance()->playerDeath;
 	voice		= SGD::INVALID_HANDLE;
 
 
@@ -381,7 +381,7 @@ void Player::SpawnTurret(void)
 void Player::CheckDamage(void)
 {
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
-	GameplayState* pGameplay = GameplayState::GetInstance();
+	Game* pGame = Game::GetInstance();
 
 
 	// dead, !hurt
@@ -409,21 +409,21 @@ void Player::CheckDamage(void)
 		switch (sound)
 		{
 		case 0:
-			m_hHurt = &pGameplay->playerHurt1;
+			m_hHurt = &pGame->playerHurt1;
 			break;
 		case 1:
-			m_hHurt = &pGameplay->playerHurt2;
+			m_hHurt = &pGame->playerHurt2;
 			break;
 		case 2:
-			m_hHurt = &pGameplay->playerHurt3;
+			m_hHurt = &pGame->playerHurt3;
 			break;
 		default:
 			break;
 		}
 
-		if (pAudio->IsAudioPlaying(pGameplay->playerHurt1) == false &&
-			pAudio->IsAudioPlaying(pGameplay->playerHurt2) == false &&
-			pAudio->IsAudioPlaying(pGameplay->playerHurt3) == false)
+		if (pAudio->IsAudioPlaying(pGame->playerHurt1) == false &&
+			pAudio->IsAudioPlaying(pGame->playerHurt2) == false &&
+			pAudio->IsAudioPlaying(pGame->playerHurt3) == false)
 			voice = pAudio->PlayAudio(*m_hHurt, false);
 		pAudio->SetVoiceVolume(voice);
 
@@ -434,7 +434,15 @@ void Player::CheckDamage(void)
 bool Player::GoodTurretPosition(void) const
 {
 	SGD::Point		turretposP	= GetTurretPosition();
-	SGD::Rectangle	world		= { 0, 0, GameplayState::GetInstance()->GetWorldSize().width, GameplayState::GetInstance()->GetWorldSize().height };
+	SGD::Rectangle	world;
+
+	if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
+	{
+		world = { 0, 0, HTPGameState::GetInstance()->GetWorldSize().width, HTPGameState::GetInstance()->GetWorldSize().height };
+	}
+
+	else
+		world = { 0, 0, GameplayState::GetInstance()->GetWorldSize().width, GameplayState::GetInstance()->GetWorldSize().height };
 
 	if (turretposP.IsWithinRectangle(world) == true)
 		return true;

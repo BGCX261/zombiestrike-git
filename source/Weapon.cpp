@@ -18,7 +18,7 @@ Weapon::~Weapon()
 void Weapon::Update(float dt)
 {
 	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
-	GameplayState*		pGameplay	= GameplayState::GetInstance();
+	Game*		pGame	= Game::GetInstance();
 
 	/*
 	recoilTimer.Update(dt);
@@ -61,7 +61,7 @@ void Weapon::Update(float dt)
 		// unload empty magazine
 		if (reloadB == true)
 		{
-			pAudio->PlayAudio(pGameplay->reload_begin, false);
+			pAudio->PlayAudio(pGame->reload_begin, false);
 			reloadB = false;
 		}
 
@@ -101,7 +101,7 @@ void Weapon::Update(float dt)
 		// load full magazine
 		if (reloadF == true)
 		{
-			pAudio->PlayAudio(pGameplay->reload_finish, false);
+			pAudio->PlayAudio(pGame->reload_finish, false);
 			reloadF = false;
 			reloadB = true;
 			reloading = false;
