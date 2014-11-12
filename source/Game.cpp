@@ -83,8 +83,10 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	m_hWpnSwitch = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/switchweapon.wav");
 
 	// Load assets
-	m_hMainTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikemain.xwm");
-	m_hSurvivalTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikesurvival.xwm");
+	m_hMainTheme		= SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikemain.xwm");
+	m_hSurvivalTheme	= SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikesurvival.xwm");
+	turret_good			= SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/turret_good.wav");
+	turret_bad			= SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/turret_bad.wav");
 
 
 	// Setup the profiles
@@ -181,6 +183,10 @@ void Game::Terminate( void )
 
 	pGraphics->UnloadTexture(m_hHudWpn);
 	pAudio->UnloadAudio(m_hWpnSwitch);
+
+	pAudio->UnloadAudio(turret_good);
+	pAudio->UnloadAudio(turret_bad);
+
 
 	// Exit the current state
 	

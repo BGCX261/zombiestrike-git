@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "BaseObject.h"
+#include "House.h"
 #include "GameplayState.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "AnimationManager.h"
@@ -47,6 +48,22 @@ Bullet::~Bullet()
 {
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
+	// other stuff
+	if (pOther->GetType() == ObjectType::OBJ_BASE || pOther->GetType() == ObjectType::OBJ_WALL)
+	{
+		const House* house = dynamic_cast<const House*>(pOther);
+
+		if (house->IsActive() == true)
+		{
+			pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_house, false);
+
+			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+			dMsg->QueueMessage();
+			dMsg = nullptr;
+			return;
+		}
+	}
+
 	if (this->type != ObjectType::OBJ_VOMIT)
 	{
 		// player
@@ -90,16 +107,6 @@ Bullet::~Bullet()
 				dMsg = nullptr;
 			}
 		}
-	}
-
-	// other stuff
-	else if (pOther->GetType() == ObjectType::OBJ_BASE || pOther->GetType() == ObjectType::OBJ_WALL)
-	{
-		pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_house, false);
-
-		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
-		dMsg->QueueMessage();
-		dMsg = nullptr;
 	}
 }
 

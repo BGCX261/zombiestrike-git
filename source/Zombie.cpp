@@ -14,6 +14,7 @@
 #include "BarbedWire.h"
 #include "LandMine.h"
 #include "SandBag.h"
+#include "House.h"
 #include "SpawnManager.h"
 #include "CreateBloodMsg.h"
 
@@ -155,7 +156,10 @@ void Zombie::RetrieveBehavior(std::string name)
 
 	else if (pOther->GetType() == OBJ_WALL)
 	{
-		MovingObject::HandleCollision(pOther);
+		const House* house = dynamic_cast<const House*>(pOther);
+
+		if (house->IsActive() == true)
+			MovingObject::HandleCollision(pOther);
 	}
 
 }

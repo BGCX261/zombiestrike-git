@@ -426,6 +426,7 @@
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
 		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_BULLETS);	// house + bullets
 		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_ENEMIES);	// house + zombies
+		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_PLAYER);	// house + player
 
 
 		// Center camera on the player

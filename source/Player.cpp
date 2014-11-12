@@ -23,6 +23,7 @@
 #include "Sniper.h"
 #include "FlameThrower.h"
 #include "EnvironmentalObject.h"
+#include "House.h"
 
 
 
@@ -336,10 +337,21 @@ void Player::RetrieveBehavior(std::string name)
 
 void Player::SpawnTurret(void)
 {
-	if (m_nNumTurrets == 0)
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	Game* pGame = Game::GetInstance();
+
+
+	if (m_nNumTurrets == 0 || GoodTurretPosition() == false)
+	{
+		if (pAudio->IsAudioPlaying(pGame->turret_bad) == false)
+			pAudio->PlayAudio(pGame->turret_bad, false);
 		return;
-	if (GoodTurretPosition() == false)
-		return;
+	}
+
+
+	if (pAudio->IsAudioPlaying(pGame->turret_good) == false)
+		pAudio->PlayAudio(pGame->turret_good, false);
+
 
 	// create turret message
 	CreateTurretMessage* pMsg = new CreateTurretMessage(this);
