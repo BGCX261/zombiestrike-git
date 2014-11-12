@@ -26,6 +26,7 @@
 {
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor({ 0, 0, 0 });	// black
+
 }
 
 
@@ -33,6 +34,7 @@
 // Exit
 /*virtual*/ void HowToPlayState::Exit( void )
 {
+
 }
 
 

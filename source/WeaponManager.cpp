@@ -23,6 +23,7 @@
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
+#include "HTPGameState.h"
 
 #include "GameplayState.h"
 #include "Game.h"
@@ -435,10 +436,16 @@ Weapon * WeaponManager::CreateLMG()
 Weapon * WeaponManager::CreatePistol()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+	
 
 	Pistol * pistol = new Pistol(GetOwner());
 
@@ -461,10 +468,16 @@ Weapon * WeaponManager::CreatePistol()
 Weapon * WeaponManager::CreateRevolver()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+
 	Pistol* revolver = new Pistol(GetOwner());
 
 	//revolver->SetObtained(profile->revolver.isBought);
@@ -489,10 +502,16 @@ Weapon * WeaponManager::CreateRevolver()
 Weapon * WeaponManager::CreatePumpShotgun()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+
 
 	Shotgun * shotty = new Shotgun(GetOwner());
 
@@ -517,10 +536,15 @@ Weapon * WeaponManager::CreatePumpShotgun()
 Weapon * WeaponManager::CreateAutoShotgun()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
 
 	Shotgun * shotty = new Shotgun(GetOwner());
 
@@ -546,10 +570,16 @@ Weapon * WeaponManager::CreateAutoShotgun()
 Weapon * WeaponManager::CreateSawnOff()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+
 
 	Shotgun * shotty = new Shotgun(GetOwner());
 
@@ -575,10 +605,16 @@ Weapon * WeaponManager::CreateSawnOff()
 Weapon * WeaponManager::CreateSniper()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+
 	Sniper * sniper = new Sniper(GetOwner());
 
 	sniper->SetObtained(profile->sniper.isBought);
@@ -603,10 +639,16 @@ Weapon * WeaponManager::CreateSniper()
 Weapon * WeaponManager::CreateFlameThrower()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+
 	FlameThrower * ft = new FlameThrower(GetOwner());
 
 	ft->SetObtained(profile->flameThrower.isBought);
@@ -632,10 +674,16 @@ Weapon * WeaponManager::CreateFlameThrower()
 Weapon * WeaponManager::CreateGrenadeLauncher()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+
 	GrenadeLauncher * nadeLauncher = new GrenadeLauncher(GetOwner());
 
 	nadeLauncher->SetObtained(profile->nadeLauncher.isBought);
@@ -658,10 +706,16 @@ Weapon * WeaponManager::CreateGrenadeLauncher()
 Weapon * WeaponManager::CreateP90()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+
 	P90 * p90 = new P90(GetOwner());  
 
 	p90->SetObtained(profile->p90.isBought);
@@ -684,10 +738,16 @@ Weapon * WeaponManager::CreateP90()
 Weapon * WeaponManager::CreateTech9()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+
 	Tech9 * tech9 = new Tech9(GetOwner());
 
 	tech9->SetObtained(profile->tech9.isBought);
@@ -710,10 +770,16 @@ Weapon * WeaponManager::CreateTech9()
 Weapon * WeaponManager::CreateMac10()
 {
 	GamerProfile* profile;
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = &Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = &Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = &Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = &Game::GetInstance()->GetStoryProfile();
+		else
+			profile = &Game::GetInstance()->GetSurvivalProfile();
+	}
+
 	UZI * mac10 = new UZI(GetOwner());
 
 	mac10->SetObtained(profile->mac10.isBought);

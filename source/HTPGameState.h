@@ -119,7 +119,9 @@ public:
 	bool GetChoiceScreen() { return m_bIsChoiceScreen; }
 
 	void SetChoiceScreen(bool choice) { m_bIsChoiceScreen = choice; }
+	bool GetIsCurrState(void) const { return isActive; }
 
+	void SetIsCurrState(bool state) { isActive = state; }
 private:
 	/**********************************************************/
 	// SINGLETON (not-dynamically allocated)
@@ -175,5 +177,8 @@ private:
 	string iTutorial[20];
 
 	SGD::Rectangle tutRect;
+
+	bool isActive = false;
+
 };
 

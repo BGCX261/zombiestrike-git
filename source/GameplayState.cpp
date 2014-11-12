@@ -85,6 +85,7 @@
 //	- set up entities
 /*virtual*/ void GameplayState::Enter( void )
 {
+
 	SpawnManager::GetInstance()->ShutDown();
 	HTPGameState::GetInstance()->SetChoiceScreen(true);
 
@@ -111,64 +112,29 @@
 	SGD::InputManager*		pInput				= SGD::InputManager::GetInstance();
 	//AnimationManager*		pAnimationManager	= AnimationManager::GetInstance();
 
-	//// player animations
-	//pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
-	//pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
-	//pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
-	//pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
-	//pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
-
-	//pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
-
-	//pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
-	//pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
-	//pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
-
-	////Blood Animation
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
-
-	//// enemy animations
-
-	//pAnimationManager->Load("resource/config/animations/ZombieWalker_Animation.xml", "slowZombie");
-	//pAnimationManager->Load("resource/config/animations/ZombieRunner_Animation.xml", "fastZombie");
-	//pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
-	//pAnimationManager->Load("resource/config/animations/ZombieSploder_Animation.xml", "explodingZombie");
-	//pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
-
-	//pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
-	///*
-	//pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
-	//pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
-	//pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
-	//pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
-	//pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
-
-	//pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
-	//*/
-	//pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
-
-
-	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
+	
 
 
 
 	if (m_bStoryMode == true)
 	{
+		Game::GetInstance()->LoadStoryProfiles();
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
 		SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
 		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetStoryProfile().wavesComplete);
+	
+
 
 
 	}
 
 	else
 	{
+		Game::GetInstance()->LoadSurvivalProfiles();
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
 		SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");
 		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetSurvivalProfile().wavesComplete);
+	
 
 	}
 

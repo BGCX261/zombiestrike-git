@@ -1,5 +1,6 @@
 #include "ShopState.h"
 #include "WeaponManager.h"
+#include "HTPGameState.h"
 #include "Weapon.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -39,20 +40,25 @@ void	ShopState::Enter(void)
 		m_tShopTimer.AddTime(theTime);
 	}
 
-	
 
-	if (GameplayState::GetInstance()->GetGameMode() == true)
+
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
 	{
-		profile = Game::GetInstance()->GetStoryProfile();
-	
-
-
+		profile = Game::GetInstance()->GetTutorialProfile();
 	}
 	else
 	{
-		profile = Game::GetInstance()->GetSurvivalProfile();
-		
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+		{
+			profile = Game::GetInstance()->GetStoryProfile();
+		}
+		else
+		{
+			profile = Game::GetInstance()->GetSurvivalProfile();
+		}
 	}
+
+	
 
 	
 
@@ -136,13 +142,19 @@ void	ShopState::Enter(void)
 }
 void	ShopState::Exit(void)
 {
+
+	
 	UpdateProfile();
 	SaveProfile();
-	if (GameplayState::GetInstance()->GetGameMode())
-		Game::GetInstance()->LoadStoryProfiles();
-	else
-		Game::GetInstance()->LoadSurvivalProfiles();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == false)
+	{
 
+		if (GameplayState::GetInstance()->GetGameMode())
+			Game::GetInstance()->LoadStoryProfiles();
+		else
+			Game::GetInstance()->LoadSurvivalProfiles();
+
+	}
 	UpdateWeaponManager();
 
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hReticleImage);

@@ -59,11 +59,17 @@ Player::Player()
 
 	m_fCurrHP = m_fMaxHP = 100.0f;
 
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		profile = Game::GetInstance()->GetStoryProfile();
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = Game::GetInstance()->GetTutorialProfile();
 	else
-		profile = Game::GetInstance()->GetSurvivalProfile();
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = Game::GetInstance()->GetStoryProfile();
+		else
+			profile = Game::GetInstance()->GetSurvivalProfile();
 
+	}
+	
 
 
 

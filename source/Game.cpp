@@ -87,7 +87,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	//m_pFont->Initialize("resource/bitmapfonts/Arial.xml", '\0', false);
 
 	m_pFont2->Initialize("resource/bitmapfonts/Arial.xml", '\0', false);
-	m_hHudWpn = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/hudweapons.png");
+
 	AnimationManager*		pAnimationManager = AnimationManager::GetInstance();
 
 	// player animations
@@ -99,6 +99,8 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
 	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
+	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
+
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
 
 
@@ -173,9 +175,12 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	// Setup the profiles
 	CreateStoryProfiles();
 	CreateSurvivalProfiles();
+	CreateTutorialProfile();
 
 	LoadStoryProfiles();
 	LoadSurvivalProfiles();
+	LoadTutorialProfiles();
+	
 
 	// Start the game in the Main Menu state
 	/*
@@ -1496,6 +1501,565 @@ void Game::LoadSurvivalProfiles(void)
 		}
 	}
 }
+void				Game::LoadTutorialProfiles(void)
+{
+	//* If using Wide characters under project settings *//
+	HRESULT hr;
+	ostringstream stringstream;
+	char path[MAX_PATH];
+	LPWSTR wszPath = NULL;
+	size_t   size;
+
+
+	// Get the path to the app data folder
+	hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, 0, &wszPath);
+
+
+	// Convert from LPWSTR to char[]
+	wcstombs_s(&size, path, MAX_PATH, wszPath, MAX_PATH);
+
+
+	// Convert char types
+	if (hr == S_OK)
+		stringstream << path;
+	string pathtowrite = stringstream.str();
+
+
+	// Add the company and game information
+	pathtowrite += "\\CTS\\ZombieStrike\\Tutorial\\";
+
+
+	// Create our directory
+	SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
+
+
+	// Create our save file
+
+	string filePath = pathtowrite;
+
+	filePath += "savefile.save";
+
+
+	ifstream fin(filePath.c_str());
+	if (fin.is_open())
+	{
+		getline(fin, tutorialProfile.path);
+
+		fin >> tutorialProfile.time.tm_year;
+
+		fin >> tutorialProfile.time.tm_mon;
+		fin >> tutorialProfile.time.tm_mday;
+		fin >> tutorialProfile.time.tm_hour;
+		fin >> tutorialProfile.time.tm_min;
+		fin >> tutorialProfile.time.tm_sec;
+
+		fin >> tutorialProfile.health;
+
+
+#pragma region Pistols
+
+		//pistol
+		fin >> tutorialProfile.pistol.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.pistol.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.pistol.magSize.upgradedSkill.maxTier;
+
+
+		fin >> tutorialProfile.pistol.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.pistol.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.pistol.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.pistol.recoilTime.upgradedSkill.stat;
+		fin >> tutorialProfile.pistol.recoilTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.pistol.recoilTime.upgradedSkill.maxTier;
+		fin >> tutorialProfile.pistol.isEquipt;
+
+		//revolver
+		fin >> tutorialProfile.revolver.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.revolver.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.revolver.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.revolver.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.revolver.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.revolver.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.revolver.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.revolver.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.revolver.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.revolver.recoilTime.upgradedSkill.stat;
+		fin >> tutorialProfile.revolver.recoilTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.revolver.recoilTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.revolver.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.revolver.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.revolver.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.revolver.penPower.upgradedSkill.stat;
+		fin >> tutorialProfile.revolver.penPower.upgradedSkill.currTier;
+		fin >> tutorialProfile.revolver.penPower.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.revolver.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.revolver.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.revolver.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.revolver.isBought;
+		fin >> tutorialProfile.revolver.isEquipt;
+
+
+#pragma endregion
+
+
+
+
+
+#pragma region SMGs
+		//Mac10
+		fin >> tutorialProfile.mac10.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.mac10.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.mac10.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.mac10.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.mac10.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.mac10.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.mac10.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.mac10.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.mac10.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.mac10.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.mac10.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.mac10.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.mac10.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.mac10.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.mac10.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.mac10.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.mac10.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.mac10.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.mac10.isBought;
+		fin >> tutorialProfile.mac10.isEquipt;
+
+		//Tech9
+		fin >> tutorialProfile.tech9.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.tech9.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.tech9.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.tech9.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.tech9.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.tech9.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.tech9.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.tech9.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.tech9.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.tech9.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.tech9.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.tech9.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.tech9.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.tech9.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.tech9.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.tech9.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.tech9.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.tech9.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.tech9.isBought;
+		fin >> tutorialProfile.tech9.isEquipt;
+
+		//P90
+		fin >> tutorialProfile.p90.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.p90.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.p90.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.p90.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.p90.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.p90.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.p90.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.p90.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.p90.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.p90.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.p90.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.p90.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.p90.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.p90.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.p90.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.p90.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.p90.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.p90.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.p90.isBought;
+		fin >> tutorialProfile.p90.isEquipt;
+
+#pragma endregion
+
+#pragma region Shotguns
+
+		//SawnOff
+		fin >> tutorialProfile.sawnoff.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.sawnoff.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.sawnoff.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sawnoff.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.sawnoff.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.sawnoff.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sawnoff.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.sawnoff.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.sawnoff.reloadTime.upgradedSkill.maxTier;
+
+
+		fin >> tutorialProfile.sawnoff.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.sawnoff.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.sawnoff.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sawnoff.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.sawnoff.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.sawnoff.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sawnoff.recoilTime.upgradedSkill.stat;
+		fin >> tutorialProfile.sawnoff.recoilTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.sawnoff.recoilTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sawnoff.isBought;
+		fin >> tutorialProfile.sawnoff.isEquipt;
+
+
+		//Pump
+		fin >> tutorialProfile.pumpShotgun.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.pumpShotgun.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.pumpShotgun.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.pumpShotgun.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.pumpShotgun.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.pumpShotgun.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.pumpShotgun.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.pumpShotgun.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.pumpShotgun.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.pumpShotgun.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.pumpShotgun.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.pumpShotgun.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.pumpShotgun.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.pumpShotgun.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.pumpShotgun.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.pumpShotgun.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.pumpShotgun.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.pumpShotgun.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.pumpShotgun.recoilTime.upgradedSkill.stat;
+		fin >> tutorialProfile.pumpShotgun.recoilTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.pumpShotgun.recoilTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.pumpShotgun.isBought;
+		fin >> tutorialProfile.pumpShotgun.isEquipt;
+
+		//Auto
+		fin >> tutorialProfile.autoShotgun.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.autoShotgun.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.autoShotgun.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.autoShotgun.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.autoShotgun.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.autoShotgun.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.autoShotgun.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.autoShotgun.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.autoShotgun.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.autoShotgun.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.autoShotgun.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.autoShotgun.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.autoShotgun.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.autoShotgun.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.autoShotgun.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.autoShotgun.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.autoShotgun.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.autoShotgun.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.autoShotgun.recoilTime.upgradedSkill.stat;
+		fin >> tutorialProfile.autoShotgun.recoilTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.autoShotgun.recoilTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.autoShotgun.isBought;
+		fin >> tutorialProfile.autoShotgun.isEquipt;
+
+
+
+#pragma endregion
+
+#pragma region Assault Rifles
+
+		//AK-47
+		fin >> tutorialProfile.ak47.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.ak47.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.ak47.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.ak47.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.ak47.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.ak47.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.ak47.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.ak47.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.ak47.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.ak47.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.ak47.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.ak47.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.ak47.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.ak47.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.ak47.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.ak47.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.ak47.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.ak47.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.ak47.recoilTime.upgradedSkill.stat;
+		fin >> tutorialProfile.ak47.recoilTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.ak47.recoilTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.ak47.isBought;
+		fin >> tutorialProfile.ak47.isEquipt;
+
+		//M-16
+		fin >> tutorialProfile.m16.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.m16.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.m16.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.m16.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.m16.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.m16.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.m16.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.m16.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.m16.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.m16.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.m16.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.m16.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.m16.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.m16.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.m16.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.m16.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.m16.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.m16.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.m16.recoilTime.upgradedSkill.stat;
+		fin >> tutorialProfile.m16.recoilTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.m16.recoilTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.m16.isBought;
+		fin >> tutorialProfile.m16.isEquipt;
+
+		//LMG
+		fin >> tutorialProfile.lmg.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.lmg.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.lmg.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.lmg.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.lmg.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.lmg.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.lmg.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.lmg.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.lmg.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.lmg.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.lmg.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.lmg.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.lmg.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.lmg.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.lmg.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.lmg.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.lmg.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.lmg.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.lmg.recoilTime.upgradedSkill.stat;
+		fin >> tutorialProfile.lmg.recoilTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.lmg.recoilTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.lmg.isBought;
+		fin >> tutorialProfile.lmg.isEquipt;
+
+#pragma endregion
+
+#pragma region Heavy Weapons
+
+		//Sniper
+		fin >> tutorialProfile.sniper.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.sniper.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.sniper.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sniper.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.sniper.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.sniper.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sniper.penPower.upgradedSkill.stat;
+		fin >> tutorialProfile.sniper.penPower.upgradedSkill.currTier;
+		fin >> tutorialProfile.sniper.penPower.upgradedSkill.maxTier;
+
+
+		fin >> tutorialProfile.sniper.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.sniper.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.sniper.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sniper.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.sniper.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.sniper.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sniper.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.sniper.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.sniper.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sniper.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.sniper.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.sniper.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sniper.recoilTime.upgradedSkill.stat;
+		fin >> tutorialProfile.sniper.recoilTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.sniper.recoilTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.sniper.isBought;
+		fin >> tutorialProfile.sniper.isEquipt;
+
+		//Flamethrower
+
+		fin >> tutorialProfile.flameThrower.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.flameThrower.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.flameThrower.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.flameThrower.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.flameThrower.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.flameThrower.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.flameThrower.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.flameThrower.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.flameThrower.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.flameThrower.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.flameThrower.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.flameThrower.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.flameThrower.bulletSpread.upgradedSkill.stat;
+		fin >> tutorialProfile.flameThrower.bulletSpread.upgradedSkill.currTier;
+		fin >> tutorialProfile.flameThrower.bulletSpread.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.flameThrower.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.flameThrower.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.flameThrower.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.flameThrower.bulletVelocity.upgradedSkill.stat;
+		fin >> tutorialProfile.flameThrower.bulletVelocity.upgradedSkill.currTier;
+		fin >> tutorialProfile.flameThrower.bulletVelocity.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.flameThrower.isBought;
+		fin >> tutorialProfile.flameThrower.isEquipt;
+
+		//Grenade Launcher
+
+		fin >> tutorialProfile.nadeLauncher.totalAmmo.upgradedSkill.stat;
+		fin >> tutorialProfile.nadeLauncher.totalAmmo.upgradedSkill.currTier;
+		fin >> tutorialProfile.nadeLauncher.totalAmmo.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.nadeLauncher.magSize.upgradedSkill.stat;
+		fin >> tutorialProfile.nadeLauncher.magSize.upgradedSkill.currTier;
+		fin >> tutorialProfile.nadeLauncher.magSize.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.nadeLauncher.ammoCap.upgradedSkill.stat;
+		fin >> tutorialProfile.nadeLauncher.ammoCap.upgradedSkill.currTier;
+		fin >> tutorialProfile.nadeLauncher.ammoCap.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.nadeLauncher.reloadTime.upgradedSkill.stat;
+		fin >> tutorialProfile.nadeLauncher.reloadTime.upgradedSkill.currTier;
+		fin >> tutorialProfile.nadeLauncher.reloadTime.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.nadeLauncher.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.nadeLauncher.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.nadeLauncher.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.nadeLauncher.bulletVelocity.upgradedSkill.stat;
+		fin >> tutorialProfile.nadeLauncher.bulletVelocity.upgradedSkill.currTier;
+		fin >> tutorialProfile.nadeLauncher.bulletVelocity.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.nadeLauncher.isBought;
+		fin >> tutorialProfile.nadeLauncher.isEquipt;
+
+		//Barb Wire
+		fin >> tutorialProfile.barbWire.maxHealth.upgradedSkill.stat;
+		fin >> tutorialProfile.barbWire.maxHealth.upgradedSkill.currTier;
+		fin >> tutorialProfile.barbWire.maxHealth.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.barbWire.damage.upgradedSkill.stat;
+		fin >> tutorialProfile.barbWire.damage.upgradedSkill.currTier;
+		fin >> tutorialProfile.barbWire.damage.upgradedSkill.maxTier;
+
+		fin >> tutorialProfile.barbWire.isBought;
+
+		for (size_t j = 0; j < 30; j++)
+		{
+
+			fin >> tutorialProfile.barbWireStates[j];
+
+
+		}
+		//Sandbag
+
+		fin >> tutorialProfile.sandBag.maxHealth.upgradedSkill.stat;
+		fin >> tutorialProfile.sandBag.maxHealth.upgradedSkill.currTier;
+		fin >> tutorialProfile.sandBag.maxHealth.upgradedSkill.maxTier;
+
+
+		fin >> tutorialProfile.sandBag.isBought;
+
+		for (size_t j = 0; j < 30; j++)
+		{
+
+			fin >> tutorialProfile.sandBagStates[j];
+
+
+		}
+
+
+		fin >> tutorialProfile.landMine.isBought;
+
+		for (size_t j = 0; j < 50; j++)
+		{
+
+			fin >> tutorialProfile.landMineStates[j];
+
+
+		}
+
+		fin >> tutorialProfile.numTurrets;
+
+		fin >> tutorialProfile.maxNumTurrets;
+
+
+		fin >> tutorialProfile.wavesComplete;
+
+
+
+
+
+		//LandMine
+	}
+}
 
 /**************************************************************/
 // CreateProfiles
@@ -2439,7 +3003,7 @@ void Game::OverWriteProfile(GamerProfile& profile)
 	fstream fout(filePath.c_str(), std::ios_base::out);
 	if (fout.is_open())
 	{
-		WeaponManager::GetInstance()->GetWeapons();
+		
 		fout << filePath << '\n';
 
 
@@ -2858,6 +3422,11 @@ char path[MAX_PATH];
 LPWSTR wszPath = NULL;
 size_t   size;
 
+time_t tempTime;
+time(&tempTime);
+
+tm localTime;
+localtime_s(&localTime, &tempTime);
 
 // Get the path to the app data folder
 hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, 0, &wszPath);
@@ -2887,526 +3456,417 @@ SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 	filePath += "savefile.save";
 	//filePath += std::to_string(i);
 
-	ifstream fin(filePath.c_str());
-	if (fin.is_open())
+	ofstream fout(filePath.c_str());
+	if (fout.is_open())
 	{
-		getline(fin, tutorialProfile.path);
 
-		fin >> tutorialProfile.time.tm_year;
+		fout << filePath << '\n';
 
-		fin >> tutorialProfile.time.tm_mon;
-		fin >> tutorialProfile.time.tm_mday;
-		fin >> tutorialProfile.time.tm_hour;
-		fin >> tutorialProfile.time.tm_min;
-		fin >> tutorialProfile.time.tm_sec;
+
+		fout << (localTime.tm_year + 1900) << '\n';
+		fout << (localTime.tm_mon + 1) << '\n';
+		fout << localTime.tm_mday << '\n';
+		fout << localTime.tm_hour << '\n';
+		fout << localTime.tm_min << '\n';
+		fout << localTime.tm_sec << '\n';
+
+		fout << 100 << '\n';
 
 #pragma region Pistols
 
-		//pistol
-		fin >> tutorialProfile.pistol.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.pistol.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.pistol.magSize.upgradedSkill.maxTier;
-
-
-		fin >> tutorialProfile.pistol.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.pistol.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.pistol.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.pistol.recoilTime.upgradedSkill.stat;
-		fin >> tutorialProfile.pistol.recoilTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.pistol.recoilTime.upgradedSkill.maxTier;
-		fin >> tutorialProfile.pistol.isEquipt;
+		//pistol stats
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .33 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
 
 		//revolver
-		fin >> tutorialProfile.revolver.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.revolver.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.revolver.totalAmmo.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.revolver.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.revolver.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.revolver.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.revolver.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.revolver.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.revolver.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.revolver.recoilTime.upgradedSkill.stat;
-		fin >> tutorialProfile.revolver.recoilTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.revolver.recoilTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.revolver.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.revolver.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.revolver.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.revolver.penPower.upgradedSkill.stat;
-		fin >> tutorialProfile.revolver.penPower.upgradedSkill.currTier;
-		fin >> tutorialProfile.revolver.penPower.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.revolver.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.revolver.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.revolver.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.revolver.isBought;
-		fin >> tutorialProfile.revolver.isEquipt;
-
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 50 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
 #pragma endregion
 
-
-
-
-
 #pragma region SMGs
 		//Mac10
-		fin >> tutorialProfile.mac10.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.mac10.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.mac10.totalAmmo.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.mac10.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.mac10.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.mac10.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.mac10.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.mac10.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.mac10.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.mac10.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.mac10.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.mac10.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.mac10.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.mac10.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.mac10.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.mac10.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.mac10.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.mac10.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.mac10.isBought;
-		fin >> tutorialProfile.mac10.isEquipt;
+		fout << 60 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 60 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
 		//Tech9
-		fin >> tutorialProfile.tech9.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.tech9.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.tech9.totalAmmo.upgradedSkill.maxTier;
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 35 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
-		fin >> tutorialProfile.tech9.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.tech9.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.tech9.magSize.upgradedSkill.maxTier;
+		//p90
+		fout << 150 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 50 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 150 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 35 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
-		fin >> tutorialProfile.tech9.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.tech9.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.tech9.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.tech9.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.tech9.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.tech9.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.tech9.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.tech9.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.tech9.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.tech9.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.tech9.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.tech9.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.tech9.isBought;
-		fin >> tutorialProfile.tech9.isEquipt;
-
-		//P90
-		fin >> tutorialProfile.p90.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.p90.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.p90.totalAmmo.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.p90.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.p90.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.p90.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.p90.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.p90.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.p90.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.p90.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.p90.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.p90.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.p90.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.p90.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.p90.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.p90.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.p90.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.p90.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.p90.isBought;
-		fin >> tutorialProfile.p90.isEquipt;
 
 #pragma endregion
 
 #pragma region Shotguns
+		//sawn off
+		fout << 16 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 16 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 35 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
-		//SawnOff
-		fin >> tutorialProfile.sawnoff.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.sawnoff.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.sawnoff.totalAmmo.upgradedSkill.maxTier;
+		//pump
+		fout << 24 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 6 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 24 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
-		fin >> tutorialProfile.sawnoff.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.sawnoff.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.sawnoff.ammoCap.upgradedSkill.maxTier;
+		//auto shotty
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 15 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
-		fin >> tutorialProfile.sawnoff.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.sawnoff.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.sawnoff.reloadTime.upgradedSkill.maxTier;
 
-
-		fin >> tutorialProfile.sawnoff.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.sawnoff.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.sawnoff.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.sawnoff.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.sawnoff.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.sawnoff.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.sawnoff.recoilTime.upgradedSkill.stat;
-		fin >> tutorialProfile.sawnoff.recoilTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.sawnoff.recoilTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.sawnoff.isBought;
-		fin >> tutorialProfile.sawnoff.isEquipt;
-
-
-		//Pump
-		fin >> tutorialProfile.pumpShotgun.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.pumpShotgun.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.pumpShotgun.totalAmmo.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.pumpShotgun.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.pumpShotgun.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.pumpShotgun.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.pumpShotgun.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.pumpShotgun.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.pumpShotgun.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.pumpShotgun.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.pumpShotgun.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.pumpShotgun.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.pumpShotgun.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.pumpShotgun.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.pumpShotgun.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.pumpShotgun.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.pumpShotgun.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.pumpShotgun.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.pumpShotgun.recoilTime.upgradedSkill.stat;
-		fin >> tutorialProfile.pumpShotgun.recoilTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.pumpShotgun.recoilTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.pumpShotgun.isBought;
-		fin >> tutorialProfile.pumpShotgun.isEquipt;
-
-		//Auto
-		fin >> tutorialProfile.autoShotgun.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.autoShotgun.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.autoShotgun.totalAmmo.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.autoShotgun.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.autoShotgun.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.autoShotgun.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.autoShotgun.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.autoShotgun.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.autoShotgun.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.autoShotgun.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.autoShotgun.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.autoShotgun.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.autoShotgun.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.autoShotgun.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.autoShotgun.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.autoShotgun.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.autoShotgun.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.autoShotgun.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.autoShotgun.recoilTime.upgradedSkill.stat;
-		fin >> tutorialProfile.autoShotgun.recoilTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.autoShotgun.recoilTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.autoShotgun.isBought;
-		fin >> tutorialProfile.autoShotgun.isEquipt;
 
 
 
 #pragma endregion
+
 
 #pragma region Assault Rifles
+		//ak47
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 7 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 40 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .33 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
-		//AK-47
-		fin >> tutorialProfile.ak47.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.ak47.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.ak47.totalAmmo.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.ak47.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.ak47.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.ak47.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.ak47.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.ak47.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.ak47.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.ak47.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.ak47.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.ak47.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.ak47.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.ak47.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.ak47.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.ak47.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.ak47.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.ak47.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.ak47.recoilTime.upgradedSkill.stat;
-		fin >> tutorialProfile.ak47.recoilTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.ak47.recoilTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.ak47.isBought;
-		fin >> tutorialProfile.ak47.isEquipt;
-
-		//M-16
-		fin >> tutorialProfile.m16.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.m16.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.m16.totalAmmo.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.m16.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.m16.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.m16.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.m16.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.m16.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.m16.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.m16.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.m16.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.m16.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.m16.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.m16.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.m16.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.m16.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.m16.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.m16.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.m16.recoilTime.upgradedSkill.stat;
-		fin >> tutorialProfile.m16.recoilTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.m16.recoilTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.m16.isBought;
-		fin >> tutorialProfile.m16.isEquipt;
+		//m16
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
 		//LMG
-		fin >> tutorialProfile.lmg.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.lmg.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.lmg.totalAmmo.upgradedSkill.maxTier;
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 100 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 6 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 75 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .33 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
-		fin >> tutorialProfile.lmg.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.lmg.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.lmg.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.lmg.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.lmg.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.lmg.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.lmg.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.lmg.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.lmg.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.lmg.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.lmg.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.lmg.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.lmg.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.lmg.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.lmg.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.lmg.recoilTime.upgradedSkill.stat;
-		fin >> tutorialProfile.lmg.recoilTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.lmg.recoilTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.lmg.isBought;
-		fin >> tutorialProfile.lmg.isEquipt;
 
 #pragma endregion
+
 
 #pragma region Heavy Weapons
+		//sniper
+		fout << 15 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 15 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+		//flamethrower
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 100 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 300 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
-		//Sniper
-		fin >> tutorialProfile.sniper.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.sniper.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.sniper.totalAmmo.upgradedSkill.maxTier;
+		//grenade launcher
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 300 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
 
-		fin >> tutorialProfile.sniper.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.sniper.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.sniper.magSize.upgradedSkill.maxTier;
 
-		fin >> tutorialProfile.sniper.penPower.upgradedSkill.stat;
-		fin >> tutorialProfile.sniper.penPower.upgradedSkill.currTier;
-		fin >> tutorialProfile.sniper.penPower.upgradedSkill.maxTier;
+		//barbedwire
+		fout << 100 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
 
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
 
-		fin >> tutorialProfile.sniper.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.sniper.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.sniper.ammoCap.upgradedSkill.maxTier;
+		fout << 0 << '\n';
 
-		fin >> tutorialProfile.sniper.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.sniper.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.sniper.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.sniper.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.sniper.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.sniper.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.sniper.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.sniper.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.sniper.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.sniper.recoilTime.upgradedSkill.stat;
-		fin >> tutorialProfile.sniper.recoilTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.sniper.recoilTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.sniper.isBought;
-		fin >> tutorialProfile.sniper.isEquipt;
-
-		//Flamethrower
-
-		fin >> tutorialProfile.flameThrower.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.flameThrower.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.flameThrower.totalAmmo.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.flameThrower.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.flameThrower.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.flameThrower.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.flameThrower.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.flameThrower.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.flameThrower.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.flameThrower.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.flameThrower.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.flameThrower.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.flameThrower.bulletSpread.upgradedSkill.stat;
-		fin >> tutorialProfile.flameThrower.bulletSpread.upgradedSkill.currTier;
-		fin >> tutorialProfile.flameThrower.bulletSpread.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.flameThrower.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.flameThrower.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.flameThrower.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.flameThrower.bulletVelocity.upgradedSkill.stat;
-		fin >> tutorialProfile.flameThrower.bulletVelocity.upgradedSkill.currTier;
-		fin >> tutorialProfile.flameThrower.bulletVelocity.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.flameThrower.isBought;
-		fin >> tutorialProfile.flameThrower.isEquipt;
-
-		//Grenade Launcher
-
-		fin >> tutorialProfile.nadeLauncher.totalAmmo.upgradedSkill.stat;
-		fin >> tutorialProfile.nadeLauncher.totalAmmo.upgradedSkill.currTier;
-		fin >> tutorialProfile.nadeLauncher.totalAmmo.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.nadeLauncher.magSize.upgradedSkill.stat;
-		fin >> tutorialProfile.nadeLauncher.magSize.upgradedSkill.currTier;
-		fin >> tutorialProfile.nadeLauncher.magSize.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.nadeLauncher.ammoCap.upgradedSkill.stat;
-		fin >> tutorialProfile.nadeLauncher.ammoCap.upgradedSkill.currTier;
-		fin >> tutorialProfile.nadeLauncher.ammoCap.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.nadeLauncher.reloadTime.upgradedSkill.stat;
-		fin >> tutorialProfile.nadeLauncher.reloadTime.upgradedSkill.currTier;
-		fin >> tutorialProfile.nadeLauncher.reloadTime.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.nadeLauncher.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.nadeLauncher.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.nadeLauncher.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.nadeLauncher.bulletVelocity.upgradedSkill.stat;
-		fin >> tutorialProfile.nadeLauncher.bulletVelocity.upgradedSkill.currTier;
-		fin >> tutorialProfile.nadeLauncher.bulletVelocity.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.nadeLauncher.isBought;
-		fin >> tutorialProfile.nadeLauncher.isEquipt;
-
-		//Barb Wire
-		fin >> tutorialProfile.barbWire.maxHealth.upgradedSkill.stat;
-		fin >> tutorialProfile.barbWire.maxHealth.upgradedSkill.currTier;
-		fin >> tutorialProfile.barbWire.maxHealth.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.barbWire.damage.upgradedSkill.stat;
-		fin >> tutorialProfile.barbWire.damage.upgradedSkill.currTier;
-		fin >> tutorialProfile.barbWire.damage.upgradedSkill.maxTier;
-
-		fin >> tutorialProfile.barbWire.isBought;
-
-		for (size_t j = 0; j < 30; j++)
+		for (size_t i = 0; i < 30; i++)
 		{
-
-			fin >> tutorialProfile.barbWireStates[j];
-
-
+			fout << 0 << '\n';
 		}
-		//Sandbag
 
-		fin >> tutorialProfile.sandBag.maxHealth.upgradedSkill.stat;
-		fin >> tutorialProfile.sandBag.maxHealth.upgradedSkill.currTier;
-		fin >> tutorialProfile.sandBag.maxHealth.upgradedSkill.maxTier;
+		//sandbags
+		fout << 250 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
 
+		fout << 0 << '\n';
 
-		fin >> tutorialProfile.sandBag.isBought;
-
-		for (size_t j = 0; j < 30; j++)
+		for (size_t i = 0; i < 30; i++)
 		{
+			fout << 0 << '\n';
+		}
 
-			fin >> tutorialProfile.sandBagStates[j];
+		//landmines
+		fout << 0 << '\n';
 
-
+		for (size_t i = 0; i < 50; i++)
+		{
+			fout << 0 << '\n';
 		}
 
 
-		fin >> tutorialProfile.landMine.isBought;
+		//turrets
+		//numturrets
+		fout << 0 << '\n';
+		//max num turrets
+		fout << 3 << '\n';
 
-		for (size_t j = 0; j < 50; j++)
-		{
-
-			fin >> tutorialProfile.landMineStates[j];
-
-
-		}
-
-		fin >> tutorialProfile.numTurrets;
-
-		fin >> tutorialProfile.maxNumTurrets;
-
-
-		fin >> tutorialProfile.wavesComplete;
-
-
-
-
-
-		//LandMine
-
-
+		//num waves
+		fout << 0;
 
 #pragma endregion
 
-		fin.close();
+		fout.close();
 	}
 }

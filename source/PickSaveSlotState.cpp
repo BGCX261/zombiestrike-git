@@ -38,15 +38,11 @@ void PickSaveSlotState::Enter(void)
 	{
 		for (unsigned int i = 0; i < 3; i++)
 		{
+
+
 			profiles[i] = Game::GetInstance()->GetSpecStoryProfile(i);
 		}
 	}
-
-	else if (HTPGameState::GetInstance()->GetGameMode())
-	{
-		profiles[0] = Game::GetInstance()->GetTutorialProfile();
-	}
-
 	else
 	{
 		for (unsigned int i = 0; i < 3; i++)

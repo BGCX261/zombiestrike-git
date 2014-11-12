@@ -33,7 +33,13 @@ PlayerController::~PlayerController()
 	{
 		if (pInput->GetRightJoystick(0).x != 0.0f && pInput->GetRightJoystick(0).y != 0.0f)
 		{
-			SGD::Vector toCursor = SGD::Point(pInput->GetRightJoystick(0).x * 1000 + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetRightJoystick(0).y * 1000 + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+			SGD::Vector toCursor;
+			// rotate to face mouse
+			if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
+				toCursor = SGD::Point(pInput->GetMousePosition().x + HTPGameState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + HTPGameState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+			else
+				toCursor = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+
 			if (m_Player->m_bIsAlive == true)
 			{
 				toCursor.Normalize();
@@ -55,8 +61,14 @@ PlayerController::~PlayerController()
 	}
 	else
 	{
+		SGD::Vector toMouse;
 		// rotate to face mouse
-		SGD::Vector toMouse = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+		if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
+			toMouse = SGD::Point(pInput->GetMousePosition().x + HTPGameState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + HTPGameState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+		else
+			toMouse = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+
+		
 		if (m_Player->m_bIsAlive == true)
 		{
 			toMouse.Normalize();

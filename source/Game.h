@@ -66,6 +66,9 @@ public:
 
 	GamerProfile&		GetTutorialProfile(void)		{ return tutorialProfile; }
 
+
+
+
 	GamerProfile&		GetSpecStoryProfile(int index)		{ return storyProfiles[index]; }
 	GamerProfile&		GetSpecSurvialProfile(int index)		{ return survivalProfiles[index]; }
 
@@ -80,9 +83,7 @@ public:
 
 	void				OverWriteProfile(GamerProfile& profile);
 
-	GamerProfile		storyProfiles[3];
-	GamerProfile		survivalProfiles[3];
-	GamerProfile		tutorialProfile;
+
 
 	unsigned int		selectedProfile	= 0;
 
@@ -185,7 +186,9 @@ private:
 	// Loading screen
 	SGD::HTexture			loadScreen		= SGD::INVALID_HANDLE;
 
-
+	GamerProfile		storyProfiles[3];
+	GamerProfile		survivalProfiles[3];
+	GamerProfile		tutorialProfile;
 };
 
 #endif //GAME_H
