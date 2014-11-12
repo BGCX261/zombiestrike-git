@@ -130,7 +130,11 @@ public:
 	float				GetCurrHealth		(void) const				{ return m_fCurrHP; }
 	float				GetMaxHealth		(void) const				{ return m_fMaxHP; }
 
-	void				CheckDamage		(void);
+	void				CheckDamage			(void);
+
+	bool				GoodTurretPosition	(void) const;
+	SGD::Point			GetTurretPosition	(void) const;
+
 
 
 

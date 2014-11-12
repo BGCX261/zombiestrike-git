@@ -27,6 +27,7 @@
 #include "CreateFlameBullet.h"
 #include "CreateGrenadeBullet.h"
 #include "CreatePukeBullet.h"
+#include "CreateTurretBullet.h"
 #include "CreateBloodMsg.h"
 
 #include "Spawner.h"
@@ -85,6 +86,8 @@
 //	- set up entities
 /*virtual*/ void HTPGameState::Enter(void)
 {
+	
+
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor({ 0, 0, 0 });	// black
 
@@ -92,6 +95,7 @@
 	SGD::EventManager::GetInstance()->Initialize();
 	SGD::MessageManager::GetInstance()->Initialize(&MessageProc);
 
+	tutRect = { Game::GetInstance()->GetScreenWidth() / 2 - 350.0f, Game::GetInstance()->GetScreenHeight() / 2 - 200, Game::GetInstance()->GetScreenWidth() / 2 + 350.0f, Game::GetInstance()->GetScreenHeight() / 2 + 200 };
 	// Allocate the Entity Manager
 	m_pEntities = new EntityManager;
 
@@ -149,7 +153,9 @@
 	//playerHurt1 = pAudio->LoadAudio("resource/audio/player_grunt1.wav");
 	//playerHurt2 = pAudio->LoadAudio("resource/audio/player_grunt2.wav");
 	//playerHurt3 = pAudio->LoadAudio("resource/audio/player_grunt3.wav");
-	if (m_bStoryMode == true)
+	if (m_bTutorialMode == true)
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetTutorialProfile(), m_pEntities);
+	else if (m_bStoryMode == true)
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
 	else
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
@@ -160,7 +166,7 @@
 	{
 		SpawnManager::GetInstance()->Activate();
 	}
-	
+
 	// Music
 	//storyMusic = pAudio->LoadAudio("resource/audio/AmbienceDrama.xwm");
 	//survivalMusic = pAudio->LoadAudio("resource/audio/AmbienceDungeon.xwm");
@@ -209,7 +215,23 @@
 
 	WeaponManager::GetInstance()->Initialize(*pPlayer);
 
-	//m_tCompleteWave.AddTime(3);
+	iTutorial[0] = "Controls";
+	iTutorial[1] = "Practice your shot at the shooting range.";
+	iTutorial[2] = "If you would like to check out any"; 
+	iTutorial[3] = "merchandise feel free to press the buy ";
+	iTutorial[4] = "button If you kill a zombie... Don't"; 
+	iTutorial[5] = "worry we'll send out more.";
+	iTutorial[6] = "Usually these zombies are carrying money."; 
+	iTutorial[7] = "I guess they won't be needing it anymore."; 
+	iTutorial[8] = "So you might as well spend it at the shop.";
+	iTutorial[9] = "You can buy weapons and upgrade them"; 
+	iTutorial[10] = "from the shop.";
+	iTutorial[11] = "Next to continue to the shooting range";
+	iTutorial[12] = "               -OR-                   ";
+	iTutorial[13] = "     Previous to go to last page      ";
+	iTutorial[14] = "    PREV";
+	iTutorial[15] = "NEXT          ";
+
 	m_tStartTutorial.AddTime(1.0f);
 }
 
@@ -368,6 +390,19 @@
 		}
 	}
 
+	else if (m_bIsChoiceScreen == false && m_tStartTutorial.GetTime() <= 0.0f && m_bIsTutorial == true)
+	{
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		{
+			m_nCurPage++;
+		}
+
+		if (pInput->IsKeyPressed(SGD::Key::MouseRight) == true)
+		{
+			m_nCurPage--;
+		}
+	}
+
 	else
 	{
 		/**********************************************************/
@@ -393,7 +428,6 @@
 			SGD::Event msg("PAUSE");
 			msg.SendEventNow();
 			Game::GetInstance()->AddState(LoseGameState::GetInstance());
-
 
 			if (pAudio->IsAudioPlaying(Game::GetInstance()->storyMusic) == true)
 				pAudio->StopAudio(Game::GetInstance()->storyMusic);
@@ -421,12 +455,32 @@
 {
 	Player* player = dynamic_cast<Player*>(m_pPlayer);
 
-	//m_tStartTutorial.Update(dt);
 
 
-	if (m_bIsChoiceScreen == false && m_tStartTutorial.GetTime() <= 0.0f )
+	
+
+	if (m_tStartTutorial.GetTime() > 0.0f && m_bIsChoiceScreen == false)
+		m_tStartTutorial.Update(dt);
+	
+	if (m_bIsChoiceScreen == true){}
+
+	else if (m_bIsChoiceScreen == false && m_tStartTutorial.GetTime() <= 0.0f && m_bIsTutorial == false && m_bIsHowToPlay == false)
 	{
+		m_bIsTutorial = true;
+		m_bIsHowToPlay = true;
+	}
 
+	else if (m_bIsTutorial == true)
+	{
+		if (m_nCurPage > 3)
+		{
+			m_bIsTutorial = false;
+		}
+
+		if (m_nCurPage < 0)
+		{
+			m_nCurPage = 0;
+		}
 	}
 
 	else
@@ -462,6 +516,7 @@
 
 			// Update the Map Manager
 			//	MapManager::GetInstance()->Update(dt);
+
 
 		}
 
@@ -526,24 +581,30 @@
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 	const BitmapFont * pFont = Game::GetInstance()->GetFont();
 	
+
+
 	if (m_bIsChoiceScreen == true)
 	{
-		pFont->Draw("YES", { Game::GetInstance()->GetScreenWidth() / 2 - 100, Game::GetInstance()->GetScreenHeight() / 2 }, 1.0f, { 100, 0, 0 });
-		pFont->Draw("NO", { Game::GetInstance()->GetScreenWidth() / 2 + 100, Game::GetInstance()->GetScreenHeight() / 2 }, 1.0f, { 100, 0, 0 });
+		pFont->Draw("Would you like to try the firing range", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 - 45}, 1.25f, { 100, 0, 0 });
+		pFont->Draw("before playing?", { Game::GetInstance()->GetScreenWidth() / 2 - 128 , Game::GetInstance()->GetScreenHeight() / 2 }, 1.25f, { 100, 0, 0 });
+		pFont->Draw("Yes", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 100, 0, 0 });
+		pFont->Draw("No", { Game::GetInstance()->GetScreenWidth() / 2 + 210, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 100, 0, 0 });
 
 		if (m_nCursor == 0)
 		{
-			pFont->Draw("()", { Game::GetInstance()->GetScreenWidth() / 2 - 125, Game::GetInstance()->GetScreenHeight() / 2 }, 1.0f, { 0, 100, 0 });
+			pFont->Draw("()", { Game::GetInstance()->GetScreenWidth() / 2 - 340, Game::GetInstance()->GetScreenHeight() / 2 + 75 }, 1.0f, { 0, 100, 0 });
 		}
 
 		if (m_nCursor == 1)
 		{
-			pFont->Draw("()", { Game::GetInstance()->GetScreenWidth() / 2 + 75, Game::GetInstance()->GetScreenHeight() / 2 }, 1.0f, { 0, 100, 0 });
+			pFont->Draw("()", { Game::GetInstance()->GetScreenWidth() / 2 + 190, Game::GetInstance()->GetScreenHeight() / 2 + 75 }, 1.0f, { 0, 100, 0 });
 		}
 	}
 
 	else
 	{
+
+
 		SGD::Point textPos({ Game::GetInstance()->GetScreenWidth() / 2, Game::GetInstance()->GetScreenHeight() / 2 });
 
 		// Draw background
@@ -617,6 +678,77 @@
 
 		retpos.Offset(-32.0F * retscale, -32.0F * retscale);
 		pGraphics->DrawTexture(Game::GetInstance()->m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+
+		if (m_bIsTutorial == true)
+		{
+
+			if (m_nCurPage == 0)
+			{
+				SGD::Point pos = { 0, 0 };
+
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2.0f);
+
+				pFont->Draw(iTutorial[0].c_str(), { (tutRect.left + tutRect.right) / 2 - 100.0f, tutRect.top + 15 + pos.y }, 1.25f, { 200, 0, 0 });
+
+				pFont->Draw(iTutorial[14].c_str(), { tutRect.left, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[15].c_str(), { tutRect.right - 150, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+
+			}
+
+			else if (m_nCurPage == 1)
+			{
+
+				SGD::Point pos = { 0, 0 };
+
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2.0f);
+
+				pFont->Draw(iTutorial[1].c_str(), { tutRect.left + 15 + pos.x, tutRect.top + 15 + pos.y}, 1.25f, { 200, 0, 0 });
+
+				for (unsigned int i = 2; i < 6; i++)
+				{
+					pFont->Draw(iTutorial[i].c_str(), { tutRect.left + 15, tutRect.top + pos.y + 30*i}, 1.25f, { 200, 0, 0 });
+
+					pos.y += 15.0f;
+				}
+
+				pFont->Draw(iTutorial[14].c_str(), { tutRect.left, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[15].c_str(), { tutRect.right - 150, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				
+			}
+
+			else if (m_nCurPage == 2)
+			{
+				SGD::Point pos = { 0, 0 };
+
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2.0f);
+
+				pFont->Draw(iTutorial[6].c_str(), { tutRect.left + 15, tutRect.top + 15}, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[7].c_str(), { tutRect.left + 15, tutRect.top + 60 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[8].c_str(), { tutRect.left + 15, tutRect.top + 105 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[9].c_str(), { tutRect.left + 15, tutRect.top + 150 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[10].c_str(), { tutRect.left + 15, tutRect.top + 195 }, 1.25f, { 200, 0, 0 });
+
+				pFont->Draw(iTutorial[14].c_str(), { tutRect.left, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[15].c_str(), { tutRect.right - 150, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+			}
+
+			else if (m_nCurPage == 3)
+			{
+				float yVal = ((tutRect.bottom - tutRect.top) / 2);
+				SGD::Point pos = { 0, yVal };
+
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2.0f);
+
+				pFont->Draw(iTutorial[11].c_str(), { tutRect.left + 25 + pos.x, tutRect.top + 15 + pos.y - 100 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[12].c_str(), { tutRect.left + 25 + pos.x, tutRect.top + 15 + pos.y - 40 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[13].c_str(), { tutRect.left + 25 + pos.x, tutRect.top + 15 + pos.y + 20 }, 1.25f, { 200, 0, 0 });
+
+				pFont->Draw(iTutorial[14].c_str(), { tutRect.left, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+				pFont->Draw(iTutorial[15].c_str(), { tutRect.right - 150, tutRect.bottom - 45 }, 1.25f, { 200, 0, 0 });
+
+			}
+
+		}
 	}
 
 }
@@ -787,6 +919,14 @@
 										 HTPGameState::GetInstance()->CreateTurret(pCreateTurretMsg->GetOwner());
 	}
 		break;
+
+	case MessageID::MSG_CREATE_TURRET_BLT:
+	{
+											 const CreateTurretBullet* pCreateBulletMsg = dynamic_cast<const CreateTurretBullet*>(pMsg);
+											 HTPGameState::GetInstance()->CreateTurretBullets(pCreateBulletMsg->GetOwner());
+	}
+		break;
+
 	case MessageID::MSG_CREATE_BLOOD:
 	{
 										const CreateBloodMsg* pCreateBloodMsg = dynamic_cast<const CreateBloodMsg*>(pMsg);
@@ -1039,6 +1179,26 @@ void HTPGameState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetVelocity(direction * owner->GetSpeed());
 	bullet->SetAnimation("bullet");
 	bullet->SetDamage(owner->GetDamage());
+
+
+	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);
+	bullet->Release();
+	bullet = nullptr;
+}
+
+void HTPGameState::CreateTurretBullets(Turret* turret)
+{
+	Bullet* bullet = new Bullet;
+	bullet->SetRotation(turret->GetRotation());
+	bullet->SetOwner(turret);
+	bullet->SetPosition(turret->GetPosition());
+	SGD::Vector direction = turret->GetDirection();
+	direction.Rotate(turret->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+
+	bullet->SetDirection(direction);
+	bullet->SetVelocity(direction * turret->GetSpeed());
+	bullet->SetAnimation("bullet");
+	bullet->SetDamage(turret->GetDamage());
 
 
 	m_pEntities->AddEntity(bullet, EntityBucket::BUCKET_BULLETS);

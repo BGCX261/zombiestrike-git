@@ -1,4 +1,3 @@
-
 #include "HUD.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_String.h"

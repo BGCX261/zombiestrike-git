@@ -20,6 +20,7 @@ class AnimationManager;
 class SandBag;
 class LandMine;
 class BarbedWire;
+class Turret;
 
 /**************************************************************/
 // GameplayState class
@@ -51,6 +52,8 @@ public:
 	void			PauseAudio(bool);
 
 	bool			GetGameMode(void) const	{ return m_bStoryMode; }
+	bool			GetTutorialMode(void) const { return m_bTutorialMode; }
+	bool			GetChoiceScreen() const { return m_bIsChoiceScreen; }
 	void			SetGameMode(bool m)		{ m_bStoryMode = m; }
 
 
@@ -73,6 +76,7 @@ public:
 	void			CreateSnipeBullet(Weapon* owner);
 	void			CreateFireBullet(Weapon* owner);
 	void			CreatePukeyBullet(Weapon* owner);
+	void			CreateTurretBullets(Turret* turret);
 	void			CreateGrenade(Weapon* owner);
 	void			CreateBlood(SGD::Point pos);
 
@@ -145,7 +149,7 @@ private:
 
 	/**********************************************************/
 	// World size
-	SGD::Size				m_szWorldSize = { 1024, 768 };
+	SGD::Size				m_szWorldSize = { 1536, 1536 };
 
 
 	//Textures
@@ -156,13 +160,20 @@ private:
 	/**********************************************************/
 	// Game mode: Story/Survival
 	bool					m_bStoryMode = true;
+	bool					m_bTutorialMode = true;
 
 	bool m_bShopState = false;
 	bool m_bIsChoiceScreen = true;
 	bool m_bIsHowToPlay = false;
+	bool m_bIsTutorial = false;
 
 	Timer m_tStartTutorial;
 
 	int m_nCursor = 0;
+	int m_nCurPage = 0;
+
+	string iTutorial[20];
+
+	SGD::Rectangle tutRect;
 };
 

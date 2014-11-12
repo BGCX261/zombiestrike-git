@@ -8,6 +8,7 @@
 #include "GameplayState.h"
 #include "BarbedWire.h"
 #include "LandMine.h"
+#include "House.h"
 #include "CreateBloodMsg.h"
 
 ExplodingZombie::ExplodingZombie()
@@ -35,6 +36,7 @@ void ExplodingZombie::Update(float dt)
 			// possible turret target
 			SGD::Event event = { "ASSESS_THREAT", nullptr, this };
 			event.SendEventNow(nullptr);
+
 		}
 		else
 		{
@@ -77,7 +79,6 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 
 			SetAnimation("bloodExplosion");
 
-
 			if (pAudio->IsAudioPlaying(Game::GetInstance()->zombie_pain) == false)
 				pAudio->PlayAudio(Game::GetInstance()->zombie_pain, false);
 
@@ -91,12 +92,8 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 			if (barbWire->IsActive())
 			{
 				SetAnimation("bloodExplosion");
-				
 				MovingObject::HandleCollision(pOther);
 			}
-
-
-
 		}
 		else if (pOther->GetType() == OBJ_SANDBAG)
 		{
@@ -105,47 +102,27 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 			{
 				MovingObject::HandleCollision(pOther);
 				SetAnimation("bloodExplosion");
-
 			}
-
-
 		}
 
 		else if (pOther->GetType() == OBJ_LANDMINE)
-
 		{
 			const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
 			if (landMine->IsActive())
 			{
-			
 				SetAnimation("bloodExplosion");
-
 			}
 		}
 		else if (pOther->GetType() == OBJ_WALL)
-
 		{
-			
-			
-				
-				SetAnimation("bloodExplosion");
+			const House* house = dynamic_cast<const House*>(pOther);
 
-			
+			if (house->IsActive() == true)
+				SetAnimation("bloodExplosion");
 		}
 		else if (pOther->GetType() == OBJ_PLAYER)
-
 		{
-
-
-
 			SetAnimation("bloodExplosion");
-
-
 		}
 	}
-	else
-	{
-		
-	}
-
 }

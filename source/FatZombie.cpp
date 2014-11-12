@@ -11,6 +11,9 @@
 #include "Weapon.h"
 #include "PukerBlaster.h"
 #include "SpawnManager.h"
+#include "AnimationManager.h"
+#include "Animation.h"
+#include "Frame.h"
 
 
 FatZombie::FatZombie()
@@ -44,11 +47,20 @@ void FatZombie::Update(float dt)
 		SGD::Event event = { "ASSESS_THREAT", nullptr, this };
 		event.SendEventNow(nullptr);
 
-		if ((m_pTarget->GetPosition() - m_ptPosition).ComputeLength() <= 200.0f)
+		if ((m_pTarget->GetPosition() - m_ptPosition).ComputeLength() <= 200.0f && this->animation.m_strCurrAnimation.find("Death") == string::npos)
 		{
-
 			pukeBlaster.Fire(dt);
 		}
+
+
+		// death animation
+		int		numframes	= AnimationManager::GetInstance()->GetAnimation(this->animation.m_strCurrAnimation)->GetFrames().size();
+		numframes--;
+		float	deathdur	= AnimationManager::GetInstance()->GetAnimation(this->animation.m_strCurrAnimation)->GetFrames()[numframes]->GetDuration();
+		string	deathanim	= this->animation.m_strCurrAnimation;
+
+		if (deathanim.find("Death") != string::npos && this->animation.m_nCurrFrame == numframes && this->animation.m_fCurrDuration >= deathdur)
+			isAlive = false;
 	}
 	else
 	{

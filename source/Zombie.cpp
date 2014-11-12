@@ -5,6 +5,8 @@
 #include "BehaviorManager.h"
 #include "BaseBehavior.h"
 #include "AnimationManager.h"
+#include "Animation.h"
+#include "Frame.h"
 #include "Bullet.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "DestroyObjectMessage.h"
@@ -12,6 +14,7 @@
 #include "BarbedWire.h"
 #include "LandMine.h"
 #include "SandBag.h"
+#include "House.h"
 #include "SpawnManager.h"
 #include "CreateBloodMsg.h"
 
@@ -40,6 +43,15 @@ void Zombie::Update(float dt)
 		SGD::Event event = { "ASSESS_THREAT", nullptr, this };
 		event.SendEventNow(nullptr);
 
+
+		// death animation
+		int		numframes	= AnimationManager::GetInstance()->GetAnimation(this->animation.m_strCurrAnimation)->GetFrames().size();
+		numframes--;
+		float	deathdur	= AnimationManager::GetInstance()->GetAnimation(this->animation.m_strCurrAnimation)->GetFrames()[numframes]->GetDuration();
+		string	deathanim	= this->animation.m_strCurrAnimation;
+
+		if (deathanim.find("Death") != string::npos && this->animation.m_nCurrFrame == numframes && this->animation.m_fCurrDuration >= deathdur)
+			isAlive = false;
 	}
 	else
 	{
@@ -84,7 +96,9 @@ void Zombie::RetrieveBehavior(std::string name)
 		health -= bullet->GetDamage();
 		if (health <= 0.0f)
 		{
-			isAlive = false;
+			this->SetAnimation(this->animation.m_strCurrAnimation + "Death");
+			this->RetrieveBehavior("wait");
+			//isAlive = false;
 		}
 
 		if (pAudio->IsAudioPlaying(Game::GetInstance()->zombie_pain) == false)
@@ -99,9 +113,12 @@ void Zombie::RetrieveBehavior(std::string name)
 	if (pOther->GetType() == OBJ_EXPLODING_ZOMBIE)
 	{
 		const BaseObject* ptr = dynamic_cast<const BaseObject*>(pOther);
+
 		if (ptr->GetAnimation() == "bloodExplosion")
 		{
-				isAlive = false;
+			this->SetAnimation(this->animation.m_strCurrAnimation + "Death");
+			this->RetrieveBehavior("wait");
+			//isAlive = false;
 		}
 	}
 	if (pOther->GetType() == OBJ_BARBEDWIRE)
@@ -111,7 +128,11 @@ void Zombie::RetrieveBehavior(std::string name)
 		{
 			health -= barbWire->GetDamage() * Game::GetInstance()->DeltaTime();
 			if (health <= 0)
-				isAlive = false;
+			{
+				this->SetAnimation(this->animation.m_strCurrAnimation + "Death");
+				this->RetrieveBehavior("wait");
+				//isAlive = false;
+			}
 			MovingObject::HandleCollision(pOther);
 		}
 	}
@@ -126,14 +147,19 @@ void Zombie::RetrieveBehavior(std::string name)
 	{
 		const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
 		if (landMine->IsActive())
-			isAlive = false;
-
-		//SpawnManager::GetInstance()->SetEnemiesKilled(SpawnManager::GetInstance()->GetEnemiesKilled() + 1);
+		{
+			this->SetAnimation(this->animation.m_strCurrAnimation + "Death");
+			this->RetrieveBehavior("wait");
+			//isAlive = false;
+		}
 	}
 
 	else if (pOther->GetType() == OBJ_WALL)
 	{
-		MovingObject::HandleCollision(pOther);
+		const House* house = dynamic_cast<const House*>(pOther);
+
+		if (house->IsActive() == true)
+			MovingObject::HandleCollision(pOther);
 	}
 
 }

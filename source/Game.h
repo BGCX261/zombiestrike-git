@@ -62,6 +62,7 @@ public:
 	// Gamer profile
 	GamerProfile&		GetStoryProfile		( void )		{	return storyProfiles[selectedProfile];	}
 	GamerProfile&		GetSurvivalProfile(void)		{ return survivalProfiles[selectedProfile]; }
+	GamerProfile&		GetTutorialProfile(void)		{ return tutorialProfile; }
 
 	GamerProfile&		GetSpecStoryProfile(int index)		{ return storyProfiles[index]; }
 	GamerProfile&		GetSpecSurvialProfile(int index)		{ return survivalProfiles[index]; }
@@ -71,11 +72,13 @@ public:
 
 	void				CreateStoryProfiles	( void );
 	void				CreateSurvivalProfiles(void);
+	void				CreateTutorialProfile(void);
 
 	void				OverWriteProfile(GamerProfile& profile);
 
 	GamerProfile		storyProfiles[3];
 	GamerProfile		survivalProfiles[3];
+	GamerProfile		tutorialProfile;
 
 	unsigned int		selectedProfile	= 0;
 
@@ -86,6 +89,8 @@ public:
 	SGD::HAudio			m_hMainTheme		= SGD::INVALID_HANDLE;
 	SGD::HAudio			m_hSurvivalTheme	= SGD::INVALID_HANDLE;
 
+	SGD::HAudio			turret_good	= SGD::INVALID_HANDLE;
+	SGD::HAudio			turret_bad	= SGD::INVALID_HANDLE;
 	SGD::HAudio playerDeath			= SGD::INVALID_HANDLE;
 	SGD::HAudio playerHurt1			= SGD::INVALID_HANDLE;
 	SGD::HAudio playerHurt2			= SGD::INVALID_HANDLE;
@@ -111,6 +116,8 @@ public:
 	SGD::HAudio storyMusic			= SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWpnSwitch		= SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWaveChange		= SGD::INVALID_HANDLE;
+
+
 
 	/**********************************************************/
 	// Game State Machine:
