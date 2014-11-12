@@ -161,22 +161,24 @@
 	pAnimationManager->Load("resource/config/animations/House_Animation.xml",		"house");
 	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
-	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
+
+
 	if (m_bStoryMode == true)
+	{
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
-	else
-		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
-
-	//SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
-	m_bStoryMode == true
-		? SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt")
-		: SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");;
-
-	if (m_bStoryMode == true)
+		SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
 		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetStoryProfile().wavesComplete);
 
+
+	}
+
 	else
+	{
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
+		SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");
 		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetSurvivalProfile().wavesComplete);
+
+	}
 
 
 	
@@ -457,13 +459,11 @@
 		Game::GetInstance()->AddState(GameplayState::GetInstance());
 	}
 
-	//For Testing enemies killed to enemies spawned for the current wave//
-	//int numKilled = SpawnManager::GetInstance()->GetEnemiesKilled();
 
 	if (SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies())
 	{
 		SpawnManager::GetInstance()->Deactivate();
-		
+
 		
 		if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
 		{
@@ -474,6 +474,7 @@
 			// WinState sequence start
 			SpawnManager::GetInstance()->SetGameWon(true);
 
+			
 			// go to WinState
 			if (m_tToWinState.Update(dt) == true)
 			{
@@ -486,36 +487,40 @@
 				return;
 			}
 		}
-
-		if (m_tNextWave.Update(dt))
+		else
 		{
-			m_bShopState = true;
-
-			m_tNextWave.AddTime(3);
-		
-			m_tStartWave.AddTime(3);
-
-			SGD::Event msg("PAUSE");
-			msg.SendEventNow();
-			if (m_bStoryMode == true)
+			if (m_tNextWave.Update(dt))
 			{
-				Game::GetInstance()->GetStoryProfile().wavesComplete++;
+				if (m_bStoryMode == true)
+					Game::GetInstance()->GetStoryProfile().wavesComplete++;
+
+				else
+					Game::GetInstance()->GetSurvivalProfile().wavesComplete++;
+
+				m_bShopState = true;
+
+				m_tNextWave.AddTime(3);
+
+				m_tStartWave.AddTime(3);
+
+				SGD::Event msg("PAUSE");
+				msg.SendEventNow();
+
+
+
+				//Calls the shopstate//
+				Game::GetInstance()->AddState(ShopState::GetInstance());
+
+				m_pPlayer->SetPosition({ 200, 200 });
+
+
+				SGD::Event housemsg("REPAIR_HOUSE");
+				housemsg.SendEventNow();
 
 			}
-			else
-				Game::GetInstance()->GetSurvivalProfile().wavesComplete++;
-
-
-			//Calls the shopstate//
-			Game::GetInstance()->AddState(ShopState::GetInstance());
-
-			m_pPlayer->SetPosition({ 200, 200 });
-
-
-			SGD::Event housemsg("REPAIR_HOUSE");
-			housemsg.SendEventNow();
-
 		}
+
+	
 	}
 
 	
@@ -619,7 +624,7 @@
 
 	else
 		retpos = SGD::InputManager::GetInstance()->GetMousePosition();
-
+	
 		
 
 
@@ -968,8 +973,11 @@ void GameplayState::CreateARBullet(Weapon* owner)
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
 	bullet->SetOwner(owner->GetOwner());
 	bullet->SetPosition(owner->GetOwner()->GetPosition());
+	float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
-	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+
+	direction.Rotate(angle);
+
 	
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
@@ -987,8 +995,10 @@ void GameplayState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
 	bullet->SetOwner(owner->GetOwner());
 	bullet->SetPosition(owner->GetOwner()->GetPosition());
+	float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
-	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+
+	direction.Rotate(angle);
 	bullet->SetDamage(owner->GetDamage());
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
@@ -1008,7 +1018,10 @@ void GameplayState::CreateTurretBullets(Turret* turret)
 	bullet->SetOwner(turret);
 	bullet->SetPosition(turret->GetPosition());
 	SGD::Vector direction = turret->GetDirection();
-	direction.Rotate(turret->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+	float angle = ((rand() % (int)turret->GetBulletSpread() * 2) - (int)turret->GetBulletSpread()) *SGD::PI / 180.0f;
+
+
+	direction.Rotate(angle);
 	
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * turret->GetSpeed());

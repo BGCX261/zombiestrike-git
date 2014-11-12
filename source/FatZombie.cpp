@@ -22,14 +22,16 @@ FatZombie::FatZombie()
 	damage = 20.0f;
 	//damage = 3.0f;
 	//pukeBlaster = new PukerBlaster(this);
+	RegisterForEvent("GAME_OVER");
 }
 
 
 FatZombie::~FatZombie()
 {
-	//pukeBlaster->SetOwner(nullptr);
-	//delete pukeBlaster;
-	//pukeBlaster = nullptr;
+	SetTarget(nullptr);
+	UnregisterFromEvent("GAME_OVER");
+
+	
 }
 void FatZombie::Update(float dt)
 {
@@ -82,6 +84,9 @@ void FatZombie::Update(float dt)
 
 /*virtual*/ void FatZombie::HandleEvent(const SGD::Event* pEvent)
 {
-
+	if (pEvent->GetEventID() == "GAME_OVER")
+	{
+		pukeBlaster.SetOwner(nullptr);
+	}
 }
 

@@ -199,7 +199,7 @@ PlayerController::~PlayerController()
 
 
 	// spawning turrets
-	if (pInput->IsKeyPressed(SGD::Key::T) == true || (pInput->IsButtonPressed(0, 4) == true))
+	if (pInput->IsKeyPressed(SGD::Key::T) == true || (pInput->IsButtonPressed(0, 3) == true))
 		m_Player->SetIsPlacingTurret(!m_Player->isPlacingTurret());
 	
 

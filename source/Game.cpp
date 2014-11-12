@@ -157,13 +157,11 @@ int Game::Update( void )
 
 
 	// Update & render the current state if it was not changed
+	if (m_pCurrState == stateMachine.top())
 	{
 	
 		if (m_pCurrState != nullptr)
 			m_pCurrState->Update(elapsedTime);
-
-
-
 
 		if (m_pCurrState != nullptr)
 			m_pCurrState->Render();
@@ -2399,7 +2397,7 @@ void Game::OverWriteProfile(GamerProfile& profile)
 		fout << 60 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
-		fout << 2 << '\n';
+		fout << 4 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 		fout << 5 << '\n';
@@ -2421,7 +2419,7 @@ void Game::OverWriteProfile(GamerProfile& profile)
 		fout << 90 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
-		fout << 3 << '\n';
+		fout << 5 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 		fout << 5 << '\n';

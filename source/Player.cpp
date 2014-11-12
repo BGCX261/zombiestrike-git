@@ -27,7 +27,7 @@
 
 
 
-Player::Player() : Listener(this)
+Player::Player()
 {
 	m_Attributes.m_fCurrEnergy = 100.0f;
 	m_Attributes.m_fMaxEnergy = 100.0f;
@@ -177,20 +177,24 @@ void Player::Render()
 
 
 	// render good/bad turret location
-	if (m_nNumTurrets > 0)
+	if (m_bIsPlacingTurret)
 	{
-		// fake time stamp for animation
-		AnimTimeStamp ats;
-		ats.m_strCurrAnimation	= "turret";
-		ats.m_nCurrFrame		= 0;
-		ats.m_fCurrDuration		= 0.0f;
+		if (m_nNumTurrets > 0)
+		{
+			// fake time stamp for animation
+			AnimTimeStamp ats;
+			ats.m_strCurrAnimation = "turret";
+			ats.m_nCurrFrame = 0;
+			ats.m_fCurrDuration = 0.0f;
 
-		SGD::Point turretposP = GetTurretPosition();
+			SGD::Point turretposP = GetTurretPosition();
 
-		GoodTurretPosition() == true
-			? AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 255, 0 })
-			: AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 0, 0 });
+			GoodTurretPosition() == true
+				? AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 255, 0 })
+				: AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 0, 0 });
+		}
 	}
+	
 
 
 

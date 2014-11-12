@@ -49,7 +49,7 @@ struct Attributes
 };
 
 
-class Player : public MovingObject, public SGD::Listener
+class Player : public MovingObject
 {
 	GamerProfile	profile;
 	Attributes		m_Attributes;

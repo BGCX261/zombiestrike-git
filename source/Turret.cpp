@@ -35,10 +35,10 @@ Turret::Turret() : Listener(this)
 	currAmmo = totalAmmo;
 	magSize = 25;
 	ammoCapactity = 100;
-	recoilTime = 0.1f;
+	recoilTime = 0.25f;
 	bulletSpread = 2.0f;
-	damage = 34.0f;
-	speed = 800.0f;
+	damage = 25.0f;
+	speed = 1350.0f;
 	lifeTime = 1000.0f;
 	//m_pOwner = owner;
 	//owner->AddRef();
@@ -58,7 +58,6 @@ Turret::~Turret()
 	SetTarget(nullptr);
 
 	//this->bulletmaker->SetOwner(nullptr);
-	delete bulletmaker;
 
 	//delete bulletmaker;
 	//SetWeapon(nullptr);
@@ -80,26 +79,7 @@ Turret::~Turret()
 
 	// update weapon
 	Weapon::Update(dt);
-	/*
-	if (bulletmaker != nullptr)
-	{
-		bulletmaker->Update(dt);
-
-		// if out of ammo
-		if (bulletmaker->GetTotalAmmo() == 0)
-		{
-			// turn off turet
-			isActive = false;
-			DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
-			dMsg->QueueMessage();
-			dMsg = nullptr;
-
-			// tell owner
-			//m_pOwner->SetNumTurrets(m_pOwner->GetNumTurrets() - 1);
-		}
-	}
-	*/
-
+	
 
 	// check if target is still alive
 	if (m_pTarget != nullptr && (m_pTarget->GetHealth() <= 0.0f || m_pTarget->IsAlive() == false)) //if (m_pTarget != nullptr && (m_pTarget->GetAnimation().find("Death") != string::npos || m_pTarget->IsAlive() == false)) //if (m_pTarget != nullptr && m_pTarget->IsAlive() == false)

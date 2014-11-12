@@ -192,7 +192,7 @@
 
 	SGD::Color backColor(transBack, 255, 255, 255);
 	// Draw the background image
-	pGraphics->DrawTexture(m_hBackgroundImage, { -175, 100 }, 0.0f, {}, backColor);
+	pGraphics->DrawTexture(m_hBackgroundImage, { 0, 0 }, 0.0f, {}, backColor);
 
 	if (IntroTimer.GetTime() < 20.0f)
 	{
