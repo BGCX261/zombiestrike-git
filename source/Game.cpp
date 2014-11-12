@@ -5,6 +5,7 @@
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_String.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "AnimationManager.h"
 #include "WeaponManager.h"
 
 #include "BitmapFont.h"
@@ -59,11 +60,15 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	rand();
 
 	ShowCursor(false);
+
 	// Initialize the wrappers
 	if( SGD::AudioManager::GetInstance()->Initialize() == false 
 		|| SGD::GraphicsManager::GetInstance()->Initialize( false ) == false
 		|| SGD::InputManager::GetInstance()->Initialize() == false )
 		return false;
+
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
 	// Store the size parameters
 	m_fScreenWidth	= width;
@@ -78,14 +83,76 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	m_pFont = new BitmapFont;
 	m_pFont->Initialize("resource/bitmapfonts/Remains.xml", '\0', false);
 
-	m_hHudWpn = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/hudweapons.png");
+	AnimationManager*		pAnimationManager = AnimationManager::GetInstance();
 
-	m_hWpnSwitch = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/switchweapon.wav");
+	// player animations
+	pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
+	pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
+	pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
+	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
+	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
+
+	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
+	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
+	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
+
+
+	// enemy animations
+
+	pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
+	pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
+	pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
+	pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
+	pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
+
+	pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
+	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
+
+	//Blood Animation
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
+	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
+
+
+	// other animations
+	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml", "turret");
+	pAnimationManager->Load("resource/config/animations/House_Animation.xml", "house");
+
+	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/Weapons/hudweapons.png");
+	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/Weapons/crosshair.png");
 
 	// Load assets
-	m_hMainTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikemain.xwm");
-	m_hSurvivalTheme = SGD::AudioManager::GetInstance()->LoadAudio("resource/audio/zstrikesurvival.xwm");
+	storyMusic = pAudio->LoadAudio("resource/audio/AmbienceDrama.xwm");
 
+	m_hMainTheme = pAudio->LoadAudio("resource/audio/zstrikemain.xwm");
+	m_hSurvivalTheme = pAudio->LoadAudio("resource/audio/zstrikesurvival.xwm");
+
+	// SFX
+	m_hWaveChange		= pAudio->LoadAudio("resource/audio/wavechange.wav");
+	m_hWpnSwitch		= pAudio->LoadAudio("resource/audio/switchweapon.wav");
+	playerDeath			= pAudio->LoadAudio("resource/audio/player_death1.wav");
+	playerHurt1			= pAudio->LoadAudio("resource/audio/player_grunt1.wav");
+	playerHurt2			= pAudio->LoadAudio("resource/audio/player_grunt2.wav");
+	playerHurt3			= pAudio->LoadAudio("resource/audio/player_grunt3.wav");
+	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
+	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
+	zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");
+	bullet_hit_zombie	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
+	bullet_hit_house	= pAudio->LoadAudio("resource/audio/bullet_hit_house.wav");
+	out_of_ammo			= pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
+	reload_begin		= pAudio->LoadAudio("resource/audio/reload_begin.wav");
+	reload_finish		= pAudio->LoadAudio("resource/audio/reload_finish.wav");
+	explosion			= pAudio->LoadAudio("resource/audio/Splode2.wav");
+	vomit_hit_player	= pAudio->LoadAudio("resource/audio/splat.wav");
+	pistol_fire			= pAudio->LoadAudio("resource/audio/pistol_fire.wav");
+	shotgun_fire		= pAudio->LoadAudio("resource/audio/shotgun_fire.wav");
+	rifle_fire			= pAudio->LoadAudio("resource/audio/rifle_fire.wav");
+	sniper_fire			= pAudio->LoadAudio("resource/audio/sniper_fire.wav");
+	flamethrower_fire	= pAudio->LoadAudio("resource/audio/fire_ignite_1.wav");
+	smg_fire			= pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
+	rpg_fire			= pAudio->LoadAudio("resource/audio/RocketLauncher.wav");
+	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
 
 	// Setup the profiles
 	CreateStoryProfiles();
@@ -93,8 +160,6 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 
 	LoadStoryProfiles();
 	LoadSurvivalProfiles();
-
-
 
 	// Start the game in the Main Menu state
 	/*
@@ -191,10 +256,41 @@ void Game::Terminate( void )
 		Game::GetInstance()->RemoveState();
 
 	// Unload assets
-	SGD::GraphicsManager::GetInstance()->UnloadTexture(loadScreen);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hMainTheme);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSurvivalTheme);
+	pGraphics->UnloadTexture(loadScreen);
+	pGraphics->UnloadTexture(m_hReticleImage);
 
+	pAudio->UnloadAudio(m_hMainTheme);
+	pAudio->UnloadAudio(m_hSurvivalTheme);
+
+	pAudio->UnloadAudio(storyMusic);
+	pGraphics->UnloadTexture(m_hHudWpn);
+	pAudio->UnloadAudio(playerDeath);
+	pAudio->UnloadAudio(playerHurt1);
+	pAudio->UnloadAudio(playerHurt2);
+	pAudio->UnloadAudio(playerHurt3);
+	pAudio->UnloadAudio(cannot_use_skill);
+	pAudio->UnloadAudio(footstep);
+	pAudio->UnloadAudio(m_hWpnSwitch);
+	pAudio->UnloadAudio(zombie_pain);
+	pAudio->UnloadAudio(bullet_hit_zombie);
+	pAudio->UnloadAudio(bullet_hit_house);
+	pAudio->UnloadAudio(out_of_ammo);
+	pAudio->UnloadAudio(reload_begin);
+	pAudio->UnloadAudio(reload_finish);
+	pAudio->UnloadAudio(explosion);
+	pAudio->UnloadAudio(m_hWaveChange);
+	pAudio->UnloadAudio(vomit_hit_player);
+
+	pAudio->UnloadAudio(pistol_fire);
+	pAudio->UnloadAudio(shotgun_fire);
+	pAudio->UnloadAudio(rifle_fire);
+	pAudio->UnloadAudio(sniper_fire);
+	pAudio->UnloadAudio(flamethrower_fire);
+	pAudio->UnloadAudio(smg_fire);
+	pAudio->UnloadAudio(rpg_fire);
+	pAudio->UnloadAudio(vomit_fire);
+
+	AnimationManager::GetInstance()->Shutdown();
 
 	// Terminate the core SGD wrappers
 	SGD::AudioManager::GetInstance()->Terminate();
@@ -205,6 +301,7 @@ void Game::Terminate( void )
 
 	SGD::InputManager::GetInstance()->Terminate();
 	SGD::InputManager::DeleteInstance();
+	
 }
 
 

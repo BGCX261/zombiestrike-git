@@ -58,8 +58,8 @@ Bullet::~Bullet()
 		{
 			if (GetOwner() != pOther)
 			{
-				if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->bullet_hit_zombie) == false)
-					pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_zombie, false);
+				if (pAudio->IsAudioPlaying(Game::GetInstance()->bullet_hit_zombie) == false)
+					pAudio->PlayAudio(Game::GetInstance()->bullet_hit_zombie, false);
 
 				penetratingPower--;
 				if (penetratingPower < 0)
@@ -81,8 +81,8 @@ Bullet::~Bullet()
 		{
 			if (GetOwner() != pOther)
 			{
-				if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->vomit_hit_player) == false)
-					pAudio->PlayAudio(GameplayState::GetInstance()->vomit_hit_player, false);
+				if (pAudio->IsAudioPlaying(Game::GetInstance()->vomit_hit_player) == false)
+					pAudio->PlayAudio(Game::GetInstance()->vomit_hit_player, false);
 
 	
 				DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
@@ -95,7 +95,7 @@ Bullet::~Bullet()
 	// other stuff
 	else if (pOther->GetType() == ObjectType::OBJ_BASE || pOther->GetType() == ObjectType::OBJ_WALL)
 	{
-		pAudio->PlayAudio(GameplayState::GetInstance()->bullet_hit_house, false);
+		pAudio->PlayAudio(Game::GetInstance()->bullet_hit_house, false);
 
 		DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
 		dMsg->QueueMessage();

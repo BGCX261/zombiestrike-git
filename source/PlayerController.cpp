@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "GameplayState.h"
+#include "HTPGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
@@ -28,9 +29,16 @@ PlayerController::~PlayerController()
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
-
+	SGD::Vector toMouse;
 	// rotate to face mouse
-	SGD::Vector toMouse = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+	if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance())
+	{
+		toMouse = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+	}
+
+	else
+		toMouse = SGD::Point(pInput->GetMousePosition().x + HTPGameState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + HTPGameState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+
 	if (m_Player->m_bIsAlive == true)
 	{
 		toMouse.Normalize();
@@ -195,7 +203,7 @@ PlayerController::~PlayerController()
 				}
 				else
 				{
-					SGD::HAudio cannotuse = GameplayState::GetInstance()->cannot_use_skill;
+					SGD::HAudio cannotuse = Game::GetInstance()->cannot_use_skill;
 
 					if (pAudio->IsAudioPlaying(cannotuse) == false)
 						m_Player->SetVoice(pAudio->PlayAudio(cannotuse, false));

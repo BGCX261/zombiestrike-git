@@ -2,6 +2,7 @@
 #include "Spawner.h"
 #include <fstream>
 #include "GameplayState.h"
+#include "HTPGameState.h"
 
 using namespace std;
 
@@ -23,19 +24,15 @@ void SpawnManager::Update(float dt)
 
 		m_nNumEnemies = 0;
 
-		if (m_nCurrWave < (int)m_vEnemyWaves.size())
+		if (m_nCurrWave < (int)m_vEnemyWaves.size() && Game::GetInstance()->GetCurrState() == GameplayState::GetInstance())
 		{
 			m_nWaveEnemies = m_vEnemyWaves[m_nCurrWave];
-
-		
 		}
 
 		else
 		{
 			isGameWon = true;
 		}
-
-
 	}
 
 	else if (m_nNumWaves == m_vEnemyWaves.size() && m_nEnemiesKilled == m_nWaveEnemies)

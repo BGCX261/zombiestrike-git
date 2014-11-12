@@ -37,7 +37,7 @@
 	// Load assets
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
-	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/youLose.png");
+	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/MenuImages/youLose.png");
 }
 
 

@@ -24,7 +24,7 @@ Turret::Turret() : Listener(this)
 	RegisterForEvent("PAUSE");
 	RegisterForEvent("ASSESS_THREAT");
 
-	fireSound = &GameplayState::GetInstance()->rifle_fire;
+	fireSound = &Game::GetInstance()->rifle_fire;
 
 	this->SetAnimation("turret");
 

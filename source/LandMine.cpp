@@ -67,7 +67,7 @@ void LandMine::HandleCollision( const IBase* pOther )
 		{
 			// trigger explosion
 			this->SetAnimation("explosion");
-			SGD::AudioManager::GetInstance()->PlayAudio(GameplayState::GetInstance()->explosion, false);
+			SGD::AudioManager::GetInstance()->PlayAudio(Game::GetInstance()->explosion, false);
 		}
 
 		// exploding mine

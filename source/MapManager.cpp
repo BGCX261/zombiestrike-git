@@ -19,13 +19,7 @@
 
 //#include "../resource/config/"
 
-
 enum EntityBucket { BUCKET_BULLETS, BUCKET_PUKE, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
-
-
-
-
-
 
 /*static*/ MapManager * MapManager::GetInstance()
 {

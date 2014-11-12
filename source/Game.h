@@ -86,6 +86,31 @@ public:
 	SGD::HAudio			m_hMainTheme		= SGD::INVALID_HANDLE;
 	SGD::HAudio			m_hSurvivalTheme	= SGD::INVALID_HANDLE;
 
+	SGD::HAudio playerDeath			= SGD::INVALID_HANDLE;
+	SGD::HAudio playerHurt1			= SGD::INVALID_HANDLE;
+	SGD::HAudio playerHurt2			= SGD::INVALID_HANDLE;
+	SGD::HAudio playerHurt3			= SGD::INVALID_HANDLE;
+	SGD::HAudio cannot_use_skill	= SGD::INVALID_HANDLE;
+	SGD::HAudio footstep			= SGD::INVALID_HANDLE;
+	SGD::HAudio zombie_pain			= SGD::INVALID_HANDLE;
+	SGD::HAudio bullet_hit_zombie	= SGD::INVALID_HANDLE;
+	SGD::HAudio bullet_hit_house	= SGD::INVALID_HANDLE;
+	SGD::HAudio out_of_ammo			= SGD::INVALID_HANDLE;
+	SGD::HAudio reload_begin		= SGD::INVALID_HANDLE;
+	SGD::HAudio reload_finish		= SGD::INVALID_HANDLE;
+	SGD::HAudio explosion			= SGD::INVALID_HANDLE;
+	SGD::HAudio vomit_hit_player	= SGD::INVALID_HANDLE;
+	SGD::HAudio pistol_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio shotgun_fire		= SGD::INVALID_HANDLE;
+	SGD::HAudio rifle_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio sniper_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio flamethrower_fire	= SGD::INVALID_HANDLE;
+	SGD::HAudio smg_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio rpg_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio vomit_fire			= SGD::INVALID_HANDLE;
+	SGD::HAudio storyMusic			= SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWpnSwitch		= SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWaveChange		= SGD::INVALID_HANDLE;
 
 	/**********************************************************/
 	// Game State Machine:
@@ -94,8 +119,8 @@ public:
 	void				RemoveState		( void );
 
 	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hReticleImage = SGD::INVALID_HANDLE;
 
-	SGD::HAudio m_hWpnSwitch = SGD::INVALID_HANDLE;
 
 
 private:

@@ -49,12 +49,12 @@
 
 
 	// Load assets
-	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/Zombie_Strike_menu_image.png");
-	m_hTitleImage		= pGraphics->LoadTexture("resource/graphics/Zombie_Strike_menu_title.png");
-	m_hReticleImage		= pGraphics->LoadTexture("resource/graphics/Reticle3.png", { 0, 0, 0 });
-	m_hButton1			= pGraphics->LoadTexture("resource/graphics/rectangle1.png");
-	m_hButton2			= pGraphics->LoadTexture("resource/graphics/rectangle2.png");
-	m_hLightning		= pGraphics->LoadTexture("resource/graphics/lightning2.png");
+	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_image.png");
+	m_hTitleImage		= pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_title.png");
+	m_hReticleImage		= pGraphics->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
+	m_hButton1			= pGraphics->LoadTexture("resource/graphics/MenuImages/rectangle1.png");
+	m_hButton2			= pGraphics->LoadTexture("resource/graphics/MenuImages/rectangle2.png");
+	m_hLightning		= pGraphics->LoadTexture("resource/graphics/MenuImages/lightning2.png");
 
 	m_hButtonSwitchSFX	= pAudio->LoadAudio("resource/audio/button_switch.wav");
 	m_hMenuChangeSFX	= pAudio->LoadAudio("resource/audio/menu_change.wav");

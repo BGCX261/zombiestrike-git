@@ -87,8 +87,8 @@ void Zombie::RetrieveBehavior(std::string name)
 			isAlive = false;
 		}
 
-		if (pAudio->IsAudioPlaying(GameplayState::GetInstance()->zombie_pain) == false)
-			pAudio->PlayAudio(GameplayState::GetInstance()->zombie_pain, false);
+		if (pAudio->IsAudioPlaying(Game::GetInstance()->zombie_pain) == false)
+			pAudio->PlayAudio(Game::GetInstance()->zombie_pain, false);
 
 		CreateBloodMsg* msg = new CreateBloodMsg(m_ptPosition);
 		msg->QueueMessage();

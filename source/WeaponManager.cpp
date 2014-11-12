@@ -124,10 +124,17 @@ void WeaponManager::Render()
 			else
 				bFont->Draw(ammoCap.str().c_str(), ammoPos, 1.0f, { 0, 0, 0 });
 
-			if (m_vWeapons[curIndex]->GetCurrAmmo() == 0)
+			if (m_vWeapons[curIndex]->GetCurrAmmo() == 0 && m_vWeapons[curIndex]->GetTotalAmmo() > 0)
 			{
-				bFont->Draw("RELOAD", { Game::GetInstance()->GetScreenWidth() - 250, Game::GetInstance()->GetScreenHeight() - 100 }, 1.5f, { 200, 0, 0 });
+				bFont->Draw("RELOAD", { Game::GetInstance()->GetScreenWidth() - 275, Game::GetInstance()->GetScreenHeight() - 150 }, 1.5f, { 200, 0, 0 });
 			}
+
+			if (m_vWeapons[curIndex]->GetTotalAmmo() == 0 && m_vWeapons[curIndex]->GetCurrAmmo() <= 0)
+			{
+				bFont->Draw("OUT OF AMMO", { Game::GetInstance()->GetScreenWidth() - 275, Game::GetInstance()->GetScreenHeight() - 150 }, .75f, { 200, 0, 0 });
+			}
+
+
 		}
 	}
 
@@ -142,6 +149,10 @@ void WeaponManager::Render()
 		unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
 		pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
 
+		//if (m_vWeapons[equipIndex]->GetObtained() == false)
+		//{
+		//	pGraphics->DrawRectangle({ sWidth + size*j, sHeight - size, sWidth + size*j + size, sHeight }, { 175, 0, 0, 0 });
+		//}
 	}
 
 
@@ -154,7 +165,7 @@ void WeaponManager::Render()
 
 			if (m_vWeapons[i]->GetObtained() == true && m_vWeapons[i]->GetEquipped() == true)
 			{
-				SGD::Rectangle imageRect = m_vWeapons[i]->GetRenderRect();
+				SGD::Rectangle imageRect = m_vWeapons[i]->GetRenderRect();				
 
 				if (m_vWeapons[i]->GetGunType() == m_vWeapons[curIndex]->GetGunType())
 				{
@@ -166,7 +177,8 @@ void WeaponManager::Render()
 				{
 					pGraphics->DrawTextureSection(m_hHudWpn, { sWidth + size*j, sHeight - size },
 						imageRect, {}, {}, {}, { .25f, .25f });
-					pGraphics->DrawRectangle({ sWidth + size*j, sHeight - size, sWidth + size*j + size, sHeight }, { 175, 0, 0, 0 });
+
+
 				}
 				
 				equipIndex++;
