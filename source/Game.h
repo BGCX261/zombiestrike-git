@@ -63,6 +63,7 @@ public:
 	// Gamer profile
 	GamerProfile&		GetStoryProfile		( void )		{	return storyProfiles[selectedProfile];	}
 	GamerProfile&		GetSurvivalProfile(void)		{ return survivalProfiles[selectedProfile]; }
+
 	GamerProfile&		GetTutorialProfile(void)		{ return tutorialProfile; }
 
 	GamerProfile&		GetSpecStoryProfile(int index)		{ return storyProfiles[index]; }
@@ -70,6 +71,8 @@ public:
 
 	void				LoadStoryProfiles	( void );
 	void				LoadSurvivalProfiles(void);
+	void				LoadTutorialProfiles(void);
+
 
 	void				CreateStoryProfiles	( void );
 	void				CreateSurvivalProfiles(void);
