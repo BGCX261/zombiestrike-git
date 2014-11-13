@@ -80,6 +80,7 @@
 	return &s_Instance;
 }
 
+
 /**************************************************************/
 // Enter
 //	- reset game
@@ -191,10 +192,47 @@
 	iTutorial[11] = "Next to continue to the shooting range";
 	iTutorial[12] = "               -OR-                   ";
 	iTutorial[13] = "     Previous to go to last page      ";
-	iTutorial[14] = "    PREV";
-	iTutorial[15] = "NEXT          ";
+	//iTutorial[14] = "    PREV";
+	//iTutorial[15] = "NEXT          ";
+	//
+	//
+	//if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == false)
+	//{
+	//	iTutorial[14] = "<    PREV";
+	//	iTutorial[15] = "NEXT          >";
+	//}
+	//else
+	//{
+	//	iTutorial[14] = " O   PREV";
+	//	iTutorial[15] = "NEXT  X        ";
+	//}
+
 
 	m_tStartTutorial.AddTime(1.0f);
+
+
+
+	// mouse input rects
+	/*
+	float width = Game::GetInstance()->GetScreenWidth();
+	float height = Game::GetInstance()->GetScreenHeight();
+
+	float halfW = (width * 0.5f);
+	float halfH = (height * 0.5f);
+
+	selectionrects[0].left		= halfW - 350.0f;
+	selectionrects[0].top		= halfH + 65.0f;
+	selectionrects[0].right		= selectionrects[0].left + 120.0f;
+	selectionrects[0].bottom	= selectionrects[0].top + 55.0f;
+
+	selectionrects[1].left		= halfW + 180.0f;
+	selectionrects[1].top		= selectionrects[0].top;
+	selectionrects[1].right		= selectionrects[1].left + 100.0f;
+	selectionrects[1].bottom	= selectionrects[0].bottom;
+
+
+	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
+	*/
 
 }
 
@@ -254,7 +292,12 @@
 
 	isActive = false;
 
+
+	//pGraphics->UnloadTexture(m_hReticleImage);
+
 }
+
+
 /**************************************************************/
 // Input
 //	- handle user input
@@ -265,7 +308,18 @@
 
 	if (m_bIsChoiceScreen == true)
 	{
-		if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true)
+		// mouse input
+		/*
+		SGD::Point mousepos = pInput->GetMousePosition();
+		for (size_t i = 0; i < 2; i++)
+		{
+			if (mousepos.IsWithinRectangle(selectionrects[i]) == true)
+				m_nCursor = i;
+		}
+		*/
+
+
+		if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
 		{
 			m_nCursor++;
 
@@ -275,7 +329,7 @@
 			}
 		}
 
-		if (pInput->IsKeyPressed(SGD::Key::LeftArrow)==true)
+		if (pInput->IsKeyPressed(SGD::Key::LeftArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true)
 		{
 			m_nCursor--;
 
@@ -285,7 +339,7 @@
 			}
 		}
 
-		if (pInput->IsKeyPressed(SGD::Key::Enter)== true)
+		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
 		{
 			switch (m_nCursor)
 			{
@@ -320,12 +374,12 @@
 
 	else if (m_bIsChoiceScreen == false && m_tStartTutorial.GetTime() <= 0.0f && m_bIsTutorial == true)
 	{
-		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true || pInput->IsButtonPressed(0, 1) == true)
 		{
 			m_nCurPage++;
 		}
 
-		if (pInput->IsKeyPressed(SGD::Key::MouseRight) == true)
+		if (pInput->IsKeyPressed(SGD::Key::MouseRight) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true || pInput->IsButtonPressed(0, 2) == true)
 		{
 			m_nCurPage--;
 		}
@@ -336,7 +390,7 @@
 		/**********************************************************/
 		// Press Escape to enter Pause menu
 		/**********************************************************/
-		if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonDown(0, 9) == true)
+		if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 9) == true)
 		{
 			SGD::Event msg("PAUSE");
 			msg.SendEventNow();
@@ -361,7 +415,7 @@
 				pAudio->StopAudio(Game::GetInstance()->storyMusic);
 		}
 
-		if (pInput->IsKeyPressed(SGD::Key::B) == true)
+		if (pInput->IsKeyPressed(SGD::Key::B) == true || pInput->IsButtonPressed(0, 8) == true)
 		{
 			SGD::Event msg("PAUSE");
 			msg.SendEventNow();
@@ -511,12 +565,27 @@
 {
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	const BitmapFont * pFont = Game::GetInstance()->GetFont();
-	
+
+
+	if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == false)
+	{
+		iTutorial[14] = " <   PREV";
+		iTutorial[15] = "NEXT  >        ";
+	}
+	else
+	{
+		iTutorial[14] = " O   PREV";
+		iTutorial[15] = "NEXT  X        ";
+	}
 
 
 	if (m_bIsChoiceScreen == true)
 	{
+		//for (size_t i = 0; i < 2; i++)
+		//	pGraphics->DrawRectangle(selectionrects[i], { 255, 255, 255 });
+
 		pFont->Draw("Would you like to try the firing range", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 - 45}, 1.25f, { 100, 0, 0 });
 		pFont->Draw("before playing?", { Game::GetInstance()->GetScreenWidth() / 2 - 128 , Game::GetInstance()->GetScreenHeight() / 2 }, 1.25f, { 100, 0, 0 });
 		pFont->Draw("Yes", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 100, 0, 0 });
@@ -531,6 +600,15 @@
 		{
 			pFont->Draw("()", { Game::GetInstance()->GetScreenWidth() / 2 + 190, Game::GetInstance()->GetScreenHeight() / 2 + 75 }, 1.0f, { 0, 100, 0 });
 		}
+
+
+		// Draw the reticle
+		/*
+		SGD::Point	retpos = pInput->GetMousePosition();
+		float		retscale = 0.8f;
+		retpos.Offset(-32.0F * retscale, -32.0F * retscale);
+		pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+		*/
 	}
 
 	else
@@ -691,9 +769,18 @@
 			}
 
 		}
+
+		// On screen input
+		else
+		{
+			SGD::InputManager::GetInstance()->IsControllerConnected(0) == false
+				? DrawKeyboardInput()
+				: DrawControllerInput();
+		}
 	}
 
 }
+
 
 /**************************************************************/
 // MessageProc
@@ -1163,6 +1250,50 @@ void HTPGameState::CreateZombie(Spawner* owner)
 	m_pEntities->AddEntity(zombie, EntityBucket::BUCKET_ENEMIES);
 	zombie->Release();
 	zombie = nullptr;
+}
+
+
+/**************************************************************/
+// Factory Methods:
+void HTPGameState::DrawControllerInput(void)
+{
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+	const BitmapFont * pFont = Game::GetInstance()->GetFont();
+
+
+	float width = Game::GetInstance()->GetScreenWidth();
+	float height = Game::GetInstance()->GetScreenHeight();
+
+	float middleoffset = 180.0f;
+
+
+	SGD::Rectangle inputbox = { (width * 0.5f) - middleoffset, 0, (width * 0.5f) + middleoffset, 35.0f };
+	pGraphics->DrawRectangle(inputbox, { 0, 0, 0 });
+
+
+	std::string	shopinput = "Select - Enter Shop";
+	pFont->Draw(shopinput.c_str(), { (width - (shopinput.length() * 13 * 1.0f)) / 2, 0.0f }, 1.0f, { 255, 0, 0 });
+}
+void HTPGameState::DrawKeyboardInput(void)
+{
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+	const BitmapFont * pFont = Game::GetInstance()->GetFont();
+
+
+	float width = Game::GetInstance()->GetScreenWidth();
+	float height = Game::GetInstance()->GetScreenHeight();
+
+	float middleoffset = 180.0f;
+
+
+	SGD::Rectangle inputbox = { (width * 0.5f) - middleoffset, 0, (width * 0.5f) + middleoffset, 35.0f };
+	pGraphics->DrawRectangle(inputbox, { 0, 0, 0 });
+
+
+	std::string	shopinput = "B - Enter Shop";
+	pFont->Draw(shopinput.c_str(), { (width - (shopinput.length() * 13 * 1.0f)) / 2, 0.0f }, 1.0f, { 255, 0, 0 });
 }
 
 void HTPGameState::OverWriteTutorialFile()

@@ -122,20 +122,13 @@
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
 		SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
 		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetStoryProfile().wavesComplete);
-	
-
-
-
 	}
-
 	else
 	{
 		Game::GetInstance()->LoadSurvivalProfiles();
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
 		SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");
 		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetSurvivalProfile().wavesComplete);
-	
-
 	}
 
 
@@ -296,6 +289,20 @@
 		msg.SendEventNow();
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 	}
+
+
+	/**********************************************************/
+	// 'Alt + Tab' -> Pause Menu
+	/**********************************************************/
+	//if (pInput->IsKeyDown(SGD::Key::Alt) == true && pInput->IsKeyPressed(SGD::Key::Tab) == true)
+	//{
+	//	SGD::Event msg("PAUSE");
+	//	msg.SendEventNow();
+	//	Game::GetInstance()->AddState(PauseState::GetInstance());
+	//}
+
+
+
 
 	//WeaponManager::GetInstance()->Input();
 

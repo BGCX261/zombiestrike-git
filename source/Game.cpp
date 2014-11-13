@@ -84,9 +84,8 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	m_pFont2 = new BitmapFont;
 
 	m_pFont->Initialize("resource/bitmapfonts/Remains.xml", '\0', false);
-	//m_pFont->Initialize("resource/bitmapfonts/Arial.xml", '\0', false);
-
 	m_pFont2->Initialize("resource/bitmapfonts/Arial.xml", '\0', false);
+
 
 	AnimationManager*		pAnimationManager = AnimationManager::GetInstance();
 
@@ -98,14 +97,41 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
 
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
-	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
+	pAnimationManager->Load("resource/config/animations/Player_Death2.xml", "playerDeath");
 	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
 
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
 
 
-	// enemy animations
+	// Weapons
+	pAnimationManager->Load("resource/config/animations/Pistol_Idle_Animation.xml",		"pistolIdle");
+	pAnimationManager->Load("resource/config/animations/Pistol_Walk_Animation.xml",		"pistolWalk");
+	pAnimationManager->Load("resource/config/animations/Pistol_Run_Animation.xml",		"pistolRun");
 
+	pAnimationManager->Load("resource/config/animations/Shotgun_Idle_Animation.xml",	"shotgunIdle");
+	pAnimationManager->Load("resource/config/animations/Shotgun_Walk_Animation.xml",	"shotgunWalk");
+	pAnimationManager->Load("resource/config/animations/Shotgun_Run_Animation.xml",		"shotgunRun");
+	pAnimationManager->Load("resource/config/animations/Sawnoff_Idle_Animation.xml",	"sawnoffIdle");
+	pAnimationManager->Load("resource/config/animations/Sawnoff_Walk_Animation.xml",	"sawnoffWalk");
+	pAnimationManager->Load("resource/config/animations/Sawnoff_Run_Animation.xml",		"sawnoffRun");
+
+	pAnimationManager->Load("resource/config/animations/Rifle_Idle_Animation.xml",		"rifleIdle");
+	pAnimationManager->Load("resource/config/animations/Rifle_Walk_Animation.xml",		"rifleWalk");
+	pAnimationManager->Load("resource/config/animations/Rifle_Run_Animation.xml",		"rifleRun");
+
+	pAnimationManager->Load("resource/config/animations/Sniper_Idle_Animation.xml",		"sniperIdle");
+	pAnimationManager->Load("resource/config/animations/Sniper_Walk_Animation.xml",		"sniperWalk");
+	pAnimationManager->Load("resource/config/animations/Sniper_Run_Animation.xml",		"sniperRun");
+
+	pAnimationManager->Load("resource/config/animations/Flamethrower_Idle_Animation.xml",	"flamethrowerIdle");
+	pAnimationManager->Load("resource/config/animations/Flamethrower_Walk_Animation.xml",	"flamethrowerWalk");
+	pAnimationManager->Load("resource/config/animations/Flamethrower_Run_Animation.xml",	"flamethrowerRun");
+	pAnimationManager->Load("resource/config/animations/Heavy_Idle_Animation.xml",			"heavyIdle");
+	pAnimationManager->Load("resource/config/animations/Heavy_Walk_Animation.xml",			"heavyWalk");
+	pAnimationManager->Load("resource/config/animations/Heavy_Run_Animation.xml",			"heavyRun");
+
+
+	// enemy animations
 	pAnimationManager->Load("resource/config/animations/ZombieWalker_Animation.xml", "slowZombie");
 	pAnimationManager->Load("resource/config/animations/ZombieRunner_Animation.xml", "fastZombie");
 	pAnimationManager->Load("resource/config/animations/ZombieTank_Animation.xml", "tankZombie");
@@ -114,8 +140,6 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/ZombieFat_Animation.xml", "fatZombie");
 
 	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
-
-
 
 	pAnimationManager->Load("resource/config/animations/ZombieWalker_Death1.xml", "slowZombieDeath");
 	pAnimationManager->Load("resource/config/animations/ZombieRunner_Death1.xml", "fastZombieDeath");
@@ -129,10 +153,11 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
 
-
 	// other animations
 	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml", "turret");
 	pAnimationManager->Load("resource/config/animations/House_Animation.xml", "house");
+
+
 
 	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/Weapons/hudweapons.png");
 	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/Weapons/crosshair.png");
@@ -171,6 +196,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	smg_fire			= pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
 	rpg_fire			= pAudio->LoadAudio("resource/audio/RocketLauncher.wav");
 	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
+
 
 	// Setup the profiles
 	CreateStoryProfiles();
@@ -228,6 +254,7 @@ int Game::Update( void )
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	pInput->IsControllerConnected(0);
 
 	// Let the current state handle input
 

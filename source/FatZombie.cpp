@@ -22,6 +22,7 @@ FatZombie::FatZombie()
 	damage = 20.0f;
 	//damage = 3.0f;
 	//pukeBlaster = new PukerBlaster(this);
+
 	RegisterForEvent("GAME_OVER");
 }
 
