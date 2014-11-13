@@ -46,7 +46,7 @@
 
 
 	// Press Escape to quit
-	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonDown(0, 2) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 2) == true)
 		Game::GetInstance()->RemoveState();
 
 
@@ -119,8 +119,8 @@
 		#pragma region Keyboard Controls
 		num_newlines += 4;
 		std::string keycontrols1 = "Keyboard Controls:";
-		std::string keycontrols2 = "\n\n\tW\t\tMove towards mouse\n\tS\t\tMove away from mouse\n\tA\t\tStrafe left\n\tS\t\tStrafe right\n\n\tShift\t\tSprint";
-		std::string keycontrols3 = "\n\n\n\tQ\t\tSwitch to previous weapon\n\tE\t\tSwitch to next weapon\n\tR\t\tReload current weapon\n\tG\t\tSpawn a turret\n\n";
+		std::string keycontrols2 = "\n\n\tW\t\tMove up\n\tS\t\tMove down\n\tA\t\tMove left\n\tS\t\tMove right\n\n\tShift\t\tSprint";
+		std::string keycontrols3 = "\n\n\tQ\t\tSwitch to previous weapon\n\tE\t\tSwitch to next weapon\n\tR\t\tReload current weapon\n\tG\t\t Spawn a turret\n\n";
 		
 		//string_var = keycontrols1 + keycontrols2;
 		
@@ -135,14 +135,14 @@
 		#pragma region PS3 Controls
 		num_newlines += 4;
 		std::string ps3controls1 = "Play Station Controls:";
-		//std::string ps3controls1 = "\n\n\tW\t\tMove towards mouse\n\tS\t\tMove away from mouse\n\tA\t\tStrafe left\n\tS\t\tStrafe right\n\tShift\t\tSprint";
-		//std::string ps3controls1 = "\n\n\tQ\t\tSwitch to previous weapon\n\tE\t\tSwitch to next weapon\n\tR\t\tReload current weapon\n\tG\t\tSpawn a turret\n\n";
+		std::string ps3controls2 = "\n\n\tLeft Stick\t\tMove player\n\tRight Stick\t\t Rotate player\n\tR2\t\t\tFire weapon\n\tL2\t\t\tSprint";
+		std::string ps3controls3 = "\n\n\tSquare\t\tReload weapon\n\tTriangle\t\tToggle Turret mode\n\tX\t\t\tSpawn turret (in Turret Mode)\n\n";
 		
 		//string_var = pscontrols1 + pscontrols2;
 		
 		pFont->Draw(ps3controls1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 0, 0 });
-		//pFont->Draw(ps3controls1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 0, 255, 0 });
-		//pFont->Draw(ps3controls1.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 5)) }, scale, { 0, 255, 255 });
+		pFont->Draw(ps3controls2.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 255, 255 });
+		pFont->Draw(ps3controls3.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 4)) }, scale, { 255, 255, 255 });
 		#pragma endregion
 	}
 

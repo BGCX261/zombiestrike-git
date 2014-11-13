@@ -122,6 +122,12 @@ public:
 	bool GetIsCurrState(void) const { return isActive; }
 
 	void SetIsCurrState(bool state) { isActive = state; }
+
+	void DrawControllerInput(void);
+	void DrawKeyboardInput(void);
+
+
+
 private:
 	/**********************************************************/
 	// SINGLETON (not-dynamically allocated)
@@ -180,5 +186,9 @@ private:
 
 	bool isActive = false;
 
+
+
+	//SGD::Rectangle selectionrects[2];
+	//SGD::HTexture	m_hReticleImage		= SGD::INVALID_HANDLE;
 };
 

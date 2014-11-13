@@ -36,7 +36,7 @@
 	// Load assets
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
-	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/youWin.png");
+	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/MenuImages/youWin.png");
 }
 
 

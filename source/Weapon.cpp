@@ -163,3 +163,51 @@ void Weapon::ReloadNeeded(void)
 		reloading = true;
 	}
 }
+
+std::string Weapon::GetWeaponAnimType(void) const
+{
+	string gun = "";
+
+	switch (this->type)
+	{
+	case Gun::GLOCK:
+	case Gun::REVOLVER:
+	case Gun::MAC10:
+	case Gun::TECH9:
+		gun = "pistol";
+		break;
+
+	case Gun::SAWN:
+		gun = "sawnoff";
+		break;
+
+	case Gun::PUMP:
+	case Gun::AUTO:
+		gun = "shotgun";
+		break;
+
+	case Gun::SP90:
+	case Gun::M16:
+	case Gun::LIGHT_MG:
+	case Gun::AK47:
+		gun = "rifle";
+		break;
+
+	case Gun::SNIPER:
+		gun = "sniper";
+		break;
+
+	case Gun::FTHROWER:
+		gun = "flamethrower";
+		break;
+
+	case Gun::GLAUNCHER:
+		gun = "heavy";
+		break;
+
+	default:
+		break;
+	}
+
+	return gun;
+}
