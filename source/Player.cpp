@@ -333,6 +333,7 @@ void Player::Render()
 		case OBJ_BARBEDWIRE:
 		case OBJ_SANDBAG:
 		case OBJ_WALL:
+		case OBJ_BASE:
 		{
 			const EnvironmentalObject* temp = dynamic_cast<const EnvironmentalObject*>(pOther);
 			if (temp->IsActive())

@@ -31,14 +31,43 @@ PlayerController::~PlayerController()
 
 	if (pInput->IsControllerConnected(0) == true)
 	{
-		if (pInput->GetRightJoystick(0).x != 0.0f && pInput->GetRightJoystick(0).y != 0.0f)
+		/*if (pInput->GetRightJoystick(0).x != 0.0f || pInput->GetRightJoystick(0).y != 0.0f)
+		{
+			SGD::Point	mpoint = pInput->GetMousePosition();
+			SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+			float		stickmin = 0.250f;
+			float		mousevel = 1.0f;
+
+
+			if (joystick.x > stickmin)
+				mpoint.x += mousevel;
+			else if (joystick.x < stickmin * -1.0f)
+				mpoint.x -= mousevel;
+
+			if (joystick.y > stickmin)
+				mpoint.y += mousevel;
+			else if (joystick.y < stickmin * -1.0f)
+				mpoint.y -= mousevel;
+
+			if (mpoint.x < 0.0F)
+				mpoint.x = 0.0F;
+			if (mpoint.y < 0.0F)
+				mpoint.y = 0.0F;
+			if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+				mpoint.x = Game::GetInstance()->GetScreenWidth();
+			if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+				mpoint.y = Game::GetInstance()->GetScreenHeight();
+
+			pInput->SetMousePosition(mpoint);
+		}*/
+		if (pInput->GetRightJoystick(0).x != 0 || pInput->GetRightJoystick(0).y != 0)
 		{
 			SGD::Vector toCursor;
 			// rotate to face mouse
 			if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
-				toCursor = SGD::Point(pInput->GetMousePosition().x + HTPGameState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + HTPGameState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+				toCursor = SGD::Point(pInput->GetRightJoystick(0).x * 1000.0f + HTPGameState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetRightJoystick(0).y * 1000.0f + HTPGameState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
 			else
-				toCursor = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+				toCursor = SGD::Point(pInput->GetRightJoystick(0).x * 1000.0f + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetRightJoystick(0).y * 1000.0f + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
 
 			if (m_Player->m_bIsAlive == true)
 			{
@@ -54,10 +83,12 @@ PlayerController::~PlayerController()
 					SGD::Vector orientation = { 0, -1 };
 					orientation.Rotate(toUpdate->GetRotation());
 					toUpdate->SetDirection(orientation);
+
 				}
 			}
 		}
-		
+			
+	
 	}
 	else
 	{

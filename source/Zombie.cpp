@@ -161,6 +161,9 @@ void Zombie::RetrieveBehavior(std::string name)
 		if (house->IsActive() == true)
 			MovingObject::HandleCollision(pOther);
 	}
+	else if (pOther->GetType() == OBJ_BASE)
+			MovingObject::HandleCollision(pOther);
+	
 
 }
 

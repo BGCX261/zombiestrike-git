@@ -21,7 +21,7 @@
 //#include "../resource/config/"
 
 
-enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_NONE_COLLIDABLE, BUCKET_PICKUPS };
+enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_COLLIDABLE, BUCKET_PICKUPS };
 
 /*static*/ MapManager * MapManager::GetInstance()
 {
@@ -108,7 +108,7 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 		int startIndex = fullPath.find_last_of('\\');
 
 		filePath += fullPath.substr(startIndex + 1, fullPath.length());
-		string path = "resource/graphics/";
+		string path = "resource/graphics/TileSets/";
 		path += filePath;
 		tStruct.map.SetTilePath(path);
 	}
@@ -160,7 +160,7 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 		collisionInfo->Attribute("posY", &posY);
 		collisionInfo->Attribute("type", &tileid);
 
-		CreateEnvironment({ (float)posX * tileWidth, (float)posY * tileHeight } ,m_pEntities);
+		CreateEnvironment({ (float)posX * tileWidth, (float)posY * tileHeight } ,m_pEntities, tileid);
 
 
 		collisionInfo = collisionInfo->NextSiblingElement("collision_tile");
@@ -259,16 +259,16 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 				break;
 			case BaseObject::OBJ_SANDBAG:
 				
-				CreateSandBags({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+				CreateSandBags({ (float)posX * tileWidth + 16, (float)posY * tileHeight+16 }, m_pEntities);
 				break;
 			case BaseObject::OBJ_BARBEDWIRE:
-				CreateBarbedWire({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+				CreateBarbedWire({ (float)posX * tileWidth + 16, (float)posY * tileHeight+16 }, m_pEntities);
 				break;
 			case BaseObject::OBJ_LANDMINE:
-				CreateLandMine({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+				CreateLandMine({ (float)posX * tileWidth +16, (float)posY * tileHeight+16 }, m_pEntities);
 				break;
 			case BaseObject::OBJ_SPAWNER:
-				CreateSpawner({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
+				CreateSpawner({ (float)posX * tileWidth +16, (float)posY * tileHeight +16 }, m_pEntities);
 				break;
 		};
 
@@ -442,21 +442,27 @@ void MapManager::CreateSpawner(SGD::Point pos, EntityManager* entities)
 	Spawner* spawnPoint = new Spawner;
 	spawnPoint->SetPosition(pos);
 	SpawnManager::GetInstance()->GetSpawnVector().push_back(spawnPoint);
-	entities->AddEntity(spawnPoint, BUCKET_NONE_COLLIDABLE);
+	entities->AddEntity(spawnPoint, BUCKET_COLLIDABLE);
 
 	spawnPoint->Release();
 	spawnPoint = nullptr;
 
 }
 
-void MapManager::CreateEnvironment(SGD::Point pos, EntityManager* entities)
+void MapManager::CreateEnvironment(SGD::Point pos, EntityManager* entities, int type)
 {
 	
 	EnvironmentalObject* object = new EnvironmentalObject;
 	object->SetPosition(pos);
 	object->SetSize({ 32, 32 });
 	
-	entities->AddEntity(object, BUCKET_ENVIRO);
+	if (type == 0)
+		entities->AddEntity(object, BUCKET_COLLIDABLE);
+
+	
+	else
+		entities->AddEntity(object, BUCKET_ENVIRO);
+
 	object->Release();
 	object = nullptr;
 	

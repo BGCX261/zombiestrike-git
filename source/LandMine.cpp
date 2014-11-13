@@ -87,3 +87,9 @@ void LandMine::HandleEvent(const SGD::Event* pEvent)
 		isActive = true;
 	}
 }
+
+SGD::Rectangle LandMine::GetRect() const
+{
+
+	return BaseObject::GetRect();
+}

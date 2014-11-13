@@ -7289,7 +7289,7 @@ void ShopState::SaveProfile()
 				fout << profile.barbWire.isBought << '\n';
 				
 				
-				for (size_t j = 0; j < 30; j++)
+				for (size_t j = 0; j < 74; j++)
 				{
 
 					fout << profile.barbWireStates[j] << '\n';
@@ -7305,7 +7305,7 @@ void ShopState::SaveProfile()
 
 				fout << profile.sandBag.isBought << '\n';
 
-				for (size_t j = 0; j < 30; j++)
+				for (size_t j = 0; j < 66; j++)
 				{
 
 					fout << profile.sandBagStates[j] << '\n';
@@ -7316,7 +7316,7 @@ void ShopState::SaveProfile()
 
 				fout << profile.landMine.isBought << '\n';
 
-				for (size_t j = 0; j < 50; j++)
+				for (size_t j = 0; j < 55; j++)
 				{
 
 					fout << profile.landMineStates[j] << '\n';

@@ -46,7 +46,7 @@
 
 
 	// Press Escape to quit
-	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonDown(0, 2) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 2) == true)
 		Game::GetInstance()->RemoveState();
 
 
