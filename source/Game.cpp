@@ -254,7 +254,7 @@ int Game::Update( void )
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
-	pInput->CheckForNewControllers();
+	pInput->IsControllerConnected(0);
 
 	// Let the current state handle input
 
