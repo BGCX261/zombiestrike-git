@@ -52,7 +52,7 @@ BaseObject::~BaseObject()
 	//
 	//SGD::Rectangle rect = SGD::Rectangle(renderPos - m_szSize / 2, m_szSize);
 	////rect.Offset(GameplayState::GetInstance()->GetCamera()->GetPosition().x, GameplayState::GetInstance()->GetCamera()->GetPosition().y);
-	SGD::GraphicsManager::GetInstance()->DrawRectangle(GetRect() , SGD::Color(0, 0, 0, 0), SGD::Color(255, 0, 0, 0));
+	//SGD::GraphicsManager::GetInstance()->DrawRectangle(GetRect() , SGD::Color(0, 0, 0, 0), SGD::Color(255, 0, 0, 0));
 
 }
 void BaseObject::Update(float dt)

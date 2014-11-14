@@ -189,7 +189,7 @@ bool	ShopState::Input(void)
 		if (currPage < 0)
 			currPage = 5;
 		currTab = 0;
-
+		buttonnum = 0;
 	}
 	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsButtonPressed(0, 5) == true)
 	{
@@ -197,15 +197,23 @@ bool	ShopState::Input(void)
 		if (currPage > 5)
 			currPage = 0;
 		currTab = 0;
-
+		buttonnum = 0;
 	}
 	if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
+	{
 		currTab++;
+		buttonnum = 0;
+	}
 	if (pInput->IsKeyPressed(SGD::Key::LeftArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true)
+	{
 		currTab--;
+		buttonnum = 0;
+	}
 
 	if (pInput->IsControllerConnected(0) == true)
 	{
+		ControllerSelectionCheck();
+		/*
 		if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 		{
 			SGD::Point	mpoint = pInput->GetMousePosition();
@@ -234,10 +242,12 @@ bool	ShopState::Input(void)
 
 			pInput->SetMousePosition(mpoint);
 		}
-
+	ControllerInputCheck();
+		*/
 	}
 	
 	mousePos = pInput->GetMousePosition();
+
 
 	switch (currPage)
 	{
@@ -2712,6 +2722,9 @@ void	ShopState::Render(void)
 
 	
 
+	SGD::InputManager::GetInstance()->IsControllerConnected(0) == true
+		? DrawControllerInput()
+		: DrawKeyboardInput();
 
 
 	stringstream wave;
@@ -5232,7 +5245,6 @@ void	ShopState::Render(void)
 	}
 		break;
 	case DEFENSE:
-	
 					/*pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
 					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
 					pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
@@ -5247,10 +5259,6 @@ void	ShopState::Render(void)
 					string sandbagMaxHealth = "";
 					sandbagMaxHealth += std::to_string(sandBag.maxHealth.upgradedSkill.stat);
 					sandbagMaxHealth += " ";*/
-
-					
-
-					
 
 					string turretInventory = "Level ";
 					turretInventory += std::to_string(profile.numTurrets);
@@ -7344,7 +7352,7 @@ void ShopState::SaveProfile()
 	
 
 
-		void ShopState::UpdateWeaponManager()
+void ShopState::UpdateWeaponManager()
 		{
 
 			WeaponManager* m_pWeapons = WeaponManager::GetInstance();
@@ -7488,5 +7496,313 @@ void ShopState::SaveProfile()
 			m_pWeapons->GetWeapons()[SNIPER]->SetMagSize(profile.sniper.magSize.upgradedSkill.stat);
 			m_pWeapons->GetWeapons()[SNIPER]->SetEquipped(profile.sniper.isEquipt);
 			m_pWeapons->GetWeapons()[SNIPER]->SetObtained(profile.sniper.isBought);
+
+}
+
+
+
+
+
+/**************************************************************/
+// Input Methods:
+void ShopState::ControllerSelectionCheck(void)
+{
+	// Weapons pages
+	switch (currPage)
+	{
+		case PISTOLS:
+		#pragma region Pistols
+		{
+			switch (currTab)
+			{
+			case 0: // pistol
+				numoptions = 3;
+				break;
+			case 1: // revolver
+				numoptions = 7;
+				break;
+			default:
+				break;
+			}
+		}
+#pragma endregion
+		break;
+
+		case SHOTGUNS:
+		#pragma region Shotguns
+		{
+			switch (currTab)
+			{
+			case 0: // sawnoff
+				numoptions = 6;
+				break;
+			case 1: // pump action
+				numoptions = 7;
+				break;
+			case 2: // auto
+				numoptions = 7;
+				break;
+			default:
+				break;
+			}
+		}
+#pragma endregion
+		break;
+
+		case SMGS:
+		#pragma region Smgs
+		{
+			switch (currTab)
+			{
+			case 0: // mac10
+				numoptions = 6;
+				break;
+			case 1: // tech9
+				numoptions = 6;
+				break;
+			case 2: // p90
+				numoptions = 6;
+				break;
+			default:
+				break;
+			}
+		}
+#pragma endregion
+		break;
+
+		case ASSAULT_RIFLES:
+		#pragma region Assault Rifles
+		{
+			switch (currTab)
+			{
+			case 0: // ak47
+				numoptions = 7;
+				break;
+			case 1: // m16
+				numoptions = 7;
+				break;
+			case 2: // lmg
+				numoptions = 7;
+				break;
+			default:
+				break;
+			}
+		}
+#pragma endregion
+		break;
+
+		case HEAVY:
+		#pragma region Heavy
+		{
+			switch (currTab)
+			{
+			case 0: // sniper
+				numoptions = 8;
+				break;
+			case 1: // flamethrower
+				numoptions = 7;
+				break;
+			case 2: // grenade launcher
+				numoptions = 6;
+				break;
+			default:
+				break;
+			}
+		}
+#pragma endregion
+		break;
+
+		case DEFENSE:
+		numoptions = 8;
+		break;
+
+	default:
+		break;
+	}
+
+
+
+	// set cursor
+	currPage != DEFENSE
+		? DPadWeaponResults()
+		: DPadDefenceResults();
+
+	currPage != DEFENSE
+		? JoystickWeaponResults()
+		: JoystickDefenceResults();
+
+}
+void ShopState::DPadWeaponResults(void)
+{
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+
+	// add buy/equip option
+	numoptions++;
+
+
+	// Dpad input
+	if (pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
+		buttonnum = buttonnum - 1 >= 0 ? buttonnum - 1 : numoptions - 1;
+	else if (pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
+		buttonnum = buttonnum + 1 < numoptions ? buttonnum + 1 : 0;
+
+
+	// reticle pos
+	SGD::Point newpos;
+
+	if (buttonnum != numoptions - 1)
+	{
+		newpos.x = Buttons[buttonnum].left + (BUTTON_WIDTH * 0.5f);
+		newpos.y = Buttons[buttonnum].top + (BUTTON_HEIGHT * 0.5f);
+	}
+	else
+	{
+		newpos.x = Buttons[8].left + (BUTTON_WIDTH * 0.5f);
+		newpos.y = Buttons[8].top + (BUTTON_HEIGHT * 0.5f);
+	}
+
+
+	pInput->SetMousePosition(newpos);
+
+
+	// remove buy/equip option
+	numoptions--;
+
+
+}
+void ShopState::DPadDefenceResults(void)
+{
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+
+	// Dpad input
+	if (pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
+		buttonnum = buttonnum - 1 >= 0 ? buttonnum - 1 : numoptions - 1;
+	else if (pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
+		buttonnum = buttonnum + 1 < numoptions ? buttonnum + 1 : 0;
+
+
+	// reticle pos
+	SGD::Point newpos;
+	newpos.x = DefenseButtons[buttonnum].left + (BUTTON_WIDTH * 0.5f);
+	newpos.y = DefenseButtons[buttonnum].top + (BUTTON_HEIGHT * 0.5f);
+
+
+	pInput->SetMousePosition(newpos);
+}
+
+void ShopState::JoystickWeaponResults(void)
+{
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+
+
+	// add buy/equip option
+	numoptions++;
+
+
+	// Joystick input
+	if (pInput->GetLeftJoystick(0).y < 0)
+	{
+		if (isJSmoved == false)
+			buttonnum = buttonnum - 1 >= 0 ? buttonnum - 1 : numoptions - 1;
+		isJSmoved = true;
+	}
+	else if (pInput->GetLeftJoystick(0).y > 0)
+	{
+		if (isJSmoved == false)
+			buttonnum = buttonnum + 1 < numoptions ? buttonnum + 1 : 0;
+		isJSmoved = true;
+	}
+	else
+	{
+		isJSmoved = false;
+	}
+
+
+
+	// reticle pos
+	SGD::Point newpos;
+
+	if (buttonnum != numoptions - 1)
+	{
+		newpos.x = Buttons[buttonnum].left + (BUTTON_WIDTH * 0.5f);
+		newpos.y = Buttons[buttonnum].top + (BUTTON_HEIGHT * 0.5f);
+	}
+	else
+	{
+		newpos.x = Buttons[8].left + (BUTTON_WIDTH * 0.5f);
+		newpos.y = Buttons[8].top + (BUTTON_HEIGHT * 0.5f);
+	}
+
+
+	pInput->SetMousePosition(newpos);
+
+}
+void ShopState::JoystickDefenceResults(void)
+{
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+
+	// Joystick input
+	if (pInput->GetLeftJoystick(0).y < 0)
+	{
+		if (isJSmoved == false)
+			buttonnum = buttonnum - 1 >= 0 ? buttonnum - 1 : numoptions - 1;
+		isJSmoved = true;
+	}
+	else if (pInput->GetLeftJoystick(0).y > 0)
+	{
+		if (isJSmoved == false)
+			buttonnum = buttonnum + 1 < numoptions ? buttonnum + 1 : 0;
+		isJSmoved = true;
+	}
+	else
+	{
+		isJSmoved = false;
+	}
+
+
+	// reticle pos
+	SGD::Point newpos;
+	newpos.x = DefenseButtons[buttonnum].left + (BUTTON_WIDTH * 0.5f);
+	newpos.y = DefenseButtons[buttonnum].top + (BUTTON_HEIGHT * 0.5f);
+
+
+	pInput->SetMousePosition(newpos);
+}
+
+
+void ShopState::DrawControllerInput(void)
+{
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+	const BitmapFont * pFont = Game::GetInstance()->GetFont();
+
+	//pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
+
+	pFont->Draw("L1:\tPrev Page", { screenSize.width * 0.7f, screenSize.height * 0.05f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("R1:\tNext Page", { screenSize.width * 0.7f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Dpad-Left:\tPrev Tab", { screenSize.width * 0.7f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Dpad-Right:\tNext Tab", { screenSize.width * 0.7f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
+
+
+
+}
+void ShopState::DrawKeyboardInput(void)
+{
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+	const BitmapFont * pFont = Game::GetInstance()->GetFont();
+
+	//pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
+
+	pFont->Draw("Q:\tPrev Page", { screenSize.width * 0.7f, screenSize.height * 0.05f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("E:\tNext Page", { screenSize.width * 0.7f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Left:\tPrev Tab", { screenSize.width * 0.7f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Right:\tNext Tab", { screenSize.width * 0.7f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
+
+
 
 }
