@@ -239,15 +239,15 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 	case WM_ACTIVATE:		// Window activated / deactivated
 		if( LOWORD( wParam ) != WA_INACTIVE )	//	gaining focus (unpause)
 		{
-			Game * zstrike = (Game *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			//Game * zstrike = Game::GetInstance();
 
-			if (zstrike->GetCurrState() == GameplayState::GetInstance() || zstrike->GetCurrState() == HTPGameState::GetInstance())
-				zstrike->RemoveState();
+			//if (zstrike->GetCurrState() == PauseState::GetInstance())
+			//	zstrike->RemoveState();
 		}
 		else									//	losing focus (pause)
 		{
-			//Game * zstrike = ((Game *)GetWindowLongPtr(hWnd, GWLP_USERDATA))->GetInstance();
-			Game * zstrike = (Game *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			//Game * zstrike = (Game *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			Game * zstrike = Game::GetInstance();
 
 			if (zstrike->GetCurrState() == GameplayState::GetInstance() || zstrike->GetCurrState() == HTPGameState::GetInstance())
 				zstrike->AddState(PauseState::GetInstance());
