@@ -26,5 +26,7 @@ public:
 	void			SetCurrHP		( float hp )		{ m_fCurrHP	= hp; }
 	void			SetMaxHP		( float hp )		{ m_fMaxHP	= hp; }
 
+	SGD::Rectangle GetRect(void) const { return BaseObject::GetRect(); }
+
 };
 

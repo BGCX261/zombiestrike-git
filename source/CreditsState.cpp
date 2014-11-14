@@ -66,7 +66,7 @@
 // Update
 /*virtual*/ void CreditsState::Update( float elapsedTime )
 {
-	if (starting_y <= -120.0f)
+	if (starting_y <= -700.0f)
 	{
 		Game::GetInstance()->RemoveState();
 		//Game::GetInstance()->AddState(MainMenuState::GetInstance());
@@ -96,7 +96,7 @@
 
 
 	// Align text based on window width
-	float left_start		= 10.0F;
+	float left_start		= width * 0.15f;
 	float y_offset			= 210.0f;
 	float scale				= 1.0f;
 	float newline_offset	= 31.0f;
@@ -118,7 +118,7 @@
 
 	string_var = developers1 + developers2;
 
-	pFont->Draw(string_var.c_str(), { left_start, starting_y }, scale, { 0, 255, 255 });
+	pFont->Draw(string_var.c_str(), { left_start, starting_y }, scale, { 255, 255, 0 });
 	pFont->Draw(developers1.c_str(), { left_start, starting_y }, scale, { 0, 255, 0 });
 	pFont->Draw(developers3.c_str(), { left_start, starting_y }, scale, { 255, 0, 0 });
 	#pragma endregion

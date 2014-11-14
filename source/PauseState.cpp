@@ -49,7 +49,8 @@
 {
 	// Unload assets
 
-
+	int temp = 0;
+	temp++;
 }
 
 
@@ -77,7 +78,7 @@
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonDown(0, 1) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
 	{
 
 		switch (m_nCursor)

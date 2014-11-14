@@ -16,7 +16,11 @@
 #include <Windows.h>		// Win32 Application
 #include <vld.h>			// Visual Leak Detector!!!
 #include "Game.h"			// Our Game class
+#include "GameplayState.h"	// Our GameplayState class
+#include "HTPGameState.h"	// Our HTPGameState class
+#include "PauseState.h"		// Our PauseState class
 #include "../resource.h"
+
 //*********************************************************************//
 // Preprocessor Constants
 #define WINDOW_CLASS_NAME	((const wchar_t*)L"Zombie Strike")		// window class name
@@ -235,9 +239,18 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 	case WM_ACTIVATE:		// Window activated / deactivated
 		if( LOWORD( wParam ) != WA_INACTIVE )	//	gaining focus (unpause)
 		{
+			//Game * zstrike = Game::GetInstance();
+
+			//if (zstrike->GetCurrState() == PauseState::GetInstance())
+			//	zstrike->RemoveState();
 		}
 		else									//	losing focus (pause)
 		{
+			//Game * zstrike = (Game *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			Game * zstrike = Game::GetInstance();
+
+			if (zstrike->GetCurrState() == GameplayState::GetInstance() || zstrike->GetCurrState() == HTPGameState::GetInstance())
+				zstrike->AddState(PauseState::GetInstance());
 		}
 		break;
 

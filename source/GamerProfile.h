@@ -41,9 +41,9 @@ struct GamerProfile
 	int maxNumTurrets;
 	float health;
 	
-	bool sandBagStates[30];
-	bool landMineStates[50];
-	bool barbWireStates[30];
+	bool sandBagStates[66];
+	bool landMineStates[55];
+	bool barbWireStates[74];
 
 	int wavesComplete;
 

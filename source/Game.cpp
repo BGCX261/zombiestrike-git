@@ -85,9 +85,8 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	m_pFont2 = new BitmapFont;
 
 	m_pFont->Initialize("resource/bitmapfonts/Remains.xml", '\0', false);
-	//m_pFont->Initialize("resource/bitmapfonts/Arial.xml", '\0', false);
-
 	m_pFont2->Initialize("resource/bitmapfonts/Arial.xml", '\0', false);
+
 
 	AnimationManager*		pAnimationManager = AnimationManager::GetInstance();
 
@@ -100,13 +99,42 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
 
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
-	pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
+	pAnimationManager->Load("resource/config/animations/Player_Death2.xml", "playerDeath");
 
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
+	pAnimationManager->Load("resource/config/animations/Sandbag_Animation.xml", "sandbag");
+	pAnimationManager->Load("resource/config/animations/Barbedwire_Animation.xml", "barbedwire");
+
+
+	// Weapons
+	pAnimationManager->Load("resource/config/animations/Pistol_Idle_Animation.xml",		"pistolIdle");
+	pAnimationManager->Load("resource/config/animations/Pistol_Walk_Animation.xml",		"pistolWalk");
+	pAnimationManager->Load("resource/config/animations/Pistol_Run_Animation.xml",		"pistolRun");
+
+	pAnimationManager->Load("resource/config/animations/Shotgun_Idle_Animation.xml",	"shotgunIdle");
+	pAnimationManager->Load("resource/config/animations/Shotgun_Walk_Animation.xml",	"shotgunWalk");
+	pAnimationManager->Load("resource/config/animations/Shotgun_Run_Animation.xml",		"shotgunRun");
+	pAnimationManager->Load("resource/config/animations/Sawnoff_Idle_Animation.xml",	"sawnoffIdle");
+	pAnimationManager->Load("resource/config/animations/Sawnoff_Walk_Animation.xml",	"sawnoffWalk");
+	pAnimationManager->Load("resource/config/animations/Sawnoff_Run_Animation.xml",		"sawnoffRun");
+
+	pAnimationManager->Load("resource/config/animations/Rifle_Idle_Animation.xml",		"rifleIdle");
+	pAnimationManager->Load("resource/config/animations/Rifle_Walk_Animation.xml",		"rifleWalk");
+	pAnimationManager->Load("resource/config/animations/Rifle_Run_Animation.xml",		"rifleRun");
+
+	pAnimationManager->Load("resource/config/animations/Sniper_Idle_Animation.xml",		"sniperIdle");
+	pAnimationManager->Load("resource/config/animations/Sniper_Walk_Animation.xml",		"sniperWalk");
+	pAnimationManager->Load("resource/config/animations/Sniper_Run_Animation.xml",		"sniperRun");
+
+	pAnimationManager->Load("resource/config/animations/Flamethrower_Idle_Animation.xml",	"flamethrowerIdle");
+	pAnimationManager->Load("resource/config/animations/Flamethrower_Walk_Animation.xml",	"flamethrowerWalk");
+	pAnimationManager->Load("resource/config/animations/Flamethrower_Run_Animation.xml",	"flamethrowerRun");
+	pAnimationManager->Load("resource/config/animations/Heavy_Idle_Animation.xml",			"heavyIdle");
+	pAnimationManager->Load("resource/config/animations/Heavy_Walk_Animation.xml",			"heavyWalk");
+	pAnimationManager->Load("resource/config/animations/Heavy_Run_Animation.xml",			"heavyRun");
 
 
 	// enemy animations
-
 	pAnimationManager->Load("resource/config/animations/ZombieWalker_Animation.xml", "slowZombie");
 	pAnimationManager->Load("resource/config/animations/ZombieRunner_Animation.xml", "fastZombie");
 	pAnimationManager->Load("resource/config/animations/ZombieTank_Animation.xml", "tankZombie");
@@ -115,8 +143,6 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/ZombieFat_Animation.xml", "fatZombie");
 
 	pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
-
-
 
 	pAnimationManager->Load("resource/config/animations/ZombieWalker_Death1.xml", "slowZombieDeath");
 	pAnimationManager->Load("resource/config/animations/ZombieRunner_Death1.xml", "fastZombieDeath");
@@ -129,7 +155,6 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
-
 
 
 	// other animations
@@ -173,6 +198,8 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	smg_fire			= pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
 	rpg_fire			= pAudio->LoadAudio("resource/audio/RocketLauncher.wav");
 	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
+	zombie_hit_house1 = pAudio->LoadAudio("resource/audio/zombie_hit_house1.wav");
+	zombie_hit_house2 = pAudio->LoadAudio("resource/audio/zombie_hit_house2.wav");
 
 	m_hCash				= pAudio->LoadAudio("resource/audio/cashregister.wav");
 	m_hNoBuy			= pAudio->LoadAudio("resource/audio/buzzer.wav");
@@ -255,6 +282,7 @@ int Game::Update( void )
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	pInput->IsControllerConnected(0);
 
 	// Let the current state handle input
 
@@ -343,6 +371,8 @@ void Game::Terminate( void )
 	pAudio->UnloadAudio(smg_fire);
 	pAudio->UnloadAudio(rpg_fire);
 	pAudio->UnloadAudio(vomit_fire);
+	pAudio->UnloadAudio(zombie_hit_house1);
+	pAudio->UnloadAudio(zombie_hit_house2);
 
 	pAudio->UnloadAudio(m_hCash);
 	pAudio->UnloadAudio(m_hNoBuy);
@@ -912,7 +942,7 @@ void Game::LoadStoryProfiles( void )
 
 			fin >> storyProfiles[i - 1].barbWire.isBought;
 			
-			for (size_t j = 0; j < 30; j++)
+			for (size_t j = 0; j < 74; j++)
 			{
 				
 				fin >> storyProfiles[i - 1].barbWireStates[j];
@@ -928,7 +958,7 @@ void Game::LoadStoryProfiles( void )
 
 			fin >> storyProfiles[i - 1].sandBag.isBought;
 
-			for (size_t j = 0; j < 30; j++)
+			for (size_t j = 0; j < 66; j++)
 			{
 				
 				fin >> storyProfiles[i - 1].sandBagStates[j];
@@ -939,7 +969,7 @@ void Game::LoadStoryProfiles( void )
 
 			fin >> storyProfiles[i - 1].landMine.isBought;
 
-			for (size_t j = 0; j < 50; j++)
+			for (size_t j = 0; j < 55; j++)
 			{
 				
 				fin >> storyProfiles[i - 1].landMineStates[j];
@@ -954,7 +984,7 @@ void Game::LoadStoryProfiles( void )
 
 			fin >> storyProfiles[i - 1].wavesComplete;
 
-
+			fin >> storyProfiles[i - 1].money;
 
 
 
@@ -1480,7 +1510,7 @@ void Game::LoadSurvivalProfiles(void)
 
 			fin >> survivalProfiles[i - 1].barbWire.isBought;
 
-			for (size_t j = 0; j < 30; j++)
+			for (size_t j = 0; j < 74; j++)
 			{
 
 				fin >> survivalProfiles[i - 1].barbWireStates[j];
@@ -1496,7 +1526,7 @@ void Game::LoadSurvivalProfiles(void)
 
 			fin >> survivalProfiles[i - 1].sandBag.isBought;
 
-			for (size_t j = 0; j < 30; j++)
+			for (size_t j = 0; j < 66; j++)
 			{
 
 				fin >> survivalProfiles[i - 1].sandBagStates[j];
@@ -1507,7 +1537,7 @@ void Game::LoadSurvivalProfiles(void)
 
 			fin >> survivalProfiles[i - 1].landMine.isBought;
 
-			for (size_t j = 0; j < 50; j++)
+			for (size_t j = 0; j < 55; j++)
 			{
 
 				fin >> survivalProfiles[i - 1].landMineStates[j];
@@ -1521,6 +1551,9 @@ void Game::LoadSurvivalProfiles(void)
 
 
 			fin >> survivalProfiles[i - 1].wavesComplete;
+
+			fin >> survivalProfiles[i - 1].money;
+
 
 
 
@@ -2046,7 +2079,7 @@ void				Game::LoadTutorialProfiles(void)
 
 		fin >> tutorialProfile.barbWire.isBought;
 
-		for (size_t j = 0; j < 30; j++)
+		for (size_t j = 0; j < 28; j++)
 		{
 
 			fin >> tutorialProfile.barbWireStates[j];
@@ -2062,7 +2095,7 @@ void				Game::LoadTutorialProfiles(void)
 
 		fin >> tutorialProfile.sandBag.isBought;
 
-		for (size_t j = 0; j < 30; j++)
+		for (size_t j = 0; j < 38; j++)
 		{
 
 			fin >> tutorialProfile.sandBagStates[j];
@@ -2073,7 +2106,7 @@ void				Game::LoadTutorialProfiles(void)
 
 		fin >> tutorialProfile.landMine.isBought;
 
-		for (size_t j = 0; j < 50; j++)
+		for (size_t j = 0; j < 28; j++)
 		{
 
 			fin >> tutorialProfile.landMineStates[j];
@@ -2087,6 +2120,8 @@ void				Game::LoadTutorialProfiles(void)
 
 
 		fin >> tutorialProfile.wavesComplete;
+		fin >> tutorialProfile.money;
+
 
 
 
@@ -2512,6 +2547,7 @@ void Game::CreateStoryProfiles()
 				fout << 0 << '\n';
 
 
+
 				//barbedwire
 				fout << 100 << '\n';
 				fout << 1 << '\n';
@@ -2523,7 +2559,7 @@ void Game::CreateStoryProfiles()
 
 				fout << 0 << '\n';
 
-				for (size_t i = 0; i < 30; i++)
+				for (size_t i = 0; i < 74; i++)
 				{
 					fout << 0 << '\n';
 				}
@@ -2533,17 +2569,17 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 
-				fout << 0 << '\n';
+				fout << 1 << '\n';
 
-				for (size_t i = 0; i < 30; i++)
+				for (size_t i = 0; i < 66; i++)
 				{
-					fout << 0 << '\n';
+					fout << 1 << '\n';
 				}
 
 				//landmines
 				fout << 0 << '\n';
 
-				for (size_t i = 0; i < 50; i++)
+				for (size_t i = 0; i < 55; i++)
 				{
 					fout << 0 << '\n';
 				}
@@ -2626,6 +2662,11 @@ void Game::CreateSurvivalProfiles()
 				fout << localTime.tm_sec << '\n';
 
 				fout << 100 << '\n';
+
+				fout << 0 << '\n';
+
+
+
 
 
 #pragma region Pistols
@@ -2975,6 +3016,7 @@ void Game::CreateSurvivalProfiles()
 				fout << 0 << '\n';
 
 
+
 				//barbedwire
 				fout << 100 << '\n';
 				fout << 1 << '\n';
@@ -2986,7 +3028,7 @@ void Game::CreateSurvivalProfiles()
 
 				fout << 0 << '\n';
 
-				for (size_t i = 0; i < 30; i++)
+				for (size_t i = 0; i < 74; i++)
 				{
 					fout << 0 << '\n';
 				}
@@ -2996,17 +3038,17 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 
-				fout << 0 << '\n';
+				fout << 1 << '\n';
 
-				for (size_t i = 0; i < 30; i++)
+				for (size_t i = 0; i < 66; i++)
 				{
-					fout << 0 << '\n';
+					fout << 1 << '\n';
 				}
 
 				//landmines
 				fout << 0 << '\n';
 
-				for (size_t i = 0; i < 50; i++)
+				for (size_t i = 0; i < 55; i++)
 				{
 					fout << 0 << '\n';
 				}
@@ -3019,6 +3061,9 @@ void Game::CreateSurvivalProfiles()
 				fout << 3 << '\n';
 
 				//num waves
+				fout << 0;
+
+				//money
 				fout << 0;
 			}
 		}
@@ -3409,7 +3454,7 @@ void Game::OverWriteProfile(GamerProfile& profile)
 
 		fout << 0 << '\n';
 
-		for (size_t i = 0; i < 30; i++)
+		for (size_t i = 0; i < 74; i++)
 		{
 			fout << 0 << '\n';
 		}
@@ -3419,17 +3464,17 @@ void Game::OverWriteProfile(GamerProfile& profile)
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 
-		fout << 0 << '\n';
+		fout << 1 << '\n';
 
-		for (size_t i = 0; i < 30; i++)
+		for (size_t i = 0; i < 66; i++)
 		{
-			fout << 0 << '\n';
+			fout << 1 << '\n';
 		}
 
 		//landmines
 		fout << 0 << '\n';
 
-		for (size_t i = 0; i < 50; i++)
+		for (size_t i = 0; i < 55; i++)
 		{
 			fout << 0 << '\n';
 		}
@@ -3442,6 +3487,9 @@ void Game::OverWriteProfile(GamerProfile& profile)
 		fout << 3 << '\n';
 
 		//num waves
+		fout << 0;
+
+		//money
 		fout << 0;
 
 		fout.close();
@@ -3865,7 +3913,7 @@ SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 
 		fout << 0 << '\n';
 
-		for (size_t i = 0; i < 30; i++)
+		for (size_t i = 0; i < 28; i++)
 		{
 			fout << 0 << '\n';
 		}
@@ -3875,17 +3923,17 @@ SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 
-		fout << 0 << '\n';
+		fout << 1 << '\n';
 
-		for (size_t i = 0; i < 30; i++)
+		for (size_t i = 0; i < 28; i++)
 		{
-			fout << 0 << '\n';
+			fout << 1 << '\n';
 		}
 
 		//landmines
 		fout << 0 << '\n';
 
-		for (size_t i = 0; i < 50; i++)
+		for (size_t i = 0; i < 28; i++)
 		{
 			fout << 0 << '\n';
 		}
@@ -3898,6 +3946,9 @@ SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 		fout << 3 << '\n';
 
 		//num waves
+		fout << 0;
+
+		//money
 		fout << 0;
 
 #pragma endregion

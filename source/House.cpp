@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "AnimationManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_Event.h"
 
 
@@ -53,6 +54,9 @@ void House::HandleCollision( const IBase* pOther )
 	if (this->isActive == false)
 		return;
 
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	Game* pGame = Game::GetInstance();
+
 
 	// zombie collision
 	if (pOther->GetType() >= ObjectType::OBJ_SLOW_ZOMBIE && pOther->GetType() <= ObjectType::OBJ_TANK_ZOMBIE)
@@ -61,6 +65,28 @@ void House::HandleCollision( const IBase* pOther )
 		pOther->GetType() == ObjectType::OBJ_EXPLODING_ZOMBIE
 			? m_fCurrHP -= 200.0f * Game::GetInstance()->DeltaTime()
 			: m_fCurrHP -= 10.0f * Game::GetInstance()->DeltaTime();
+
+
+		// sound
+
+		int sound = rand() % 2;
+
+		switch (sound)
+		{
+		case 0:
+			if (pAudio->IsAudioPlaying(pGame->zombie_hit_house1) == false && pAudio->IsAudioPlaying(pGame->zombie_hit_house2) == false)
+				pAudio->PlayAudio(pGame->zombie_hit_house2, false);
+			break;
+
+		case 1:
+			if (pAudio->IsAudioPlaying(pGame->zombie_hit_house1) == false && pAudio->IsAudioPlaying(pGame->zombie_hit_house2) == false)
+				pAudio->PlayAudio(pGame->zombie_hit_house1, false);
+			break;
+
+		default:
+			break;
+		}
+
 
 		// dead
 		if (m_fCurrHP <= 0.0f)

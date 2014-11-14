@@ -2,6 +2,7 @@
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "Timer.h"
+#include <string>
 
 class MovingObject;
 
@@ -57,6 +58,9 @@ public:
 	virtual void Update(float dt);
 	virtual void ReloadEntire(void);
 	virtual void ReloadNeeded(void);
+
+	std::string GetWeaponAnimType(void) const;
+
 
 	//Accessors
 	int GetCurrAmmo() const { return currAmmo; }

@@ -50,6 +50,10 @@
 
 	// Unload assets
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
+	if (pAudio->IsAudioPlaying(m_hBackgroundSFX) == true)
+		pAudio->StopAudio(m_hBackgroundSFX);
+
 	pAudio->UnloadAudio(m_hBackgroundSFX);
 }
 
