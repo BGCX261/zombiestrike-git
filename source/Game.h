@@ -187,7 +187,9 @@ private:
 
 
 	/**********************************************************/
-	// Gamer profile
+	// Un/Re-plug check
+	bool ctrlrWasIn = false;
+	bool ctrlrIsIn = false;
 
 
 	/**********************************************************/
