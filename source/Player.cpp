@@ -27,7 +27,7 @@
 #include "HTPGameState.h"
 
 
-Player::Player() : Listener(this)
+Player::Player()
 {
 	m_Attributes.m_fCurrEnergy = 100.0f;
 	m_Attributes.m_fMaxEnergy = 100.0f;
@@ -59,6 +59,18 @@ Player::Player() : Listener(this)
 
 	m_fCurrHP = m_fMaxHP = 100.0f;
 
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		profile = Game::GetInstance()->GetTutorialProfile();
+	else
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+			profile = Game::GetInstance()->GetStoryProfile();
+		else
+			profile = Game::GetInstance()->GetSurvivalProfile();
+
+	}
+	
+
 
 
 
@@ -88,7 +100,10 @@ Player::~Player()
 	if (controller != nullptr)
 		controller->Update(dt, this, { 0, 0 });
 
-
+	if (GameplayState::GetInstance()->GetGameMode() == true)
+		Game::GetInstance()->GetStoryProfile().health = m_fCurrHP = profile.health;
+	else
+		Game::GetInstance()->GetSurvivalProfile().health = m_fCurrHP = profile.health;
 
 	//// camo
 	//if (m_bIsCamoOn)
@@ -166,20 +181,24 @@ void Player::Render()
 
 
 	// render good/bad turret location
-	if (m_nNumTurrets > 0)
+	if (m_bIsPlacingTurret)
 	{
-		// fake time stamp for animation
-		AnimTimeStamp ats;
-		ats.m_strCurrAnimation	= "turret";
-		ats.m_nCurrFrame		= 0;
-		ats.m_fCurrDuration		= 0.0f;
+		if (m_nNumTurrets > 0)
+		{
+			// fake time stamp for animation
+			AnimTimeStamp ats;
+			ats.m_strCurrAnimation = "turret";
+			ats.m_nCurrFrame = 0;
+			ats.m_fCurrDuration = 0.0f;
 
-		SGD::Point turretposP = GetTurretPosition();
+			SGD::Point turretposP = GetTurretPosition();
 
-		GoodTurretPosition() == true
-			? AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 255, 0 })
-			: AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 0, 0 });
+			GoodTurretPosition() == true
+				? AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 255, 0 })
+				: AnimationManager::GetInstance()->Render(ats, turretposP, this->m_fRotation, { 255, 0, 0 });
+		}
 	}
+	
 
 
 
@@ -286,7 +305,7 @@ void Player::Render()
 			// take damage
 			if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()->GetInstance())
 			{
-				this->m_fCurrHP -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
+				profile.health -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
 			}
 			
 			// check death
@@ -302,7 +321,8 @@ void Player::Render()
 			const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
 			
 			// take damage
-			this->m_fCurrHP -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			profile.health -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			
 
 			// check death
 			CheckDamage();
@@ -372,9 +392,9 @@ void Player::CheckDamage(void)
 
 
 	// dead, !hurt
-	if (m_fCurrHP <= 0.0f)
+	if (profile.health <= 0.0f)
 	{
-		m_fCurrHP = 0.0f;
+		profile.health = 0.0f;
 
 		if (m_hHurt != nullptr && pAudio->IsAudioPlaying(*m_hHurt) == true)
 			pAudio->StopAudio(*m_hHurt);

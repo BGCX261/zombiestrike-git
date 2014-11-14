@@ -64,6 +64,7 @@ Bullet::~Bullet()
 		}
 	}
 
+
 	if (this->type != ObjectType::OBJ_VOMIT)
 	{
 		// player
@@ -88,6 +89,7 @@ Bullet::~Bullet()
 				
 			}
 		}
+		
 
 
 	}

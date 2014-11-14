@@ -85,6 +85,7 @@
 //	- set up entities
 /*virtual*/ void GameplayState::Enter( void )
 {
+
 	SpawnManager::GetInstance()->ShutDown();
 	HTPGameState::GetInstance()->SetChoiceScreen(true);
 
@@ -111,64 +112,31 @@
 	SGD::InputManager*		pInput				= SGD::InputManager::GetInstance();
 	//AnimationManager*		pAnimationManager	= AnimationManager::GetInstance();
 
-	//// player animations
-	//pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
-	//pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
-	//pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
-	//pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
-	//pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
-
-	//pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
-
-	//pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
-	//pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
-	//pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
-
-	////Blood Animation
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
-
-	//// enemy animations
-
-	//pAnimationManager->Load("resource/config/animations/ZombieWalker_Animation.xml", "slowZombie");
-	//pAnimationManager->Load("resource/config/animations/ZombieRunner_Animation.xml", "fastZombie");
-	//pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
-	//pAnimationManager->Load("resource/config/animations/ZombieSploder_Animation.xml", "explodingZombie");
-	//pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
-
-	//pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
-	///*
-	//pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
-	//pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
-	//pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
-	//pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
-	//pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
-
-	//pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
-	//*/
-	//pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
+	
 
 
-	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
 
-	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
 	if (m_bStoryMode == true)
+	{
+		Game::GetInstance()->LoadStoryProfiles();
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetStoryProfile(), m_pEntities);
-	else
-		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
-
-	//SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
-	m_bStoryMode == true
-		? SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt")
-		: SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");;
-
-	if (m_bStoryMode == true)
+		SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves.txt");
 		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetStoryProfile().wavesComplete);
+	
+
+
+
+	}
 
 	else
+	{
+		Game::GetInstance()->LoadSurvivalProfiles();
+		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetSurvivalProfile(), m_pEntities);
+		SpawnManager::GetInstance()->LoadFromFile("resource/config/levels/waves2.txt");
 		SpawnManager::GetInstance()->SetCurrWave(Game::GetInstance()->GetSurvivalProfile().wavesComplete);
+	
+
+	}
 
 
 	
@@ -350,7 +318,7 @@
 			pAudio->StopAudio(survivalMusic);
 	}
 	
-
+	
 
 
 
@@ -420,13 +388,11 @@
 		Game::GetInstance()->AddState(GameplayState::GetInstance());
 	}
 
-	//For Testing enemies killed to enemies spawned for the current wave//
-	//int numKilled = SpawnManager::GetInstance()->GetEnemiesKilled();
 
 	if (SpawnManager::GetInstance()->GetEnemiesKilled() == SpawnManager::GetInstance()->GetNumWaveEnemies())
 	{
 		SpawnManager::GetInstance()->Deactivate();
-		
+
 		
 		if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
 		{
@@ -437,6 +403,7 @@
 			// WinState sequence start
 			SpawnManager::GetInstance()->SetGameWon(true);
 
+			
 			// go to WinState
 			if (m_tToWinState.Update(dt) == true)
 			{
@@ -449,38 +416,41 @@
 				return;
 			}
 		}
-
-		if (m_tNextWave.Update(dt))
+		else
 		{
-			m_bShopState = true;
-
-			m_tNextWave.AddTime(3);
-		
-			m_tStartWave.AddTime(3);
-
-			SGD::Event msg("PAUSE");
-			msg.SendEventNow();
-			if (m_bStoryMode == true)
+			if (m_tNextWave.Update(dt))
 			{
-				Game::GetInstance()->GetStoryProfile().wavesComplete++;
+				if (m_bStoryMode == true)
+					Game::GetInstance()->GetStoryProfile().wavesComplete++;
+
+				else
+					Game::GetInstance()->GetSurvivalProfile().wavesComplete++;
+
+				m_bShopState = true;
+
+				m_tNextWave.AddTime(3);
+
+				m_tStartWave.AddTime(3);
+
+				SGD::Event msg("PAUSE");
+				msg.SendEventNow();
+
+
+
+				//Calls the shopstate//
+				Game::GetInstance()->AddState(ShopState::GetInstance());
+
+				m_pPlayer->SetPosition({ 200, 200 });
+
+
+				SGD::Event housemsg("REPAIR_HOUSE");
+				housemsg.SendEventNow();
 
 			}
-			else
-				Game::GetInstance()->GetSurvivalProfile().wavesComplete++;
-
-
-			//Calls the shopstate//
-			Game::GetInstance()->AddState(ShopState::GetInstance());
-
-			m_pPlayer->SetPosition({ 200, 200 });
-
-
-			SGD::Event housemsg("REPAIR_HOUSE");
-			housemsg.SendEventNow();
-
 		}
-	}
 
+	
+	}
 	
 	//ShopState::GetInstance()->Update(dt);
 	
@@ -493,6 +463,8 @@
 //	- render the game entities
 /*virtual*/ void GameplayState::Render( void )
 {
+	Player* player = dynamic_cast<Player*>(m_pPlayer);
+
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 	const BitmapFont * pFont = Game::GetInstance()->GetFont();
@@ -570,9 +542,20 @@
 	pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 1.75f, { 0, 255, 0 });
 
 
+	SGD::Point	retpos = { 0.0f, 0.0f };
+
+	if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == true)
+	{
+		retpos = { (player->GetPosition().x + (player->GetDirection().x * 300.0f)), (player->GetPosition().y + (player->GetDirection().y * 300.0f)) };
+		retpos.Offset(-camera.GetPosition().x, -camera.GetPosition().y);
+	}
+
+	else
+		retpos = SGD::InputManager::GetInstance()->GetMousePosition();
 	
-	// Draw the reticle
-	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+		
+
+
 	float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
 
 	retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
@@ -768,6 +751,12 @@ BaseObject* GameplayState::CreatePlayer( void )
 	player->SetMoveSpeed(180.0f);
 	player->RetrieveBehavior("playerController");
 	player->SetAnimation("player");
+	if (m_bStoryMode == true)
+		player->SetHealth(Game::GetInstance()->GetStoryProfile().health);
+	else
+		player->SetHealth(Game::GetInstance()->GetSurvivalProfile().health);
+
+	
 	return player;
 }
 
@@ -912,8 +901,11 @@ void GameplayState::CreateARBullet(Weapon* owner)
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
 	bullet->SetOwner(owner->GetOwner());
 	bullet->SetPosition(owner->GetOwner()->GetPosition());
+	float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
-	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+
+	direction.Rotate(angle);
+
 	
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
@@ -931,8 +923,10 @@ void GameplayState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
 	bullet->SetOwner(owner->GetOwner());
 	bullet->SetPosition(owner->GetOwner()->GetPosition());
+	float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
-	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+
+	direction.Rotate(angle);
 	bullet->SetDamage(owner->GetDamage());
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * owner->GetSpeed());
@@ -952,7 +946,10 @@ void GameplayState::CreateTurretBullets(Turret* turret)
 	bullet->SetOwner(turret);
 	bullet->SetPosition(turret->GetPosition());
 	SGD::Vector direction = turret->GetDirection();
-	direction.Rotate(turret->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
+	float angle = ((rand() % (int)turret->GetBulletSpread() * 2) - (int)turret->GetBulletSpread()) *SGD::PI / 180.0f;
+
+
+	direction.Rotate(angle);
 	
 	bullet->SetDirection(direction);
 	bullet->SetVelocity(direction * turret->GetSpeed());

@@ -35,10 +35,7 @@ void SpawnManager::Update(float dt)
 		}
 	}
 
-	else if (m_nNumWaves == m_vEnemyWaves.size() && m_nEnemiesKilled == m_nWaveEnemies)
-	{
 
-	}
 
 	if (isActive == true) // if its on
 	{

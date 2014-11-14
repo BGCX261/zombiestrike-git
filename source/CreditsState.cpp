@@ -98,7 +98,7 @@
 	// Align text based on window width
 	float left_start		= 10.0F;
 	float y_offset			= 210.0f;
-	float scale				= 0.77f;
+	float scale				= 1.0f;
 	float newline_offset	= 31.0f;
 
 

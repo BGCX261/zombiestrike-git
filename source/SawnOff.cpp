@@ -8,8 +8,8 @@ SawnOff::SawnOff(MovingObject* owner)
 {
 	type = SHOTGUN;
 	reloadTime = 4.0f;
-	currAmmo = 6;
-	magSize = 6;
+	currAmmo = 2;
+	magSize = 2;
 	ammoCapactity = 24;
 	recoilTime = 1.0f;
 	bulletSpread = 15.0f;

@@ -26,6 +26,7 @@
 {
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor({ 0, 0, 0 });	// black
+
 }
 
 
@@ -33,6 +34,7 @@
 // Exit
 /*virtual*/ void HowToPlayState::Exit( void )
 {
+
 }
 
 
@@ -68,24 +70,26 @@
 
 	// Align text based on window width
 	float width = Game::GetInstance()->GetScreenWidth();
+	float height = Game::GetInstance()->GetScreenHeight();
+
 
 
 	// Display the title centered at 4x scale
-	pFont->Draw("How To Play", { (width - (11 * 25 * 2.5f)) / 2, 10 }, 2.5f, { 255, 255, 255 });
+	pFont->Draw("How To Play", { (width - (11 * 18 * 2.5f)) / 2, height * 0.10f }, 2.5f, { 255, 255, 255 });
 
 
 	// Display exit input
 	std::string goback = SGD::InputManager::GetInstance()->IsControllerConnected(0) == false
 		? "Press 'Esc' to exit"
 		: "Press 'O' to exit";
-	pFont->Draw(goback.c_str(), { (width - (goback.length() * 25 * 0.7f)) / 2, 70 }, 0.7f, { 255, 255, 255 });
+	pFont->Draw(goback.c_str(), { (width - (goback.length() * 25 * 1.0f)) / 2, height * 0.20f  }, 1.0f, { 255, 255, 255 });
 
 
 	// Align text based on window width
-	float left_start	= 10.0F;
-	float starting_y	= 130.0F;
+	float left_start	= width * 0.1F;
+	float starting_y	= height * 0.3f;
 	float y_offset			= 210.0f;
-	float scale				= 0.77f;
+	float scale				= 1.0f;
 	float newline_offset	= 31.0f;
 
 
@@ -105,7 +109,7 @@
 	string_var = objective1 + objective2;
 
 	pFont->Draw(string_var.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 0, 0 });
-	pFont->Draw(objective2.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 0, 255, 0 });
+	pFont->Draw(objective2.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 255, 255 });
 	#pragma endregion
 
 
@@ -115,14 +119,14 @@
 		#pragma region Keyboard Controls
 		num_newlines += 4;
 		std::string keycontrols1 = "Keyboard Controls:";
-		std::string keycontrols2 = "\n\n\tW\t\tMove towards mouse\n\tS\t\tMove away from mouse\n\tA\t\tStrafe left\n\tS\t\tStrafe right\n\tShift\t\tSprint";
-		std::string keycontrols3 = "\n\n\tQ\t\tSwitch to previous weapon\n\tE\t\tSwitch to next weapon\n\tR\t\tReload current weapon\n\tG\t\tSpawn a turret\n\n";
+		std::string keycontrols2 = "\n\n\tW\t\tMove towards mouse\n\tS\t\tMove away from mouse\n\tA\t\tStrafe left\n\tS\t\tStrafe right\n\n\tShift\t\tSprint";
+		std::string keycontrols3 = "\n\n\n\tQ\t\tSwitch to previous weapon\n\tE\t\tSwitch to next weapon\n\tR\t\tReload current weapon\n\tG\t\tSpawn a turret\n\n";
 		
 		//string_var = keycontrols1 + keycontrols2;
 		
-		pFont->Draw(keycontrols1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 255, 0 });
-		pFont->Draw(keycontrols2.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 0, 255, 0 });
-		pFont->Draw(keycontrols3.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 5)) }, scale, { 0, 255, 255 });
+		pFont->Draw(keycontrols1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 0, 0 });
+		pFont->Draw(keycontrols2.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 255, 255 });
+		pFont->Draw(keycontrols3.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 5)) }, scale, { 255, 255, 255 });
 		#pragma endregion
 	}
 	else
@@ -136,7 +140,7 @@
 		
 		//string_var = pscontrols1 + pscontrols2;
 		
-		pFont->Draw(ps3controls1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 255, 0 });
+		pFont->Draw(ps3controls1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 0, 0 });
 		//pFont->Draw(ps3controls1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 0, 255, 0 });
 		//pFont->Draw(ps3controls1.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 5)) }, scale, { 0, 255, 255 });
 		#pragma endregion

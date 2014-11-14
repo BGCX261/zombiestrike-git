@@ -16,6 +16,7 @@ protected:
 
 
 	SGD::Rectangle m_rRenderRect;
+	SGD::Rectangle m_rInventoryRect;
 
 	int category = NONE;
 	int type = NONE;
@@ -79,6 +80,7 @@ public:
 	bool IsReloading() { return reloading; }
 	bool GetEquipped() { return m_bIsEquipped; }
 	int GetGunType() { return type; }
+	SGD::Rectangle GetInventoryRect() { return m_rInventoryRect; }
 
 	//Mutators
 	void AddAmmo(int addedAmmo) { totalAmmo += addedAmmo; }
@@ -100,6 +102,7 @@ public:
 	void SetObtained(bool isObtained) { m_bIsObtained = isObtained; }
 	void SetEquipped(bool isEquipped) { m_bIsEquipped = isEquipped; }
 	void SetGunType(int theType) { type = theType; }
+	void SetInventoryRect(SGD::Rectangle iRect) { m_rInventoryRect = iRect; }
 
 };
 

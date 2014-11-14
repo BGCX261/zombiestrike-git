@@ -90,6 +90,8 @@ private:
 	SGD::HTexture buyButton = SGD::INVALID_HANDLE;
 	SGD::HTexture upgradeButton = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hReticleImage = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hBackground = SGD::INVALID_HANDLE;
+
 
 	GamerProfile profile;
 	SGD::Rectangle Buttons[9];
@@ -100,6 +102,4 @@ private:
 	std::vector<BarbedWire*> barbedWires;
 	std::vector<SandBag*> sandBags;
 	std::vector<LandMine*> landMines;
-
 };
-

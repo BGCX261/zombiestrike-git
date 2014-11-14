@@ -18,6 +18,8 @@ public:
 	virtual void	Update( float elapsedTime )	override;	// update entites
 	virtual void	Render( void )				override;	// render entities / menu
 
+	
+
 
 private:
 	/**********************************************************/
@@ -27,6 +29,7 @@ private:
 
 	HowToPlayState( const HowToPlayState& )				= delete;	
 	HowToPlayState& operator= ( const HowToPlayState& )	= delete;
+
 
 
 };

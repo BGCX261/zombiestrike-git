@@ -86,7 +86,8 @@
 //	- set up entities
 /*virtual*/ void HTPGameState::Enter(void)
 {
-	
+	isActive = true;
+
 
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor({ 0, 0, 0 });	// black
@@ -233,6 +234,7 @@
 	iTutorial[15] = "NEXT          ";
 
 	m_tStartTutorial.AddTime(1.0f);
+
 }
 
 
@@ -254,47 +256,7 @@
 	SGD::InputManager*		pInput = SGD::InputManager::GetInstance();
 
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
-	//pGraphics->UnloadTexture(m_hHudWpn);
-	//pGraphics->UnloadTexture(m_hReticleImage);
-
-
-
-	//if (pAudio->IsAudioPlaying(storyMusic) == true)
-	//	pAudio->StopAudio(storyMusic);
-	//if (pAudio->IsAudioPlaying(survivalMusic) == true)
-	//	pAudio->StopAudio(survivalMusic);
-
-	//pAudio->UnloadAudio(storyMusic);
-	//pAudio->UnloadAudio(survivalMusic);
-
-	//pAudio->UnloadAudio(playerDeath);
-	//pAudio->UnloadAudio(cannot_use_skill);
-	//pAudio->UnloadAudio(footstep);
-	////pAudio->UnloadAudio(m_hWpnSwitch);
-	//pAudio->UnloadAudio(zombie_pain);
-	//pAudio->UnloadAudio(bullet_hit_zombie);
-	//pAudio->UnloadAudio(bullet_hit_house);
-	//pAudio->UnloadAudio(out_of_ammo);
-	//pAudio->UnloadAudio(reload_begin);
-	//pAudio->UnloadAudio(reload_finish);
-	//pAudio->UnloadAudio(explosion);
-	////pAudio->UnloadAudio(m_hWaveChange);
-	//pAudio->UnloadAudio(vomit_hit_player);
-
-	//pAudio->UnloadAudio(pistol_fire);
-	//pAudio->UnloadAudio(shotgun_fire);
-	//pAudio->UnloadAudio(rifle_fire);
-	//pAudio->UnloadAudio(sniper_fire);
-	//pAudio->UnloadAudio(flamethrower_fire);
-	//pAudio->UnloadAudio(smg_fire);
-	//pAudio->UnloadAudio(vomit_fire);
-	//pAudio->UnloadAudio(playerHurt1);
-	//pAudio->UnloadAudio(playerHurt2);
-	//pAudio->UnloadAudio(playerHurt3);
-
 	
-	//pAudio->UnloadAudio(*m_hMain);
-	//pAudio->UnloadAudio(*m_hSurvive);
 
 	camera.SetTarget(nullptr);
 
@@ -325,6 +287,11 @@
 	SGD::MessageManager::DeleteInstance();
 
 	MapManager::GetInstance()->UnloadLevel();
+
+
+	Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetTutorialProfile());
+
+	isActive = false;
 
 }
 /**************************************************************/
@@ -669,11 +636,12 @@
 
 
 		// Draw the reticle
-		SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
-		float		retscale = 0.8f;
 
-		retpos.Offset(-32.0F * retscale, -32.0F * retscale);
-		pGraphics->DrawTexture(Game::GetInstance()->m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
+		SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+		float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
+
+		retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
+		pGraphics->DrawTexture(Game::GetInstance()->m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 0 }, { retscale, retscale });
 
 		if (m_bIsTutorial == true)
 		{
@@ -682,7 +650,7 @@
 			{
 				SGD::Point pos = { 0, 0 };
 
-				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2.0f);
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2);
 
 				pFont->Draw(iTutorial[0].c_str(), { (tutRect.left + tutRect.right) / 2 - 100.0f, tutRect.top + 15 + pos.y }, 1.25f, { 200, 0, 0 });
 
@@ -696,7 +664,7 @@
 
 				SGD::Point pos = { 0, 0 };
 
-				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2.0f);
+				pGraphics->DrawRectangle(tutRect, {155,155,155}, { 255, 255, 255 }, 2);
 
 				pFont->Draw(iTutorial[1].c_str(), { tutRect.left + 15 + pos.x, tutRect.top + 15 + pos.y}, 1.25f, { 200, 0, 0 });
 
@@ -716,7 +684,7 @@
 			{
 				SGD::Point pos = { 0, 0 };
 
-				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2.0f);
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2);
 
 				pFont->Draw(iTutorial[6].c_str(), { tutRect.left + 15, tutRect.top + 15}, 1.25f, { 200, 0, 0 });
 				pFont->Draw(iTutorial[7].c_str(), { tutRect.left + 15, tutRect.top + 60 }, 1.25f, { 200, 0, 0 });
@@ -733,7 +701,7 @@
 				float yVal = ((tutRect.bottom - tutRect.top) / 2);
 				SGD::Point pos = { 0, yVal };
 
-				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2.0f);
+				pGraphics->DrawRectangle(tutRect, { 150, 150, 150 }, { 255, 255, 255 }, 2);
 
 				pFont->Draw(iTutorial[11].c_str(), { tutRect.left + 25 + pos.x, tutRect.top + 15 + pos.y - 100 }, 1.25f, { 200, 0, 0 });
 				pFont->Draw(iTutorial[12].c_str(), { tutRect.left + 25 + pos.x, tutRect.top + 15 + pos.y - 40 }, 1.25f, { 200, 0, 0 });

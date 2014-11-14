@@ -49,7 +49,7 @@ struct Attributes
 };
 
 
-class Player : public MovingObject, public SGD::Listener
+class Player : public MovingObject
 {
 	GamerProfile	profile;
 	Attributes		m_Attributes;
@@ -86,6 +86,7 @@ class Player : public MovingObject, public SGD::Listener
 
 	float			m_fCurrHP			= 0.0f;
 	float			m_fMaxHP			= 100.0f;
+	bool			m_bIsPlacingTurret = false;
 
 public:
 
@@ -113,12 +114,15 @@ public:
 	void				RetrieveBehavior	(std::string name);
 	void				SetGamerProfile		(GamerProfile _profile)		{ profile = _profile; }
 	void				SetAlpha			(unsigned char newAlpha)	{ alpha = newAlpha; }
+	void				SetHealth(float newHealth)				{ m_fCurrHP = newHealth; }
+
 	void				SetVoice			(SGD::HVoice v)				{ voice = v; }
+	void				SetIsPlacingTurret(bool state)						{ m_bIsPlacingTurret = state; }
 
-
+	bool isPlacingTurret(void) const { return m_bIsPlacingTurret; }
 	// Other methods
 	bool				IsMoving			(void) const				{ return m_bMoving; }
-	bool				IsSprinting			(void) const				{ return m_bMoving; }
+	bool				IsSprinting			(void) const				{ return m_bIsSprinting; }
 	bool				isLevelCompleted	(void) const				{ return m_bLevelCompleted; }
 
 	int					GetNumTurrets		(void) const				{ return m_nNumTurrets; }

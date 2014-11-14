@@ -358,9 +358,6 @@
     <ClCompile Include="source\HTPGameState.cpp">
       <Filter>Game States</Filter>
     </ClCompile>
-    <ClCompile Include="source\ShopState.cpp">
-      <Filter>Game States</Filter>
-    </ClCompile>
     <ClCompile Include="source\BloodSplatter.cpp">
       <Filter>Objects\Environment</Filter>
     </ClCompile>
@@ -369,6 +366,9 @@
     </ClCompile>
     <ClCompile Include="source\House.cpp">
       <Filter>Objects\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ShopState.cpp">
+      <Filter>Game States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -695,9 +695,6 @@
     <ClInclude Include="source\HTPGameState.h">
       <Filter>Game States</Filter>
     </ClInclude>
-    <ClInclude Include="source\ShopState.h">
-      <Filter>Game States</Filter>
-    </ClInclude>
     <ClInclude Include="source\BloodSplatter.h">
       <Filter>Objects\Environment</Filter>
     </ClInclude>
@@ -708,6 +705,9 @@
       <Filter>Objects\Environment</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="source\ShopState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="OptionsVolumes.txt" />

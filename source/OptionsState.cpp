@@ -185,7 +185,7 @@
 	float right_start	= width - 224.0F;		// 800
 	float starting_y	= 200.0F;
 	float offset		= 50.0F;
-	float scale			= 0.9f;
+	float scale			=1.25f;
 
 
 	SGD::OStringStream volumes[2];
@@ -193,52 +193,97 @@
 	volumes[1] << pAudio->GetMasterVolume(SGD::AudioGroup::SoundEffects);
 
 
-	pFont->Draw("Music", { left_start, 250.0F }, scale, { 0, 255, 0 });
-	pFont->Draw("Volume", { left_start + 100.0F, 300.0F }, scale, { 0, 255, 0 });
-	pFont->Draw(volumes[0].str().c_str(), { left_start + 600.0F, 300.0F }, scale, { 0, 255, 0 });
+	pFont->Draw("Music", { left_start, 250.0F }, scale, { 255, 0, 0 });
+	pFont->Draw("Volume", { left_start + 100.0F, 300.0F }, scale, { 255, 0, 0 });
 
+	pFont->Draw("Sound Effects", { left_start, 400.0F }, scale, { 255, 0, 0 });
+	pFont->Draw("Volume", { left_start + 100.0F, 450.0F }, scale, { 255, 0, 0 });
+	pFont->Draw("Full Screen", { (width - (11 * 32 * scale)) / 2, 550.0F }, scale, { 255, 0, 0 });
 
-	pFont->Draw("Sound Effects", { left_start, 400.0F }, scale, { 0, 255, 255 });
-	pFont->Draw("Volume", { left_start + 100.0F, 450.0F }, scale, { 0, 255, 255 });
-	pFont->Draw(volumes[1].str().c_str(), { left_start + 600.0F, 450.0F }, scale, { 0, 255, 255 });
-
-
-	pFont->Draw("Full Screen", { (width - (11 * 32 * scale)) / 2, 550.0F }, scale, { 255, 255, 0 });
-	if (m_bFullScreen == true)
-		pFont->Draw("ON", { (width - (2 * 32 * scale)) / 2, 600.0F }, scale, { 255, 255, 0 });
-	else
-		pFont->Draw("OFF", { (width - (3 * 32 * scale)) / 2, 600.0F }, scale, { 255, 255, 0 });
-
-
-	pFont->Draw("Back", { left_start, 700.0F }, 1.0f, { 255, 0, 0 });
-
-
-	const char* output = "=                          =";
-	SGD::Point position;
-
-	// music & sfx
-	position.x = (left_start + 100.0F) - 50.0F;
-	position.y = 300.0F + (150.0f * m_nCursor);
-
-
-
-	// full screen
-	if (m_nCursor == 2)
+	switch (m_nCursor)
 	{
-		output		= m_bFullScreen == true ? "=  =" : "=    =";
-		int length	= m_bFullScreen == true ? 4 : 5;
+	case 0:
+		pFont->Draw(volumes[0].str().c_str(), { left_start + 600.0F, 300.0F }, scale, { 255, 255, 255 });
+		pFont->Draw(volumes[1].str().c_str(), { left_start + 600.0F, 450.0F }, scale, { 255, 0, 0 });
 
-		position.x	= (width - (length * 32 * scale)) * 0.5f;
-		position.y	= 600.0F;
-	}
-	else if (m_nCursor == 3)
-	{
-		output		= "=     =";
-		position.x	= left_start - 40.0F;
-		position.y	= 700.0F;
-	}
+		if (m_bFullScreen == true)
+			pFont->Draw("ON", { (width - (2 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
+		else
+			pFont->Draw("OFF", { (width - (3 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
 
-	pFont->Draw( output, position, 1.0f, {255, 0, 0} );
+
+		pFont->Draw("Back", { left_start, 700.0F }, 1.0f, { 255, 0, 0 });
+
+		break;
+	
+	case 1:
+		pFont->Draw(volumes[0].str().c_str(), { left_start + 600.0F, 300.0F }, scale, { 255, 0, 0 });
+		pFont->Draw(volumes[1].str().c_str(), { left_start + 600.0F, 450.0F }, scale, { 255, 255, 255 });
+
+		if (m_bFullScreen == true)
+			pFont->Draw("ON", { (width - (2 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
+		else
+			pFont->Draw("OFF", { (width - (3 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
+
+
+		pFont->Draw("Back", { left_start, 700.0F }, 1.0f, { 255, 0, 0 });
+
+		break;
+	case 2:
+		pFont->Draw(volumes[0].str().c_str(), { left_start + 600.0F, 300.0F }, scale, { 255, 0, 0 });
+		pFont->Draw(volumes[1].str().c_str(), { left_start + 600.0F, 450.0F }, scale, { 255, 0, 0 });
+
+		if (m_bFullScreen == true)
+			pFont->Draw("ON", { (width - (2 * 32 * scale)) / 2, 600.0F }, scale, { 255, 255, 255 });
+		else
+			pFont->Draw("OFF", { (width - (3 * 32 * scale)) / 2, 600.0F }, scale, { 255, 255, 255 });
+
+
+		pFont->Draw("Back", { left_start, 700.0F }, 1.0f, { 255, 0, 0 });
+
+		break;
+	case 3:
+		pFont->Draw(volumes[0].str().c_str(), { left_start + 600.0F, 300.0F }, scale, { 255, 0, 0 });
+		pFont->Draw(volumes[1].str().c_str(), { left_start + 600.0F, 450.0F }, scale, { 255, 0, 0 });
+
+		if (m_bFullScreen == true)
+			pFont->Draw("ON", { (width - (2 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
+		else
+			pFont->Draw("OFF", { (width - (3 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
+
+
+		pFont->Draw("Back", { left_start, 700.0F }, 1.0f, { 255, 255, 255 });
+
+		break;
+	}
+	
+
+	//const char* output = "=                          =";
+	//SGD::Point position;
+
+	//// music & sfx
+	//position.x = (left_start + 100.0F) - 50.0F;
+	//position.y = 300.0F + (150.0f * m_nCursor);
+
+
+
+	//// full screen
+	//if (m_nCursor == 2)
+	//{
+	//	output		= m_bFullScreen == true ? "=  =" : "=    =";
+	//	int length	= m_bFullScreen == true ? 4 : 5;
+
+	//	position.x	= (width - (length * 32 * scale)) * 0.5f;
+	//	position.y	= 600.0F;
+	//}
+	//else if (m_nCursor == 3)
+	//{
+	//	output		= "=     =";
+	//	position.x	= left_start - 40.0F;
+	//	position.y	= 700.0F;
+	//}
+
+	//pFont->Draw( output, position, 1.0f, {255, 0, 0} );
 }
 
 

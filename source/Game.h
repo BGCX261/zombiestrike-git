@@ -51,6 +51,7 @@ public:
 	/**********************************************************/
 	// Font Accessor: (#include "BitmapFont.h" to use!)
 	const BitmapFont*	GetFont			( void ) const	{	return m_pFont;			}
+	const BitmapFont*	GetShopFont(void) const	{ return m_pFont2; }
 
 
 	/**********************************************************/
@@ -62,13 +63,19 @@ public:
 	// Gamer profile
 	GamerProfile&		GetStoryProfile		( void )		{	return storyProfiles[selectedProfile];	}
 	GamerProfile&		GetSurvivalProfile(void)		{ return survivalProfiles[selectedProfile]; }
+
 	GamerProfile&		GetTutorialProfile(void)		{ return tutorialProfile; }
+
+
+
 
 	GamerProfile&		GetSpecStoryProfile(int index)		{ return storyProfiles[index]; }
 	GamerProfile&		GetSpecSurvialProfile(int index)		{ return survivalProfiles[index]; }
 
 	void				LoadStoryProfiles	( void );
 	void				LoadSurvivalProfiles(void);
+	void				LoadTutorialProfiles(void);
+
 
 	void				CreateStoryProfiles	( void );
 	void				CreateSurvivalProfiles(void);
@@ -76,9 +83,7 @@ public:
 
 	void				OverWriteProfile(GamerProfile& profile);
 
-	GamerProfile		storyProfiles[3];
-	GamerProfile		survivalProfiles[3];
-	GamerProfile		tutorialProfile;
+
 
 	unsigned int		selectedProfile	= 0;
 
@@ -117,9 +122,13 @@ public:
 	SGD::HAudio m_hWpnSwitch		= SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWaveChange		= SGD::INVALID_HANDLE;
 
+	//Shop
+	SGD::HAudio m_hCash				= SGD::INVALID_HANDLE;
+	SGD::HAudio m_hNoBuy			= SGD::INVALID_HANDLE;
 
 
-	/**********************************************************/
+	/*****************************************************
+*****/
 	// Game State Machine:
 	//	- can ONLY be called by the state's Input, Update, or Render methods!!!
 	void				AddState		( IGameState* pNewState );
@@ -128,7 +137,9 @@ public:
 	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hReticleImage = SGD::INVALID_HANDLE;
 
+	SGD::HAudio GetAudio(int index) { return ssRadio[index]; }
 
+	void SetAudio(SGD::HAudio rsound, int index) { ssRadio[index] = rsound; }
 
 private:
 	/**********************************************************/
@@ -157,6 +168,8 @@ private:
 	/**********************************************************/
 	// Game Font
 	BitmapFont*				m_pFont			= nullptr;
+	BitmapFont*				m_pFont2		= nullptr;
+
 
 
 	/**********************************************************/
@@ -179,7 +192,11 @@ private:
 	// Loading screen
 	SGD::HTexture			loadScreen		= SGD::INVALID_HANDLE;
 
-
+	GamerProfile		storyProfiles[3];
+	GamerProfile		survivalProfiles[3];
+	GamerProfile		tutorialProfile;
+	
+	SGD::HAudio ssRadio[20];
 };
 
 #endif //GAME_H

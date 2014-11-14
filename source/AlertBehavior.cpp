@@ -30,9 +30,9 @@ AlertBehavior::~AlertBehavior()
 		if (toWaypoint.ComputeDotProduct(toUpdate->GetDirection()) < 0.999f)
 		{
 			if (toUpdate->GetDirection().ComputeSteering(toWaypoint) > 0)
-				toUpdate->SetRotation(toUpdate->GetRotation() + (SGD::PI * 0.5f * dt)); //Turn left
+				toUpdate->SetRotation(toUpdate->GetRotation() + (SGD::PI  * dt)); //Turn left
 			else if (toUpdate->GetDirection().ComputeSteering(toWaypoint) < 0)
-				toUpdate->SetRotation(toUpdate->GetRotation() - (SGD::PI * 0.5f * dt)); //Turn right
+				toUpdate->SetRotation(toUpdate->GetRotation() - (SGD::PI * dt)); //Turn right
 
 			SGD::Vector orientation = { 0, -1 };
 			orientation.Rotate(toUpdate->GetRotation());
