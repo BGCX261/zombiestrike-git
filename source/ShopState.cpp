@@ -183,7 +183,7 @@ void	ShopState::Exit(void)
 	uziUpgrade.totalAmmo.isMaxed = false;
 	uziUpgrade.ammoCap.isMaxed = false;
 	uziUpgrade.bulletSpread.isMaxed = false;
-	
+
 	tech9Upgrade.magSize.isMaxed = false;
 	tech9Upgrade.reloadTime.isMaxed = false;
 	tech9Upgrade.damage.isMaxed = false;
@@ -248,7 +248,7 @@ void	ShopState::Exit(void)
 	nadeLauncherUpgrade.ammoCap.isMaxed = false;
 	nadeLauncherUpgrade.bulletVelocity.isMaxed = false;
 
-	
+
 	sawnOffUpgrade.recoilTime.isMaxed = false;
 	sawnOffUpgrade.reloadTime.isMaxed = false;
 	sawnOffUpgrade.damage.isMaxed = false;
@@ -271,7 +271,7 @@ void	ShopState::Exit(void)
 	autoShotgunUpgrade.totalAmmo.isMaxed = false;
 	autoShotgunUpgrade.bulletSpread.isMaxed = false;
 	autoShotgunUpgrade.ammoCap.isMaxed = false;
-	
+
 
 
 }
@@ -325,33 +325,33 @@ bool	ShopState::Input(void)
 		/*
 		if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 		{
-			SGD::Point	mpoint = pInput->GetMousePosition();
-			SGD::Vector	joystick = pInput->GetLeftJoystick(0);
-			float		stickmin = 0.250f;
-			float		mousevel = 4.0f;
+		SGD::Point	mpoint = pInput->GetMousePosition();
+		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+		float		stickmin = 0.250f;
+		float		mousevel = 4.0f;
 
-			if (joystick.x > stickmin)
-				mpoint.x += mousevel;
-			else if (joystick.x < stickmin * -1.0f)
-				mpoint.x -= mousevel;
+		if (joystick.x > stickmin)
+		mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+		mpoint.x -= mousevel;
 
-			if (joystick.y > stickmin)
-				mpoint.y += mousevel;
-			else if (joystick.y < stickmin * -1.0f)
-				mpoint.y -= mousevel;
+		if (joystick.y > stickmin)
+		mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+		mpoint.y -= mousevel;
 
-			if (mpoint.x < 0.0F)
-				mpoint.x = 0.0F;
-			if (mpoint.y < 0.0F)
-				mpoint.y = 0.0F;
-			if (mpoint.x > Game::GetInstance()->GetScreenWidth())
-				mpoint.x = Game::GetInstance()->GetScreenWidth();
-			if (mpoint.y > Game::GetInstance()->GetScreenHeight())
-				mpoint.y = Game::GetInstance()->GetScreenHeight();
+		if (mpoint.x < 0.0F)
+		mpoint.x = 0.0F;
+		if (mpoint.y < 0.0F)
+		mpoint.y = 0.0F;
+		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+		mpoint.x = Game::GetInstance()->GetScreenWidth();
+		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+		mpoint.y = Game::GetInstance()->GetScreenHeight();
 
-			pInput->SetMousePosition(mpoint);
+		pInput->SetMousePosition(mpoint);
 		}
-	ControllerInputCheck();
+		ControllerInputCheck();
 		*/
 	}
 
@@ -8211,12 +8211,12 @@ void	ShopState::Render(void)
 	}
 		break;
 	case DEFENSE:
-					/*pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
-					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
-					pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
-					pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });*/
+		/*pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
+		pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
+		pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
+		pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+		pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+		pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });*/
 
 		/*pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
 		pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
@@ -8458,7 +8458,7 @@ void	ShopState::Render(void)
 	retpos.Offset(-5.0f, -5.0f);
 	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { 1.0f, 1.0f });
 
-	SGD::Rectangle equipRect = { Game::GetInstance()->GetScreenWidth()/2 - 141.0f, Game::GetInstance()->GetScreenHeight() - 135.0f, Game::GetInstance()->GetScreenWidth()/2 + 141, Game::GetInstance()->GetScreenHeight() - 10 };
+	SGD::Rectangle equipRect = { Game::GetInstance()->GetScreenWidth() / 2 - 141.0f, Game::GetInstance()->GetScreenHeight() - 135.0f, Game::GetInstance()->GetScreenWidth() / 2 + 141, Game::GetInstance()->GetScreenHeight() - 10 };
 
 	int widthOffset = 10;
 	int heightOffset = 15;
@@ -9241,7 +9241,7 @@ void ShopState::LoadShopStatus()
 	//landmines
 	landMine.isBought = profile.landMine.isBought;
 
-	
+
 
 
 
@@ -10265,18 +10265,18 @@ void ShopState::SaveProfile()
 		fout << profile.barbWire.damage.upgradedSkill.currTier << '\n';
 		fout << profile.barbWire.damage.upgradedSkill.maxTier << '\n';
 
-				fout << profile.barbWire.isBought << '\n';
-				
-				
-				for (size_t j = 0; j < 74; j++)
-				{
-
-}
+		fout << profile.barbWire.isBought << '\n';
 
 
-
-
+		for (size_t j = 0; j < 74; j++)
+		{
+			fout << profile.barbWireStates[j] << '\n';
 		}
+
+
+
+
+
 		//Sandbag
 
 		fout << profile.sandBag.maxHealth.upgradedSkill.stat << '\n';
@@ -10284,8 +10284,8 @@ void ShopState::SaveProfile()
 		fout << profile.sandBag.maxHealth.upgradedSkill.maxTier << '\n';
 		fout << profile.sandBag.isBought << '\n';
 
-				for (size_t j = 0; j < 66; j++)
-				{
+		for (size_t j = 0; j < 66; j++)
+		{
 
 
 
@@ -10301,8 +10301,8 @@ void ShopState::SaveProfile()
 
 		fout << profile.landMine.isBought << '\n';
 
-				for (size_t j = 0; j < 55; j++)
-				{
+		for (size_t j = 0; j < 55; j++)
+		{
 			fout << profile.landMineStates[j] << '\n';
 
 
@@ -10313,9 +10313,9 @@ void ShopState::SaveProfile()
 		fout << profile.maxNumTurrets << '\n';
 
 
-				fout << profile.wavesComplete << '\n';
+		fout << profile.wavesComplete << '\n';
 
-				fout << profile.money << '\n';
+		fout << profile.money << '\n';
 
 
 
@@ -10489,109 +10489,109 @@ void ShopState::ControllerSelectionCheck(void)
 	// Weapons pages
 	switch (currPage)
 	{
-		case PISTOLS:
-		#pragma region Pistols
-		{
-			switch (currTab)
-			{
-			case 0: // pistol
-				numoptions = 3;
-				break;
-			case 1: // revolver
-				numoptions = 7;
-				break;
-			default:
-				break;
-			}
-		}
+	case PISTOLS:
+#pragma region Pistols
+	{
+					switch (currTab)
+					{
+					case 0: // pistol
+						numoptions = 3;
+						break;
+					case 1: // revolver
+						numoptions = 7;
+						break;
+					default:
+						break;
+					}
+	}
 #pragma endregion
 		break;
 
-		case SHOTGUNS:
-		#pragma region Shotguns
-		{
-			switch (currTab)
-			{
-			case 0: // sawnoff
-				numoptions = 6;
-				break;
-			case 1: // pump action
-				numoptions = 7;
-				break;
-			case 2: // auto
-				numoptions = 7;
-				break;
-			default:
-				break;
-			}
-		}
+	case SHOTGUNS:
+#pragma region Shotguns
+	{
+					 switch (currTab)
+					 {
+					 case 0: // sawnoff
+						 numoptions = 6;
+						 break;
+					 case 1: // pump action
+						 numoptions = 7;
+						 break;
+					 case 2: // auto
+						 numoptions = 7;
+						 break;
+					 default:
+						 break;
+					 }
+	}
 #pragma endregion
 		break;
 
-		case SMGS:
-		#pragma region Smgs
-		{
-			switch (currTab)
-			{
-			case 0: // mac10
-				numoptions = 6;
-				break;
-			case 1: // tech9
-				numoptions = 6;
-				break;
-			case 2: // p90
-				numoptions = 6;
-				break;
-			default:
-				break;
-			}
-		}
+	case SMGS:
+#pragma region Smgs
+	{
+				 switch (currTab)
+				 {
+				 case 0: // mac10
+					 numoptions = 6;
+					 break;
+				 case 1: // tech9
+					 numoptions = 6;
+					 break;
+				 case 2: // p90
+					 numoptions = 6;
+					 break;
+				 default:
+					 break;
+				 }
+	}
 #pragma endregion
 		break;
 
-		case ASSAULT_RIFLES:
-		#pragma region Assault Rifles
-		{
-			switch (currTab)
-			{
-			case 0: // ak47
-				numoptions = 7;
-				break;
-			case 1: // m16
-				numoptions = 7;
-				break;
-			case 2: // lmg
-				numoptions = 7;
-				break;
-			default:
-				break;
-			}
-		}
+	case ASSAULT_RIFLES:
+#pragma region Assault Rifles
+	{
+						   switch (currTab)
+						   {
+						   case 0: // ak47
+							   numoptions = 7;
+							   break;
+						   case 1: // m16
+							   numoptions = 7;
+							   break;
+						   case 2: // lmg
+							   numoptions = 7;
+							   break;
+						   default:
+							   break;
+						   }
+	}
 #pragma endregion
 		break;
 
-		case HEAVY:
-		#pragma region Heavy
-		{
-			switch (currTab)
-			{
-			case 0: // sniper
-				numoptions = 8;
-				break;
-			case 1: // flamethrower
-				numoptions = 7;
-				break;
-			case 2: // grenade launcher
-				numoptions = 6;
-				break;
-			default:
-				break;
-			}
-		}
+	case HEAVY:
+#pragma region Heavy
+	{
+				  switch (currTab)
+				  {
+				  case 0: // sniper
+					  numoptions = 8;
+					  break;
+				  case 1: // flamethrower
+					  numoptions = 7;
+					  break;
+				  case 2: // grenade launcher
+					  numoptions = 6;
+					  break;
+				  default:
+					  break;
+				  }
+	}
 #pragma endregion
 		break;
 
-		case DEFENSE:
+	case DEFENSE:
 		numoptions = 8;
 		break;
 
