@@ -163,7 +163,112 @@ void	ShopState::Exit(void)
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(weaponsImage);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
 
+	pistolUpgrade.magSize.isMaxed = false;
+	pistolUpgrade.reloadTime.isMaxed = false;
+	pistolUpgrade.recoilTime.isMaxed = false;
 
+	revolverUpgrade.magSize.isMaxed = false;
+	revolverUpgrade.reloadTime.isMaxed = false;
+	revolverUpgrade.recoilTime.isMaxed = false;
+	revolverUpgrade.penPower.isMaxed = false;
+	revolverUpgrade.damage.isMaxed = false;
+	revolverUpgrade.totalAmmo.isMaxed = false;
+	revolverUpgrade.ammoCap.isMaxed = false;
+
+	uziUpgrade.magSize.isMaxed = false;
+	uziUpgrade.reloadTime.isMaxed = false;
+	uziUpgrade.damage.isMaxed = false;
+	uziUpgrade.totalAmmo.isMaxed = false;
+	uziUpgrade.ammoCap.isMaxed = false;
+	uziUpgrade.bulletSpread.isMaxed = false;
+	
+	tech9Upgrade.magSize.isMaxed = false;
+	tech9Upgrade.reloadTime.isMaxed = false;
+	tech9Upgrade.damage.isMaxed = false;
+	tech9Upgrade.totalAmmo.isMaxed = false;
+	tech9Upgrade.ammoCap.isMaxed = false;
+	tech9Upgrade.bulletSpread.isMaxed = false;
+
+	p90Upgrade.magSize.isMaxed = false;
+	p90Upgrade.reloadTime.isMaxed = false;
+	p90Upgrade.damage.isMaxed = false;
+	p90Upgrade.totalAmmo.isMaxed = false;
+	p90Upgrade.ammoCap.isMaxed = false;
+	p90Upgrade.bulletSpread.isMaxed = false;
+
+	m16Upgrade.magSize.isMaxed = false;
+	m16Upgrade.recoilTime.isMaxed = false;
+	m16Upgrade.reloadTime.isMaxed = false;
+	m16Upgrade.damage.isMaxed = false;
+	m16Upgrade.totalAmmo.isMaxed = false;
+	m16Upgrade.ammoCap.isMaxed = false;
+	m16Upgrade.bulletSpread.isMaxed = false;
+
+	ak47Upgrade.magSize.isMaxed = false;
+	ak47Upgrade.recoilTime.isMaxed = false;
+	ak47Upgrade.reloadTime.isMaxed = false;
+	ak47Upgrade.damage.isMaxed = false;
+	ak47Upgrade.totalAmmo.isMaxed = false;
+	ak47Upgrade.ammoCap.isMaxed = false;
+	ak47Upgrade.bulletSpread.isMaxed = false;
+
+	lmgUpgrade.magSize.isMaxed = false;
+	lmgUpgrade.recoilTime.isMaxed = false;
+	lmgUpgrade.reloadTime.isMaxed = false;
+	lmgUpgrade.damage.isMaxed = false;
+	lmgUpgrade.totalAmmo.isMaxed = false;
+	lmgUpgrade.ammoCap.isMaxed = false;
+	lmgUpgrade.bulletSpread.isMaxed = false;
+
+
+	flameUpgrade.magSize.isMaxed = false;
+	flameUpgrade.reloadTime.isMaxed = false;
+	flameUpgrade.damage.isMaxed = false;
+	flameUpgrade.totalAmmo.isMaxed = false;
+	flameUpgrade.ammoCap.isMaxed = false;
+	flameUpgrade.bulletSpread.isMaxed = false;
+	flameUpgrade.bulletVelocity.isMaxed = false;
+
+	sniperUpgrade.magSize.isMaxed = false;
+	sniperUpgrade.reloadTime.isMaxed = false;
+	sniperUpgrade.recoilTime.isMaxed = false;
+	sniperUpgrade.penPower.isMaxed = false;
+	sniperUpgrade.damage.isMaxed = false;
+	sniperUpgrade.totalAmmo.isMaxed = false;
+	sniperUpgrade.bulletSpread.isMaxed = false;
+
+	sniperUpgrade.ammoCap.isMaxed = false;
+
+	nadeLauncherUpgrade.magSize.isMaxed = false;
+	nadeLauncherUpgrade.reloadTime.isMaxed = false;
+	nadeLauncherUpgrade.damage.isMaxed = false;
+	nadeLauncherUpgrade.totalAmmo.isMaxed = false;
+	nadeLauncherUpgrade.ammoCap.isMaxed = false;
+	nadeLauncherUpgrade.bulletVelocity.isMaxed = false;
+
+	
+	sawnOffUpgrade.recoilTime.isMaxed = false;
+	sawnOffUpgrade.reloadTime.isMaxed = false;
+	sawnOffUpgrade.damage.isMaxed = false;
+	sawnOffUpgrade.totalAmmo.isMaxed = false;
+	sawnOffUpgrade.bulletSpread.isMaxed = false;
+	sawnOffUpgrade.ammoCap.isMaxed = false;
+
+	pumpShotgunUpgrade.magSize.isMaxed = false;
+	pumpShotgunUpgrade.recoilTime.isMaxed = false;
+	pumpShotgunUpgrade.reloadTime.isMaxed = false;
+	pumpShotgunUpgrade.damage.isMaxed = false;
+	pumpShotgunUpgrade.totalAmmo.isMaxed = false;
+	pumpShotgunUpgrade.bulletSpread.isMaxed = false;
+	pumpShotgunUpgrade.ammoCap.isMaxed = false;
+
+	autoShotgunUpgrade.magSize.isMaxed = false;
+	autoShotgunUpgrade.recoilTime.isMaxed = false;
+	autoShotgunUpgrade.reloadTime.isMaxed = false;
+	autoShotgunUpgrade.damage.isMaxed = false;
+	autoShotgunUpgrade.totalAmmo.isMaxed = false;
+	autoShotgunUpgrade.bulletSpread.isMaxed = false;
+	autoShotgunUpgrade.ammoCap.isMaxed = false;
 	
 
 
@@ -6262,6 +6367,8 @@ void ShopState::LoadShopStatus()
 
 	//landmines
 	landMine.isBought = profile.landMine.isBought;
+
+	
 
 
 	

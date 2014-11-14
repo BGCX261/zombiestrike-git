@@ -90,7 +90,7 @@ PlayerController::~PlayerController()
 		}
 			
 	
-	}
+	
 	else
 	{
 		SGD::Vector toMouse;
@@ -119,7 +119,7 @@ PlayerController::~PlayerController()
 		}
 
 	}
-	*/
+	
 
 
 	SGD::Point	mousepoint	= pInput->GetMousePosition();
