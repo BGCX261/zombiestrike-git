@@ -55,6 +55,7 @@ public:
 	bool			GetTutorialMode(void) const { return m_bTutorialMode; }
 	bool			GetChoiceScreen() const { return m_bIsChoiceScreen; }
 	void			SetGameMode(bool m)		{ m_bStoryMode = m; }
+	void OverWriteTutorialFile();
 
 
 	bool GetShopState() const { return m_bShopState; }
@@ -146,7 +147,8 @@ private:
 
 	/**********************************************************/
 	// Game Entities
-	enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_BULLETS, BUCKET_PICKUPS, BUCKET_TURRETS };
+	enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_COLLIDABLE, BUCKET_PICKUPS };
+
 	EntityManager*			m_pEntities = nullptr;
 	AnimationManager*		m_pAnimManager = nullptr;
 

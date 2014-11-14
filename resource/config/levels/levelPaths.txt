@@ -1,2 +1,2 @@
-resource/config/levels/testLevel2.xml
+resource/config/levels/Level.xml
 resource/config/levels/tutorial.xml

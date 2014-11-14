@@ -926,7 +926,7 @@ void Game::LoadStoryProfiles( void )
 
 			fin >> storyProfiles[i - 1].barbWire.isBought;
 			
-			for (size_t j = 0; j < 30; j++)
+			for (size_t j = 0; j < 74; j++)
 			{
 				
 				fin >> storyProfiles[i - 1].barbWireStates[j];
@@ -942,7 +942,7 @@ void Game::LoadStoryProfiles( void )
 
 			fin >> storyProfiles[i - 1].sandBag.isBought;
 
-			for (size_t j = 0; j < 30; j++)
+			for (size_t j = 0; j < 66; j++)
 			{
 				
 				fin >> storyProfiles[i - 1].sandBagStates[j];
@@ -953,7 +953,7 @@ void Game::LoadStoryProfiles( void )
 
 			fin >> storyProfiles[i - 1].landMine.isBought;
 
-			for (size_t j = 0; j < 50; j++)
+			for (size_t j = 0; j < 55; j++)
 			{
 				
 				fin >> storyProfiles[i - 1].landMineStates[j];
@@ -968,7 +968,7 @@ void Game::LoadStoryProfiles( void )
 
 			fin >> storyProfiles[i - 1].wavesComplete;
 
-
+			fin >> storyProfiles[i - 1].money;
 
 
 
@@ -1494,7 +1494,7 @@ void Game::LoadSurvivalProfiles(void)
 
 			fin >> survivalProfiles[i - 1].barbWire.isBought;
 
-			for (size_t j = 0; j < 30; j++)
+			for (size_t j = 0; j < 74; j++)
 			{
 
 				fin >> survivalProfiles[i - 1].barbWireStates[j];
@@ -1510,7 +1510,7 @@ void Game::LoadSurvivalProfiles(void)
 
 			fin >> survivalProfiles[i - 1].sandBag.isBought;
 
-			for (size_t j = 0; j < 30; j++)
+			for (size_t j = 0; j < 66; j++)
 			{
 
 				fin >> survivalProfiles[i - 1].sandBagStates[j];
@@ -1521,7 +1521,7 @@ void Game::LoadSurvivalProfiles(void)
 
 			fin >> survivalProfiles[i - 1].landMine.isBought;
 
-			for (size_t j = 0; j < 50; j++)
+			for (size_t j = 0; j < 55; j++)
 			{
 
 				fin >> survivalProfiles[i - 1].landMineStates[j];
@@ -1535,6 +1535,9 @@ void Game::LoadSurvivalProfiles(void)
 
 
 			fin >> survivalProfiles[i - 1].wavesComplete;
+
+			fin >> survivalProfiles[i - 1].money;
+
 
 
 
@@ -2060,7 +2063,7 @@ void				Game::LoadTutorialProfiles(void)
 
 		fin >> tutorialProfile.barbWire.isBought;
 
-		for (size_t j = 0; j < 30; j++)
+		for (size_t j = 0; j < 28; j++)
 		{
 
 			fin >> tutorialProfile.barbWireStates[j];
@@ -2076,7 +2079,7 @@ void				Game::LoadTutorialProfiles(void)
 
 		fin >> tutorialProfile.sandBag.isBought;
 
-		for (size_t j = 0; j < 30; j++)
+		for (size_t j = 0; j < 38; j++)
 		{
 
 			fin >> tutorialProfile.sandBagStates[j];
@@ -2087,7 +2090,7 @@ void				Game::LoadTutorialProfiles(void)
 
 		fin >> tutorialProfile.landMine.isBought;
 
-		for (size_t j = 0; j < 50; j++)
+		for (size_t j = 0; j < 28; j++)
 		{
 
 			fin >> tutorialProfile.landMineStates[j];
@@ -2101,6 +2104,8 @@ void				Game::LoadTutorialProfiles(void)
 
 
 		fin >> tutorialProfile.wavesComplete;
+		fin >> tutorialProfile.money;
+
 
 
 
@@ -2526,6 +2531,7 @@ void Game::CreateStoryProfiles()
 				fout << 0 << '\n';
 
 
+
 				//barbedwire
 				fout << 100 << '\n';
 				fout << 1 << '\n';
@@ -2537,7 +2543,7 @@ void Game::CreateStoryProfiles()
 
 				fout << 0 << '\n';
 
-				for (size_t i = 0; i < 30; i++)
+				for (size_t i = 0; i < 74; i++)
 				{
 					fout << 0 << '\n';
 				}
@@ -2547,17 +2553,17 @@ void Game::CreateStoryProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 
-				fout << 0 << '\n';
+				fout << 1 << '\n';
 
-				for (size_t i = 0; i < 30; i++)
+				for (size_t i = 0; i < 66; i++)
 				{
-					fout << 0 << '\n';
+					fout << 1 << '\n';
 				}
 
 				//landmines
 				fout << 0 << '\n';
 
-				for (size_t i = 0; i < 50; i++)
+				for (size_t i = 0; i < 55; i++)
 				{
 					fout << 0 << '\n';
 				}
@@ -2640,6 +2646,11 @@ void Game::CreateSurvivalProfiles()
 				fout << localTime.tm_sec << '\n';
 
 				fout << 100 << '\n';
+
+				fout << 0 << '\n';
+
+
+
 
 
 #pragma region Pistols
@@ -2989,6 +3000,7 @@ void Game::CreateSurvivalProfiles()
 				fout << 0 << '\n';
 
 
+
 				//barbedwire
 				fout << 100 << '\n';
 				fout << 1 << '\n';
@@ -3000,7 +3012,7 @@ void Game::CreateSurvivalProfiles()
 
 				fout << 0 << '\n';
 
-				for (size_t i = 0; i < 30; i++)
+				for (size_t i = 0; i < 74; i++)
 				{
 					fout << 0 << '\n';
 				}
@@ -3010,17 +3022,17 @@ void Game::CreateSurvivalProfiles()
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 
-				fout << 0 << '\n';
+				fout << 1 << '\n';
 
-				for (size_t i = 0; i < 30; i++)
+				for (size_t i = 0; i < 66; i++)
 				{
-					fout << 0 << '\n';
+					fout << 1 << '\n';
 				}
 
 				//landmines
 				fout << 0 << '\n';
 
-				for (size_t i = 0; i < 50; i++)
+				for (size_t i = 0; i < 55; i++)
 				{
 					fout << 0 << '\n';
 				}
@@ -3033,6 +3045,9 @@ void Game::CreateSurvivalProfiles()
 				fout << 3 << '\n';
 
 				//num waves
+				fout << 0;
+
+				//money
 				fout << 0;
 			}
 		}
@@ -3423,7 +3438,7 @@ void Game::OverWriteProfile(GamerProfile& profile)
 
 		fout << 0 << '\n';
 
-		for (size_t i = 0; i < 30; i++)
+		for (size_t i = 0; i < 74; i++)
 		{
 			fout << 0 << '\n';
 		}
@@ -3433,17 +3448,17 @@ void Game::OverWriteProfile(GamerProfile& profile)
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 
-		fout << 0 << '\n';
+		fout << 1 << '\n';
 
-		for (size_t i = 0; i < 30; i++)
+		for (size_t i = 0; i < 66; i++)
 		{
-			fout << 0 << '\n';
+			fout << 1 << '\n';
 		}
 
 		//landmines
 		fout << 0 << '\n';
 
-		for (size_t i = 0; i < 50; i++)
+		for (size_t i = 0; i < 55; i++)
 		{
 			fout << 0 << '\n';
 		}
@@ -3456,6 +3471,9 @@ void Game::OverWriteProfile(GamerProfile& profile)
 		fout << 3 << '\n';
 
 		//num waves
+		fout << 0;
+
+		//money
 		fout << 0;
 
 		fout.close();
@@ -3879,7 +3897,7 @@ SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 
 		fout << 0 << '\n';
 
-		for (size_t i = 0; i < 30; i++)
+		for (size_t i = 0; i < 28; i++)
 		{
 			fout << 0 << '\n';
 		}
@@ -3889,17 +3907,17 @@ SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 
-		fout << 0 << '\n';
+		fout << 1 << '\n';
 
-		for (size_t i = 0; i < 30; i++)
+		for (size_t i = 0; i < 28; i++)
 		{
-			fout << 0 << '\n';
+			fout << 1 << '\n';
 		}
 
 		//landmines
 		fout << 0 << '\n';
 
-		for (size_t i = 0; i < 50; i++)
+		for (size_t i = 0; i < 28; i++)
 		{
 			fout << 0 << '\n';
 		}
@@ -3912,6 +3930,9 @@ SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 		fout << 3 << '\n';
 
 		//num waves
+		fout << 0;
+
+		//money
 		fout << 0;
 
 #pragma endregion

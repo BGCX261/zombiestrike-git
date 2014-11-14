@@ -100,71 +100,31 @@ Player::~Player()
 	if (controller != nullptr)
 		controller->Update(dt, this, { 0, 0 });
 
-	if (GameplayState::GetInstance()->GetGameMode() == true)
-		Game::GetInstance()->GetStoryProfile().health = m_fCurrHP = profile.health;
+	if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
+	{
+		profile = Game::GetInstance()->GetTutorialProfile();
+		m_fCurrHP = profile.health;
+	}
 	else
-		Game::GetInstance()->GetSurvivalProfile().health = m_fCurrHP = profile.health;
+	{
+		if (GameplayState::GetInstance()->GetGameMode() == true)
+		{
+			profile = Game::GetInstance()->GetStoryProfile();
+			m_fCurrHP = profile.health;
+		}
+
+		else
+		{
+			profile = Game::GetInstance()->GetSurvivalProfile();
+			m_fCurrHP = profile.health;
+		}
+	}
+
+	
+		
 
 
 
-	//// camo
-	//if (m_bIsCamoOn)
-	//{
-	//	// minus energy this frame
-	//	m_Attributes.m_fCurrEnergy -= (m_Attributes.m_fCamoCost * m_Attributes.m_fCamoMultiplier) * dt;
-
-	//	// cap energy at min
- //		if (m_Attributes.m_fCurrEnergy < 0.0f)
-	//	{
-	//		m_Attributes.m_fCurrEnergy = 0.0f;
-	//		m_bIsCamoOn = false;
-	//	}
-	//}
-
-
-	//// sprinting
-	//if (m_bIsSprinting == true)
-	//{
-	//	// minus stamina this frame
-	//	m_Attributes.m_fCurrStamina -= (m_Attributes.m_fSprintCost * dt);
-
-	//	// cap stamina at min
-	//	if (m_Attributes.m_fCurrStamina < 0.0f)
-	//	{
-	//		m_Attributes.m_fCurrStamina = 0.0f;
-	//		m_bIsSprinting = false;
-	//	}
-	//}
-
-
-	//// recover energy
-	//if (m_Attributes.m_fCurrEnergy < m_Attributes.m_fMaxEnergy && m_bIsCamoOn == false)
-	//{
-	//	if (energyReboot.Update(dt))
-	//		m_Attributes.m_fCurrEnergy += m_Attributes.m_fEnergyRegen * dt;
-
-	//	if (m_Attributes.m_fCurrEnergy > m_Attributes.m_fMaxEnergy)
-	//		m_Attributes.m_fCurrEnergy = m_Attributes.m_fMaxEnergy;
-	//}
-
-
-	//// recover stamina
-	//if (m_Attributes.m_fCurrStamina < m_Attributes.m_fMaxStamina)
-	//{
-	//	if (m_bIsSprinting == false)
-	//	{
-	//		if (m_bMoving == false)
-	//			m_Attributes.m_fCurrStamina += m_Attributes.m_fStaminaRegen * dt;
-	//		else
-	//			m_Attributes.m_fCurrStamina += (m_Attributes.m_fStaminaRegen *0.5f) * dt;
-	//	}
-	//}
-
-	//pistol->Update(dt);
-	//shotgun->Update(dt);
-	//arifle->Update(dt);
-	//sniper->Update(dt);
-	//flameThrower->Update(dt);
 
 
 
@@ -185,7 +145,7 @@ void Player::Render()
 	// render good/bad turret location
 	if (m_bIsPlacingTurret)
 	{
-		if (m_nNumTurrets > 0)
+		if (profile.numTurrets > 0)
 		{
 			// fake time stamp for animation
 			AnimTimeStamp ats;
@@ -333,6 +293,7 @@ void Player::Render()
 		case OBJ_BARBEDWIRE:
 		case OBJ_SANDBAG:
 		case OBJ_WALL:
+		case OBJ_BASE:
 		{
 			const EnvironmentalObject* temp = dynamic_cast<const EnvironmentalObject*>(pOther);
 			if (temp->IsActive())
@@ -364,7 +325,7 @@ void Player::SpawnTurret(void)
 	Game* pGame = Game::GetInstance();
 
 
-	if (m_nNumTurrets == 0 || GoodTurretPosition() == false)
+	if (profile.numTurrets == 0 || GoodTurretPosition() == false)
 	{
 		if (pAudio->IsAudioPlaying(pGame->turret_bad) == false)
 			pAudio->PlayAudio(pGame->turret_bad, false);
@@ -381,7 +342,7 @@ void Player::SpawnTurret(void)
 	pMsg->QueueMessage();
 	pMsg = nullptr;
 
-	m_nNumTurrets--;
+	profile.numTurrets--;
 }
 
 void Player::CheckDamage(void)

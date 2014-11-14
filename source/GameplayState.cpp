@@ -355,6 +355,7 @@
 
 		// Check collisions
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENEMIES);
+		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_COLLIDABLE);
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PUKE);
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENVIRO);
 
@@ -446,8 +447,9 @@
 
 				//Calls the shopstate//
 				Game::GetInstance()->AddState(ShopState::GetInstance());
+				player->SetPosition({ m_szWorldSize.width * .6f, m_szWorldSize.height * .6f });
 
-				m_pPlayer->SetPosition({ 200, 200 });
+
 
 
 				SGD::Event housemsg("REPAIR_HOUSE");
@@ -754,7 +756,8 @@
 BaseObject* GameplayState::CreatePlayer( void )
 {
 	Player* player = new Player;
-	player->SetPosition({ 200, 200 });
+	player->SetPosition({ m_szWorldSize.width * .6f, m_szWorldSize.height * .6f });
+
 	player->SetRotation(0.0f);
 	player->SetMoveSpeed(180.0f);
 	player->RetrieveBehavior("playerController");

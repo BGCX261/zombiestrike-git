@@ -124,5 +124,7 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 		{
 			SetAnimation("bloodExplosion");
 		}
+		else if (pOther->GetType() == OBJ_BASE)
+			MovingObject::HandleCollision(pOther);
 	}
 }

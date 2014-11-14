@@ -67,6 +67,7 @@
 #include <Windows.h>
 #include <cstdlib>
 #include <cassert>
+#include <fstream>
 #define WIN32_LEAN_AND_MEAN
 
 /**************************************************************/
@@ -114,47 +115,7 @@
 	SGD::InputManager*		pInput = SGD::InputManager::GetInstance();
 	//AnimationManager*		pAnimationManager = AnimationManager::GetInstance();
 
-	//// player animations
-	//pAnimationManager->Load("resource/config/animations/PlayerAnimation.xml", "player");
-	//pAnimationManager->Load("resource/config/animations/FlameThrower.xml", "flameThrowerRound");
-	//pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
-	//pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
-	//pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
 
-	//pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
-	//pAnimationManager->Load("resource/config/animations/Player_Death.xml", "playerDeath");
-	//pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
-
-
-	//// enemy animations
-
-	//pAnimationManager->Load("resource/config/animations/Zombie_Animation1.xml", "slowZombie");
-	//pAnimationManager->Load("resource/config/animations/Zombie_Animation2.xml", "fastZombie");
-	//pAnimationManager->Load("resource/config/animations/TankZombie.xml", "tankZombie");
-	//pAnimationManager->Load("resource/config/animations/ExplodingZombie.xml", "explodingZombie");
-	//pAnimationManager->Load("resource/config/animations/Explosion_Animation1.xml", "explosion");
-
-	//pAnimationManager->Load("resource/config/animations/FatZombie.xml", "fatZombie");
-	//pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
-	//pAnimationManager->Load("resource/config/animations/AcidAnimation.xml", "puke");
-
-	////Blood Animation
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood1.xml", "blood1");
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood2.xml", "blood2");
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
-	//pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
-
-
-	//// other animations
-	//pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml", "turret");
-	//pAnimationManager->Load("resource/config/animations/House_Animation.xml", "house");
-
-	//pAnimationManager->Load("resource/config/animations/PowerCoreAnimation.xml",	"powerCore");
-
-	//pAnimationManager->Load("resource/config/animations/StimPack.xml",				"stimPack");
-	//playerHurt1 = pAudio->LoadAudio("resource/audio/player_grunt1.wav");
-	//playerHurt2 = pAudio->LoadAudio("resource/audio/player_grunt2.wav");
-	//playerHurt3 = pAudio->LoadAudio("resource/audio/player_grunt3.wav");
 	if (m_bTutorialMode == true)
 		MapManager::GetInstance()->LoadLevel(Game::GetInstance()->GetTutorialProfile(), m_pEntities);
 	else if (m_bStoryMode == true)
@@ -175,37 +136,7 @@
 	//m_bStoryMode == true ? pAudio->PlayAudio(storyMusic, true) : pAudio->PlayAudio(survivalMusic, true);
 	pAudio->PlayAudio(Game::GetInstance()->storyMusic, true);
 
-	// SFX
-	//playerDeath = pAudio->LoadAudio("resource/audio/player_death1.wav");
-	//cannot_use_skill = pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
-	//footstep = pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
-	//m_hWpnSwitch = pAudio->LoadAudio("resource/audio/switchweapon.wav");
-	//m_hWaveChange = pAudio->LoadAudio("resource/audio/wavechange.wav");
-
-	//m_hHudWpn = Game::GetInstance()->m_hHudWpn;
-	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
-
-	/*zombie_pain = pAudio->LoadAudio("resource/audio/zombie_howl.wav");
-	bullet_hit_zombie = pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
-	bullet_hit_house = pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
-	out_of_ammo = pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
-	reload_begin = pAudio->LoadAudio("resource/audio/reload_begin.wav");
-	reload_finish = pAudio->LoadAudio("resource/audio/reload_finish.wav");
-	explosion = pAudio->LoadAudio("resource/audio/Splode2.wav");
-	vomit_hit_player = pAudio->LoadAudio("resource/audio/splat.wav");
-
-	pistol_fire = pAudio->LoadAudio("resource/audio/pistol_fire.wav");
-	shotgun_fire = pAudio->LoadAudio("resource/audio/shotgun_fire.wav");
-	rifle_fire = pAudio->LoadAudio("resource/audio/rifle_fire.wav");
-	sniper_fire = pAudio->LoadAudio("resource/audio/sniper_fire.wav");
-	flamethrower_fire = pAudio->LoadAudio("resource/audio/fire_ignite_1.wav");
-	smg_fire = pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
-	vomit_fire = pAudio->LoadAudio("resource/audio/vomit.wav");*/
-
-
-	//m_hMain = &Game::GetInstance()->m_hMainTheme;
-	//m_hSurvive = &Game::GetInstance()->m_hSurvivalTheme;
-
+	
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
 
@@ -231,21 +162,7 @@
 	iTutorial[11] = "Next to continue to the shooting range";
 	iTutorial[12] = "               -OR-                   ";
 	iTutorial[13] = "     Previous to go to last page      ";
-	//iTutorial[14] = "    PREV";
-	//iTutorial[15] = "NEXT          ";
-	//
-	//
-	//if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == false)
-	//{
-	//	iTutorial[14] = "<    PREV";
-	//	iTutorial[15] = "NEXT          >";
-	//}
-	//else
-	//{
-	//	iTutorial[14] = " O   PREV";
-	//	iTutorial[15] = "NEXT  X        ";
-	//}
-
+	
 
 	m_tStartTutorial.AddTime(1.0f);
 
@@ -516,11 +433,15 @@
 			m_pEntities->UpdateAll(dt);
 
 
-			// Check collisions
-			m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENEMIES);
-			m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_BULLETS);
-			m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PICKUPS);
+			
+			m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_COLLIDABLE);
+			m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENVIRO);
+
+			m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENVIRO);
+			m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_COLLIDABLE);
+
 			m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
+
 
 
 			// Center camera on the player
@@ -561,29 +482,7 @@
 
 			SpawnManager::GetInstance()->Activate();
 
-			//if (m_tCompleteWave.GetTime() > 0.0f)
-			//{
-			//	m_tCompleteWave.Update(dt);
-			//}
-
-			//else if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
-			//{
-			//	SpawnManager::GetInstance()->SetGameWon(true);
-			//}
-
-			//else
-			//{
-			//	m_bShopState = true;
-
-			//	m_tNextWave.AddTime(6);
-			//	m_tCompleteWave.AddTime(3);
-
-			//	SGD::Event msg("PAUSE");
-			//	msg.SendEventNow();
-
-			//	//Calls the shopstate//
-			//	Game::GetInstance()->AddState(ShopState::GetInstance());
-			//}
+			
 
 		}
 
@@ -621,10 +520,10 @@
 		//for (size_t i = 0; i < 2; i++)
 		//	pGraphics->DrawRectangle(selectionrects[i], { 255, 255, 255 });
 
-		pFont->Draw("Would you like to try the firing range", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 - 45}, 1.25f, { 100, 0, 0 });
-		pFont->Draw("before playing?", { Game::GetInstance()->GetScreenWidth() / 2 - 128 , Game::GetInstance()->GetScreenHeight() / 2 }, 1.25f, { 100, 0, 0 });
-		pFont->Draw("Yes", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 100, 0, 0 });
-		pFont->Draw("No", { Game::GetInstance()->GetScreenWidth() / 2 + 210, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 100, 0, 0 });
+		pFont->Draw("Would you like to try the firing range", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 - 45}, 1.25f, { 255, 0, 0 });
+		pFont->Draw("before playing?", { Game::GetInstance()->GetScreenWidth() / 2 - 128 , Game::GetInstance()->GetScreenHeight() / 2 }, 1.25f, { 255, 0, 0 });
+		pFont->Draw("Yes", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 255, 0, 0 });
+		pFont->Draw("No", { Game::GetInstance()->GetScreenWidth() / 2 + 210, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 255, 0, 0 });
 
 		if (m_nCursor == 0)
 		{
@@ -712,14 +611,23 @@
 		*/
 
 		stringstream moneyCount;
-		//moneyCount << "$" << Game::GetInstance()->GetProfile().money;
+		moneyCount << "$" << Game::GetInstance()->GetTutorialProfile().money;
 		pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0f, { 0, 255, 0 });
 
 
+		Player* player = dynamic_cast<Player*>(m_pPlayer);
 
 		// Draw the reticle
+		SGD::Point retpos = { 0, 0 };
 
-		SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+		if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == true)
+		{
+			retpos = { (player->GetPosition().x + (player->GetDirection().x * 300.0f)), (player->GetPosition().y + (player->GetDirection().y * 300.0f)) };
+			retpos.Offset(-camera.GetPosition().x, -camera.GetPosition().y);
+		}
+
+		else
+			retpos = SGD::InputManager::GetInstance()->GetMousePosition();
 		float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
 
 		retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
@@ -1001,7 +909,7 @@
 BaseObject* HTPGameState::CreatePlayer(void)
 {
 	Player* player = new Player;
-	player->SetPosition({ 200, 200 });
+	player->SetPosition({ 800, 1100 });
 	player->SetRotation(0.0f);
 	player->SetMoveSpeed(180.0f);
 	player->RetrieveBehavior("playerController");
@@ -1320,4 +1228,434 @@ void HTPGameState::DrawKeyboardInput(void)
 
 	std::string	shopinput = "B - Enter Shop";
 	pFont->Draw(shopinput.c_str(), { (width - (shopinput.length() * 13 * 1.0f)) / 2, 0.0f }, 1.0f, { 255, 0, 0 });
+}
+
+void HTPGameState::OverWriteTutorialFile()
+{
+
+	time_t tempTime;
+	time(&tempTime);
+
+	tm localTime;
+	localtime_s(&localTime, &tempTime);
+
+	string filePath = Game::GetInstance()->GetTutorialProfile().path;
+	std::ofstream fout(filePath.c_str());
+	
+	if (fout.is_open())
+	{
+
+		fout << filePath << '\n';
+
+
+		fout << (localTime.tm_year + 1900) << '\n';
+		fout << (localTime.tm_mon + 1) << '\n';
+		fout << localTime.tm_mday << '\n';
+		fout << localTime.tm_hour << '\n';
+		fout << localTime.tm_min << '\n';
+		fout << localTime.tm_sec << '\n';
+
+		fout << 100 << '\n';
+
+#pragma region Pistols
+
+		//pistol stats
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .33 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+
+		//revolver
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 50 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+#pragma endregion
+
+#pragma region SMGs
+		//Mac10
+		fout << 60 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 60 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//Tech9
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 35 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//p90
+		fout << 150 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 50 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 150 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 35 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+
+#pragma endregion
+
+#pragma region Shotguns
+		//sawn off
+		fout << 16 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 16 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 35 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//pump
+		fout << 24 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 6 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 24 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//auto shotty
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 15 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+
+
+
+
+#pragma endregion
+
+
+#pragma region Assault Rifles
+		//ak47
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 7 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 40 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .33 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//m16
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 30 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 90 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 25 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//LMG
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 100 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 6 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 75 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << .33 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+
+#pragma endregion
+
+
+#pragma region Heavy Weapons
+		//sniper
+		fout << 15 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 15 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 2 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+		//flamethrower
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 100 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 20 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 300 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+		//grenade launcher
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 1 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 5 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 4 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 200 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 300 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+		fout << 0 << '\n';
+		fout << 0 << '\n';
+
+
+		//barbedwire
+		fout << 100 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+
+		fout << 10 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+
+		fout << 0 << '\n';
+
+		for (size_t i = 0; i < 74; i++)
+		{
+			fout << 0 << '\n';
+		}
+
+		//sandbags
+		fout << 250 << '\n';
+		fout << 1 << '\n';
+		fout << 3 << '\n';
+
+		fout << 1 << '\n';
+
+		for (size_t i = 0; i < 66; i++)
+		{
+			fout << 1 << '\n';
+		}
+
+		//landmines
+		fout << 0 << '\n';
+
+		for (size_t i = 0; i < 55; i++)
+		{
+			fout << 0 << '\n';
+		}
+
+
+		//turrets
+		//numturrets
+		fout << 0 << '\n';
+		//max num turrets
+		fout << 3 << '\n';
+
+		//num waves
+		fout << 0;
+
+		//money
+		fout << 0;
+
+#pragma endregion
+
+		fout.close();
+	}
+
 }

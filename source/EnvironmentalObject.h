@@ -24,5 +24,7 @@ public:
 
 	void SetType(int newType) { type = newType; }
 
+	SGD::Rectangle GetRect(void) const;
+
 };
 

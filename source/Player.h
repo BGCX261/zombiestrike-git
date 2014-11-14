@@ -128,8 +128,8 @@ public:
 	int					GetNumTurrets		(void) const				{ return m_nNumTurrets; }
 	void				SetNumTurrets		(int tur)					{ m_nNumTurrets = tur; }
 
-	void				AddOneTurret		(void)						{ m_nNumTurrets++; }
-	void				MinusOneTurrets		(void)						{ m_nNumTurrets--; }
+	void				AddOneTurret		(void)						{ profile.numTurrets++; }
+	void				MinusOneTurrets(void)						{ profile.numTurrets--; }
 
 	float				GetCurrHealth		(void) const				{ return m_fCurrHP; }
 	float				GetMaxHealth		(void) const				{ return m_fMaxHP; }

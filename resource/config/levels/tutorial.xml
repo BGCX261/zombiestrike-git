@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level>C:\Users\fullsail\Desktop\Zombie_StrikeNEW\zombiestrike\resource\graphics\tset.png
-	<world_info width="32" height="32" worldWidth="48" worldHeight="48" tileSheetWidth="16" tileSheetHeight="16">C:\Users\fullsail\Desktop\Zombie_StrikeNEW\zombiestrike\resource\graphics\tset.png</world_info>
+<Level>C:\Users\fullsail\Desktop\ZombieStrike\resource\graphics\tset.png
+	<world_info width="32" height="32" worldWidth="48" worldHeight="48" tileSheetWidth="16" tileSheetHeight="16">C:\Users\fullsail\Desktop\ZombieStrike\resource\graphics\tset.png</world_info>
 <player_info id="0" posX="0" posY="0" numEvents="0" numWaypoints="0" numEnemies="0" sRectleft="0" sRecttop="0" sRectwidth="0" sRectheight="0" />
 <tile_list>
 		<tile_info rposx="32" rposy="64" posX="0" posY="0" />
@@ -2309,11 +2309,258 @@
 		<tile_info rposx="0" rposy="96" posX="1504" posY="1504" />
 	</tile_list>
 	<collsion_list>
+		<collision_tile posX="11" posY="21" type="1" index="1" />
+		<collision_tile posX="12" posY="21" type="1" index="2" />
+		<collision_tile posX="13" posY="21" type="1" index="3" />
+		<collision_tile posX="14" posY="21" type="1" index="4" />
+		<collision_tile posX="15" posY="21" type="1" index="5" />
+		<collision_tile posX="16" posY="21" type="1" index="6" />
+		<collision_tile posX="17" posY="21" type="1" index="7" />
+		<collision_tile posX="18" posY="21" type="1" index="8" />
+		<collision_tile posX="19" posY="21" type="1" index="9" />
+		<collision_tile posX="20" posY="21" type="1" index="10" />
+		<collision_tile posX="21" posY="21" type="1" index="11" />
+		<collision_tile posX="22" posY="21" type="1" index="12" />
+		<collision_tile posX="23" posY="21" type="1" index="13" />
+		<collision_tile posX="25" posY="21" type="1" index="14" />
+		<collision_tile posX="26" posY="21" type="1" index="15" />
+		<collision_tile posX="27" posY="21" type="1" index="16" />
+		<collision_tile posX="28" posY="21" type="1" index="17" />
+		<collision_tile posX="29" posY="21" type="1" index="18" />
+		<collision_tile posX="31" posY="21" type="1" index="19" />
+		<collision_tile posX="32" posY="21" type="1" index="20" />
+		<collision_tile posX="33" posY="21" type="1" index="21" />
+		<collision_tile posX="34" posY="21" type="1" index="22" />
+		<collision_tile posX="35" posY="21" type="1" index="23" />
+		<collision_tile posX="36" posY="21" type="1" index="24" />
+		<collision_tile posX="37" posY="21" type="1" index="25" />
+		<collision_tile posX="38" posY="21" type="1" index="26" />
+		<collision_tile posX="30" posY="21" type="1" index="27" />
+		<collision_tile posX="24" posY="21" type="1" index="28" />
+		<collision_tile posX="10" posY="0" type="1" index="29" />
+		<collision_tile posX="10" posY="1" type="1" index="30" />
+		<collision_tile posX="10" posY="2" type="1" index="31" />
+		<collision_tile posX="10" posY="3" type="1" index="32" />
+		<collision_tile posX="10" posY="4" type="1" index="33" />
+		<collision_tile posX="10" posY="5" type="1" index="34" />
+		<collision_tile posX="10" posY="6" type="1" index="35" />
+		<collision_tile posX="10" posY="9" type="1" index="36" />
+		<collision_tile posX="10" posY="10" type="1" index="37" />
+		<collision_tile posX="10" posY="11" type="1" index="38" />
+		<collision_tile posX="10" posY="12" type="1" index="39" />
+		<collision_tile posX="10" posY="13" type="1" index="40" />
+		<collision_tile posX="10" posY="14" type="1" index="41" />
+		<collision_tile posX="10" posY="15" type="1" index="42" />
+		<collision_tile posX="10" posY="17" type="1" index="43" />
+		<collision_tile posX="10" posY="18" type="1" index="44" />
+		<collision_tile posX="10" posY="19" type="1" index="45" />
+		<collision_tile posX="10" posY="20" type="1" index="46" />
+		<collision_tile posX="10" posY="21" type="1" index="47" />
+		<collision_tile posX="10" posY="8" type="1" index="48" />
+		<collision_tile posX="10" posY="7" type="1" index="49" />
+		<collision_tile posX="10" posY="16" type="1" index="50" />
+		<collision_tile posX="39" posY="21" type="1" index="51" />
+		<collision_tile posX="39" posY="20" type="1" index="52" />
+		<collision_tile posX="39" posY="19" type="1" index="53" />
+		<collision_tile posX="39" posY="18" type="1" index="54" />
+		<collision_tile posX="39" posY="17" type="1" index="55" />
+		<collision_tile posX="39" posY="16" type="1" index="56" />
+		<collision_tile posX="39" posY="15" type="1" index="57" />
+		<collision_tile posX="39" posY="14" type="1" index="58" />
+		<collision_tile posX="39" posY="12" type="1" index="59" />
+		<collision_tile posX="39" posY="11" type="1" index="60" />
+		<collision_tile posX="39" posY="10" type="1" index="61" />
+		<collision_tile posX="39" posY="13" type="1" index="62" />
+		<collision_tile posX="39" posY="9" type="1" index="63" />
+		<collision_tile posX="39" posY="8" type="1" index="64" />
+		<collision_tile posX="39" posY="7" type="1" index="65" />
+		<collision_tile posX="39" posY="6" type="1" index="66" />
+		<collision_tile posX="39" posY="5" type="1" index="67" />
+		<collision_tile posX="39" posY="4" type="1" index="68" />
+		<collision_tile posX="39" posY="3" type="1" index="69" />
+		<collision_tile posX="39" posY="2" type="1" index="70" />
+		<collision_tile posX="39" posY="1" type="1" index="71" />
+		<collision_tile posX="39" posY="0" type="1" index="72" />
+		<collision_tile posX="10" posY="37" type="0" index="73" />
+		<collision_tile posX="10" posY="36" type="0" index="74" />
+		<collision_tile posX="10" posY="35" type="0" index="75" />
+		<collision_tile posX="10" posY="34" type="0" index="76" />
+		<collision_tile posX="10" posY="33" type="0" index="77" />
+		<collision_tile posX="10" posY="31" type="0" index="78" />
+		<collision_tile posX="10" posY="30" type="0" index="79" />
+		<collision_tile posX="10" posY="29" type="0" index="80" />
+		<collision_tile posX="10" posY="28" type="0" index="81" />
+		<collision_tile posX="10" posY="27" type="0" index="82" />
+		<collision_tile posX="10" posY="26" type="0" index="83" />
+		<collision_tile posX="10" posY="25" type="0" index="84" />
+		<collision_tile posX="10" posY="23" type="0" index="85" />
+		<collision_tile posX="10" posY="22" type="0" index="86" />
+		<collision_tile posX="10" posY="24" type="0" index="87" />
+		<collision_tile posX="10" posY="32" type="0" index="88" />
+		<collision_tile posX="11" posY="37" type="0" index="89" />
+		<collision_tile posX="12" posY="37" type="0" index="90" />
+		<collision_tile posX="13" posY="37" type="0" index="91" />
+		<collision_tile posX="15" posY="37" type="0" index="92" />
+		<collision_tile posX="16" posY="37" type="0" index="93" />
+		<collision_tile posX="14" posY="37" type="0" index="94" />
+		<collision_tile posX="17" posY="37" type="0" index="95" />
+		<collision_tile posX="18" posY="37" type="0" index="96" />
+		<collision_tile posX="19" posY="37" type="0" index="97" />
+		<collision_tile posX="20" posY="37" type="0" index="98" />
+		<collision_tile posX="21" posY="37" type="0" index="99" />
+		<collision_tile posX="22" posY="37" type="0" index="100" />
+		<collision_tile posX="23" posY="37" type="0" index="101" />
+		<collision_tile posX="24" posY="37" type="0" index="102" />
+		<collision_tile posX="25" posY="37" type="0" index="103" />
+		<collision_tile posX="26" posY="37" type="0" index="104" />
+		<collision_tile posX="27" posY="37" type="0" index="105" />
+		<collision_tile posX="28" posY="37" type="0" index="106" />
+		<collision_tile posX="29" posY="37" type="0" index="107" />
+		<collision_tile posX="30" posY="37" type="0" index="108" />
+		<collision_tile posX="31" posY="37" type="0" index="109" />
+		<collision_tile posX="32" posY="37" type="0" index="110" />
+		<collision_tile posX="33" posY="37" type="0" index="111" />
+		<collision_tile posX="34" posY="37" type="0" index="112" />
+		<collision_tile posX="35" posY="37" type="0" index="113" />
+		<collision_tile posX="36" posY="37" type="0" index="114" />
+		<collision_tile posX="37" posY="37" type="0" index="115" />
+		<collision_tile posX="38" posY="37" type="0" index="116" />
+		<collision_tile posX="39" posY="37" type="0" index="117" />
+		<collision_tile posX="39" posY="36" type="0" index="118" />
+		<collision_tile posX="39" posY="34" type="0" index="119" />
+		<collision_tile posX="39" posY="33" type="0" index="120" />
+		<collision_tile posX="39" posY="35" type="0" index="121" />
+		<collision_tile posX="39" posY="31" type="0" index="124" />
+		<collision_tile posX="39" posY="32" type="0" index="125" />
+		<collision_tile posX="39" posY="30" type="0" index="126" />
+		<collision_tile posX="39" posY="29" type="0" index="127" />
+		<collision_tile posX="39" posY="28" type="0" index="128" />
+		<collision_tile posX="39" posY="26" type="0" index="129" />
+		<collision_tile posX="39" posY="25" type="0" index="130" />
+		<collision_tile posX="39" posY="24" type="0" index="131" />
+		<collision_tile posX="39" posY="23" type="0" index="132" />
+		<collision_tile posX="39" posY="22" type="0" index="133" />
+		<collision_tile posX="39" posY="27" type="0" index="134" />
+		<collision_tile posX="11" posY="22" type="0" index="135" />
+		<collision_tile posX="12" posY="22" type="0" index="136" />
+		<collision_tile posX="15" posY="22" type="0" index="137" />
+		<collision_tile posX="17" posY="22" type="0" index="138" />
+		<collision_tile posX="18" posY="22" type="0" index="139" />
+		<collision_tile posX="19" posY="22" type="0" index="140" />
+		<collision_tile posX="14" posY="22" type="0" index="141" />
+		<collision_tile posX="13" posY="22" type="0" index="142" />
+		<collision_tile posX="16" posY="22" type="0" index="143" />
+		<collision_tile posX="20" posY="22" type="0" index="144" />
+		<collision_tile posX="21" posY="22" type="0" index="145" />
+		<collision_tile posX="22" posY="22" type="0" index="146" />
+		<collision_tile posX="23" posY="22" type="0" index="147" />
+		<collision_tile posX="24" posY="22" type="0" index="148" />
+		<collision_tile posX="25" posY="22" type="0" index="149" />
+		<collision_tile posX="26" posY="22" type="0" index="150" />
+		<collision_tile posX="27" posY="22" type="0" index="151" />
+		<collision_tile posX="28" posY="22" type="0" index="152" />
+		<collision_tile posX="29" posY="22" type="0" index="153" />
+		<collision_tile posX="30" posY="22" type="0" index="154" />
+		<collision_tile posX="31" posY="22" type="0" index="155" />
+		<collision_tile posX="32" posY="22" type="0" index="156" />
+		<collision_tile posX="33" posY="22" type="0" index="157" />
+		<collision_tile posX="34" posY="22" type="0" index="158" />
+		<collision_tile posX="35" posY="22" type="0" index="159" />
+		<collision_tile posX="36" posY="22" type="0" index="160" />
+		<collision_tile posX="37" posY="22" type="0" index="161" />
+		<collision_tile posX="38" posY="22" type="0" index="162" />
 	</collsion_list>
 	<graph_list>
 	</graph_list>
 	<objects_list>
-		<object_info id="2" posX="24" posY="26" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="0" sRectwidth="32" sRectheight="32">Goal</object_info>
-		<object_info id="13" posX="24" posY="0" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="160" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="11" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="12" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="13" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="14" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="15" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="16" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="17" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="18" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="19" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="20" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="21" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="22" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="23" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="24" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="25" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="26" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="27" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="28" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="29" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="30" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="31" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="32" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="33" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="34" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="35" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="36" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="37" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="9" posX="38" posY="20" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="32" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="11" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="12" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="13" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="14" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="15" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="16" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="17" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="18" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="19" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="20" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="21" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="22" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="23" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="24" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="25" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="26" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="27" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="28" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="29" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="30" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="31" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="33" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="34" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="35" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="36" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="37" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="38" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="11" posX="32" posY="19" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="96" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="11" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="13" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="15" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="17" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="19" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="21" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="23" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="25" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="27" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="29" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="31" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="33" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="35" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="37" posY="16" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="38" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="36" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="34" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="32" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="30" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="28" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="26" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="24" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="22" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="20" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="18" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="16" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="14" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="10" posX="12" posY="14" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="64" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="13" posX="25" posY="0" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="160" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="13" posX="14" posY="0" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="160" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="13" posX="34" posY="0" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="160" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="13" posX="19" posY="0" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="160" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
+		<object_info id="13" posX="30" posY="0" numEvents="0" numWaypoints="0" numEnemies="0" startState="0" sRectleft="160" sRecttop="32" sRectwidth="32" sRectheight="32">Empty</object_info>
 	</objects_list>
 </Level>
