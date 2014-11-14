@@ -460,7 +460,6 @@
 
 	
 	}
-
 	
 	//ShopState::GetInstance()->Update(dt);
 	

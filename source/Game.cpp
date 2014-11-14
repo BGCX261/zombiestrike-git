@@ -13,6 +13,9 @@
 #include "MainMenuState.h"
 #include "GameplayState.h"
 #include "LoseGameState.h"
+#include "HTPGameState.h"
+#include "PauseState.h"
+#include "ShopState.h"
 
 #include <ctime>
 #include <cstdlib>
@@ -95,10 +98,10 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/testLandMine.xml", "testLandmine");
 	pAnimationManager->Load("resource/config/animations/barbwireAnimation.xml", "testBarbwire");
 	pAnimationManager->Load("resource/config/animations/sandbagAnimation.xml", "testSandbag");
+	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
 
 	pAnimationManager->Load("resource/config/animations/Bullet.xml", "bullet");
 	pAnimationManager->Load("resource/config/animations/Player_Death2.xml", "playerDeath");
-	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
 
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
 	pAnimationManager->Load("resource/config/animations/Sandbag_Animation.xml", "sandbag");
@@ -155,13 +158,12 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood3.xml", "blood3");
 	pAnimationManager->Load("resource/config/animations/BloodAnimations/blood4.xml", "blood4");
 
+
 	// other animations
 	pAnimationManager->Load("resource/config/animations/Turret_Animation2.xml", "turret");
 	pAnimationManager->Load("resource/config/animations/House_Animation.xml", "house");
 
-
-
-	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/Weapons/hudweapons.png");
+	m_hHudWpn = pGraphics->LoadTexture("resource/graphics/Weapons/hweapons.png");
 	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/Weapons/crosshair.png");
 
 	// Load assets
@@ -201,6 +203,30 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	zombie_hit_house1 = pAudio->LoadAudio("resource/audio/zombie_hit_house1.wav");
 	zombie_hit_house2 = pAudio->LoadAudio("resource/audio/zombie_hit_house2.wav");
 
+	m_hCash				= pAudio->LoadAudio("resource/audio/cashregister.wav");
+	m_hNoBuy			= pAudio->LoadAudio("resource/audio/buzzer.wav");
+
+	////Radio
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),0);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),1);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),2);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),3);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),4);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),5);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),6);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),7);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),8);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),9);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),10);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),11);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),12);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),13);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),14);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),15);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),16);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),17);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),18);
+	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),19);
 
 	// Setup the profiles
 	CreateStoryProfiles();
@@ -216,7 +242,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	/*
 	m_pCurrState = MainMenuState::GetInstance();
 	m_pCurrState->Enter();
-	stateMachine.push(m_pCurrState);
+	stateMachine.push(m_pCurrState);g
 	*/
 	Game::GetInstance()->AddState(MainMenuState::GetInstance());
 
@@ -258,10 +284,23 @@ int Game::Update( void )
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
-	pInput->IsControllerConnected(0);
+
+	// controller check
+	ctrlrWasIn = ctrlrIsIn;
+	ctrlrIsIn = pInput->IsControllerConnected(0) == true
+		? true
+		: false;
+
+	if (stateMachine.top() == GameplayState::GetInstance() || stateMachine.top() == HTPGameState::GetInstance())
+	{
+		// Was plugged in, Now taken out
+		if (ctrlrWasIn == true && ctrlrIsIn == false)
+			Game::GetInstance()->AddState(PauseState::GetInstance());
+	}
+
+
 
 	// Let the current state handle input
-
 	m_pCurrState = stateMachine.top();
 	if (m_pCurrState->Input() == false)
 		return 1;	// exit success!
@@ -350,6 +389,13 @@ void Game::Terminate( void )
 	pAudio->UnloadAudio(zombie_hit_house1);
 	pAudio->UnloadAudio(zombie_hit_house2);
 
+	pAudio->UnloadAudio(m_hCash);
+	pAudio->UnloadAudio(m_hNoBuy);
+
+	for (unsigned int i = 0; i < 20; i++)
+	{
+		pAudio->UnloadAudio(GetAudio(i));
+	}
 
 	AnimationManager::GetInstance()->Shutdown();
 

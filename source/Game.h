@@ -124,9 +124,13 @@ public:
 	SGD::HAudio zombie_hit_house1	= SGD::INVALID_HANDLE;
 	SGD::HAudio zombie_hit_house2	= SGD::INVALID_HANDLE;
 
+	//Shop
+	SGD::HAudio m_hCash				= SGD::INVALID_HANDLE;
+	SGD::HAudio m_hNoBuy			= SGD::INVALID_HANDLE;
 
 
-	/**********************************************************/
+	/*****************************************************
+*****/
 	// Game State Machine:
 	//	- can ONLY be called by the state's Input, Update, or Render methods!!!
 	void				AddState		( IGameState* pNewState );
@@ -135,7 +139,9 @@ public:
 	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hReticleImage = SGD::INVALID_HANDLE;
 
+	SGD::HAudio GetAudio(int index) { return ssRadio[index]; }
 
+	void SetAudio(SGD::HAudio rsound, int index) { ssRadio[index] = rsound; }
 
 private:
 	/**********************************************************/
@@ -181,7 +187,9 @@ private:
 
 
 	/**********************************************************/
-	// Gamer profile
+	// Un/Re-plug check
+	bool ctrlrWasIn = false;
+	bool ctrlrIsIn = false;
 
 
 	/**********************************************************/
@@ -191,6 +199,8 @@ private:
 	GamerProfile		storyProfiles[3];
 	GamerProfile		survivalProfiles[3];
 	GamerProfile		tutorialProfile;
+	
+	SGD::HAudio ssRadio[20];
 };
 
 #endif //GAME_H

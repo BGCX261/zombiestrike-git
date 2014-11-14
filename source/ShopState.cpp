@@ -13,6 +13,7 @@
 #include "BarbedWire.h"
 #include "SandBag.h"
 #include "LandMine.h"
+#include "SpawnManager.h"
 #include <fstream>
 #include <sstream>
 #include <ctime>
@@ -30,7 +31,7 @@
 // IGameState Interface:
 void	ShopState::Enter(void)
 {
-	
+
 
 
 	if (m_tShopTimer.GetTime() < 180.0f)
@@ -60,13 +61,13 @@ void	ShopState::Enter(void)
 		}
 	}
 
-	
 
-	
 
-	
 
-	screenSize = SGD::Size( Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() );
+
+
+
+	screenSize = SGD::Size(Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 
 	weaponsImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/weapons.png");
 	buyButton = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/MenuImages/rectangle1.png");
@@ -84,7 +85,7 @@ void	ShopState::Enter(void)
 
 	for (unsigned int currWeapon = 0; currWeapon < 8; currWeapon++)
 	{
-		Buttons[currWeapon] = SGD::Rectangle(SGD::Point( screenSize.width * 0.5f, (float)startY ), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
+		Buttons[currWeapon] = SGD::Rectangle(SGD::Point(screenSize.width * 0.5f, (float)startY), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
 		startY += BUTTON_HEIGHT + 5;
 	}
 	Buttons[8] = SGD::Rectangle({ screenSize.width* 0.7f, screenSize.height * 0.7f }, SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -115,7 +116,7 @@ void	ShopState::Enter(void)
 	DefenseButtons[7].bottom += BUTTON_HEIGHT + 5;
 	DefenseButtons[7].top += BUTTON_HEIGHT + 5;
 
-	barbedWires = MapManager::GetInstance()->GetBaredWire(); 
+	barbedWires = MapManager::GetInstance()->GetBaredWire();
 	sandBags = MapManager::GetInstance()->GetSandBags();
 	landMines = MapManager::GetInstance()->GetLandMines();
 
@@ -139,12 +140,12 @@ void	ShopState::Enter(void)
 
 
 
-	
+
 }
 void	ShopState::Exit(void)
 {
 
-	
+
 	UpdateProfile();
 	SaveProfile();
 	if (HTPGameState::GetInstance()->GetIsCurrState() == false)
@@ -182,7 +183,7 @@ void	ShopState::Exit(void)
 	uziUpgrade.totalAmmo.isMaxed = false;
 	uziUpgrade.ammoCap.isMaxed = false;
 	uziUpgrade.bulletSpread.isMaxed = false;
-	
+
 	tech9Upgrade.magSize.isMaxed = false;
 	tech9Upgrade.reloadTime.isMaxed = false;
 	tech9Upgrade.damage.isMaxed = false;
@@ -247,7 +248,7 @@ void	ShopState::Exit(void)
 	nadeLauncherUpgrade.ammoCap.isMaxed = false;
 	nadeLauncherUpgrade.bulletVelocity.isMaxed = false;
 
-	
+
 	sawnOffUpgrade.recoilTime.isMaxed = false;
 	sawnOffUpgrade.reloadTime.isMaxed = false;
 	sawnOffUpgrade.damage.isMaxed = false;
@@ -270,7 +271,7 @@ void	ShopState::Exit(void)
 	autoShotgunUpgrade.totalAmmo.isMaxed = false;
 	autoShotgunUpgrade.bulletSpread.isMaxed = false;
 	autoShotgunUpgrade.ammoCap.isMaxed = false;
-	
+
 
 
 }
@@ -279,10 +280,12 @@ bool	ShopState::Input(void)
 {
 	WeaponManager * pWeapons = WeaponManager::GetInstance();
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
 	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 2) == true)
 	{
 		//m_bTimerSet = true;
+		//pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()));
 
 		SGD::Event msg("UNPAUSE");
 		msg.SendEventNow();
@@ -322,36 +325,36 @@ bool	ShopState::Input(void)
 		/*
 		if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 		{
-			SGD::Point	mpoint = pInput->GetMousePosition();
-			SGD::Vector	joystick = pInput->GetLeftJoystick(0);
-			float		stickmin = 0.250f;
-			float		mousevel = 4.0f;
+		SGD::Point	mpoint = pInput->GetMousePosition();
+		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+		float		stickmin = 0.250f;
+		float		mousevel = 4.0f;
 
-			if (joystick.x > stickmin)
-				mpoint.x += mousevel;
-			else if (joystick.x < stickmin * -1.0f)
-				mpoint.x -= mousevel;
+		if (joystick.x > stickmin)
+		mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+		mpoint.x -= mousevel;
 
-			if (joystick.y > stickmin)
-				mpoint.y += mousevel;
-			else if (joystick.y < stickmin * -1.0f)
-				mpoint.y -= mousevel;
+		if (joystick.y > stickmin)
+		mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+		mpoint.y -= mousevel;
 
-			if (mpoint.x < 0.0F)
-				mpoint.x = 0.0F;
-			if (mpoint.y < 0.0F)
-				mpoint.y = 0.0F;
-			if (mpoint.x > Game::GetInstance()->GetScreenWidth())
-				mpoint.x = Game::GetInstance()->GetScreenWidth();
-			if (mpoint.y > Game::GetInstance()->GetScreenHeight())
-				mpoint.y = Game::GetInstance()->GetScreenHeight();
+		if (mpoint.x < 0.0F)
+		mpoint.x = 0.0F;
+		if (mpoint.y < 0.0F)
+		mpoint.y = 0.0F;
+		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+		mpoint.x = Game::GetInstance()->GetScreenWidth();
+		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+		mpoint.y = Game::GetInstance()->GetScreenHeight();
 
-			pInput->SetMousePosition(mpoint);
+		pInput->SetMousePosition(mpoint);
 		}
-	ControllerInputCheck();
+		ControllerInputCheck();
 		*/
 	}
-	
+
 	mousePos = pInput->GetMousePosition();
 
 
@@ -387,11 +390,36 @@ bool	ShopState::Input(void)
 
 												if (pistolUpgrade.magSize.upgradedSkill.currTier == pistolUpgrade.magSize.upgradedSkill.maxTier)
 													pistolUpgrade.magSize.isMaxed = true;
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
 											}
-												
-												
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
 										}
-										
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+											}
+										}
+
+
 									}
 
 									else if (currButton == 1)
@@ -407,6 +435,32 @@ bool	ShopState::Input(void)
 
 												if (pistolUpgrade.reloadTime.upgradedSkill.currTier == pistolUpgrade.reloadTime.upgradedSkill.maxTier)
 													pistolUpgrade.reloadTime.isMaxed = true;
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
+											}
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
+										}
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 											}
 										}
 									}
@@ -423,6 +477,32 @@ bool	ShopState::Input(void)
 
 												if (pistolUpgrade.recoilTime.upgradedSkill.currTier == pistolUpgrade.recoilTime.upgradedSkill.maxTier)
 													pistolUpgrade.recoilTime.isMaxed = true;
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
+											}
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
+										}
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 											}
 										}
 									}
@@ -448,8 +528,8 @@ bool	ShopState::Input(void)
 								}
 							}
 						}
-					
-						
+
+
 					}
 					else
 					{
@@ -473,6 +553,32 @@ bool	ShopState::Input(void)
 
 												if (revolverUpgrade.magSize.upgradedSkill.currTier == revolverUpgrade.magSize.upgradedSkill.maxTier)
 													revolverUpgrade.magSize.isMaxed = true;
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
+											}
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
+										}
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 											}
 										}
 
@@ -488,6 +594,32 @@ bool	ShopState::Input(void)
 
 												if (revolverUpgrade.reloadTime.upgradedSkill.currTier == revolverUpgrade.reloadTime.upgradedSkill.maxTier)
 													revolverUpgrade.reloadTime.isMaxed = true;
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
+											}
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
+										}
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 											}
 										}
 										break;
@@ -502,6 +634,32 @@ bool	ShopState::Input(void)
 
 												if (revolverUpgrade.recoilTime.upgradedSkill.currTier == revolverUpgrade.recoilTime.upgradedSkill.maxTier)
 													revolverUpgrade.recoilTime.isMaxed = true;
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
+											}
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
+										}
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 											}
 										}
 										break;
@@ -516,6 +674,32 @@ bool	ShopState::Input(void)
 
 												if (revolverUpgrade.penPower.upgradedSkill.currTier == revolverUpgrade.penPower.upgradedSkill.maxTier)
 													revolverUpgrade.penPower.isMaxed = true;
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
+											}
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
+										}
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 											}
 										}
 										break;
@@ -530,6 +714,32 @@ bool	ShopState::Input(void)
 
 												if (revolverUpgrade.damage.upgradedSkill.currTier == revolverUpgrade.damage.upgradedSkill.maxTier)
 													revolverUpgrade.damage.isMaxed = true;
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
+											}
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
+										}
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 											}
 										}
 										break;
@@ -544,6 +754,32 @@ bool	ShopState::Input(void)
 
 												if (revolverUpgrade.ammoCap.upgradedSkill.currTier == revolverUpgrade.ammoCap.upgradedSkill.maxTier)
 													revolverUpgrade.ammoCap.isMaxed = true;
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
+											}
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
+										}
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 											}
 										}
 										break;
@@ -554,7 +790,7 @@ bool	ShopState::Input(void)
 											{
 												profile.money -= 100;
 												revolverUpgrade.totalAmmo.upgradedSkill.stat += revolverUpgrade.magSize.upgradedSkill.stat;
-												
+
 												if (revolverUpgrade.totalAmmo.upgradedSkill.stat > revolverUpgrade.ammoCap.upgradedSkill.stat)
 												{
 
@@ -562,7 +798,31 @@ bool	ShopState::Input(void)
 													revolverUpgrade.totalAmmo.isMaxed = true;
 												}
 
-												
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+												{
+													pAudio->StopAudio(Game::GetInstance()->m_hCash);
+												}
+
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+												}
+											}
+
+											else
+											{
+												if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+												{
+													pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+												}
+											}
+										}
+
+										else
+										{
+											if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+											{
+												pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 											}
 										}
 										break;
@@ -578,9 +838,27 @@ bool	ShopState::Input(void)
 									{
 										profile.money -= 2000;
 										revolverUpgrade.isBought = true;
-										
+
+										if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+										{
+											pAudio->StopAudio(Game::GetInstance()->m_hCash);
+										}
+
+										if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+										{
+											pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+										}
+									}
+
+									else
+									{
+										if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+										{
+											pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+										}
 									}
 								}
+
 								else
 								{
 									//equipt code
@@ -594,7 +872,7 @@ bool	ShopState::Input(void)
 
 										if (pWeapons->GetWeapons()[i]->GetGunType() == REVOLVER)
 										{
-										//	pWeapons->GetWeapons()[i]->SetEquipped(true);
+											//	pWeapons->GetWeapons()[i]->SetEquipped(true);
 											revolverUpgrade.isEquipt = true;
 
 										}
@@ -636,6 +914,32 @@ bool	ShopState::Input(void)
 
 									if (sawnOffUpgrade.recoilTime.upgradedSkill.currTier == sawnOffUpgrade.recoilTime.upgradedSkill.maxTier)
 										sawnOffUpgrade.recoilTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 
@@ -651,6 +955,32 @@ bool	ShopState::Input(void)
 
 									if (sawnOffUpgrade.reloadTime.upgradedSkill.currTier == sawnOffUpgrade.reloadTime.upgradedSkill.maxTier)
 										sawnOffUpgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -665,6 +995,32 @@ bool	ShopState::Input(void)
 
 									if (sawnOffUpgrade.bulletSpread.upgradedSkill.currTier == sawnOffUpgrade.bulletSpread.upgradedSkill.maxTier)
 										sawnOffUpgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -679,6 +1035,32 @@ bool	ShopState::Input(void)
 
 									if (sawnOffUpgrade.damage.upgradedSkill.currTier == sawnOffUpgrade.damage.upgradedSkill.maxTier)
 										sawnOffUpgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -693,6 +1075,32 @@ bool	ShopState::Input(void)
 
 									if (sawnOffUpgrade.ammoCap.upgradedSkill.currTier == sawnOffUpgrade.ammoCap.upgradedSkill.maxTier)
 										sawnOffUpgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -703,21 +1111,47 @@ bool	ShopState::Input(void)
 								{
 									profile.money -= 100;
 									sawnOffUpgrade.totalAmmo.upgradedSkill.stat += 6;
-								
+
 									if (sawnOffUpgrade.totalAmmo.upgradedSkill.stat >= sawnOffUpgrade.ammoCap.upgradedSkill.stat)
 									{
 										sawnOffUpgrade.totalAmmo.upgradedSkill.stat = sawnOffUpgrade.ammoCap.upgradedSkill.stat;
 										sawnOffUpgrade.totalAmmo.isMaxed = true;
 
 									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
-						
+
 						}
 					}
 				}
-				if (mousePos.IsWithinRectangle(Buttons[8])) 
+				if (mousePos.IsWithinRectangle(Buttons[8]))
 				{
 					if (sawnOffUpgrade.isBought == false)
 					{
@@ -725,6 +1159,24 @@ bool	ShopState::Input(void)
 						{
 							profile.money -= 2000;
 							sawnOffUpgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
 						}
 					}
 					else
@@ -734,7 +1186,7 @@ bool	ShopState::Input(void)
 						{
 							if (pWeapons->GetWeapons()[i]->GetGunType() == SAWN)
 							{
-							//	pWeapons->GetWeapons()[i]->SetEquipped(true);
+								//	pWeapons->GetWeapons()[i]->SetEquipped(true);
 								sawnOffUpgrade.isEquipt = true;
 							}
 
@@ -753,9 +1205,9 @@ bool	ShopState::Input(void)
 							}
 						}
 					}
-				
+
 				}
-					
+
 			}
 		}
 		else if (currTab == 1)
@@ -780,11 +1232,37 @@ bool	ShopState::Input(void)
 
 									if (pumpShotgunUpgrade.magSize.upgradedSkill.currTier == pumpShotgunUpgrade.magSize.upgradedSkill.maxTier)
 										pumpShotgunUpgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 
 							break;
-						
+
 						case 1:
 							if (pumpShotgunUpgrade.recoilTime.isMaxed == false)
 							{
@@ -796,6 +1274,32 @@ bool	ShopState::Input(void)
 
 									if (pumpShotgunUpgrade.recoilTime.upgradedSkill.currTier == pumpShotgunUpgrade.recoilTime.upgradedSkill.maxTier)
 										pumpShotgunUpgrade.recoilTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -810,6 +1314,32 @@ bool	ShopState::Input(void)
 
 									if (pumpShotgunUpgrade.reloadTime.upgradedSkill.currTier == pumpShotgunUpgrade.reloadTime.upgradedSkill.maxTier)
 										pumpShotgunUpgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -824,6 +1354,32 @@ bool	ShopState::Input(void)
 
 									if (pumpShotgunUpgrade.bulletSpread.upgradedSkill.currTier == pumpShotgunUpgrade.bulletSpread.upgradedSkill.maxTier)
 										pumpShotgunUpgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -838,6 +1394,32 @@ bool	ShopState::Input(void)
 
 									if (pumpShotgunUpgrade.damage.upgradedSkill.currTier == pumpShotgunUpgrade.damage.upgradedSkill.maxTier)
 										pumpShotgunUpgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -852,6 +1434,32 @@ bool	ShopState::Input(void)
 
 									if (pumpShotgunUpgrade.ammoCap.upgradedSkill.currTier == pumpShotgunUpgrade.ammoCap.upgradedSkill.maxTier)
 										pumpShotgunUpgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -868,10 +1476,36 @@ bool	ShopState::Input(void)
 										pumpShotgunUpgrade.totalAmmo.upgradedSkill.stat = pumpShotgunUpgrade.ammoCap.upgradedSkill.stat;
 										pumpShotgunUpgrade.totalAmmo.isMaxed = true;
 									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
-						
+
 						}
 					}
 				}
@@ -883,6 +1517,24 @@ bool	ShopState::Input(void)
 						{
 							profile.money -= 2000;
 							pumpShotgunUpgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
 						}
 					}
 					else
@@ -937,6 +1589,32 @@ bool	ShopState::Input(void)
 
 									if (autoShotgunUpgrade.magSize.upgradedSkill.currTier == autoShotgunUpgrade.magSize.upgradedSkill.maxTier)
 										autoShotgunUpgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 
@@ -953,6 +1631,32 @@ bool	ShopState::Input(void)
 
 									if (autoShotgunUpgrade.recoilTime.upgradedSkill.currTier == autoShotgunUpgrade.recoilTime.upgradedSkill.maxTier)
 										autoShotgunUpgrade.recoilTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -967,6 +1671,32 @@ bool	ShopState::Input(void)
 
 									if (autoShotgunUpgrade.reloadTime.upgradedSkill.currTier == autoShotgunUpgrade.reloadTime.upgradedSkill.maxTier)
 										autoShotgunUpgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -981,6 +1711,32 @@ bool	ShopState::Input(void)
 
 									if (autoShotgunUpgrade.bulletSpread.upgradedSkill.currTier == autoShotgunUpgrade.bulletSpread.upgradedSkill.maxTier)
 										autoShotgunUpgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -995,6 +1751,32 @@ bool	ShopState::Input(void)
 
 									if (autoShotgunUpgrade.damage.upgradedSkill.currTier == autoShotgunUpgrade.damage.upgradedSkill.maxTier)
 										autoShotgunUpgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1009,6 +1791,32 @@ bool	ShopState::Input(void)
 
 									if (autoShotgunUpgrade.ammoCap.upgradedSkill.currTier == autoShotgunUpgrade.ammoCap.upgradedSkill.maxTier)
 										autoShotgunUpgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1025,10 +1833,36 @@ bool	ShopState::Input(void)
 										autoShotgunUpgrade.totalAmmo.upgradedSkill.stat = autoShotgunUpgrade.ammoCap.upgradedSkill.stat;
 										autoShotgunUpgrade.totalAmmo.isMaxed = true;
 									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
-						
+
 						}
 					}
 				}
@@ -1040,8 +1874,27 @@ bool	ShopState::Input(void)
 						{
 							profile.money -= 2000;
 							autoShotgunUpgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
 						}
 					}
+
 					else
 					{
 						//equipt code
@@ -1103,6 +1956,32 @@ bool	ShopState::Input(void)
 
 									if (uziUpgrade.magSize.upgradedSkill.currTier == uziUpgrade.magSize.upgradedSkill.maxTier)
 										uziUpgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 
@@ -1118,6 +1997,32 @@ bool	ShopState::Input(void)
 
 									if (uziUpgrade.reloadTime.upgradedSkill.currTier == uziUpgrade.reloadTime.upgradedSkill.maxTier)
 										uziUpgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1132,6 +2037,32 @@ bool	ShopState::Input(void)
 
 									if (uziUpgrade.bulletSpread.upgradedSkill.currTier == uziUpgrade.bulletSpread.upgradedSkill.maxTier)
 										uziUpgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1146,6 +2077,32 @@ bool	ShopState::Input(void)
 
 									if (uziUpgrade.damage.upgradedSkill.currTier == uziUpgrade.damage.upgradedSkill.maxTier)
 										uziUpgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1160,6 +2117,32 @@ bool	ShopState::Input(void)
 
 									if (uziUpgrade.ammoCap.upgradedSkill.currTier == uziUpgrade.ammoCap.upgradedSkill.maxTier)
 										uziUpgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1170,7 +2153,7 @@ bool	ShopState::Input(void)
 								{
 									profile.money -= 100;
 									uziUpgrade.totalAmmo.upgradedSkill.stat += uziUpgrade.magSize.upgradedSkill.stat;
-									
+
 
 									if (uziUpgrade.totalAmmo.upgradedSkill.stat >= uziUpgrade.ammoCap.upgradedSkill.stat)
 									{
@@ -1178,6 +2161,32 @@ bool	ShopState::Input(void)
 										uziUpgrade.totalAmmo.isMaxed = true;
 
 									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1193,8 +2202,27 @@ bool	ShopState::Input(void)
 						{
 							profile.money -= 2000;
 							uziUpgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
 						}
 					}
+
 					else
 					{
 						//equipt code
@@ -1246,6 +2274,32 @@ bool	ShopState::Input(void)
 
 									if (tech9Upgrade.magSize.upgradedSkill.currTier == tech9Upgrade.magSize.upgradedSkill.maxTier)
 										tech9Upgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 
@@ -1261,6 +2315,32 @@ bool	ShopState::Input(void)
 
 									if (tech9Upgrade.reloadTime.upgradedSkill.currTier == tech9Upgrade.reloadTime.upgradedSkill.maxTier)
 										tech9Upgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1275,6 +2355,32 @@ bool	ShopState::Input(void)
 
 									if (tech9Upgrade.bulletSpread.upgradedSkill.currTier == tech9Upgrade.bulletSpread.upgradedSkill.maxTier)
 										tech9Upgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1289,6 +2395,32 @@ bool	ShopState::Input(void)
 
 									if (tech9Upgrade.damage.upgradedSkill.currTier == tech9Upgrade.damage.upgradedSkill.maxTier)
 										tech9Upgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1303,6 +2435,32 @@ bool	ShopState::Input(void)
 
 									if (tech9Upgrade.ammoCap.upgradedSkill.currTier == tech9Upgrade.ammoCap.upgradedSkill.maxTier)
 										tech9Upgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1320,10 +2478,36 @@ bool	ShopState::Input(void)
 										tech9Upgrade.totalAmmo.isMaxed = true;
 
 									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
-						
+
 						}
 					}
 				}
@@ -1335,8 +2519,27 @@ bool	ShopState::Input(void)
 						{
 							profile.money -= 2000;
 							tech9Upgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
 						}
 					}
+
 					else
 					{
 						//equipt code
@@ -1389,6 +2592,32 @@ bool	ShopState::Input(void)
 
 									if (p90Upgrade.magSize.upgradedSkill.currTier == p90Upgrade.magSize.upgradedSkill.maxTier)
 										p90Upgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 
@@ -1404,6 +2633,32 @@ bool	ShopState::Input(void)
 
 									if (p90Upgrade.reloadTime.upgradedSkill.currTier == p90Upgrade.reloadTime.upgradedSkill.maxTier)
 										p90Upgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1418,6 +2673,32 @@ bool	ShopState::Input(void)
 
 									if (p90Upgrade.bulletSpread.upgradedSkill.currTier == p90Upgrade.bulletSpread.upgradedSkill.maxTier)
 										p90Upgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1432,6 +2713,32 @@ bool	ShopState::Input(void)
 
 									if (p90Upgrade.damage.upgradedSkill.currTier == p90Upgrade.damage.upgradedSkill.maxTier)
 										p90Upgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1441,11 +2748,37 @@ bool	ShopState::Input(void)
 								if (profile.money >= 600)
 								{
 									profile.money -= 600;
-									p90Upgrade.ammoCap.upgradedSkill.stat  += 50;
+									p90Upgrade.ammoCap.upgradedSkill.stat += 50;
 									p90Upgrade.ammoCap.upgradedSkill.currTier++;
 
 									if (p90Upgrade.ammoCap.upgradedSkill.currTier == p90Upgrade.ammoCap.upgradedSkill.maxTier)
 										p90Upgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1456,7 +2789,7 @@ bool	ShopState::Input(void)
 								{
 									profile.money -= 100;
 									p90Upgrade.totalAmmo.upgradedSkill.stat += p90Upgrade.magSize.upgradedSkill.stat;
-					
+
 
 									if (p90Upgrade.totalAmmo.upgradedSkill.stat >= p90Upgrade.ammoCap.upgradedSkill.stat)
 									{
@@ -1464,10 +2797,36 @@ bool	ShopState::Input(void)
 										p90Upgrade.totalAmmo.isMaxed = true;
 
 									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
-						
+
 						}
 					}
 				}
@@ -1479,8 +2838,27 @@ bool	ShopState::Input(void)
 						{
 							profile.money -= 2000;
 							p90Upgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
 						}
 					}
+
 					else
 					{
 						//equipt code
@@ -1541,6 +2919,32 @@ bool	ShopState::Input(void)
 
 									if (ak47Upgrade.magSize.upgradedSkill.currTier == ak47Upgrade.magSize.upgradedSkill.maxTier)
 										ak47Upgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 
@@ -1556,6 +2960,32 @@ bool	ShopState::Input(void)
 
 									if (ak47Upgrade.reloadTime.upgradedSkill.currTier == ak47Upgrade.reloadTime.upgradedSkill.maxTier)
 										ak47Upgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1570,6 +3000,32 @@ bool	ShopState::Input(void)
 
 									if (ak47Upgrade.recoilTime.upgradedSkill.currTier == ak47Upgrade.recoilTime.upgradedSkill.maxTier)
 										ak47Upgrade.recoilTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1584,6 +3040,32 @@ bool	ShopState::Input(void)
 
 									if (ak47Upgrade.bulletSpread.upgradedSkill.currTier == ak47Upgrade.bulletSpread.upgradedSkill.maxTier)
 										ak47Upgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1598,6 +3080,32 @@ bool	ShopState::Input(void)
 
 									if (ak47Upgrade.damage.upgradedSkill.currTier == ak47Upgrade.damage.upgradedSkill.maxTier)
 										ak47Upgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1612,6 +3120,32 @@ bool	ShopState::Input(void)
 
 									if (ak47Upgrade.ammoCap.upgradedSkill.currTier == ak47Upgrade.ammoCap.upgradedSkill.maxTier)
 										ak47Upgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1622,7 +3156,7 @@ bool	ShopState::Input(void)
 								{
 									profile.money -= 100;
 									ak47Upgrade.totalAmmo.upgradedSkill.stat += ak47Upgrade.magSize.upgradedSkill.stat;
-									
+
 
 									if (ak47Upgrade.totalAmmo.upgradedSkill.stat >= ak47Upgrade.ammoCap.upgradedSkill.stat)
 									{
@@ -1630,10 +3164,36 @@ bool	ShopState::Input(void)
 										ak47Upgrade.totalAmmo.isMaxed = true;
 
 									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
-						
+
 						}
 					}
 				}
@@ -1645,8 +3205,27 @@ bool	ShopState::Input(void)
 						{
 							profile.money -= 2000;
 							ak47Upgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
 						}
 					}
+
 					else
 					{
 						//equipt code
@@ -1697,6 +3276,32 @@ bool	ShopState::Input(void)
 
 									if (m16Upgrade.magSize.upgradedSkill.currTier == m16Upgrade.magSize.upgradedSkill.maxTier)
 										m16Upgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 
@@ -1712,6 +3317,32 @@ bool	ShopState::Input(void)
 
 									if (m16Upgrade.reloadTime.upgradedSkill.currTier == m16Upgrade.reloadTime.upgradedSkill.maxTier)
 										m16Upgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1726,6 +3357,32 @@ bool	ShopState::Input(void)
 
 									if (m16Upgrade.recoilTime.upgradedSkill.currTier == m16Upgrade.recoilTime.upgradedSkill.maxTier)
 										m16Upgrade.recoilTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1740,6 +3397,32 @@ bool	ShopState::Input(void)
 
 									if (m16Upgrade.bulletSpread.upgradedSkill.currTier == m16Upgrade.bulletSpread.upgradedSkill.maxTier)
 										m16Upgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1754,6 +3437,32 @@ bool	ShopState::Input(void)
 
 									if (m16Upgrade.damage.upgradedSkill.currTier == m16Upgrade.damage.upgradedSkill.maxTier)
 										m16Upgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1768,6 +3477,32 @@ bool	ShopState::Input(void)
 
 									if (m16Upgrade.ammoCap.upgradedSkill.currTier == m16Upgrade.ammoCap.upgradedSkill.maxTier)
 										m16Upgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1778,7 +3513,7 @@ bool	ShopState::Input(void)
 								{
 									profile.money -= 100;
 									m16Upgrade.totalAmmo.upgradedSkill.stat += m16Upgrade.magSize.upgradedSkill.stat;
-							
+
 
 									if (m16Upgrade.totalAmmo.upgradedSkill.stat >= m16Upgrade.ammoCap.upgradedSkill.stat)
 									{
@@ -1786,6 +3521,32 @@ bool	ShopState::Input(void)
 										m16Upgrade.totalAmmo.isMaxed = true;
 
 									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1801,8 +3562,27 @@ bool	ShopState::Input(void)
 						{
 							profile.money -= 2000;
 							m16Upgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
 						}
 					}
+
 					else
 					{
 						//equipt code
@@ -1831,7 +3611,7 @@ bool	ShopState::Input(void)
 				}
 			}
 		}
-				
+
 		else if (currTab == 2)
 		{
 			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
@@ -1854,6 +3634,32 @@ bool	ShopState::Input(void)
 
 									if (lmgUpgrade.magSize.upgradedSkill.currTier == lmgUpgrade.magSize.upgradedSkill.maxTier)
 										lmgUpgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 
@@ -1869,6 +3675,32 @@ bool	ShopState::Input(void)
 
 									if (lmgUpgrade.reloadTime.upgradedSkill.currTier == lmgUpgrade.reloadTime.upgradedSkill.maxTier)
 										lmgUpgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1883,6 +3715,32 @@ bool	ShopState::Input(void)
 
 									if (lmgUpgrade.recoilTime.upgradedSkill.currTier == lmgUpgrade.recoilTime.upgradedSkill.maxTier)
 										lmgUpgrade.recoilTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1897,6 +3755,32 @@ bool	ShopState::Input(void)
 
 									if (lmgUpgrade.bulletSpread.upgradedSkill.currTier == lmgUpgrade.bulletSpread.upgradedSkill.maxTier)
 										lmgUpgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1911,6 +3795,32 @@ bool	ShopState::Input(void)
 
 									if (lmgUpgrade.damage.upgradedSkill.currTier == lmgUpgrade.damage.upgradedSkill.maxTier)
 										lmgUpgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1925,6 +3835,32 @@ bool	ShopState::Input(void)
 
 									if (lmgUpgrade.ammoCap.upgradedSkill.currTier == lmgUpgrade.ammoCap.upgradedSkill.maxTier)
 										lmgUpgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
@@ -1943,10 +3879,36 @@ bool	ShopState::Input(void)
 										lmgUpgrade.totalAmmo.isMaxed = true;
 
 									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
-						
+
 						}
 					}
 				}
@@ -1958,8 +3920,27 @@ bool	ShopState::Input(void)
 						{
 							profile.money -= 2000;
 							lmgUpgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
 						}
 					}
+
 					else
 					{
 						//equipt code
@@ -1998,681 +3979,1552 @@ bool	ShopState::Input(void)
 		if (currTab < 0)
 			currTab = 2;
 
-			if (currTab == 0)
-			{
-				if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
-				{
-					for (unsigned int currButton = 0; currButton < 8; currButton++)
-					{
-						if (mousePos.IsWithinRectangle(Buttons[currButton]))
-						{
-							switch (currButton)
-							{
-							case 0:
-								if (sniperUpgrade.magSize.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-
-										sniperUpgrade.magSize.upgradedSkill.stat += 5;
-										sniperUpgrade.magSize.upgradedSkill.currTier++;
-
-										if (sniperUpgrade.magSize.upgradedSkill.currTier == sniperUpgrade.magSize.upgradedSkill.maxTier)
-											sniperUpgrade.magSize.isMaxed = true;
-									}
-								}
-
-								break;
-							case 1:
-								if (sniperUpgrade.reloadTime.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										sniperUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
-										sniperUpgrade.reloadTime.upgradedSkill.currTier++;
-
-										if (sniperUpgrade.reloadTime.upgradedSkill.currTier == sniperUpgrade.reloadTime.upgradedSkill.maxTier)
-											sniperUpgrade.reloadTime.isMaxed = true;
-									}
-								}
-								break;
-							case 2:
-								if (sniperUpgrade.recoilTime.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										sniperUpgrade.recoilTime.upgradedSkill.stat -= 0.5f;
-										sniperUpgrade.recoilTime.upgradedSkill.currTier++;
-
-										if (sniperUpgrade.recoilTime.upgradedSkill.currTier == sniperUpgrade.recoilTime.upgradedSkill.maxTier)
-											sniperUpgrade.recoilTime.isMaxed = true;
-									}
-								}
-								break;
-							case 3:
-								if (sniperUpgrade.bulletSpread.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										sniperUpgrade.bulletSpread.upgradedSkill.stat -= .2f;
-										sniperUpgrade.bulletSpread.upgradedSkill.currTier++;
-
-										if (sniperUpgrade.bulletSpread.upgradedSkill.currTier == sniperUpgrade.bulletSpread.upgradedSkill.maxTier)
-											sniperUpgrade.bulletSpread.isMaxed = true;
-									}
-								}
-								break;
-							case 4:
-								if (sniperUpgrade.damage.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										sniperUpgrade.damage.upgradedSkill.stat += 100;
-										sniperUpgrade.damage.upgradedSkill.currTier++;
-
-										if (sniperUpgrade.damage.upgradedSkill.currTier == sniperUpgrade.damage.upgradedSkill.maxTier)
-											sniperUpgrade.damage.isMaxed = true;
-									}
-								}
-								break;
-							case 5:
-								if (sniperUpgrade.penPower.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										sniperUpgrade.penPower.upgradedSkill.stat += 1;
-										sniperUpgrade.penPower.upgradedSkill.currTier++;
-
-										if (sniperUpgrade.penPower.upgradedSkill.currTier == sniperUpgrade.penPower.upgradedSkill.maxTier)
-											sniperUpgrade.penPower.isMaxed = true;
-									}
-								}
-								break;
-							case 6:
-								if (sniperUpgrade.ammoCap.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										sniperUpgrade.ammoCap.upgradedSkill.stat += 10;
-										sniperUpgrade.ammoCap.upgradedSkill.currTier++;
-
-										if (sniperUpgrade.ammoCap.upgradedSkill.currTier == sniperUpgrade.ammoCap.upgradedSkill.maxTier)
-											sniperUpgrade.ammoCap.isMaxed = true;
-									}
-								}
-								break;
-							
-							
-							case 7:
-								if (sniperUpgrade.totalAmmo.isMaxed == false)
-								{
-									if (profile.money >= 100)
-									{
-										profile.money -= 100;
-										sniperUpgrade.totalAmmo.upgradedSkill.stat += sniperUpgrade.magSize.upgradedSkill.stat;
-
-
-										if (sniperUpgrade.totalAmmo.upgradedSkill.stat >= sniperUpgrade.ammoCap.upgradedSkill.stat)
-										{
-											sniperUpgrade.totalAmmo.upgradedSkill.stat = sniperUpgrade.ammoCap.upgradedSkill.stat;
-											sniperUpgrade.totalAmmo.isMaxed = true;
-
-										}
-									}
-								}
-								break;
-							
-							}
-						}
-					}
-					if (mousePos.IsWithinRectangle(Buttons[8]))
-					{
-						if (sniperUpgrade.isBought == false)
-						{
-							if (profile.money >= 2000)
-							{
-								profile.money -= 2000;
-								sniperUpgrade.isBought = true;
-							}
-						}
-						else
-						{
-							//equipt code
-							for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
-							{
-								if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
-								{
-									//pWeapons->GetWeapons()[i]->SetEquipped(true);
-									sniperUpgrade.isEquipt = true;
-								}
-
-								if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
-								{
-									//pWeapons->GetWeapons()[i]->SetEquipped(false);
-									flameUpgrade.isEquipt = false;
-								}
-
-								if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
-								{
-									//pWeapons->GetWeapons()[i]->SetEquipped(false);
-									nadeLauncherUpgrade.isEquipt = false;
-								}
-							}
-						}
-
-					}
-				}
-			}
-			else if (currTab == 1)
-			{
-				if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
-				{
-					for (unsigned int currButton = 0; currButton < 7; currButton++)
-					{
-						if (mousePos.IsWithinRectangle(Buttons[currButton]))
-						{
-							switch (currButton)
-							{
-							case 0:
-								if (flameUpgrade.magSize.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-
-										flameUpgrade.magSize.upgradedSkill.stat += 50;
-										flameUpgrade.magSize.upgradedSkill.currTier++;
-
-										if (flameUpgrade.magSize.upgradedSkill.currTier == flameUpgrade.magSize.upgradedSkill.maxTier)
-											flameUpgrade.magSize.isMaxed = true;
-									}
-								}
-
-								break;
-							case 1:
-								if (flameUpgrade.reloadTime.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										flameUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
-										flameUpgrade.reloadTime.upgradedSkill.currTier++;
-
-										if (flameUpgrade.reloadTime.upgradedSkill.currTier == flameUpgrade.reloadTime.upgradedSkill.maxTier)
-											flameUpgrade.reloadTime.isMaxed = true;
-									}
-								}
-								break;
-							
-							case 2:
-								if (flameUpgrade.bulletSpread.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										flameUpgrade.bulletSpread.upgradedSkill.stat -= 2.0f;
-										flameUpgrade.bulletSpread.upgradedSkill.currTier++;
-
-										if (flameUpgrade.bulletSpread.upgradedSkill.currTier == flameUpgrade.bulletSpread.upgradedSkill.maxTier)
-											flameUpgrade.bulletSpread.isMaxed = true;
-									}
-								}
-								break;
-							case 3:
-								if (flameUpgrade.damage.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										flameUpgrade.damage.upgradedSkill.stat += 20.0f;
-										flameUpgrade.damage.upgradedSkill.currTier++;
-
-										if (flameUpgrade.damage.upgradedSkill.currTier == flameUpgrade.damage.upgradedSkill.maxTier)
-											flameUpgrade.damage.isMaxed = true;
-									}
-								}
-								break;
-							case 4:
-								if (flameUpgrade.bulletVelocity.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										flameUpgrade.bulletVelocity.upgradedSkill.stat += 100.0f;
-										flameUpgrade.bulletVelocity.upgradedSkill.currTier++;
-
-										if (flameUpgrade.bulletVelocity.upgradedSkill.currTier == flameUpgrade.bulletVelocity.upgradedSkill.maxTier)
-											flameUpgrade.bulletVelocity.isMaxed = true;
-									}
-								}
-								break;
-							case 5:
-								if (flameUpgrade.ammoCap.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										flameUpgrade.ammoCap.upgradedSkill.stat += 100;
-										flameUpgrade.ammoCap.upgradedSkill.currTier++;
-
-										if (flameUpgrade.ammoCap.upgradedSkill.currTier == flameUpgrade.ammoCap.upgradedSkill.maxTier)
-											flameUpgrade.ammoCap.isMaxed = true;
-									}
-								}
-								break;
-							case 6:
-								if (flameUpgrade.totalAmmo.isMaxed == false)
-								{
-									if (profile.money >= 100)
-									{
-										profile.money -= 100;
-										
-
-										flameUpgrade.totalAmmo.upgradedSkill.stat += flameUpgrade.magSize.upgradedSkill.stat;
-
-
-										if (flameUpgrade.totalAmmo.upgradedSkill.stat >= flameUpgrade.ammoCap.upgradedSkill.stat)
-										{
-											flameUpgrade.totalAmmo.upgradedSkill.stat = flameUpgrade.ammoCap.upgradedSkill.stat;
-											flameUpgrade.totalAmmo.isMaxed = true;
-
-										}
-									}
-								}
-								break;
-							
-							}
-						}
-					}
-					if (mousePos.IsWithinRectangle(Buttons[8]))
-					{
-						if (flameUpgrade.isBought == false)
-						{
-							if (profile.money >= 2000)
-							{
-								profile.money -= 2000;
-								flameUpgrade.isBought = true;
-							}
-						}
-						else
-						{
-							//equipt code
-							for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
-							{
-								if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
-								{
-									//pWeapons->GetWeapons()[i]->SetEquipped(true);
-									sniperUpgrade.isEquipt = false;
-								}
-
-								if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
-								{
-									//pWeapons->GetWeapons()[i]->SetEquipped(false);
-									flameUpgrade.isEquipt = true;
-								}
-
-								if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
-								{
-									//pWeapons->GetWeapons()[i]->SetEquipped(false);
-									nadeLauncherUpgrade.isEquipt = false;
-								}
-							}
-						}
-
-					}
-				}
-			}
-			else if (currTab == 2)
-			{
-				if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
-				{
-					for (unsigned int currButton = 0; currButton < 6; currButton++)
-					{
-						if (mousePos.IsWithinRectangle(Buttons[currButton]))
-						{
-							switch (currButton)
-							{
-							case 0:
-								if (nadeLauncherUpgrade.magSize.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-
-										nadeLauncherUpgrade.magSize.upgradedSkill.stat += 5;
-										nadeLauncherUpgrade.magSize.upgradedSkill.currTier++;
-
-										if (nadeLauncherUpgrade.magSize.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
-											nadeLauncherUpgrade.magSize.isMaxed = true;
-									}
-								}
-
-								break;
-							case 1:
-								if (nadeLauncherUpgrade.reloadTime.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										nadeLauncherUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
-										nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier++;
-
-										if (nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier == nadeLauncherUpgrade.reloadTime.upgradedSkill.maxTier)
-											nadeLauncherUpgrade.reloadTime.isMaxed = true;
-									}
-								}
-								break;
-	
-							case 2:
-								if (nadeLauncherUpgrade.damage.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										nadeLauncherUpgrade.damage.upgradedSkill.stat += 100.0f;
-										nadeLauncherUpgrade.damage.upgradedSkill.currTier++;
-
-										if (nadeLauncherUpgrade.damage.upgradedSkill.currTier == nadeLauncherUpgrade.damage.upgradedSkill.maxTier)
-											nadeLauncherUpgrade.damage.isMaxed = true;
-									}
-								}
-								break;
-							case 3:
-								if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										nadeLauncherUpgrade.bulletVelocity.upgradedSkill.stat += 100.0f;
-										nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier++;
-
-										if (nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier == nadeLauncherUpgrade.bulletVelocity.upgradedSkill.maxTier)
-											nadeLauncherUpgrade.bulletVelocity.isMaxed = true;
-									}
-								}
-								break;
-							case 4:
-								if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
-								{
-									if (profile.money >= 600)
-									{
-										profile.money -= 600;
-										nadeLauncherUpgrade.ammoCap.upgradedSkill.stat += 10;
-										nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier++;
-
-										if (nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier == nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier)
-											nadeLauncherUpgrade.ammoCap.isMaxed = true;
-									}
-								}
-								break;
-							case 5:
-								if (nadeLauncherUpgrade.totalAmmo.isMaxed == false)
-								{
-									if (profile.money >= 100)
-									{
-										profile.money -= 100;
-										nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat += nadeLauncherUpgrade.magSize.upgradedSkill.stat;
-										
-
-										if (nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat >= nadeLauncherUpgrade.ammoCap.upgradedSkill.stat)
-										{
-											nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat = nadeLauncherUpgrade.ammoCap.upgradedSkill.stat;
-											nadeLauncherUpgrade.totalAmmo.isMaxed = true;
-
-										}
-									}
-								}
-								break;
-							case 8:
-								if (nadeLauncherUpgrade.isBought == false)
-								{
-									if (profile.money >= 2000)
-									{
-										profile.money -= 2000;
-										nadeLauncherUpgrade.isBought = true;
-									}
-								}
-								else
-								{
-
-
-								}
-								break;
-							}
-						}
-					}
-					if (mousePos.IsWithinRectangle(Buttons[8]))
-					{
-						if (nadeLauncherUpgrade.isBought == false)
-						{
-							if (profile.money >= 2000)
-							{
-								profile.money -= 2000;
-								nadeLauncherUpgrade.isBought = true;
-							}
-						}
-						else
-						{
-							//equipt code
-							for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
-							{
-								if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
-								{
-									//pWeapons->GetWeapons()[i]->SetEquipped(true);
-									sniperUpgrade.isEquipt = false;
-								}
-
-								if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
-								{
-									//pWeapons->GetWeapons()[i]->SetEquipped(false);
-									flameUpgrade.isEquipt = false;
-								}
-
-								if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
-								{
-									//pWeapons->GetWeapons()[i]->SetEquipped(false);
-									nadeLauncherUpgrade.isEquipt = true;
-								}
-							}
-						}
-
-					}
-				}
-			}
-#pragma endregion
-		break;
-
-		case DEFENSE:
-#pragma region Defense
+		if (currTab == 0)
+		{
 			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
 			{
 				for (unsigned int currButton = 0; currButton < 8; currButton++)
 				{
-					if (mousePos.IsWithinRectangle(DefenseButtons[currButton]))
+					if (mousePos.IsWithinRectangle(Buttons[currButton]))
 					{
 						switch (currButton)
 						{
 						case 0:
-							if (sandBag.isBought == false)
+							if (sniperUpgrade.magSize.isMaxed == false)
 							{
-								if (profile.money >= 500)
+								if (profile.money >= 600)
 								{
-									profile.money -= 500;
-									sandBag.isBought = true;
-									
-									SGD::Event evnt("REPAIR_SANDBAGS");
-									evnt.SendEventNow();
-									
+									profile.money -= 600;
+
+									sniperUpgrade.magSize.upgradedSkill.stat += 5;
+									sniperUpgrade.magSize.upgradedSkill.currTier++;
+
+									if (sniperUpgrade.magSize.upgradedSkill.currTier == sniperUpgrade.magSize.upgradedSkill.maxTier)
+										sniperUpgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
 								}
 
-							}
-							else
-							{
-								
-								if (sandBagCurrHealth / sandBagMaxHealth != 1)
+								else
 								{
-									if (profile.money >= sandBagRepairCost)
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
 									{
-									
-
-										profile.money -= sandBagRepairCost;
-										
-
-										SGD::Event evnt("REPAIR_SANDBAGS");
-										evnt.SendEventNow();
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 									}
 								}
 							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+
 							break;
 						case 1:
-							if (sandBag.maxHealth.isMaxed == false)
+							if (sniperUpgrade.reloadTime.isMaxed == false)
 							{
-								if (profile.money >= 1000)
+								if (profile.money >= 600)
 								{
-									profile.money -= 1000;
+									profile.money -= 600;
+									sniperUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
+									sniperUpgrade.reloadTime.upgradedSkill.currTier++;
 
-									sandBag.maxHealth.upgradedSkill.stat += 50;
-									sandBag.maxHealth.upgradedSkill.currTier++;
+									if (sniperUpgrade.reloadTime.upgradedSkill.currTier == sniperUpgrade.reloadTime.upgradedSkill.maxTier)
+										sniperUpgrade.reloadTime.isMaxed = true;
 
-									if (sandBag.maxHealth.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
-										sandBag.maxHealth.isMaxed = true;
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
 						case 2:
-							if (barbedwire.isBought == false)
+							if (sniperUpgrade.recoilTime.isMaxed == false)
 							{
-								if (profile.money >= 1000)
+								if (profile.money >= 600)
 								{
-									barbedwire.isBought = true;
+									profile.money -= 600;
+									sniperUpgrade.recoilTime.upgradedSkill.stat -= 0.5f;
+									sniperUpgrade.recoilTime.upgradedSkill.currTier++;
 
-									profile.money -= 1000;
+									if (sniperUpgrade.recoilTime.upgradedSkill.currTier == sniperUpgrade.recoilTime.upgradedSkill.maxTier)
+										sniperUpgrade.recoilTime.isMaxed = true;
 
-									SGD::Event evnt("REPAIR_BARBEDWIRE");
-									evnt.SendEventNow();
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
 								}
 
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
 							}
+
 							else
 							{
-
-								if (barbWireCurrHealth / barbWireMaxHealth != 1)
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
 								{
-									if (profile.money >= barbedWireRepairCost)
-									{
-										profile.money -= barbedWireRepairCost;
-
-
-										SGD::Event evnt("REPAIR_BARBEDWIRE");
-										evnt.SendEventNow();
-									}
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
 						case 3:
-							if (barbedwire.maxHealth.isMaxed == false)
+							if (sniperUpgrade.bulletSpread.isMaxed == false)
 							{
-								if (profile.money >= 1500)
+								if (profile.money >= 600)
 								{
-									profile.money -= 1500;
+									profile.money -= 600;
+									sniperUpgrade.bulletSpread.upgradedSkill.stat -= .2f;
+									sniperUpgrade.bulletSpread.upgradedSkill.currTier++;
 
-									barbedwire.maxHealth.upgradedSkill.stat += 50;
-									barbedwire.maxHealth.upgradedSkill.currTier++;
-									SGD::Event evnt("UPGRADE_BARBEDWIRE_HEALTH");
-									evnt.SendEventNow();
+									if (sniperUpgrade.bulletSpread.upgradedSkill.currTier == sniperUpgrade.bulletSpread.upgradedSkill.maxTier)
+										sniperUpgrade.bulletSpread.isMaxed = true;
 
-									if (barbedwire.maxHealth.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
-										barbedwire.maxHealth.isMaxed = true;
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
 								}
 							}
-							
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
 							break;
 						case 4:
-							if (barbedwire.damage.isMaxed == false)
+							if (sniperUpgrade.damage.isMaxed == false)
 							{
-								if (profile.money >= 2000)
+								if (profile.money >= 600)
 								{
-									profile.money -= 2000;
+									profile.money -= 600;
+									sniperUpgrade.damage.upgradedSkill.stat += 100;
+									sniperUpgrade.damage.upgradedSkill.currTier++;
 
-									barbedwire.damage.upgradedSkill.stat += 5;
-									barbedwire.damage.upgradedSkill.currTier++;
-									SGD::Event evnt("UPGRADE_BARBEDWIRE_DAMAGE");
-									evnt.SendEventNow();
-									if (barbedwire.damage.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
-										barbedwire.damage.isMaxed = true;
+									if (sniperUpgrade.damage.upgradedSkill.currTier == sniperUpgrade.damage.upgradedSkill.maxTier)
+										sniperUpgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
 								}
 							}
 							break;
 						case 5:
-							if (landMine.isBought == false)
+							if (sniperUpgrade.penPower.isMaxed == false)
 							{
-								if (profile.money >= 1000)
+								if (profile.money >= 600)
 								{
-									landMine.isBought = true;
-									profile.money -= 1000;
-									
-									profile.money -= landMineRepairCost;
-									SGD::Event evnt("REPAIR_LANDMINES");
-									evnt.SendEventNow();
-								}
+									profile.money -= 600;
+									sniperUpgrade.penPower.upgradedSkill.stat += 1;
+									sniperUpgrade.penPower.upgradedSkill.currTier++;
 
-							}
-							else
-							{
+									if (sniperUpgrade.penPower.upgradedSkill.currTier == sniperUpgrade.penPower.upgradedSkill.maxTier)
+										sniperUpgrade.penPower.isMaxed = true;
 
-								if (numLandMines / landMines.size() != 1)
-								{
-									if (profile.money >= landMineRepairCost)
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
 									{
-										profile.money -= landMineRepairCost;
-										SGD::Event evnt("REPAIR_LANDMINES");
-										evnt.SendEventNow();
-										
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
 									}
 								}
-									
-								
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
 							}
 							break;
 						case 6:
-							//buy turret
-							
-							if (profile.money >= 1000 && profile.numTurrets < profile.maxNumTurrets)
+							if (sniperUpgrade.ammoCap.isMaxed == false)
 							{
-								profile.numTurrets++;
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									sniperUpgrade.ammoCap.upgradedSkill.stat += 10;
+									sniperUpgrade.ammoCap.upgradedSkill.currTier++;
+
+									if (sniperUpgrade.ammoCap.upgradedSkill.currTier == sniperUpgrade.ammoCap.upgradedSkill.maxTier)
+										sniperUpgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
 							}
-						
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
 							break;
+
+
 						case 7:
-							//upgrade turret capacity
-							if (profile.money >= 2000 && profile.maxNumTurrets < 10)
+							if (sniperUpgrade.totalAmmo.isMaxed == false)
 							{
-								profile.maxNumTurrets++;
+								if (profile.money >= 100)
+								{
+									profile.money -= 100;
+									sniperUpgrade.totalAmmo.upgradedSkill.stat += sniperUpgrade.magSize.upgradedSkill.stat;
+
+
+									if (sniperUpgrade.totalAmmo.upgradedSkill.stat >= sniperUpgrade.ammoCap.upgradedSkill.stat)
+									{
+										sniperUpgrade.totalAmmo.upgradedSkill.stat = sniperUpgrade.ammoCap.upgradedSkill.stat;
+										sniperUpgrade.totalAmmo.isMaxed = true;
+
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
 							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+
+						}
+					}
+				}
+				if (mousePos.IsWithinRectangle(Buttons[8]))
+				{
+					if (sniperUpgrade.isBought == false)
+					{
+						if (profile.money >= 2000)
+						{
+							profile.money -= 2000;
+							sniperUpgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
+						}
+					}
+
+					else
+					{
+						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
+							{
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								sniperUpgrade.isEquipt = true;
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
+							{
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								flameUpgrade.isEquipt = false;
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
+							{
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								nadeLauncherUpgrade.isEquipt = false;
+							}
+						}
+					}
+
+				}
+			}
+		}
+		else if (currTab == 1)
+		{
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
+			{
+				for (unsigned int currButton = 0; currButton < 7; currButton++)
+				{
+					if (mousePos.IsWithinRectangle(Buttons[currButton]))
+					{
+						switch (currButton)
+						{
+						case 0:
+							if (flameUpgrade.magSize.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+
+									flameUpgrade.magSize.upgradedSkill.stat += 50;
+									flameUpgrade.magSize.upgradedSkill.currTier++;
+
+									if (flameUpgrade.magSize.upgradedSkill.currTier == flameUpgrade.magSize.upgradedSkill.maxTier)
+										flameUpgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+
+							break;
+						case 1:
+							if (flameUpgrade.reloadTime.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									flameUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
+									flameUpgrade.reloadTime.upgradedSkill.currTier++;
+
+									if (flameUpgrade.reloadTime.upgradedSkill.currTier == flameUpgrade.reloadTime.upgradedSkill.maxTier)
+										flameUpgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+
+						case 2:
+							if (flameUpgrade.bulletSpread.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									flameUpgrade.bulletSpread.upgradedSkill.stat -= 2.0f;
+									flameUpgrade.bulletSpread.upgradedSkill.currTier++;
+
+									if (flameUpgrade.bulletSpread.upgradedSkill.currTier == flameUpgrade.bulletSpread.upgradedSkill.maxTier)
+										flameUpgrade.bulletSpread.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+						case 3:
+							if (flameUpgrade.damage.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									flameUpgrade.damage.upgradedSkill.stat += 20.0f;
+									flameUpgrade.damage.upgradedSkill.currTier++;
+
+									if (flameUpgrade.damage.upgradedSkill.currTier == flameUpgrade.damage.upgradedSkill.maxTier)
+										flameUpgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+						case 4:
+							if (flameUpgrade.bulletVelocity.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									flameUpgrade.bulletVelocity.upgradedSkill.stat += 100.0f;
+									flameUpgrade.bulletVelocity.upgradedSkill.currTier++;
+
+									if (flameUpgrade.bulletVelocity.upgradedSkill.currTier == flameUpgrade.bulletVelocity.upgradedSkill.maxTier)
+										flameUpgrade.bulletVelocity.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+						case 5:
+							if (flameUpgrade.ammoCap.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									flameUpgrade.ammoCap.upgradedSkill.stat += 100;
+									flameUpgrade.ammoCap.upgradedSkill.currTier++;
+
+									if (flameUpgrade.ammoCap.upgradedSkill.currTier == flameUpgrade.ammoCap.upgradedSkill.maxTier)
+										flameUpgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+						case 6:
+							if (flameUpgrade.totalAmmo.isMaxed == false)
+							{
+								if (profile.money >= 100)
+								{
+									profile.money -= 100;
+
+
+									flameUpgrade.totalAmmo.upgradedSkill.stat += flameUpgrade.magSize.upgradedSkill.stat;
+
+
+									if (flameUpgrade.totalAmmo.upgradedSkill.stat >= flameUpgrade.ammoCap.upgradedSkill.stat)
+									{
+										flameUpgrade.totalAmmo.upgradedSkill.stat = flameUpgrade.ammoCap.upgradedSkill.stat;
+										flameUpgrade.totalAmmo.isMaxed = true;
+
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+
+						}
+					}
+				}
+				if (mousePos.IsWithinRectangle(Buttons[8]))
+				{
+					if (flameUpgrade.isBought == false)
+					{
+						if (profile.money >= 2000)
+						{
+							profile.money -= 2000;
+							flameUpgrade.isBought = true;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
+						}
+					}
+
+					else
+					{
+						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
+							{
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								sniperUpgrade.isEquipt = false;
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
+							{
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								flameUpgrade.isEquipt = true;
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
+							{
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								nadeLauncherUpgrade.isEquipt = false;
+							}
+						}
+					}
+
+				}
+			}
+		}
+		else if (currTab == 2)
+		{
+			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
+			{
+				for (unsigned int currButton = 0; currButton < 6; currButton++)
+				{
+					if (mousePos.IsWithinRectangle(Buttons[currButton]))
+					{
+						switch (currButton)
+						{
+						case 0:
+							if (nadeLauncherUpgrade.magSize.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+
+									nadeLauncherUpgrade.magSize.upgradedSkill.stat += 5;
+									nadeLauncherUpgrade.magSize.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.magSize.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.magSize.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+
+							break;
+						case 1:
+							if (nadeLauncherUpgrade.reloadTime.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.reloadTime.upgradedSkill.stat -= 0.5f;
+									nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.reloadTime.upgradedSkill.currTier == nadeLauncherUpgrade.reloadTime.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.reloadTime.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+
+						case 2:
+							if (nadeLauncherUpgrade.damage.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.damage.upgradedSkill.stat += 100.0f;
+									nadeLauncherUpgrade.damage.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.damage.upgradedSkill.currTier == nadeLauncherUpgrade.damage.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.damage.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+						case 3:
+							if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.bulletVelocity.upgradedSkill.stat += 100.0f;
+									nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.bulletVelocity.upgradedSkill.currTier == nadeLauncherUpgrade.bulletVelocity.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.bulletVelocity.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+						case 4:
+							if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
+							{
+								if (profile.money >= 600)
+								{
+									profile.money -= 600;
+									nadeLauncherUpgrade.ammoCap.upgradedSkill.stat += 10;
+									nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier++;
+
+									if (nadeLauncherUpgrade.ammoCap.upgradedSkill.currTier == nadeLauncherUpgrade.ammoCap.upgradedSkill.maxTier)
+										nadeLauncherUpgrade.ammoCap.isMaxed = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+						case 5:
+							if (nadeLauncherUpgrade.totalAmmo.isMaxed == false)
+							{
+								if (profile.money >= 100)
+								{
+									profile.money -= 100;
+									nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat += nadeLauncherUpgrade.magSize.upgradedSkill.stat;
+
+
+									if (nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat >= nadeLauncherUpgrade.ammoCap.upgradedSkill.stat)
+									{
+										nadeLauncherUpgrade.totalAmmo.upgradedSkill.stat = nadeLauncherUpgrade.ammoCap.upgradedSkill.stat;
+										nadeLauncherUpgrade.totalAmmo.isMaxed = true;
+
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+							break;
+						case 8:
+							if (nadeLauncherUpgrade.isBought == false)
+							{
+								if (profile.money >= 2000)
+								{
+									profile.money -= 2000;
+									nadeLauncherUpgrade.isBought = true;
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+
 							break;
 						}
 					}
 				}
-			}
-#pragma endregion
-			break;
-		
-	}
-	
+				if (mousePos.IsWithinRectangle(Buttons[8]))
+				{
+					if (nadeLauncherUpgrade.isBought == false)
+					{
+						if (profile.money >= 2000)
+						{
+							profile.money -= 2000;
+							nadeLauncherUpgrade.isBought = true;
 
-	
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
+						}
+					}
+
+					else
+					{
+						//equipt code
+						for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+						{
+							if (pWeapons->GetWeapons()[i]->GetGunType() == SNIPER)
+							{
+								//pWeapons->GetWeapons()[i]->SetEquipped(true);
+								sniperUpgrade.isEquipt = false;
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == FTHROWER)
+							{
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								flameUpgrade.isEquipt = false;
+							}
+
+							if (pWeapons->GetWeapons()[i]->GetGunType() == GLAUNCHER)
+							{
+								//pWeapons->GetWeapons()[i]->SetEquipped(false);
+								nadeLauncherUpgrade.isEquipt = true;
+							}
+						}
+					}
+
+				}
+			}
+		}
+#pragma endregion
+		break;
+
+	case DEFENSE:
+#pragma region Defense
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
+		{
+			for (unsigned int currButton = 0; currButton < 8; currButton++)
+			{
+				if (mousePos.IsWithinRectangle(DefenseButtons[currButton]))
+				{
+					switch (currButton)
+					{
+					case 0:
+						if (sandBag.isBought == false)
+						{
+							if (profile.money >= 500)
+							{
+								profile.money -= 500;
+								sandBag.isBought = true;
+
+								SGD::Event evnt("REPAIR_SANDBAGS");
+								evnt.SendEventNow();
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+								{
+									pAudio->StopAudio(Game::GetInstance()->m_hCash);
+								}
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+						}
+
+						else
+						{
+
+							if (sandBagCurrHealth / sandBagMaxHealth != 1)
+							{
+								if (profile.money >= sandBagRepairCost)
+								{
+
+
+									profile.money -= sandBagRepairCost;
+
+
+									SGD::Event evnt("REPAIR_SANDBAGS");
+									evnt.SendEventNow();
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+						}
+						break;
+					case 1:
+						if (sandBag.maxHealth.isMaxed == false)
+						{
+							if (profile.money >= 1000)
+							{
+								profile.money -= 1000;
+
+								sandBag.maxHealth.upgradedSkill.stat += 50;
+								sandBag.maxHealth.upgradedSkill.currTier++;
+
+								if (sandBag.maxHealth.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
+									sandBag.maxHealth.isMaxed = true;
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+								{
+									pAudio->StopAudio(Game::GetInstance()->m_hCash);
+								}
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
+						}
+						break;
+					case 2:
+						if (barbedwire.isBought == false)
+						{
+							if (profile.money >= 1000)
+							{
+								barbedwire.isBought = true;
+
+								profile.money -= 1000;
+
+								SGD::Event evnt("REPAIR_BARBEDWIRE");
+								evnt.SendEventNow();
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+								{
+									pAudio->StopAudio(Game::GetInstance()->m_hCash);
+								}
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+						}
+
+						else
+						{
+
+							if (barbWireCurrHealth / barbWireMaxHealth != 1)
+							{
+								if (profile.money >= barbedWireRepairCost)
+								{
+									profile.money -= barbedWireRepairCost;
+
+
+									SGD::Event evnt("REPAIR_BARBEDWIRE");
+									evnt.SendEventNow();
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+						}
+						break;
+					case 3:
+						if (barbedwire.maxHealth.isMaxed == false)
+						{
+							if (profile.money >= 1500)
+							{
+								profile.money -= 1500;
+
+								barbedwire.maxHealth.upgradedSkill.stat += 50;
+								barbedwire.maxHealth.upgradedSkill.currTier++;
+								SGD::Event evnt("UPGRADE_BARBEDWIRE_HEALTH");
+								evnt.SendEventNow();
+
+								if (barbedwire.maxHealth.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
+									barbedwire.maxHealth.isMaxed = true;
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+								{
+									pAudio->StopAudio(Game::GetInstance()->m_hCash);
+								}
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
+						}
+
+						break;
+					case 4:
+						if (barbedwire.damage.isMaxed == false)
+						{
+							if (profile.money >= 2000)
+							{
+								profile.money -= 2000;
+
+								barbedwire.damage.upgradedSkill.stat += 5;
+								barbedwire.damage.upgradedSkill.currTier++;
+								SGD::Event evnt("UPGRADE_BARBEDWIRE_DAMAGE");
+								evnt.SendEventNow();
+								if (barbedwire.damage.upgradedSkill.currTier == nadeLauncherUpgrade.magSize.upgradedSkill.maxTier)
+									barbedwire.damage.isMaxed = true;
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+								{
+									pAudio->StopAudio(Game::GetInstance()->m_hCash);
+								}
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
+						}
+						break;
+					case 5:
+						if (landMine.isBought == false)
+						{
+							if (profile.money >= 1000)
+							{
+								landMine.isBought = true;
+								profile.money -= 1000;
+
+								profile.money -= landMineRepairCost;
+								SGD::Event evnt("REPAIR_LANDMINES");
+								evnt.SendEventNow();
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+								{
+									pAudio->StopAudio(Game::GetInstance()->m_hCash);
+								}
+
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+						}
+
+						else
+						{
+
+							if (numLandMines / landMines.size() != 1)
+							{
+								if (profile.money >= landMineRepairCost)
+								{
+									profile.money -= landMineRepairCost;
+									SGD::Event evnt("REPAIR_LANDMINES");
+									evnt.SendEventNow();
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+									{
+										pAudio->StopAudio(Game::GetInstance()->m_hCash);
+									}
+
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+									}
+								}
+
+								else
+								{
+									if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+									{
+										pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+									}
+								}
+							}
+
+							else
+							{
+								if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+								{
+									pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+								}
+							}
+
+
+						}
+						break;
+					case 6:
+						//buy turret
+
+						if (profile.money >= 1000 && profile.numTurrets < profile.maxNumTurrets)
+						{
+							profile.numTurrets++;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
+						}
+
+						break;
+					case 7:
+						//upgrade turret capacity
+						if (profile.money >= 2000 && profile.maxNumTurrets < 10)
+						{
+							profile.maxNumTurrets++;
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
+							{
+								pAudio->StopAudio(Game::GetInstance()->m_hCash);
+							}
+
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
+							}
+						}
+
+						else
+						{
+							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hNoBuy) == false)
+							{
+								pAudio->PlayAudio(Game::GetInstance()->m_hNoBuy);
+							}
+						}
+
+						break;
+					}
+				}
+			}
+		}
+#pragma endregion
+		break;
+
+	}
+
+
+
 	return true;
 }
 
 void	ShopState::Update(float elapsedTime)
 {
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
 	if (profile.barbWire.isBought)
 	{
@@ -2724,7 +5576,7 @@ void	ShopState::Update(float elapsedTime)
 
 		}
 	}
-	
+
 	if (revolverUpgrade.totalAmmo.upgradedSkill.stat == profile.revolver.ammoCap.upgradedSkill.stat)
 		revolverUpgrade.totalAmmo.isMaxed = true;
 	else
@@ -2803,17 +5655,25 @@ void	ShopState::Update(float elapsedTime)
 		Game::GetInstance()->RemoveState();
 		return;
 	}
-	
+
 	m_tShopTimer.Update(elapsedTime);
 	UpdateProfile();
 	UpdateWeaponManager();
+
+	if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance() && GameplayState::GetInstance()->GetGameMode())
+	{
+		if (pAudio->IsAudioPlaying(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave())) == false)
+		{
+			pAudio->PlayAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()));
+		}
+	}
 }
 void	ShopState::Render(void)
 {
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
-	WeaponManager* pWeaponManager = WeaponManager::GetInstance(); 
-	
+	WeaponManager* pWeaponManager = WeaponManager::GetInstance();
+
 
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 });
 	pGraphics->DrawRectangle(SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight()), { 200, 0, 0, 0 });
@@ -2826,11 +5686,11 @@ void	ShopState::Render(void)
 	SGD::Color m_cActive = { 255, 255, 255, 255 };
 	SGD::Color m_cMaxed = { 255, 255, 0, 0 };
 
-	
 
 	SGD::InputManager::GetInstance()->IsControllerConnected(0) == true
 		? DrawControllerInput()
 		: DrawKeyboardInput();
+
 
 
 	stringstream wave;
@@ -2851,7 +5711,7 @@ void	ShopState::Render(void)
 	{
 	case PISTOLS:
 #pragma region Pistols
-{
+	{
 					pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 					pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, .8f, m_cMaxed);
@@ -2870,7 +5730,7 @@ void	ShopState::Render(void)
 
 						pistolMagLevel << "Level " << pistolUpgrade.magSize.upgradedSkill.currTier;
 						pistolMagSize << "Magezine Size:\t" << pistolUpgrade.magSize.upgradedSkill.stat;
-						
+
 						pistolReloadLevel << "Level " << pistolUpgrade.reloadTime.upgradedSkill.currTier;
 						pistolReloadStat << "Reload Speed:\t" << pistolUpgrade.reloadTime.upgradedSkill.stat;
 
@@ -2878,7 +5738,7 @@ void	ShopState::Render(void)
 						pistolRecoilStat << "Rate of Fire:\t" << pistolUpgrade.recoilTime.upgradedSkill.stat;
 
 
-					
+
 
 						pFont->Draw("Pistol: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
 						pFont->Draw(pistolMagLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
@@ -2889,9 +5749,9 @@ void	ShopState::Render(void)
 						pFont->Draw(pistolRecoilStat.str().c_str(), { screenSize.width *.3f, Buttons[2].top }, scale, { 255, 255, 0, 0 });
 
 						pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
-						
+
 						for (size_t i = 0; i < 3; i++)
-							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, {155,155,155}, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 						pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 
@@ -2944,8 +5804,8 @@ void	ShopState::Render(void)
 							pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						else
 							pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
-						
-						
+
+
 
 					}
 					else
@@ -2991,7 +5851,7 @@ void	ShopState::Render(void)
 
 
 
-						
+
 
 						pFont->Draw("Revolver: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
 						pFont->Draw(revolverMagLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
@@ -3142,10 +6002,10 @@ void	ShopState::Render(void)
 
 
 					}
-					
-					
 
-				
+
+
+
 
 #pragma endregion
 	}
@@ -3167,7 +6027,7 @@ void	ShopState::Render(void)
 					 {
 					 case 0:
 					 {
-							  
+
 
 							   stringstream sawnOffRecoilLevel;
 							   stringstream sawnOffRecoilStat;
@@ -3305,7 +6165,7 @@ void	ShopState::Render(void)
 									   pFont->Draw("Ammo Full", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 
-							 
+
 							   if (mousePos.IsWithinRectangle(Buttons[8]))
 							   {
 								   if (sawnOffUpgrade.isBought == false)
@@ -3378,7 +6238,7 @@ void	ShopState::Render(void)
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(15.0f, 225.0f), SGD::Size(218.0f, 70.0f)));
 							   for (size_t i = 0; i < 7; i++)
 								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-							  
+
 
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
 							   {
@@ -3503,12 +6363,12 @@ void	ShopState::Render(void)
 									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   }
 
-					 
+
 					 }
 						 break;
 					 case 2:
 					 {
-				
+
 
 							   stringstream autoShotgunMagSizeLevel;
 							   stringstream autoShotgunMagSizeStat;
@@ -3559,10 +6419,10 @@ void	ShopState::Render(void)
 							   pFont->Draw(autoShotgunAmmoCapStat.str().c_str(), { screenSize.width *0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 							   pFont->Draw(autoShotgunAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(514.0f, 228.0f), SGD::Size(228.0f, 82.0f)));
-							
+
 							   for (size_t i = 0; i < 7; i++)
 								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-					
+
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
 							   {
 								   if (autoShotgunUpgrade.magSize.isMaxed == false)
@@ -3685,13 +6545,13 @@ void	ShopState::Render(void)
 								   else
 									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
 							   }
-					 
+
 					 }
 						 break;
 
 					 }
-					
-					
+
+
 #pragma endregion
 	}
 		break;
@@ -3705,15 +6565,15 @@ void	ShopState::Render(void)
 				 pFont->Draw("Tech-9mm", { shotTab2.left + 15, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
 				 pFont->Draw("P90", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
 
-				
-				
+
+
 
 				 switch (currTab)
 				 {
 				 case 0:
 				 {
 						   //UZI
-					
+
 
 						   stringstream uziMagSizeLevel;
 						   stringstream uziMagSizeStat;
@@ -3757,7 +6617,7 @@ void	ShopState::Render(void)
 						   pFont->Draw(uziAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(725.0f, 65.0f), SGD::Size(125.0f, 110.0f)));
-						 
+
 						   for (size_t i = 0; i < 6; i++)
 							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
@@ -3857,7 +6717,7 @@ void	ShopState::Render(void)
 
 
 
-						  
+
 
 						   if (mousePos.IsWithinRectangle(Buttons[8]))
 						   {
@@ -3873,7 +6733,7 @@ void	ShopState::Render(void)
 							   else
 								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
 						   }
-						  
+
 
 
 				 }
@@ -3923,7 +6783,7 @@ void	ShopState::Render(void)
 						   pFont->Draw(tech9AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
 						   pFont->Draw(tech9AmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(335.0f, 670.0f), SGD::Size(165.0f, 100.0f)));
-						 
+
 						   for (size_t i = 0; i < 6; i++)
 							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
@@ -4086,7 +6946,7 @@ void	ShopState::Render(void)
 						   pFont->Draw(p90AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
 						   pFont->Draw(p90AmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(315.0f, 130.0f), SGD::Size(240.0f, 90.0f)));
-	
+
 						   for (size_t i = 0; i < 6; i++)
 							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
@@ -4203,10 +7063,10 @@ void	ShopState::Render(void)
 						   }
 				 }
 					 break;
-				
+
 				 }
 
-				
+
 
 
 #pragma endregion
@@ -4226,7 +7086,7 @@ void	ShopState::Render(void)
 						   {
 						   case 0:
 						   {
-									
+
 									 stringstream akMagSizeLevel;
 									 stringstream akMagSizeStat;
 									 akMagSizeLevel << "Level " << ak47Upgrade.magSize.upgradedSkill.currTier;
@@ -4275,7 +7135,7 @@ void	ShopState::Render(void)
 									 pFont->Draw(akAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 									 pFont->Draw(akAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(225.0f, 300.0f), SGD::Size(244.0f, 73.0f)));
-									
+
 									 for (size_t i = 0; i < 7; i++)
 										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
@@ -4407,10 +7267,10 @@ void	ShopState::Render(void)
 
 						   }
 							   break;
-						
+
 						   case 1:
 						   {
-							
+
 
 									 stringstream m16MagSizeLevel;
 									 stringstream m16MagSizeStat;
@@ -4460,7 +7320,7 @@ void	ShopState::Render(void)
 									 pFont->Draw(m16AmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 									 pFont->Draw(m16AmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(468.0f, 312.0f), SGD::Size(256.0f, 88.0f)));
-									
+
 									 for (size_t i = 0; i < 7; i++)
 										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
@@ -4594,7 +7454,7 @@ void	ShopState::Render(void)
 							   break;
 						   case 2:
 						   {
-								
+
 									 stringstream lmgMagSizeLevel;
 									 stringstream lmgMagSizeStat;
 									 lmgMagSizeLevel << "Level " << lmgUpgrade.magSize.upgradedSkill.currTier;
@@ -4776,8 +7636,8 @@ void	ShopState::Render(void)
 						   }
 							   break;
 						   }
-						  
-					
+
+
 	}
 #pragma endregion
 		break;
@@ -4795,7 +7655,7 @@ void	ShopState::Render(void)
 				  {
 				  case 0:
 				  {
-					
+
 
 							stringstream sniperMagSizeLevel;
 							stringstream sniperMagSizeStat;
@@ -4858,7 +7718,7 @@ void	ShopState::Render(void)
 
 							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-							
+
 							if (mousePos.IsWithinRectangle(Buttons[0]))
 							{
 								if (sniperUpgrade.magSize.isMaxed == false)
@@ -4999,7 +7859,7 @@ void	ShopState::Render(void)
 					  break;
 				  case 1:
 				  {
-						
+
 
 							stringstream flameMagSizeLevel;
 							stringstream flameMagSizeStat;
@@ -5049,12 +7909,12 @@ void	ShopState::Render(void)
 							pFont->Draw(flameAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 							pFont->Draw(flameAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(8.0f, 550.0f), SGD::Size(274.0f, 142.0f)));
-							
+
 							for (size_t i = 0; i < 7; i++)
 								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
 							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-							
+
 
 							if (mousePos.IsWithinRectangle(Buttons[0]))
 							{
@@ -5164,7 +8024,7 @@ void	ShopState::Render(void)
 									pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
-							
+
 							if (mousePos.IsWithinRectangle(Buttons[8]))
 							{
 								if (flameUpgrade.isBought == false)
@@ -5183,7 +8043,7 @@ void	ShopState::Render(void)
 					  break;
 				  case 2:
 				  {
-							
+
 							stringstream nadeMagSizeLevel;
 							stringstream nadeMagSizeStat;
 							nadeMagSizeLevel << "Level " << nadeLauncherUpgrade.magSize.upgradedSkill.currTier;
@@ -5226,7 +8086,7 @@ void	ShopState::Render(void)
 							pFont->Draw(nadeAmmoCapStat.str().c_str(), { screenSize.width * 0.3f, Buttons[4].top }, scale, { 255, 255, 0, 0 });
 							pFont->Draw(nadeAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(330.0f, 455.0f), SGD::Size(265.0f, 82.0f)));
-				
+
 							for (size_t i = 0; i < 6; i++)
 								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
@@ -5325,7 +8185,7 @@ void	ShopState::Render(void)
 
 
 
-					
+
 
 
 							if (mousePos.IsWithinRectangle(Buttons[8]))
@@ -5346,245 +8206,251 @@ void	ShopState::Render(void)
 				  }
 					  break;
 				  }
-				 
+
 #pragma endregion
 	}
 		break;
 	case DEFENSE:
-					/*pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
-					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
-					pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
-					pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
-					pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });*/
+		/*pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
+		pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
+		pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
+		pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+		pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+		pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });*/
 
-					/*string sandbagStatus = "";
-					sandbagStatus += std::to_string(sandBagCurrHealth);
-					sandbagStatus += " ";
+		/*pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, {}, { 0.5f, 0.5f });
+		pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, {}, { 0.5f, 0.5f });
+		pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, {}, { 0.5f, 0.5f });
+		pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+		pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.5f, { 255, 255, 0, 0 });
+		pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.5f, { 255, 255, 0, 0 });*/
 
-					string sandbagMaxHealth = "";
-					sandbagMaxHealth += std::to_string(sandBag.maxHealth.upgradedSkill.stat);
-					sandbagMaxHealth += " ";*/
+		/*string sandbagStatus = "";
+		sandbagStatus += std::to_string(sandBagCurrHealth);
+		sandbagStatus += " ";
 
-					string turretInventory = "Level ";
-					turretInventory += std::to_string(profile.numTurrets);
-					turretInventory += " ";
-
-					stringstream sandBagHeathStat;
-					sandBagHeathStat << "Durability:\t\t" << sandBagCurrHealth;
-					stringstream sandBagMaxDurrStat;
-					sandBagMaxDurrStat << "Max Durability:\t" << sandBag.maxHealth.upgradedSkill.stat;
-
-					stringstream barbWireHeathStat;
-					barbWireHeathStat << "Durability:\t\t" << barbWireCurrHealth;
-					stringstream barbWireMaxDurrStat;
-					barbWireMaxDurrStat << "Max Durability:\t" << barbedwire.maxHealth.upgradedSkill.stat;
-					stringstream barbWireDamageStat;
-					barbWireDamageStat << "Damage:\t\t" << barbedwire.damage.upgradedSkill.stat;
-
-					stringstream landMineStat;
-					landMineStat << "Mines Left:\t\t" << numLandMines;
-
-					stringstream numTurrets;
-					numTurrets << "Inventory:\t\t" << profile.numTurrets;
-					stringstream maxNumTurrets;
-					maxNumTurrets << "Inventory Cap:\t" << profile.maxNumTurrets;
-
-					pFont->Draw("Sandbags: ", { screenSize.width *.1f, screenSize.height * 0.1f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw(sandBagHeathStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[0].top }, scale, { 255, 255, 0, 0 });
-					pFont->Draw(sandBagMaxDurrStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[1].top }, scale, { 255, 255, 0, 0 });
-					
-
-					pFont->Draw("Barbed Wire: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw(barbWireHeathStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[2].top }, scale, { 255, 255, 0, 0 });
-					pFont->Draw(barbWireMaxDurrStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[3].top }, scale, { 255, 255, 0, 0 });
-					pFont->Draw(barbWireDamageStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[4].top }, scale, { 255, 255, 0, 0 });
-
-					pFont->Draw("Mine Field: ", { screenSize.width *.1f, screenSize.height * 0.5f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw(landMineStat.str().c_str(), { screenSize.width *.3f, DefenseButtons[5].top }, scale, { 255, 255, 0, 0 });
-
-					pFont->Draw("Auto-Turrets: ", { screenSize.width *.1f, screenSize.height * 0.7f }, 1.0f, { 255, 255, 0, 0 });
-					pFont->Draw(numTurrets.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[6].top }, scale, { 255, 255, 0, 0 });
-					pFont->Draw(maxNumTurrets.str().c_str(), { screenSize.width *.3f, DefenseButtons[7].top }, scale, { 255, 255, 0, 0 });
-
-
-					for (size_t i = 0; i < 8; i++)
-						pGraphics->DrawTexture(upgradeButton, { DefenseButtons[i].left, DefenseButtons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-
-				
-					if (sandBag.isBought == true)
-					{
-						if (mousePos.IsWithinRectangle(DefenseButtons[0]))
-						{
-							if (sandBagCurrHealth < sandBagMaxHealth)
-								pFont->Draw("Repair", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
-						}
-						else
-						{
-							if (sandBagCurrHealth < sandBagMaxHealth)
-								pFont->Draw("Repair", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
-						}
-
-						if (mousePos.IsWithinRectangle(DefenseButtons[1]))
-						{
-							if (sandBag.maxHealth.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
-						}
-						else
-						{
-							if (sandBag.maxHealth.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
-						}
-
-						
-					}
-					else
-					{
-						if (mousePos.IsWithinRectangle(DefenseButtons[0]))
-							pFont->Draw("Buy", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
-
-						else
-							pFont->Draw("Buy", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
-					}
-					
-
-					if (barbedwire.isBought == true)
-					{
-
-						if (mousePos.IsWithinRectangle(DefenseButtons[2]))
-						{
-							if (barbWireCurrHealth < barbWireMaxHealth)
-								pFont->Draw("Repair", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
-						}
-						else
-						{
-							if (barbWireCurrHealth < barbWireMaxHealth)
-								pFont->Draw("Repair", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
-						}
-
-						if (mousePos.IsWithinRectangle(DefenseButtons[3]))
-						{
-							if (barbedwire.maxHealth.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
-						}
-						else
-						{
-							if (barbedwire.maxHealth.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
-						}
-						
-						if (mousePos.IsWithinRectangle(DefenseButtons[4]))
-						{
-							if (barbedwire.damage.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
-						else
-							pFont->Draw("Maxed", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
-						}
-						else
-						{
-							if (barbedwire.damage.isMaxed == false)
-								pFont->Draw("Upgrade", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
-						}
-						
-						
-					}
-					else
-					{
-						if (mousePos.IsWithinRectangle(DefenseButtons[0]))
-							pFont->Draw("Buy", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
-
-						else
-							pFont->Draw("Buy", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
-					}
+		string sandbagMaxHealth = "";
+		sandbagMaxHealth += std::to_string(sandBag.maxHealth.upgradedSkill.stat);
+		sandbagMaxHealth += " ";*/
 
 
 
 
-					if (landMine.isBought == true)
-					{
-						if (mousePos.IsWithinRectangle(DefenseButtons[5]))
-						{
-							if (numLandMines < landMines.size())
-								pFont->Draw("Repair", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
-						}
-						else
-						{
-							if (numLandMines < landMines.size())
-								pFont->Draw("Repair", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
-							else
-								pFont->Draw("Maxed", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
-						}
-						
-					}
-					else
-					{
-						if (mousePos.IsWithinRectangle(DefenseButtons[5]))
-							pFont->Draw("Buy", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
-						else
-							pFont->Draw("Buy", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 
-					}
+		string turretInventory = "Level ";
+		turretInventory += std::to_string(profile.numTurrets);
+		turretInventory += " ";
 
+		stringstream sandBagHeathStat;
+		sandBagHeathStat << "Durability:\t\t" << sandBagCurrHealth;
+		stringstream sandBagMaxDurrStat;
+		sandBagMaxDurrStat << "Max Durability:\t" << sandBag.maxHealth.upgradedSkill.stat;
 
-					if (mousePos.IsWithinRectangle(DefenseButtons[6]))
-					{
-						if (profile.numTurrets < profile.maxNumTurrets)
-							pFont->Draw("Buy", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
-					else
-						pFont->Draw("Full Inventory", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
-					}
-					else
-					{
-						if (profile.numTurrets < profile.maxNumTurrets)
-							pFont->Draw("Buy", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
-						else
-							pFont->Draw("Full Inventory", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
-					}
-						
+		stringstream barbWireHeathStat;
+		barbWireHeathStat << "Durability:\t\t" << barbWireCurrHealth;
+		stringstream barbWireMaxDurrStat;
+		barbWireMaxDurrStat << "Max Durability:\t" << barbedwire.maxHealth.upgradedSkill.stat;
+		stringstream barbWireDamageStat;
+		barbWireDamageStat << "Damage:\t\t" << barbedwire.damage.upgradedSkill.stat;
 
-					if (mousePos.IsWithinRectangle(DefenseButtons[7]))
-					{
-						if (profile.maxNumTurrets < 10)
-							pFont->Draw("Buy", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
-						else
-							pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
-					}
-					else
-					{
-						if (profile.maxNumTurrets < 10)
-							pFont->Draw("Buy", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 0, 255, 0 });
-						else
-							pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 0, 0 });
-					}
-						
+		stringstream landMineStat;
+		landMineStat << "Mines Left:\t\t" << numLandMines;
+
+		stringstream numTurrets;
+		numTurrets << "Inventory:\t\t" << profile.numTurrets;
+		stringstream maxNumTurrets;
+		maxNumTurrets << "Inventory Cap:\t" << profile.maxNumTurrets;
+
+		pFont->Draw("Sandbags: ", { screenSize.width *.1f, screenSize.height * 0.1f }, 1.0f, { 255, 255, 0, 0 });
+		pFont->Draw(sandBagHeathStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[0].top }, scale, { 255, 255, 0, 0 });
+		pFont->Draw(sandBagMaxDurrStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[1].top }, scale, { 255, 255, 0, 0 });
 
 
+		pFont->Draw("Barbed Wire: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
+		pFont->Draw(barbWireHeathStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[2].top }, scale, { 255, 255, 0, 0 });
+		pFont->Draw(barbWireMaxDurrStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[3].top }, scale, { 255, 255, 0, 0 });
+		pFont->Draw(barbWireDamageStat.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[4].top }, scale, { 255, 255, 0, 0 });
 
-	
-						
-						break;
-						}
-	
+		pFont->Draw("Mine Field: ", { screenSize.width *.1f, screenSize.height * 0.5f }, 1.0f, { 255, 255, 0, 0 });
+		pFont->Draw(landMineStat.str().c_str(), { screenSize.width *.3f, DefenseButtons[5].top }, scale, { 255, 255, 0, 0 });
+
+		pFont->Draw("Auto-Turrets: ", { screenSize.width *.1f, screenSize.height * 0.7f }, 1.0f, { 255, 255, 0, 0 });
+		pFont->Draw(numTurrets.str().c_str(), { screenSize.width * 0.3f, DefenseButtons[6].top }, scale, { 255, 255, 0, 0 });
+		pFont->Draw(maxNumTurrets.str().c_str(), { screenSize.width *.3f, DefenseButtons[7].top }, scale, { 255, 255, 0, 0 });
+
+
+		for (size_t i = 0; i < 8; i++)
+			pGraphics->DrawTexture(upgradeButton, { DefenseButtons[i].left, DefenseButtons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+
+
+		if (sandBag.isBought == true)
+		{
+			if (mousePos.IsWithinRectangle(DefenseButtons[0]))
+			{
+				if (sandBagCurrHealth < sandBagMaxHealth)
+					pFont->Draw("Repair", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+			}
+			else
+			{
+				if (sandBagCurrHealth < sandBagMaxHealth)
+					pFont->Draw("Repair", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
+			}
+
+			if (mousePos.IsWithinRectangle(DefenseButtons[1]))
+			{
+				if (sandBag.maxHealth.isMaxed == false)
+					pFont->Draw("Upgrade", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+			}
+			else
+			{
+				if (sandBag.maxHealth.isMaxed == false)
+					pFont->Draw("Upgrade", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
+			}
+
+
+		}
+		else
+		{
+			if (mousePos.IsWithinRectangle(DefenseButtons[0]))
+				pFont->Draw("Buy", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+
+			else
+				pFont->Draw("Buy", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+		}
+
+
+		if (barbedwire.isBought == true)
+		{
+
+			if (mousePos.IsWithinRectangle(DefenseButtons[2]))
+			{
+				if (barbWireCurrHealth < barbWireMaxHealth)
+					pFont->Draw("Repair", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+			}
+			else
+			{
+				if (barbWireCurrHealth < barbWireMaxHealth)
+					pFont->Draw("Repair", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
+			}
+
+			if (mousePos.IsWithinRectangle(DefenseButtons[3]))
+			{
+				if (barbedwire.maxHealth.isMaxed == false)
+					pFont->Draw("Upgrade", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+			}
+			else
+			{
+				if (barbedwire.maxHealth.isMaxed == false)
+					pFont->Draw("Upgrade", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
+			}
+
+			if (mousePos.IsWithinRectangle(DefenseButtons[4]))
+			{
+				if (barbedwire.damage.isMaxed == false)
+					pFont->Draw("Upgrade", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+			}
+			else
+			{
+				if (barbedwire.damage.isMaxed == false)
+					pFont->Draw("Upgrade", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
+			}
+
+
+		}
+		else
+		{
+			if (mousePos.IsWithinRectangle(DefenseButtons[0]))
+				pFont->Draw("Buy", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+
+			else
+				pFont->Draw("Buy", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+		}
+
+
+
+
+		if (landMine.isBought == true)
+		{
+			if (mousePos.IsWithinRectangle(DefenseButtons[5]))
+			{
+				if (numLandMines < landMines.size())
+					pFont->Draw("Repair", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+			}
+			else
+			{
+				if (numLandMines < landMines.size())
+					pFont->Draw("Repair", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+				else
+					pFont->Draw("Maxed", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
+			}
+
+		}
+		else
+		{
+			if (mousePos.IsWithinRectangle(DefenseButtons[5]))
+				pFont->Draw("Buy", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+			else
+				pFont->Draw("Buy", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+
+		}
+
+
+		if (mousePos.IsWithinRectangle(DefenseButtons[6]))
+		{
+			if (profile.numTurrets < profile.maxNumTurrets)
+				pFont->Draw("Buy", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+			else
+				pFont->Draw("Full Inventory", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+		}
+		else
+		{
+			if (profile.numTurrets < profile.maxNumTurrets)
+				pFont->Draw("Buy", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+			else
+				pFont->Draw("Full Inventory", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
+		}
+
+
+		if (mousePos.IsWithinRectangle(DefenseButtons[7]))
+		{
+			if (profile.maxNumTurrets < 10)
+				pFont->Draw("Buy", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
+			else
+				pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
+		}
+		else
+		{
+			if (profile.maxNumTurrets < 10)
+				pFont->Draw("Buy", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 0, 255, 0 });
+			else
+				pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 0, 0 });
+		}
+
+		break;
+	}
+
 	// Draw the reticle
 	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
 	//float		retscale = 0.8f;
@@ -5592,79 +8458,77 @@ void	ShopState::Render(void)
 	retpos.Offset(-5.0f, -5.0f);
 	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { 1.0f, 1.0f });
 
-	int size = 75;
-	float sWidth = Game::GetInstance()->GetScreenWidth() / 2 - size * 2 - 50;
-	float sHeight = Game::GetInstance()->GetScreenHeight() - 10;
+	SGD::Rectangle equipRect = { Game::GetInstance()->GetScreenWidth() / 2 - 141.0f, Game::GetInstance()->GetScreenHeight() - 135.0f, Game::GetInstance()->GetScreenWidth() / 2 + 141, Game::GetInstance()->GetScreenHeight() - 10 };
+
+	int widthOffset = 10;
+	int heightOffset = 15;
+	float sWidth = Game::GetInstance()->GetScreenWidth() - 343;
+	float sHeight = Game::GetInstance()->GetScreenHeight() - 135;
 
 	SGD::Rectangle unEquip;
 
-	for (unsigned int j = 0; j < 5; j++)
+	for (unsigned int i = 0; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
 	{
-		unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
-		pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
-	}
-
-	for (unsigned int j = 0; j < 5; j++)
-	{
-		for (unsigned int i = equipIndex; i < WeaponManager::GetInstance()->GetWeapons().size(); i++)
+		if (WeaponManager::GetInstance()->GetWeapons()[i]->GetType() == 0 && WeaponManager::GetInstance()->GetWeapons()[i]->GetEquipped() == true && currPage == 0)
 		{
-			unEquip = { sWidth + size*j, sHeight - 75, sWidth + size*j + size, sHeight };
-			//pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
+			pGraphics->DrawRectangle(equipRect, { 255, 255, 255 }, { 0, 0, 255 });
 
-			if (WeaponManager::GetInstance()->GetWeapons()[i]->GetObtained() == true && WeaponManager::GetInstance()->GetWeapons()[i]->GetEquipped() == true)
-			{
-				SGD::Rectangle imageRect = WeaponManager::GetInstance()->GetWeapons()[i]->GetRenderRect();
+			SGD::Point rPoint(Game::GetInstance()->GetScreenWidth() / 2 - 141.0f, Game::GetInstance()->GetScreenHeight() - 135.0f);
 
-				//if (WeaponManager::GetInstance()->GetWeapons()[i]->GetGunType() == WeaponManager::GetInstance()->GetSelected()->GetGunType())
-				//{
-					pGraphics->DrawTextureSection(WeaponManager::GetInstance()->GetWeaponImage(), { sWidth + size*j, sHeight - size },
-						imageRect, {}, {}, {}, { .25f, .25f });
-				//}
+			pFont->Draw("Currently Equipped:", { Game::GetInstance()->GetScreenWidth() / 2 - 100, Game::GetInstance()->GetScreenHeight() - 175 }, 1.0f, { 255, 0, 0 });
 
-				//else
-				//{
-				//	pGraphics->DrawTextureSection(*WeaponManager::GetInstance()->GetWeaponImage(), { sWidth + size*j, sHeight - size },
-				//		imageRect, {}, {}, {}, { .25f, .25f });
-				//	pGraphics->DrawRectangle({ sWidth + size*j, sHeight - size, sWidth + size*j + size, sHeight }, { 175, 0, 0, 0 });
-				//}
+			pGraphics->DrawTextureSection(Game::GetInstance()->m_hHudWpn, rPoint, WeaponManager::GetInstance()->GetWeapons()[i]->GetRenderRect());/* , 0.0f, { 0.0f, 0.0f }, { 255, 0, 0, 0 }, { 1.0, 1.0f });*/
+		}
 
-				equipIndex++;
-				break;
-			}
+		else if (WeaponManager::GetInstance()->GetWeapons()[i]->GetType() == 1 && WeaponManager::GetInstance()->GetWeapons()[i]->GetEquipped() == true && currPage == 1)
+		{
+			pGraphics->DrawRectangle(equipRect, { 255, 255, 255 }, { 0, 0, 255 });
 
-			stringstream drawIndex;
-			drawIndex << j + 1;
-			pFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, scale, { 150, 155, 155 });
+			SGD::Point rPoint(Game::GetInstance()->GetScreenWidth() / 2 - 141.0f, Game::GetInstance()->GetScreenHeight() - 135.0f);
 
-			equipIndex++;
+			pFont->Draw("Currently Equipped:", { Game::GetInstance()->GetScreenWidth() / 2 - 100, Game::GetInstance()->GetScreenHeight() - 175 }, 1.0f, { 255, 0, 0 });
+
+			pGraphics->DrawTextureSection(Game::GetInstance()->m_hHudWpn, rPoint, WeaponManager::GetInstance()->GetWeapons()[i]->GetRenderRect());
+		}
+
+		else if (WeaponManager::GetInstance()->GetWeapons()[i]->GetType() == 2 && WeaponManager::GetInstance()->GetWeapons()[i]->GetEquipped() == true && currPage == 2)
+		{
+			pGraphics->DrawRectangle(equipRect, { 255, 255, 255 }, { 0, 0, 255 });
+
+			SGD::Point rPoint(Game::GetInstance()->GetScreenWidth() / 2 - 141.0f, Game::GetInstance()->GetScreenHeight() - 135.0f);
+
+			pFont->Draw("Currently Equipped:", { Game::GetInstance()->GetScreenWidth() / 2 - 100, Game::GetInstance()->GetScreenHeight() - 175 }, 1.0f, { 255, 0, 0 });
+
+			pGraphics->DrawTextureSection(Game::GetInstance()->m_hHudWpn, rPoint, WeaponManager::GetInstance()->GetWeapons()[i]->GetRenderRect());
+		}
+
+		else if (WeaponManager::GetInstance()->GetWeapons()[i]->GetType() == 3 && WeaponManager::GetInstance()->GetWeapons()[i]->GetEquipped() == true && currPage == 3)
+		{
+			pGraphics->DrawRectangle(equipRect, { 255, 255, 255 }, { 0, 0, 255 });
+
+			SGD::Point rPoint(Game::GetInstance()->GetScreenWidth() / 2 - 141.0f, Game::GetInstance()->GetScreenHeight() - 135.0f);
+
+			pFont->Draw("Currently Equipped:", { Game::GetInstance()->GetScreenWidth() / 2 - 100, Game::GetInstance()->GetScreenHeight() - 175 }, 1.0f, { 255, 0, 0 });
+
+			pGraphics->DrawTextureSection(Game::GetInstance()->m_hHudWpn, rPoint, WeaponManager::GetInstance()->GetWeapons()[i]->GetRenderRect());
+		}
+
+		else if (WeaponManager::GetInstance()->GetWeapons()[i]->GetType() == 4 && WeaponManager::GetInstance()->GetWeapons()[i]->GetEquipped() == true && currPage == 4)
+		{
+			pGraphics->DrawRectangle(equipRect, { 255, 255, 255 }, { 0, 0, 255 });
+
+			SGD::Point rPoint(Game::GetInstance()->GetScreenWidth() / 2 - 141.0f, Game::GetInstance()->GetScreenHeight() - 135.0f);
+
+			pFont->Draw("Currently Equipped:", { Game::GetInstance()->GetScreenWidth() / 2 - 100, Game::GetInstance()->GetScreenHeight() - 175 }, 1.0f, { 255, 0, 0 });
+
+			pGraphics->DrawTextureSection(Game::GetInstance()->m_hHudWpn, rPoint, WeaponManager::GetInstance()->GetWeapons()[i]->GetRenderRect());
 		}
 	}
-
-	equipIndex = 0;
-
-	for (unsigned int i = 0; i < 5; i++)
-	{
-		for (unsigned int j = 0; j < WeaponManager::GetInstance()->GetWeapons().size(); j++)
-		{
-			SGD::Rectangle unEquip = { sWidth + size*i, sHeight - 75, sWidth + size*i + size, sHeight };
-
-			//if (m_vWeapons[j]->GetGunType() == m_vWeapons[curIndex]->GetGunType() && m_vWeapons[curIndex]->GetEquipped() == true)
-			//{
-			//	pGraphics->DrawRectangle({ sWidth + size*i, sHeight - size, sWidth + size*i + size, sHeight }, { 0, 0, 0, 0 }, { 0, 100, 0 }, 6);
-			//}
-
-			stringstream drawIndex;
-			drawIndex << i + 1;
-
-			pFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, scale, { 150, 155, 155 });
-		}
-	}
-
 }
 
 void ShopState::LoadShopStatus()
 {
-	
+
 
 
 #pragma region Pistol
@@ -5673,7 +8537,7 @@ void ShopState::LoadShopStatus()
 	pistolUpgrade.magSize.upgradedSkill.stat = profile.pistol.magSize.upgradedSkill.stat;
 	if (pistolUpgrade.magSize.upgradedSkill.currTier == profile.pistol.magSize.upgradedSkill.maxTier)
 		pistolUpgrade.magSize.isMaxed = true;
-	
+
 
 	pistolUpgrade.recoilTime.upgradedSkill.currTier = profile.pistol.recoilTime.upgradedSkill.currTier;
 	pistolUpgrade.recoilTime.upgradedSkill.maxTier = profile.pistol.recoilTime.upgradedSkill.maxTier;
@@ -5749,7 +8613,7 @@ void ShopState::LoadShopStatus()
 
 #pragma region Sawnoff Loadin
 
-	
+
 
 	sawnOffUpgrade.reloadTime.upgradedSkill.currTier = profile.sawnoff.reloadTime.upgradedSkill.currTier;
 	sawnOffUpgrade.reloadTime.upgradedSkill.maxTier = profile.sawnoff.reloadTime.upgradedSkill.maxTier;
@@ -5768,7 +8632,7 @@ void ShopState::LoadShopStatus()
 	sawnOffUpgrade.bulletSpread.upgradedSkill.stat = profile.sawnoff.bulletSpread.upgradedSkill.stat;
 	if (sawnOffUpgrade.bulletSpread.upgradedSkill.currTier == profile.sawnoff.bulletSpread.upgradedSkill.maxTier)
 		sawnOffUpgrade.bulletSpread.isMaxed = true;
-	
+
 	sawnOffUpgrade.damage.upgradedSkill.currTier = profile.sawnoff.damage.upgradedSkill.currTier;
 	sawnOffUpgrade.damage.upgradedSkill.maxTier = profile.sawnoff.damage.upgradedSkill.maxTier;
 	sawnOffUpgrade.damage.upgradedSkill.stat = profile.sawnoff.damage.upgradedSkill.stat;
@@ -5913,7 +8777,7 @@ void ShopState::LoadShopStatus()
 	uziUpgrade.reloadTime.upgradedSkill.stat = profile.mac10.reloadTime.upgradedSkill.stat;
 	if (uziUpgrade.reloadTime.upgradedSkill.currTier == profile.mac10.reloadTime.upgradedSkill.maxTier)
 		uziUpgrade.reloadTime.isMaxed = true;
-	
+
 	uziUpgrade.bulletSpread.upgradedSkill.currTier = profile.mac10.reloadTime.upgradedSkill.currTier;
 	uziUpgrade.bulletSpread.upgradedSkill.maxTier = profile.mac10.reloadTime.upgradedSkill.maxTier;
 	uziUpgrade.bulletSpread.upgradedSkill.stat = profile.mac10.reloadTime.upgradedSkill.stat;
@@ -6209,7 +9073,7 @@ void ShopState::LoadShopStatus()
 	flameUpgrade.reloadTime.upgradedSkill.stat = profile.flameThrower.reloadTime.upgradedSkill.stat;
 	if (flameUpgrade.reloadTime.upgradedSkill.currTier == profile.flameThrower.reloadTime.upgradedSkill.maxTier)
 		flameUpgrade.reloadTime.isMaxed = true;
-	
+
 	flameUpgrade.bulletSpread.upgradedSkill.currTier = profile.flameThrower.bulletSpread.upgradedSkill.currTier;
 	flameUpgrade.bulletSpread.upgradedSkill.maxTier = profile.flameThrower.bulletSpread.upgradedSkill.maxTier;
 	flameUpgrade.bulletSpread.upgradedSkill.stat = profile.flameThrower.bulletSpread.upgradedSkill.stat;
@@ -6364,7 +9228,7 @@ void ShopState::LoadShopStatus()
 		barbedwire.maxHealth.isMaxed = true;
 
 	barbedwire.isBought = profile.barbWire.isBought;
-	
+
 	//sandbag
 	sandBag.maxHealth.upgradedSkill.currTier = profile.sandBag.maxHealth.upgradedSkill.currTier;
 	sandBag.maxHealth.upgradedSkill.maxTier = profile.sandBag.maxHealth.upgradedSkill.maxTier;
@@ -6377,10 +9241,9 @@ void ShopState::LoadShopStatus()
 	//landmines
 	landMine.isBought = profile.landMine.isBought;
 
-	
 
 
-	
+
 
 #pragma endregion
 
@@ -6898,7 +9761,7 @@ void ShopState::UpdateProfile()
 		profile.landMineStates[currLandMine] = landMines[currLandMine]->IsActive();
 
 	}
-	
+
 
 
 	if (GameplayState::GetInstance()->GetGameMode() == true)
@@ -6913,80 +9776,80 @@ void ShopState::UpdateProfile()
 
 void ShopState::SaveProfile()
 {
-	
-//	Game::GetInstance()->GetProfile() = profile;
+
+	//	Game::GetInstance()->GetProfile() = profile;
 	time_t tempTime;
 	time(&tempTime);
 
 	tm localTime;
 	localtime_s(&localTime, &tempTime);
 
-			ofstream fout(profile.path.c_str());
-			if (fout.is_open())
-			{
-				fout << profile.path.c_str() << '\n';
+	ofstream fout(profile.path.c_str());
+	if (fout.is_open())
+	{
+		fout << profile.path.c_str() << '\n';
 
-				fout << (localTime.tm_year + 1900) << '\n';
-				fout << (localTime.tm_mon + 1)<< '\n';
-				fout << localTime.tm_mday << '\n';
-				fout << localTime.tm_hour << '\n';
-				fout << localTime.tm_min << '\n';
-				fout << localTime.tm_sec << '\n';
+		fout << (localTime.tm_year + 1900) << '\n';
+		fout << (localTime.tm_mon + 1) << '\n';
+		fout << localTime.tm_mday << '\n';
+		fout << localTime.tm_hour << '\n';
+		fout << localTime.tm_min << '\n';
+		fout << localTime.tm_sec << '\n';
 
-				fout << profile.health << '\n';
+		fout << profile.health << '\n';
 #pragma region Pistols
 
-				//pistol
-				fout << profile.pistol.magSize.upgradedSkill.stat << '\n';
-				fout << profile.pistol.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.pistol.magSize.upgradedSkill.maxTier << '\n';
-
-				
-
-				fout << profile.pistol.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.pistol.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.pistol.reloadTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.pistol.recoilTime.upgradedSkill.stat << '\n';
-				fout << profile.pistol.recoilTime.upgradedSkill.currTier << '\n';
-				fout << profile.pistol.recoilTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.pistol.isEquipt << '\n';
+		//pistol
+		fout << profile.pistol.magSize.upgradedSkill.stat << '\n';
+		fout << profile.pistol.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.pistol.magSize.upgradedSkill.maxTier << '\n';
 
 
 
+		fout << profile.pistol.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.pistol.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.pistol.reloadTime.upgradedSkill.maxTier << '\n';
 
-				//revolver
-				fout << profile.revolver.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.revolver.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.revolver.totalAmmo.upgradedSkill.maxTier << '\n';
+		fout << profile.pistol.recoilTime.upgradedSkill.stat << '\n';
+		fout << profile.pistol.recoilTime.upgradedSkill.currTier << '\n';
+		fout << profile.pistol.recoilTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.revolver.magSize.upgradedSkill.stat << '\n';
-				fout << profile.revolver.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.revolver.magSize.upgradedSkill.maxTier << '\n';
+		fout << profile.pistol.isEquipt << '\n';
 
-				fout << profile.revolver.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.revolver.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.revolver.ammoCap.upgradedSkill.maxTier << '\n';
 
-				fout << profile.revolver.recoilTime.upgradedSkill.stat << '\n';
-				fout << profile.revolver.recoilTime.upgradedSkill.currTier << '\n';
-				fout << profile.revolver.recoilTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.revolver.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.revolver.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.revolver.reloadTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.revolver.penPower.upgradedSkill.stat << '\n';
-				fout << profile.revolver.penPower.upgradedSkill.currTier << '\n';
-				fout << profile.revolver.penPower.upgradedSkill.maxTier << '\n';
+		//revolver
+		fout << profile.revolver.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.revolver.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.revolver.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.revolver.damage.upgradedSkill.stat << '\n';
-				fout << profile.revolver.damage.upgradedSkill.currTier << '\n';
-				fout << profile.revolver.damage.upgradedSkill.maxTier << '\n';
+		fout << profile.revolver.magSize.upgradedSkill.stat << '\n';
+		fout << profile.revolver.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.revolver.magSize.upgradedSkill.maxTier << '\n';
 
-				fout << profile.revolver.isBought << '\n';
-				fout << profile.revolver.isEquipt << '\n';
+		fout << profile.revolver.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.revolver.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.revolver.ammoCap.upgradedSkill.maxTier << '\n';
+
+		fout << profile.revolver.recoilTime.upgradedSkill.stat << '\n';
+		fout << profile.revolver.recoilTime.upgradedSkill.currTier << '\n';
+		fout << profile.revolver.recoilTime.upgradedSkill.maxTier << '\n';
+
+		fout << profile.revolver.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.revolver.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.revolver.reloadTime.upgradedSkill.maxTier << '\n';
+
+		fout << profile.revolver.penPower.upgradedSkill.stat << '\n';
+		fout << profile.revolver.penPower.upgradedSkill.currTier << '\n';
+		fout << profile.revolver.penPower.upgradedSkill.maxTier << '\n';
+
+		fout << profile.revolver.damage.upgradedSkill.stat << '\n';
+		fout << profile.revolver.damage.upgradedSkill.currTier << '\n';
+		fout << profile.revolver.damage.upgradedSkill.maxTier << '\n';
+
+		fout << profile.revolver.isBought << '\n';
+		fout << profile.revolver.isEquipt << '\n';
 
 
 
@@ -6994,192 +9857,192 @@ void ShopState::SaveProfile()
 #pragma endregion
 
 #pragma region SMGs
-				//Mac10
-				fout << profile.mac10.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.mac10.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.mac10.totalAmmo.upgradedSkill.maxTier << '\n';
+		//Mac10
+		fout << profile.mac10.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.mac10.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.mac10.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.mac10.magSize.upgradedSkill.stat << '\n';
-				fout << profile.mac10.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.mac10.magSize.upgradedSkill.maxTier << '\n';
+		fout << profile.mac10.magSize.upgradedSkill.stat << '\n';
+		fout << profile.mac10.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.mac10.magSize.upgradedSkill.maxTier << '\n';
 
-				fout << profile.mac10.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.mac10.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.mac10.ammoCap.upgradedSkill.maxTier << '\n';
+		fout << profile.mac10.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.mac10.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.mac10.ammoCap.upgradedSkill.maxTier << '\n';
 
-				fout << profile.mac10.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.mac10.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.mac10.reloadTime.upgradedSkill.maxTier << '\n';
+		fout << profile.mac10.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.mac10.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.mac10.reloadTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.mac10.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.mac10.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.mac10.bulletSpread.upgradedSkill.maxTier << '\n';
+		fout << profile.mac10.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.mac10.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.mac10.bulletSpread.upgradedSkill.maxTier << '\n';
 
-				fout << profile.mac10.damage.upgradedSkill.stat << '\n';
-				fout << profile.mac10.damage.upgradedSkill.currTier << '\n';
-				fout << profile.mac10.damage.upgradedSkill.maxTier << '\n';
+		fout << profile.mac10.damage.upgradedSkill.stat << '\n';
+		fout << profile.mac10.damage.upgradedSkill.currTier << '\n';
+		fout << profile.mac10.damage.upgradedSkill.maxTier << '\n';
 
-				fout << profile.mac10.isBought << '\n';
-				fout << profile.mac10.isEquipt << '\n';
-
-
-				//Tech9
-				fout << profile.tech9.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.tech9.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.tech9.totalAmmo.upgradedSkill.maxTier << '\n';
-
-				fout << profile.tech9.magSize.upgradedSkill.stat << '\n';
-				fout << profile.tech9.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.tech9.magSize.upgradedSkill.maxTier << '\n';
-
-				fout << profile.tech9.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.tech9.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.tech9.ammoCap.upgradedSkill.maxTier << '\n';
-
-				fout << profile.tech9.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.tech9.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.tech9.reloadTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.tech9.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.tech9.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.tech9.bulletSpread.upgradedSkill.maxTier << '\n';
-
-				fout << profile.tech9.damage.upgradedSkill.stat << '\n';
-				fout << profile.tech9.damage.upgradedSkill.currTier << '\n';
-				fout << profile.tech9.damage.upgradedSkill.maxTier << '\n';
-
-				fout << profile.tech9.isBought << '\n';
-				fout << profile.tech9.isEquipt << '\n';
+		fout << profile.mac10.isBought << '\n';
+		fout << profile.mac10.isEquipt << '\n';
 
 
-				//P90
-				fout << profile.p90.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.p90.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.p90.totalAmmo.upgradedSkill.maxTier << '\n';
+		//Tech9
+		fout << profile.tech9.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.tech9.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.tech9.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.p90.magSize.upgradedSkill.stat << '\n';
-				fout << profile.p90.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.p90.magSize.upgradedSkill.maxTier << '\n';
+		fout << profile.tech9.magSize.upgradedSkill.stat << '\n';
+		fout << profile.tech9.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.tech9.magSize.upgradedSkill.maxTier << '\n';
 
-				fout << profile.p90.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.p90.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.p90.ammoCap.upgradedSkill.maxTier << '\n';
+		fout << profile.tech9.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.tech9.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.tech9.ammoCap.upgradedSkill.maxTier << '\n';
 
-				fout << profile.p90.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.p90.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.p90.reloadTime.upgradedSkill.maxTier << '\n';
+		fout << profile.tech9.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.tech9.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.tech9.reloadTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.p90.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.p90.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.p90.bulletSpread.upgradedSkill.maxTier << '\n';
+		fout << profile.tech9.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.tech9.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.tech9.bulletSpread.upgradedSkill.maxTier << '\n';
 
-				fout << profile.p90.damage.upgradedSkill.stat << '\n';
-				fout << profile.p90.damage.upgradedSkill.currTier << '\n';
-				fout << profile.p90.damage.upgradedSkill.maxTier << '\n';
+		fout << profile.tech9.damage.upgradedSkill.stat << '\n';
+		fout << profile.tech9.damage.upgradedSkill.currTier << '\n';
+		fout << profile.tech9.damage.upgradedSkill.maxTier << '\n';
 
-				fout << profile.p90.isBought << '\n';
-				fout << profile.p90.isEquipt << '\n';
+		fout << profile.tech9.isBought << '\n';
+		fout << profile.tech9.isEquipt << '\n';
+
+
+		//P90
+		fout << profile.p90.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.p90.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.p90.totalAmmo.upgradedSkill.maxTier << '\n';
+
+		fout << profile.p90.magSize.upgradedSkill.stat << '\n';
+		fout << profile.p90.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.p90.magSize.upgradedSkill.maxTier << '\n';
+
+		fout << profile.p90.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.p90.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.p90.ammoCap.upgradedSkill.maxTier << '\n';
+
+		fout << profile.p90.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.p90.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.p90.reloadTime.upgradedSkill.maxTier << '\n';
+
+		fout << profile.p90.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.p90.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.p90.bulletSpread.upgradedSkill.maxTier << '\n';
+
+		fout << profile.p90.damage.upgradedSkill.stat << '\n';
+		fout << profile.p90.damage.upgradedSkill.currTier << '\n';
+		fout << profile.p90.damage.upgradedSkill.maxTier << '\n';
+
+		fout << profile.p90.isBought << '\n';
+		fout << profile.p90.isEquipt << '\n';
 
 
 #pragma endregion
 
 #pragma region Shotguns
 
-				//SawnOff
-				fout << profile.sawnoff.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.sawnoff.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.sawnoff.totalAmmo.upgradedSkill.maxTier << '\n';
+		//SawnOff
+		fout << profile.sawnoff.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.sawnoff.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.sawnoff.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.sawnoff.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.sawnoff.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.sawnoff.ammoCap.upgradedSkill.maxTier << '\n';
+		fout << profile.sawnoff.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.sawnoff.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.sawnoff.ammoCap.upgradedSkill.maxTier << '\n';
 
-				fout << profile.sawnoff.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.sawnoff.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.sawnoff.reloadTime.upgradedSkill.maxTier << '\n';
-
-
-				fout << profile.sawnoff.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.sawnoff.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.sawnoff.bulletSpread.upgradedSkill.maxTier << '\n';
-
-				fout << profile.sawnoff.damage.upgradedSkill.stat << '\n';
-				fout << profile.sawnoff.damage.upgradedSkill.currTier << '\n';
-				fout << profile.sawnoff.damage.upgradedSkill.maxTier << '\n';
-
-				fout << profile.sawnoff.recoilTime.upgradedSkill.stat << '\n';
-				fout << profile.sawnoff.recoilTime.upgradedSkill.currTier << '\n';
-				fout << profile.sawnoff.recoilTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.sawnoff.isBought << '\n';
-				fout << profile.sawnoff.isEquipt << '\n';
+		fout << profile.sawnoff.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.sawnoff.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.sawnoff.reloadTime.upgradedSkill.maxTier << '\n';
 
 
+		fout << profile.sawnoff.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.sawnoff.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.sawnoff.bulletSpread.upgradedSkill.maxTier << '\n';
 
-				//Pump
-				fout << profile.pumpShotgun.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.pumpShotgun.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.pumpShotgun.totalAmmo.upgradedSkill.maxTier << '\n';
+		fout << profile.sawnoff.damage.upgradedSkill.stat << '\n';
+		fout << profile.sawnoff.damage.upgradedSkill.currTier << '\n';
+		fout << profile.sawnoff.damage.upgradedSkill.maxTier << '\n';
 
-				fout << profile.pumpShotgun.magSize.upgradedSkill.stat << '\n';
-				fout << profile.pumpShotgun.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.pumpShotgun.magSize.upgradedSkill.maxTier << '\n';
+		fout << profile.sawnoff.recoilTime.upgradedSkill.stat << '\n';
+		fout << profile.sawnoff.recoilTime.upgradedSkill.currTier << '\n';
+		fout << profile.sawnoff.recoilTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.pumpShotgun.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.pumpShotgun.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.pumpShotgun.ammoCap.upgradedSkill.maxTier << '\n';
-
-				fout << profile.pumpShotgun.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.pumpShotgun.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.pumpShotgun.reloadTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.pumpShotgun.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.pumpShotgun.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.pumpShotgun.bulletSpread.upgradedSkill.maxTier << '\n';
-
-				fout << profile.pumpShotgun.damage.upgradedSkill.stat << '\n';
-				fout << profile.pumpShotgun.damage.upgradedSkill.currTier << '\n';
-				fout << profile.pumpShotgun.damage.upgradedSkill.maxTier << '\n';
-
-				fout << profile.pumpShotgun.recoilTime.upgradedSkill.stat << '\n';
-				fout << profile.pumpShotgun.recoilTime.upgradedSkill.currTier << '\n';
-				fout << profile.pumpShotgun.recoilTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.pumpShotgun.isBought << '\n';
-				fout << profile.pumpShotgun.isEquipt << '\n';
+		fout << profile.sawnoff.isBought << '\n';
+		fout << profile.sawnoff.isEquipt << '\n';
 
 
-				//Auto
-				fout << profile.autoShotgun.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.autoShotgun.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.autoShotgun.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.autoShotgun.magSize.upgradedSkill.stat << '\n';
-				fout << profile.autoShotgun.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.autoShotgun.magSize.upgradedSkill.maxTier << '\n';
+		//Pump
+		fout << profile.pumpShotgun.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.pumpShotgun.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.pumpShotgun.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.autoShotgun.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.autoShotgun.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.autoShotgun.ammoCap.upgradedSkill.maxTier << '\n';
+		fout << profile.pumpShotgun.magSize.upgradedSkill.stat << '\n';
+		fout << profile.pumpShotgun.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.pumpShotgun.magSize.upgradedSkill.maxTier << '\n';
 
-				fout << profile.autoShotgun.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.autoShotgun.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.autoShotgun.reloadTime.upgradedSkill.maxTier << '\n';
+		fout << profile.pumpShotgun.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.pumpShotgun.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.pumpShotgun.ammoCap.upgradedSkill.maxTier << '\n';
 
-				fout << profile.autoShotgun.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.autoShotgun.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.autoShotgun.bulletSpread.upgradedSkill.maxTier << '\n';
+		fout << profile.pumpShotgun.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.pumpShotgun.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.pumpShotgun.reloadTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.autoShotgun.damage.upgradedSkill.stat << '\n';
-				fout << profile.autoShotgun.damage.upgradedSkill.currTier << '\n';
-				fout << profile.autoShotgun.damage.upgradedSkill.maxTier << '\n';
+		fout << profile.pumpShotgun.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.pumpShotgun.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.pumpShotgun.bulletSpread.upgradedSkill.maxTier << '\n';
 
-				fout << profile.autoShotgun.recoilTime.upgradedSkill.stat << '\n';
-				fout << profile.autoShotgun.recoilTime.upgradedSkill.currTier << '\n';
-				fout << profile.autoShotgun.recoilTime.upgradedSkill.maxTier << '\n';
+		fout << profile.pumpShotgun.damage.upgradedSkill.stat << '\n';
+		fout << profile.pumpShotgun.damage.upgradedSkill.currTier << '\n';
+		fout << profile.pumpShotgun.damage.upgradedSkill.maxTier << '\n';
 
-				fout << profile.autoShotgun.isBought << '\n';
-				fout << profile.autoShotgun.isEquipt << '\n';
+		fout << profile.pumpShotgun.recoilTime.upgradedSkill.stat << '\n';
+		fout << profile.pumpShotgun.recoilTime.upgradedSkill.currTier << '\n';
+		fout << profile.pumpShotgun.recoilTime.upgradedSkill.maxTier << '\n';
+
+		fout << profile.pumpShotgun.isBought << '\n';
+		fout << profile.pumpShotgun.isEquipt << '\n';
+
+
+		//Auto
+		fout << profile.autoShotgun.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.autoShotgun.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.autoShotgun.totalAmmo.upgradedSkill.maxTier << '\n';
+
+		fout << profile.autoShotgun.magSize.upgradedSkill.stat << '\n';
+		fout << profile.autoShotgun.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.autoShotgun.magSize.upgradedSkill.maxTier << '\n';
+
+		fout << profile.autoShotgun.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.autoShotgun.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.autoShotgun.ammoCap.upgradedSkill.maxTier << '\n';
+
+		fout << profile.autoShotgun.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.autoShotgun.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.autoShotgun.reloadTime.upgradedSkill.maxTier << '\n';
+
+		fout << profile.autoShotgun.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.autoShotgun.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.autoShotgun.bulletSpread.upgradedSkill.maxTier << '\n';
+
+		fout << profile.autoShotgun.damage.upgradedSkill.stat << '\n';
+		fout << profile.autoShotgun.damage.upgradedSkill.currTier << '\n';
+		fout << profile.autoShotgun.damage.upgradedSkill.maxTier << '\n';
+
+		fout << profile.autoShotgun.recoilTime.upgradedSkill.stat << '\n';
+		fout << profile.autoShotgun.recoilTime.upgradedSkill.currTier << '\n';
+		fout << profile.autoShotgun.recoilTime.upgradedSkill.maxTier << '\n';
+
+		fout << profile.autoShotgun.isBought << '\n';
+		fout << profile.autoShotgun.isEquipt << '\n';
 
 
 
@@ -7188,426 +10051,430 @@ void ShopState::SaveProfile()
 
 #pragma region Assault Rifles
 
-				//AK-47
-				fout << profile.ak47.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.ak47.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.ak47.totalAmmo.upgradedSkill.maxTier << '\n';
+		//AK-47
+		fout << profile.ak47.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.ak47.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.ak47.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.ak47.magSize.upgradedSkill.stat << '\n';
-				fout << profile.ak47.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.ak47.magSize.upgradedSkill.maxTier << '\n';
+		fout << profile.ak47.magSize.upgradedSkill.stat << '\n';
+		fout << profile.ak47.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.ak47.magSize.upgradedSkill.maxTier << '\n';
 
-				fout << profile.ak47.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.ak47.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.ak47.ammoCap.upgradedSkill.maxTier << '\n';
+		fout << profile.ak47.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.ak47.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.ak47.ammoCap.upgradedSkill.maxTier << '\n';
 
-				fout << profile.ak47.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.ak47.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.ak47.reloadTime.upgradedSkill.maxTier << '\n';
+		fout << profile.ak47.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.ak47.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.ak47.reloadTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.ak47.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.ak47.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.ak47.bulletSpread.upgradedSkill.maxTier << '\n';
+		fout << profile.ak47.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.ak47.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.ak47.bulletSpread.upgradedSkill.maxTier << '\n';
 
-				fout << profile.ak47.damage.upgradedSkill.stat << '\n';
-				fout << profile.ak47.damage.upgradedSkill.currTier << '\n';
-				fout << profile.ak47.damage.upgradedSkill.maxTier << '\n';
+		fout << profile.ak47.damage.upgradedSkill.stat << '\n';
+		fout << profile.ak47.damage.upgradedSkill.currTier << '\n';
+		fout << profile.ak47.damage.upgradedSkill.maxTier << '\n';
 
-				fout << profile.ak47.recoilTime.upgradedSkill.stat << '\n';
-				fout << profile.ak47.recoilTime.upgradedSkill.currTier << '\n';
-				fout << profile.ak47.recoilTime.upgradedSkill.maxTier << '\n';
+		fout << profile.ak47.recoilTime.upgradedSkill.stat << '\n';
+		fout << profile.ak47.recoilTime.upgradedSkill.currTier << '\n';
+		fout << profile.ak47.recoilTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.ak47.isBought << '\n';
-				fout << profile.ak47.isEquipt << '\n';
-
-
-				//M-16
-				fout << profile.m16.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.m16.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.m16.totalAmmo.upgradedSkill.maxTier << '\n';
-
-				fout << profile.m16.magSize.upgradedSkill.stat << '\n';
-				fout << profile.m16.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.m16.magSize.upgradedSkill.maxTier << '\n';
-
-				fout << profile.m16.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.m16.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.m16.ammoCap.upgradedSkill.maxTier << '\n';
-
-				fout << profile.m16.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.m16.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.m16.reloadTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.m16.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.m16.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.m16.bulletSpread.upgradedSkill.maxTier << '\n';
-
-				fout << profile.m16.damage.upgradedSkill.stat << '\n';
-				fout << profile.m16.damage.upgradedSkill.currTier << '\n';
-				fout << profile.m16.damage.upgradedSkill.maxTier << '\n';
-
-				fout << profile.m16.recoilTime.upgradedSkill.stat << '\n';
-				fout << profile.m16.recoilTime.upgradedSkill.currTier << '\n';
-				fout << profile.m16.recoilTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.m16.isBought << '\n';
-				fout << profile.m16.isEquipt << '\n';
+		fout << profile.ak47.isBought << '\n';
+		fout << profile.ak47.isEquipt << '\n';
 
 
-				//LMG
-				fout << profile.lmg.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.lmg.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.lmg.totalAmmo.upgradedSkill.maxTier << '\n';
+		//M-16
+		fout << profile.m16.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.m16.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.m16.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.lmg.magSize.upgradedSkill.stat << '\n';
-				fout << profile.lmg.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.lmg.magSize.upgradedSkill.maxTier << '\n';
+		fout << profile.m16.magSize.upgradedSkill.stat << '\n';
+		fout << profile.m16.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.m16.magSize.upgradedSkill.maxTier << '\n';
 
-				fout << profile.lmg.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.lmg.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.lmg.ammoCap.upgradedSkill.maxTier << '\n';
+		fout << profile.m16.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.m16.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.m16.ammoCap.upgradedSkill.maxTier << '\n';
 
-				fout << profile.lmg.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.lmg.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.lmg.reloadTime.upgradedSkill.maxTier << '\n';
+		fout << profile.m16.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.m16.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.m16.reloadTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.lmg.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.lmg.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.lmg.bulletSpread.upgradedSkill.maxTier << '\n';
+		fout << profile.m16.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.m16.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.m16.bulletSpread.upgradedSkill.maxTier << '\n';
 
-				fout << profile.lmg.damage.upgradedSkill.stat << '\n';
-				fout << profile.lmg.damage.upgradedSkill.currTier << '\n';
-				fout << profile.lmg.damage.upgradedSkill.maxTier << '\n';
+		fout << profile.m16.damage.upgradedSkill.stat << '\n';
+		fout << profile.m16.damage.upgradedSkill.currTier << '\n';
+		fout << profile.m16.damage.upgradedSkill.maxTier << '\n';
 
-				fout << profile.lmg.recoilTime.upgradedSkill.stat << '\n';
-				fout << profile.lmg.recoilTime.upgradedSkill.currTier << '\n';
-				fout << profile.lmg.recoilTime.upgradedSkill.maxTier << '\n';
+		fout << profile.m16.recoilTime.upgradedSkill.stat << '\n';
+		fout << profile.m16.recoilTime.upgradedSkill.currTier << '\n';
+		fout << profile.m16.recoilTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.lmg.isBought << '\n';
-				fout << profile.lmg.isEquipt << '\n';
+		fout << profile.m16.isBought << '\n';
+		fout << profile.m16.isEquipt << '\n';
+
+
+		//LMG
+		fout << profile.lmg.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.lmg.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.lmg.totalAmmo.upgradedSkill.maxTier << '\n';
+
+		fout << profile.lmg.magSize.upgradedSkill.stat << '\n';
+		fout << profile.lmg.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.lmg.magSize.upgradedSkill.maxTier << '\n';
+
+		fout << profile.lmg.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.lmg.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.lmg.ammoCap.upgradedSkill.maxTier << '\n';
+
+		fout << profile.lmg.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.lmg.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.lmg.reloadTime.upgradedSkill.maxTier << '\n';
+
+		fout << profile.lmg.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.lmg.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.lmg.bulletSpread.upgradedSkill.maxTier << '\n';
+
+		fout << profile.lmg.damage.upgradedSkill.stat << '\n';
+		fout << profile.lmg.damage.upgradedSkill.currTier << '\n';
+		fout << profile.lmg.damage.upgradedSkill.maxTier << '\n';
+
+		fout << profile.lmg.recoilTime.upgradedSkill.stat << '\n';
+		fout << profile.lmg.recoilTime.upgradedSkill.currTier << '\n';
+		fout << profile.lmg.recoilTime.upgradedSkill.maxTier << '\n';
+
+		fout << profile.lmg.isBought << '\n';
+		fout << profile.lmg.isEquipt << '\n';
 
 
 #pragma endregion
 
 #pragma region Heavy Weapons
 
-				//Sniper
-				fout << profile.sniper.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.sniper.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.sniper.totalAmmo.upgradedSkill.maxTier << '\n';
+		//Sniper
+		fout << profile.sniper.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.sniper.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.sniper.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.sniper.magSize.upgradedSkill.stat << '\n';
-				fout << profile.sniper.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.sniper.magSize.upgradedSkill.maxTier << '\n';
+		fout << profile.sniper.magSize.upgradedSkill.stat << '\n';
+		fout << profile.sniper.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.sniper.magSize.upgradedSkill.maxTier << '\n';
 
-				fout << profile.sniper.penPower.upgradedSkill.stat << '\n';
-				fout << profile.sniper.penPower.upgradedSkill.currTier << '\n';
-				fout << profile.sniper.penPower.upgradedSkill.maxTier << '\n';
-
-
-				fout << profile.sniper.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.sniper.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.sniper.ammoCap.upgradedSkill.maxTier << '\n';
-
-				fout << profile.sniper.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.sniper.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.sniper.reloadTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.sniper.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.sniper.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.sniper.bulletSpread.upgradedSkill.maxTier << '\n';
-
-				fout << profile.sniper.damage.upgradedSkill.stat << '\n';
-				fout << profile.sniper.damage.upgradedSkill.currTier << '\n';
-				fout << profile.sniper.damage.upgradedSkill.maxTier << '\n';
-
-				fout << profile.sniper.recoilTime.upgradedSkill.stat << '\n';
-				fout << profile.sniper.recoilTime.upgradedSkill.currTier << '\n';
-				fout << profile.sniper.recoilTime.upgradedSkill.maxTier << '\n';
-
-				fout << profile.sniper.isBought << '\n';
-				fout << profile.sniper.isEquipt << '\n';
+		fout << profile.sniper.penPower.upgradedSkill.stat << '\n';
+		fout << profile.sniper.penPower.upgradedSkill.currTier << '\n';
+		fout << profile.sniper.penPower.upgradedSkill.maxTier << '\n';
 
 
-				//Flamethrower
+		fout << profile.sniper.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.sniper.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.sniper.ammoCap.upgradedSkill.maxTier << '\n';
 
-				fout << profile.flameThrower.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.flameThrower.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.flameThrower.totalAmmo.upgradedSkill.maxTier << '\n';
+		fout << profile.sniper.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.sniper.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.sniper.reloadTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.flameThrower.magSize.upgradedSkill.stat << '\n';
-				fout << profile.flameThrower.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.flameThrower.magSize.upgradedSkill.maxTier << '\n';
+		fout << profile.sniper.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.sniper.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.sniper.bulletSpread.upgradedSkill.maxTier << '\n';
 
-				fout << profile.flameThrower.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.flameThrower.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.flameThrower.ammoCap.upgradedSkill.maxTier << '\n';
+		fout << profile.sniper.damage.upgradedSkill.stat << '\n';
+		fout << profile.sniper.damage.upgradedSkill.currTier << '\n';
+		fout << profile.sniper.damage.upgradedSkill.maxTier << '\n';
 
-				fout << profile.flameThrower.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.flameThrower.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.flameThrower.reloadTime.upgradedSkill.maxTier << '\n';
+		fout << profile.sniper.recoilTime.upgradedSkill.stat << '\n';
+		fout << profile.sniper.recoilTime.upgradedSkill.currTier << '\n';
+		fout << profile.sniper.recoilTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.flameThrower.bulletSpread.upgradedSkill.stat << '\n';
-				fout << profile.flameThrower.bulletSpread.upgradedSkill.currTier << '\n';
-				fout << profile.flameThrower.bulletSpread.upgradedSkill.maxTier << '\n';
-
-				fout << profile.flameThrower.damage.upgradedSkill.stat << '\n';
-				fout << profile.flameThrower.damage.upgradedSkill.currTier << '\n';
-				fout << profile.flameThrower.damage.upgradedSkill.maxTier << '\n';
-
-				fout << profile.flameThrower.bulletVelocity.upgradedSkill.stat << '\n';
-				fout << profile.flameThrower.bulletVelocity.upgradedSkill.currTier << '\n';
-				fout << profile.flameThrower.bulletVelocity.upgradedSkill.maxTier << '\n';
-
-				fout << profile.flameThrower.isBought << '\n';
-				fout << profile.flameThrower.isEquipt << '\n';
+		fout << profile.sniper.isBought << '\n';
+		fout << profile.sniper.isEquipt << '\n';
 
 
-				//Grenade Launcher
+		//Flamethrower
 
-				fout << profile.nadeLauncher.totalAmmo.upgradedSkill.stat << '\n';
-				fout << profile.nadeLauncher.totalAmmo.upgradedSkill.currTier << '\n';
-				fout << profile.nadeLauncher.totalAmmo.upgradedSkill.maxTier << '\n';
+		fout << profile.flameThrower.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.flameThrower.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.flameThrower.totalAmmo.upgradedSkill.maxTier << '\n';
 
-				fout << profile.nadeLauncher.magSize.upgradedSkill.stat << '\n';
-				fout << profile.nadeLauncher.magSize.upgradedSkill.currTier << '\n';
-				fout << profile.nadeLauncher.magSize.upgradedSkill.maxTier << '\n';
+		fout << profile.flameThrower.magSize.upgradedSkill.stat << '\n';
+		fout << profile.flameThrower.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.flameThrower.magSize.upgradedSkill.maxTier << '\n';
 
-				fout << profile.nadeLauncher.ammoCap.upgradedSkill.stat << '\n';
-				fout << profile.nadeLauncher.ammoCap.upgradedSkill.currTier << '\n';
-				fout << profile.nadeLauncher.ammoCap.upgradedSkill.maxTier << '\n';
+		fout << profile.flameThrower.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.flameThrower.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.flameThrower.ammoCap.upgradedSkill.maxTier << '\n';
 
-				fout << profile.nadeLauncher.reloadTime.upgradedSkill.stat << '\n';
-				fout << profile.nadeLauncher.reloadTime.upgradedSkill.currTier << '\n';
-				fout << profile.nadeLauncher.reloadTime.upgradedSkill.maxTier << '\n';
+		fout << profile.flameThrower.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.flameThrower.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.flameThrower.reloadTime.upgradedSkill.maxTier << '\n';
 
-				fout << profile.nadeLauncher.damage.upgradedSkill.stat << '\n';
-				fout << profile.nadeLauncher.damage.upgradedSkill.currTier << '\n';
-				fout << profile.nadeLauncher.damage.upgradedSkill.maxTier << '\n';
+		fout << profile.flameThrower.bulletSpread.upgradedSkill.stat << '\n';
+		fout << profile.flameThrower.bulletSpread.upgradedSkill.currTier << '\n';
+		fout << profile.flameThrower.bulletSpread.upgradedSkill.maxTier << '\n';
 
-				fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.stat << '\n';
-				fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.currTier << '\n';
-				fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.maxTier << '\n';
+		fout << profile.flameThrower.damage.upgradedSkill.stat << '\n';
+		fout << profile.flameThrower.damage.upgradedSkill.currTier << '\n';
+		fout << profile.flameThrower.damage.upgradedSkill.maxTier << '\n';
 
-				fout << profile.nadeLauncher.isBought << '\n';
-				fout << profile.nadeLauncher.isEquipt << '\n';
+		fout << profile.flameThrower.bulletVelocity.upgradedSkill.stat << '\n';
+		fout << profile.flameThrower.bulletVelocity.upgradedSkill.currTier << '\n';
+		fout << profile.flameThrower.bulletVelocity.upgradedSkill.maxTier << '\n';
 
-
-				//Barb Wire
-				fout << profile.barbWire.maxHealth.upgradedSkill.stat << '\n';
-				fout << profile.barbWire.maxHealth.upgradedSkill.currTier << '\n';
-				fout << profile.barbWire.maxHealth.upgradedSkill.maxTier << '\n';
-
-				fout << profile.barbWire.damage.upgradedSkill.stat << '\n';
-				fout << profile.barbWire.damage.upgradedSkill.currTier << '\n';
-				fout << profile.barbWire.damage.upgradedSkill.maxTier << '\n';
-
-				fout << profile.barbWire.isBought << '\n';
-				
-				
-				for (size_t j = 0; j < 74; j++)
-				{
-
-					fout << profile.barbWireStates[j] << '\n';
+		fout << profile.flameThrower.isBought << '\n';
+		fout << profile.flameThrower.isEquipt << '\n';
 
 
-				}
-				//Sandbag
+		//Grenade Launcher
 
-				fout << profile.sandBag.maxHealth.upgradedSkill.stat << '\n';
-				fout << profile.sandBag.maxHealth.upgradedSkill.currTier << '\n';
-				fout << profile.sandBag.maxHealth.upgradedSkill.maxTier << '\n';
+		fout << profile.nadeLauncher.totalAmmo.upgradedSkill.stat << '\n';
+		fout << profile.nadeLauncher.totalAmmo.upgradedSkill.currTier << '\n';
+		fout << profile.nadeLauncher.totalAmmo.upgradedSkill.maxTier << '\n';
+
+		fout << profile.nadeLauncher.magSize.upgradedSkill.stat << '\n';
+		fout << profile.nadeLauncher.magSize.upgradedSkill.currTier << '\n';
+		fout << profile.nadeLauncher.magSize.upgradedSkill.maxTier << '\n';
+
+		fout << profile.nadeLauncher.ammoCap.upgradedSkill.stat << '\n';
+		fout << profile.nadeLauncher.ammoCap.upgradedSkill.currTier << '\n';
+		fout << profile.nadeLauncher.ammoCap.upgradedSkill.maxTier << '\n';
+
+		fout << profile.nadeLauncher.reloadTime.upgradedSkill.stat << '\n';
+		fout << profile.nadeLauncher.reloadTime.upgradedSkill.currTier << '\n';
+		fout << profile.nadeLauncher.reloadTime.upgradedSkill.maxTier << '\n';
+
+		fout << profile.nadeLauncher.damage.upgradedSkill.stat << '\n';
+		fout << profile.nadeLauncher.damage.upgradedSkill.currTier << '\n';
+		fout << profile.nadeLauncher.damage.upgradedSkill.maxTier << '\n';
+
+		fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.stat << '\n';
+		fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.currTier << '\n';
+		fout << profile.nadeLauncher.bulletVelocity.upgradedSkill.maxTier << '\n';
+
+		fout << profile.nadeLauncher.isBought << '\n';
+		fout << profile.nadeLauncher.isEquipt << '\n';
 
 
-				fout << profile.sandBag.isBought << '\n';
+		//Barb Wire
+		fout << profile.barbWire.maxHealth.upgradedSkill.stat << '\n';
+		fout << profile.barbWire.maxHealth.upgradedSkill.currTier << '\n';
+		fout << profile.barbWire.maxHealth.upgradedSkill.maxTier << '\n';
 
-				for (size_t j = 0; j < 66; j++)
-				{
+		fout << profile.barbWire.damage.upgradedSkill.stat << '\n';
+		fout << profile.barbWire.damage.upgradedSkill.currTier << '\n';
+		fout << profile.barbWire.damage.upgradedSkill.maxTier << '\n';
 
-					fout << profile.sandBagStates[j] << '\n';
-
-
-				}
-
-
-				fout << profile.landMine.isBought << '\n';
-
-				for (size_t j = 0; j < 55; j++)
-				{
-
-					fout << profile.landMineStates[j] << '\n';
+		fout << profile.barbWire.isBought << '\n';
 
 
-				}
-
-				fout << profile.numTurrets << '\n';
-
-				fout << profile.maxNumTurrets << '\n';
+		for (size_t j = 0; j < 74; j++)
+		{
+			fout << profile.barbWireStates[j] << '\n';
+		}
 
 
 
 
-				fout << profile.wavesComplete << '\n';
 
-				fout << profile.money << '\n';
+		//Sandbag
+
+		fout << profile.sandBag.maxHealth.upgradedSkill.stat << '\n';
+		fout << profile.sandBag.maxHealth.upgradedSkill.currTier << '\n';
+		fout << profile.sandBag.maxHealth.upgradedSkill.maxTier << '\n';
+		fout << profile.sandBag.isBought << '\n';
+
+		for (size_t j = 0; j < 66; j++)
+		{
 
 
-				//LandMine
+
+
+
+
+			fout << profile.sandBagStates[j] << '\n';
+
+
+		}
+
+
+
+		fout << profile.landMine.isBought << '\n';
+
+		for (size_t j = 0; j < 55; j++)
+		{
+			fout << profile.landMineStates[j] << '\n';
+
+
+		}
+
+		fout << profile.numTurrets << '\n';
+
+		fout << profile.maxNumTurrets << '\n';
+
+
+		fout << profile.wavesComplete << '\n';
+
+		fout << profile.money << '\n';
+
+
+
+		//LandMine
 
 
 
 #pragma endregion
 
-				fout.close();
-			}
-		}
-	
+		fout.close();
+	}
+}
+
 
 
 void ShopState::UpdateWeaponManager()
-		{
+{
 
-			WeaponManager* m_pWeapons = WeaponManager::GetInstance();
-
-
-			m_pWeapons->GetWeapons()[GLOCK]->SetReloadTime(profile.pistol.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[GLOCK]->SetRecoilTime(profile.pistol.recoilTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[GLOCK]->SetMagSize(profile.pistol.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[GLOCK]->SetEquipped(profile.pistol.isEquipt);
+	WeaponManager* m_pWeapons = WeaponManager::GetInstance();
 
 
-			m_pWeapons->GetWeapons()[REVOLVER]->SetReloadTime(profile.revolver.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[REVOLVER]->SetRecoilTime(profile.revolver.recoilTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[REVOLVER]->SetMagSize(profile.revolver.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[REVOLVER]->SetDamage(profile.revolver.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[REVOLVER]->SetPenPower(profile.revolver.penPower.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[REVOLVER]->SetTotalAmmo(profile.revolver.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[REVOLVER]->SetAmmoCap(profile.revolver.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[REVOLVER]->SetEquipped(profile.revolver.isEquipt);
-			m_pWeapons->GetWeapons()[REVOLVER]->SetObtained(profile.revolver.isBought);
-
-			m_pWeapons->GetWeapons()[MAC10]->SetReloadTime(profile.mac10.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[MAC10]->SetRecoilTime(0.01f);
-
-			m_pWeapons->GetWeapons()[MAC10]->SetMagSize(profile.mac10.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[MAC10]->SetDamage(profile.mac10.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[MAC10]->SetBulletSpread(profile.mac10.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[MAC10]->SetTotalAmmo(profile.mac10.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[MAC10]->SetAmmoCap(profile.mac10.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[MAC10]->SetEquipped(profile.mac10.isEquipt);
-			m_pWeapons->GetWeapons()[MAC10]->SetObtained(profile.mac10.isBought);
-
-			m_pWeapons->GetWeapons()[TECH9]->SetReloadTime(profile.tech9.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[TECH9]->SetMagSize(profile.tech9.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[TECH9]->SetDamage(profile.tech9.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[TECH9]->SetBulletSpread(profile.tech9.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[TECH9]->SetTotalAmmo(profile.tech9.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[TECH9]->SetAmmoCap(profile.tech9.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[TECH9]->SetRecoilTime(0.02f);
-			m_pWeapons->GetWeapons()[TECH9]->SetEquipped(profile.tech9.isEquipt);
-			m_pWeapons->GetWeapons()[TECH9]->SetObtained(profile.tech9.isBought);
-
-			m_pWeapons->GetWeapons()[SP90]->SetReloadTime(profile.p90.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SP90]->SetMagSize(profile.p90.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SP90]->SetDamage(profile.p90.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SP90]->SetBulletSpread(profile.p90.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SP90]->SetTotalAmmo(profile.p90.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SP90]->SetAmmoCap(profile.p90.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SP90]->SetRecoilTime(0.05f);
-			m_pWeapons->GetWeapons()[SP90]->SetEquipped(profile.p90.isEquipt);
-			m_pWeapons->GetWeapons()[SP90]->SetObtained(profile.p90.isBought);
+	m_pWeapons->GetWeapons()[GLOCK]->SetReloadTime(profile.pistol.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[GLOCK]->SetRecoilTime(profile.pistol.recoilTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[GLOCK]->SetMagSize(profile.pistol.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[GLOCK]->SetEquipped(profile.pistol.isEquipt);
 
 
-			m_pWeapons->GetWeapons()[SAWN]->SetReloadTime(profile.sawnoff.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SAWN]->SetRecoilTime(profile.sawnoff.recoilTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SAWN]->SetDamage(profile.sawnoff.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SAWN]->SetBulletSpread(profile.sawnoff.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SAWN]->SetTotalAmmo(profile.sawnoff.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SAWN]->SetAmmoCap(profile.sawnoff.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SAWN]->SetEquipped(profile.sawnoff.isEquipt);
-			m_pWeapons->GetWeapons()[SAWN]->SetObtained(profile.sawnoff.isBought);
+	m_pWeapons->GetWeapons()[REVOLVER]->SetReloadTime(profile.revolver.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[REVOLVER]->SetRecoilTime(profile.revolver.recoilTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[REVOLVER]->SetMagSize(profile.revolver.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[REVOLVER]->SetDamage(profile.revolver.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[REVOLVER]->SetPenPower(profile.revolver.penPower.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[REVOLVER]->SetTotalAmmo(profile.revolver.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[REVOLVER]->SetAmmoCap(profile.revolver.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[REVOLVER]->SetEquipped(profile.revolver.isEquipt);
+	m_pWeapons->GetWeapons()[REVOLVER]->SetObtained(profile.revolver.isBought);
 
-			m_pWeapons->GetWeapons()[PUMP]->SetReloadTime(profile.pumpShotgun.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[PUMP]->SetRecoilTime(profile.pumpShotgun.recoilTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[PUMP]->SetDamage(profile.pumpShotgun.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[PUMP]->SetBulletSpread(profile.pumpShotgun.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[PUMP]->SetTotalAmmo(profile.pumpShotgun.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[PUMP]->SetAmmoCap(profile.pumpShotgun.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[PUMP]->SetMagSize(profile.pumpShotgun.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[PUMP]->SetEquipped(profile.pumpShotgun.isEquipt);
-			m_pWeapons->GetWeapons()[PUMP]->SetObtained(profile.pumpShotgun.isBought);
+	m_pWeapons->GetWeapons()[MAC10]->SetReloadTime(profile.mac10.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[MAC10]->SetRecoilTime(0.01f);
 
+	m_pWeapons->GetWeapons()[MAC10]->SetMagSize(profile.mac10.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[MAC10]->SetDamage(profile.mac10.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[MAC10]->SetBulletSpread(profile.mac10.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[MAC10]->SetTotalAmmo(profile.mac10.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[MAC10]->SetAmmoCap(profile.mac10.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[MAC10]->SetEquipped(profile.mac10.isEquipt);
+	m_pWeapons->GetWeapons()[MAC10]->SetObtained(profile.mac10.isBought);
 
-			m_pWeapons->GetWeapons()[AUTO]->SetReloadTime(profile.autoShotgun.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AUTO]->SetRecoilTime(profile.autoShotgun.recoilTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AUTO]->SetDamage(profile.autoShotgun.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AUTO]->SetBulletSpread(profile.autoShotgun.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AUTO]->SetTotalAmmo(profile.autoShotgun.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AUTO]->SetAmmoCap(profile.autoShotgun.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AUTO]->SetMagSize(profile.autoShotgun.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AUTO]->SetEquipped(profile.autoShotgun.isEquipt);
-			m_pWeapons->GetWeapons()[AUTO]->SetObtained(profile.autoShotgun.isBought);
+	m_pWeapons->GetWeapons()[TECH9]->SetReloadTime(profile.tech9.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[TECH9]->SetMagSize(profile.tech9.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[TECH9]->SetDamage(profile.tech9.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[TECH9]->SetBulletSpread(profile.tech9.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[TECH9]->SetTotalAmmo(profile.tech9.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[TECH9]->SetAmmoCap(profile.tech9.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[TECH9]->SetRecoilTime(0.02f);
+	m_pWeapons->GetWeapons()[TECH9]->SetEquipped(profile.tech9.isEquipt);
+	m_pWeapons->GetWeapons()[TECH9]->SetObtained(profile.tech9.isBought);
 
-			m_pWeapons->GetWeapons()[AK47]->SetReloadTime(profile.ak47.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AK47]->SetRecoilTime(profile.ak47.recoilTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AK47]->SetDamage(profile.ak47.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AK47]->SetBulletSpread(profile.ak47.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AK47]->SetTotalAmmo(profile.ak47.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AK47]->SetAmmoCap(profile.ak47.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AK47]->SetMagSize(profile.ak47.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[AK47]->SetEquipped(profile.ak47.isEquipt);
-			m_pWeapons->GetWeapons()[AK47]->SetObtained(profile.ak47.isBought);
-
-			m_pWeapons->GetWeapons()[M16]->SetReloadTime(profile.m16.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[M16]->SetRecoilTime(profile.m16.recoilTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[M16]->SetDamage(profile.m16.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[M16]->SetBulletSpread(profile.m16.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[M16]->SetTotalAmmo(profile.m16.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[M16]->SetAmmoCap(profile.m16.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[M16]->SetMagSize(profile.m16.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[M16]->SetEquipped(profile.m16.isEquipt);
-			m_pWeapons->GetWeapons()[M16]->SetObtained(profile.m16.isBought);
-
-			m_pWeapons->GetWeapons()[LIGHT_MG]->SetReloadTime(profile.lmg.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[LIGHT_MG]->SetRecoilTime(profile.lmg.recoilTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[LIGHT_MG]->SetDamage(profile.lmg.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[LIGHT_MG]->SetBulletSpread(profile.lmg.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[LIGHT_MG]->SetTotalAmmo(profile.lmg.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[LIGHT_MG]->SetAmmoCap(profile.lmg.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[LIGHT_MG]->SetMagSize(profile.lmg.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[LIGHT_MG]->SetEquipped(profile.lmg.isEquipt);
-			m_pWeapons->GetWeapons()[LIGHT_MG]->SetObtained(profile.lmg.isBought);
-
-			m_pWeapons->GetWeapons()[FTHROWER]->SetReloadTime(profile.flameThrower.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[FTHROWER]->SetDamage(profile.flameThrower.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[FTHROWER]->SetBulletSpread(profile.flameThrower.bulletSpread.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[FTHROWER]->SetSpeed(profile.flameThrower.bulletVelocity.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[FTHROWER]->SetTotalAmmo(profile.flameThrower.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[FTHROWER]->SetAmmoCap(profile.flameThrower.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[FTHROWER]->SetMagSize(profile.flameThrower.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[FTHROWER]->SetEquipped(profile.flameThrower.isEquipt);
-			m_pWeapons->GetWeapons()[FTHROWER]->SetObtained(profile.flameThrower.isBought);
+	m_pWeapons->GetWeapons()[SP90]->SetReloadTime(profile.p90.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SP90]->SetMagSize(profile.p90.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SP90]->SetDamage(profile.p90.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SP90]->SetBulletSpread(profile.p90.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SP90]->SetTotalAmmo(profile.p90.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SP90]->SetAmmoCap(profile.p90.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SP90]->SetRecoilTime(0.05f);
+	m_pWeapons->GetWeapons()[SP90]->SetEquipped(profile.p90.isEquipt);
+	m_pWeapons->GetWeapons()[SP90]->SetObtained(profile.p90.isBought);
 
 
-			m_pWeapons->GetWeapons()[GLAUNCHER]->SetReloadTime(profile.nadeLauncher.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[GLAUNCHER]->SetDamage(profile.nadeLauncher.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[GLAUNCHER]->SetSpeed(profile.nadeLauncher.bulletVelocity.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[GLAUNCHER]->SetTotalAmmo(profile.nadeLauncher.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[GLAUNCHER]->SetAmmoCap(profile.nadeLauncher.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[GLAUNCHER]->SetMagSize(profile.nadeLauncher.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[GLAUNCHER]->SetEquipped(profile.nadeLauncher.isEquipt);
-			m_pWeapons->GetWeapons()[GLAUNCHER]->SetObtained(profile.nadeLauncher.isBought);
+	m_pWeapons->GetWeapons()[SAWN]->SetReloadTime(profile.sawnoff.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SAWN]->SetRecoilTime(profile.sawnoff.recoilTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SAWN]->SetDamage(profile.sawnoff.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SAWN]->SetBulletSpread(profile.sawnoff.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SAWN]->SetTotalAmmo(profile.sawnoff.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SAWN]->SetAmmoCap(profile.sawnoff.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SAWN]->SetEquipped(profile.sawnoff.isEquipt);
+	m_pWeapons->GetWeapons()[SAWN]->SetObtained(profile.sawnoff.isBought);
+
+	m_pWeapons->GetWeapons()[PUMP]->SetReloadTime(profile.pumpShotgun.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[PUMP]->SetRecoilTime(profile.pumpShotgun.recoilTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[PUMP]->SetDamage(profile.pumpShotgun.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[PUMP]->SetBulletSpread(profile.pumpShotgun.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[PUMP]->SetTotalAmmo(profile.pumpShotgun.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[PUMP]->SetAmmoCap(profile.pumpShotgun.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[PUMP]->SetMagSize(profile.pumpShotgun.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[PUMP]->SetEquipped(profile.pumpShotgun.isEquipt);
+	m_pWeapons->GetWeapons()[PUMP]->SetObtained(profile.pumpShotgun.isBought);
 
 
-			m_pWeapons->GetWeapons()[SNIPER]->SetReloadTime(profile.sniper.reloadTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SNIPER]->SetRecoilTime(profile.sniper.recoilTime.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SNIPER]->SetPenPower(profile.sniper.penPower.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SNIPER]->SetDamage(profile.sniper.damage.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SNIPER]->SetTotalAmmo(profile.sniper.totalAmmo.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SNIPER]->SetAmmoCap(profile.sniper.ammoCap.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SNIPER]->SetMagSize(profile.sniper.magSize.upgradedSkill.stat);
-			m_pWeapons->GetWeapons()[SNIPER]->SetEquipped(profile.sniper.isEquipt);
-			m_pWeapons->GetWeapons()[SNIPER]->SetObtained(profile.sniper.isBought);
+	m_pWeapons->GetWeapons()[AUTO]->SetReloadTime(profile.autoShotgun.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AUTO]->SetRecoilTime(profile.autoShotgun.recoilTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AUTO]->SetDamage(profile.autoShotgun.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AUTO]->SetBulletSpread(profile.autoShotgun.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AUTO]->SetTotalAmmo(profile.autoShotgun.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AUTO]->SetAmmoCap(profile.autoShotgun.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AUTO]->SetMagSize(profile.autoShotgun.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AUTO]->SetEquipped(profile.autoShotgun.isEquipt);
+	m_pWeapons->GetWeapons()[AUTO]->SetObtained(profile.autoShotgun.isBought);
+
+	m_pWeapons->GetWeapons()[AK47]->SetReloadTime(profile.ak47.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AK47]->SetRecoilTime(profile.ak47.recoilTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AK47]->SetDamage(profile.ak47.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AK47]->SetBulletSpread(profile.ak47.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AK47]->SetTotalAmmo(profile.ak47.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AK47]->SetAmmoCap(profile.ak47.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AK47]->SetMagSize(profile.ak47.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[AK47]->SetEquipped(profile.ak47.isEquipt);
+	m_pWeapons->GetWeapons()[AK47]->SetObtained(profile.ak47.isBought);
+
+	m_pWeapons->GetWeapons()[M16]->SetReloadTime(profile.m16.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[M16]->SetRecoilTime(profile.m16.recoilTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[M16]->SetDamage(profile.m16.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[M16]->SetBulletSpread(profile.m16.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[M16]->SetTotalAmmo(profile.m16.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[M16]->SetAmmoCap(profile.m16.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[M16]->SetMagSize(profile.m16.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[M16]->SetEquipped(profile.m16.isEquipt);
+	m_pWeapons->GetWeapons()[M16]->SetObtained(profile.m16.isBought);
+
+	m_pWeapons->GetWeapons()[LIGHT_MG]->SetReloadTime(profile.lmg.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[LIGHT_MG]->SetRecoilTime(profile.lmg.recoilTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[LIGHT_MG]->SetDamage(profile.lmg.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[LIGHT_MG]->SetBulletSpread(profile.lmg.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[LIGHT_MG]->SetTotalAmmo(profile.lmg.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[LIGHT_MG]->SetAmmoCap(profile.lmg.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[LIGHT_MG]->SetMagSize(profile.lmg.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[LIGHT_MG]->SetEquipped(profile.lmg.isEquipt);
+	m_pWeapons->GetWeapons()[LIGHT_MG]->SetObtained(profile.lmg.isBought);
+
+	m_pWeapons->GetWeapons()[FTHROWER]->SetReloadTime(profile.flameThrower.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[FTHROWER]->SetDamage(profile.flameThrower.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[FTHROWER]->SetBulletSpread(profile.flameThrower.bulletSpread.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[FTHROWER]->SetSpeed(profile.flameThrower.bulletVelocity.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[FTHROWER]->SetTotalAmmo(profile.flameThrower.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[FTHROWER]->SetAmmoCap(profile.flameThrower.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[FTHROWER]->SetMagSize(profile.flameThrower.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[FTHROWER]->SetEquipped(profile.flameThrower.isEquipt);
+	m_pWeapons->GetWeapons()[FTHROWER]->SetObtained(profile.flameThrower.isBought);
+
+
+	m_pWeapons->GetWeapons()[GLAUNCHER]->SetReloadTime(profile.nadeLauncher.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[GLAUNCHER]->SetDamage(profile.nadeLauncher.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[GLAUNCHER]->SetSpeed(profile.nadeLauncher.bulletVelocity.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[GLAUNCHER]->SetTotalAmmo(profile.nadeLauncher.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[GLAUNCHER]->SetAmmoCap(profile.nadeLauncher.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[GLAUNCHER]->SetMagSize(profile.nadeLauncher.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[GLAUNCHER]->SetEquipped(profile.nadeLauncher.isEquipt);
+	m_pWeapons->GetWeapons()[GLAUNCHER]->SetObtained(profile.nadeLauncher.isBought);
+
+
+	m_pWeapons->GetWeapons()[SNIPER]->SetReloadTime(profile.sniper.reloadTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SNIPER]->SetRecoilTime(profile.sniper.recoilTime.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SNIPER]->SetPenPower(profile.sniper.penPower.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SNIPER]->SetDamage(profile.sniper.damage.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SNIPER]->SetTotalAmmo(profile.sniper.totalAmmo.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SNIPER]->SetAmmoCap(profile.sniper.ammoCap.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SNIPER]->SetMagSize(profile.sniper.magSize.upgradedSkill.stat);
+	m_pWeapons->GetWeapons()[SNIPER]->SetEquipped(profile.sniper.isEquipt);
+	m_pWeapons->GetWeapons()[SNIPER]->SetObtained(profile.sniper.isBought);
 
 }
 
@@ -7622,109 +10489,109 @@ void ShopState::ControllerSelectionCheck(void)
 	// Weapons pages
 	switch (currPage)
 	{
-		case PISTOLS:
-		#pragma region Pistols
-		{
-			switch (currTab)
-			{
-			case 0: // pistol
-				numoptions = 3;
-				break;
-			case 1: // revolver
-				numoptions = 7;
-				break;
-			default:
-				break;
-			}
-		}
+	case PISTOLS:
+#pragma region Pistols
+	{
+					switch (currTab)
+					{
+					case 0: // pistol
+						numoptions = 3;
+						break;
+					case 1: // revolver
+						numoptions = 7;
+						break;
+					default:
+						break;
+					}
+	}
 #pragma endregion
 		break;
 
-		case SHOTGUNS:
-		#pragma region Shotguns
-		{
-			switch (currTab)
-			{
-			case 0: // sawnoff
-				numoptions = 6;
-				break;
-			case 1: // pump action
-				numoptions = 7;
-				break;
-			case 2: // auto
-				numoptions = 7;
-				break;
-			default:
-				break;
-			}
-		}
+	case SHOTGUNS:
+#pragma region Shotguns
+	{
+					 switch (currTab)
+					 {
+					 case 0: // sawnoff
+						 numoptions = 6;
+						 break;
+					 case 1: // pump action
+						 numoptions = 7;
+						 break;
+					 case 2: // auto
+						 numoptions = 7;
+						 break;
+					 default:
+						 break;
+					 }
+	}
 #pragma endregion
 		break;
 
-		case SMGS:
-		#pragma region Smgs
-		{
-			switch (currTab)
-			{
-			case 0: // mac10
-				numoptions = 6;
-				break;
-			case 1: // tech9
-				numoptions = 6;
-				break;
-			case 2: // p90
-				numoptions = 6;
-				break;
-			default:
-				break;
-			}
-		}
+	case SMGS:
+#pragma region Smgs
+	{
+				 switch (currTab)
+				 {
+				 case 0: // mac10
+					 numoptions = 6;
+					 break;
+				 case 1: // tech9
+					 numoptions = 6;
+					 break;
+				 case 2: // p90
+					 numoptions = 6;
+					 break;
+				 default:
+					 break;
+				 }
+	}
 #pragma endregion
 		break;
 
-		case ASSAULT_RIFLES:
-		#pragma region Assault Rifles
-		{
-			switch (currTab)
-			{
-			case 0: // ak47
-				numoptions = 7;
-				break;
-			case 1: // m16
-				numoptions = 7;
-				break;
-			case 2: // lmg
-				numoptions = 7;
-				break;
-			default:
-				break;
-			}
-		}
+	case ASSAULT_RIFLES:
+#pragma region Assault Rifles
+	{
+						   switch (currTab)
+						   {
+						   case 0: // ak47
+							   numoptions = 7;
+							   break;
+						   case 1: // m16
+							   numoptions = 7;
+							   break;
+						   case 2: // lmg
+							   numoptions = 7;
+							   break;
+						   default:
+							   break;
+						   }
+	}
 #pragma endregion
 		break;
 
-		case HEAVY:
-		#pragma region Heavy
-		{
-			switch (currTab)
-			{
-			case 0: // sniper
-				numoptions = 8;
-				break;
-			case 1: // flamethrower
-				numoptions = 7;
-				break;
-			case 2: // grenade launcher
-				numoptions = 6;
-				break;
-			default:
-				break;
-			}
-		}
+	case HEAVY:
+#pragma region Heavy
+	{
+				  switch (currTab)
+				  {
+				  case 0: // sniper
+					  numoptions = 8;
+					  break;
+				  case 1: // flamethrower
+					  numoptions = 7;
+					  break;
+				  case 2: // grenade launcher
+					  numoptions = 6;
+					  break;
+				  default:
+					  break;
+				  }
+	}
 #pragma endregion
 		break;
 
-		case DEFENSE:
+	case DEFENSE:
 		numoptions = 8;
 		break;
 
