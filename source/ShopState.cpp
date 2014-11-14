@@ -45,6 +45,8 @@ void	ShopState::Enter(void)
 	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
 	{
 		profile = Game::GetInstance()->GetTutorialProfile();
+		profile.money = 50000;
+
 	}
 	else
 	{
@@ -136,7 +138,6 @@ void	ShopState::Enter(void)
 
 
 
-	profile.money = 50000;
 
 	
 }
@@ -7444,7 +7445,11 @@ void ShopState::SaveProfile()
 				fout << profile.maxNumTurrets << '\n';
 
 
+
+
 				fout << profile.wavesComplete << '\n';
+
+				fout << profile.money << '\n';
 
 
 				//LandMine

@@ -611,7 +611,7 @@
 		*/
 
 		stringstream moneyCount;
-		//moneyCount << "$" << Game::GetInstance()->GetProfile().money;
+		moneyCount << "$" << Game::GetInstance()->GetTutorialProfile().money;
 		pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0f, { 0, 255, 0 });
 
 
@@ -1648,6 +1648,9 @@ void HTPGameState::OverWriteTutorialFile()
 		fout << 3 << '\n';
 
 		//num waves
+		fout << 0;
+
+		//money
 		fout << 0;
 
 #pragma endregion

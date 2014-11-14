@@ -953,7 +953,7 @@ void Game::LoadStoryProfiles( void )
 
 			fin >> storyProfiles[i - 1].wavesComplete;
 
-
+			fin >> storyProfiles[i - 1].money;
 
 
 
@@ -1521,6 +1521,9 @@ void Game::LoadSurvivalProfiles(void)
 
 			fin >> survivalProfiles[i - 1].wavesComplete;
 
+			fin >> survivalProfiles[i - 1].money;
+
+
 
 
 
@@ -2086,6 +2089,8 @@ void				Game::LoadTutorialProfiles(void)
 
 
 		fin >> tutorialProfile.wavesComplete;
+		fin >> tutorialProfile.money;
+
 
 
 
@@ -2627,6 +2632,11 @@ void Game::CreateSurvivalProfiles()
 
 				fout << 100 << '\n';
 
+				fout << 0 << '\n';
+
+
+
+
 
 #pragma region Pistols
 
@@ -3020,6 +3030,9 @@ void Game::CreateSurvivalProfiles()
 				fout << 3 << '\n';
 
 				//num waves
+				fout << 0;
+
+				//money
 				fout << 0;
 			}
 		}
@@ -3443,6 +3456,9 @@ void Game::OverWriteProfile(GamerProfile& profile)
 		fout << 3 << '\n';
 
 		//num waves
+		fout << 0;
+
+		//money
 		fout << 0;
 
 		fout.close();
@@ -3899,6 +3915,9 @@ SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 		fout << 3 << '\n';
 
 		//num waves
+		fout << 0;
+
+		//money
 		fout << 0;
 
 #pragma endregion
