@@ -49,7 +49,7 @@
 
 	m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
 
-	IntroTimer.AddTime(60);
+	IntroTimer.AddTime(45);
 	ScreenTimer.AddTime(.1f);
 
 	pAudio->PlayAudio(m_hEmergency, false);
@@ -117,7 +117,7 @@
 		Game::GetInstance()->AddState(GameplayState::GetInstance());
 	}
 
-	if (IntroTimer.GetTime() < 25.0f)
+	if (IntroTimer.GetTime() < 30.0f)
 	{
 		if (ScreenTimer.GetTime() <= 0.0f && IntroTimer.GetTime() > 12.0f)
 		{

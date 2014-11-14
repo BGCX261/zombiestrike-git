@@ -105,17 +105,18 @@ Player::~Player()
 		profile = Game::GetInstance()->GetTutorialProfile();
 		m_fCurrHP = profile.health;
 	}
+
 	else
 	{
 		if (GameplayState::GetInstance()->GetGameMode() == true)
 		{
-			profile = Game::GetInstance()->GetStoryProfile();
+			//profile = Game::GetInstance()->GetStoryProfile();
 			m_fCurrHP = profile.health;
 		}
 
 		else
 		{
-			profile = Game::GetInstance()->GetSurvivalProfile();
+			//profile = Game::GetInstance()->GetSurvivalProfile();
 			m_fCurrHP = profile.health;
 		}
 	}
