@@ -136,37 +136,7 @@
 	//m_bStoryMode == true ? pAudio->PlayAudio(storyMusic, true) : pAudio->PlayAudio(survivalMusic, true);
 	pAudio->PlayAudio(Game::GetInstance()->storyMusic, true);
 
-	// SFX
-	//playerDeath = pAudio->LoadAudio("resource/audio/player_death1.wav");
-	//cannot_use_skill = pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
-	//footstep = pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
-	//m_hWpnSwitch = pAudio->LoadAudio("resource/audio/switchweapon.wav");
-	//m_hWaveChange = pAudio->LoadAudio("resource/audio/wavechange.wav");
-
-	//m_hHudWpn = Game::GetInstance()->m_hHudWpn;
-	//turretfire			= pAudio->LoadAudio("resource/audio/TurretFire.wav");
-
-	/*zombie_pain = pAudio->LoadAudio("resource/audio/zombie_howl.wav");
-	bullet_hit_zombie = pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
-	bullet_hit_house = pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
-	out_of_ammo = pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
-	reload_begin = pAudio->LoadAudio("resource/audio/reload_begin.wav");
-	reload_finish = pAudio->LoadAudio("resource/audio/reload_finish.wav");
-	explosion = pAudio->LoadAudio("resource/audio/Splode2.wav");
-	vomit_hit_player = pAudio->LoadAudio("resource/audio/splat.wav");
-
-	pistol_fire = pAudio->LoadAudio("resource/audio/pistol_fire.wav");
-	shotgun_fire = pAudio->LoadAudio("resource/audio/shotgun_fire.wav");
-	rifle_fire = pAudio->LoadAudio("resource/audio/rifle_fire.wav");
-	sniper_fire = pAudio->LoadAudio("resource/audio/sniper_fire.wav");
-	flamethrower_fire = pAudio->LoadAudio("resource/audio/fire_ignite_1.wav");
-	smg_fire = pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
-	vomit_fire = pAudio->LoadAudio("resource/audio/vomit.wav");*/
-
-
-	//m_hMain = &Game::GetInstance()->m_hMainTheme;
-	//m_hSurvive = &Game::GetInstance()->m_hSurvivalTheme;
-
+	
 	// Setup the camera
 	camera.SetSize({ Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() });
 
@@ -192,21 +162,7 @@
 	iTutorial[11] = "Next to continue to the shooting range";
 	iTutorial[12] = "               -OR-                   ";
 	iTutorial[13] = "     Previous to go to last page      ";
-	//iTutorial[14] = "    PREV";
-	//iTutorial[15] = "NEXT          ";
-	//
-	//
-	//if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == false)
-	//{
-	//	iTutorial[14] = "<    PREV";
-	//	iTutorial[15] = "NEXT          >";
-	//}
-	//else
-	//{
-	//	iTutorial[14] = " O   PREV";
-	//	iTutorial[15] = "NEXT  X        ";
-	//}
-
+	
 
 	m_tStartTutorial.AddTime(1.0f);
 
@@ -526,29 +482,7 @@
 
 			SpawnManager::GetInstance()->Activate();
 
-			//if (m_tCompleteWave.GetTime() > 0.0f)
-			//{
-			//	m_tCompleteWave.Update(dt);
-			//}
-
-			//else if (SpawnManager::GetInstance()->GetCurrWave() == SpawnManager::GetInstance()->GetNumWaves() - 1)
-			//{
-			//	SpawnManager::GetInstance()->SetGameWon(true);
-			//}
-
-			//else
-			//{
-			//	m_bShopState = true;
-
-			//	m_tNextWave.AddTime(6);
-			//	m_tCompleteWave.AddTime(3);
-
-			//	SGD::Event msg("PAUSE");
-			//	msg.SendEventNow();
-
-			//	//Calls the shopstate//
-			//	Game::GetInstance()->AddState(ShopState::GetInstance());
-			//}
+			
 
 		}
 
@@ -586,10 +520,10 @@
 		//for (size_t i = 0; i < 2; i++)
 		//	pGraphics->DrawRectangle(selectionrects[i], { 255, 255, 255 });
 
-		pFont->Draw("Would you like to try the firing range", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 - 45}, 1.25f, { 100, 0, 0 });
-		pFont->Draw("before playing?", { Game::GetInstance()->GetScreenWidth() / 2 - 128 , Game::GetInstance()->GetScreenHeight() / 2 }, 1.25f, { 100, 0, 0 });
-		pFont->Draw("Yes", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 100, 0, 0 });
-		pFont->Draw("No", { Game::GetInstance()->GetScreenWidth() / 2 + 210, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 100, 0, 0 });
+		pFont->Draw("Would you like to try the firing range", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 - 45}, 1.25f, { 255, 0, 0 });
+		pFont->Draw("before playing?", { Game::GetInstance()->GetScreenWidth() / 2 - 128 , Game::GetInstance()->GetScreenHeight() / 2 }, 1.25f, { 255, 0, 0 });
+		pFont->Draw("Yes", { Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 255, 0, 0 });
+		pFont->Draw("No", { Game::GetInstance()->GetScreenWidth() / 2 + 210, Game::GetInstance()->GetScreenHeight() / 2 +75 }, 1.5f, { 255, 0, 0 });
 
 		if (m_nCursor == 0)
 		{
@@ -975,7 +909,7 @@
 BaseObject* HTPGameState::CreatePlayer(void)
 {
 	Player* player = new Player;
-	player->SetPosition({ 1040, 1800 });
+	player->SetPosition({ 800, 1100 });
 	player->SetRotation(0.0f);
 	player->SetMoveSpeed(180.0f);
 	player->RetrieveBehavior("playerController");
