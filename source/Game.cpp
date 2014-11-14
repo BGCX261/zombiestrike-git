@@ -13,6 +13,8 @@
 #include "MainMenuState.h"
 #include "GameplayState.h"
 #include "LoseGameState.h"
+#include "HTPGameState.h"
+#include "PauseState.h"
 
 #include <ctime>
 #include <cstdlib>
@@ -258,10 +260,23 @@ int Game::Update( void )
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
-	pInput->IsControllerConnected(0);
+
+	// controller check
+	ctrlrWasIn = ctrlrIsIn;
+	ctrlrIsIn = pInput->IsControllerConnected(0) == true
+		? true
+		: false;
+
+	if (stateMachine.top() == GameplayState::GetInstance() || stateMachine.top() == HTPGameState::GetInstance())
+	{
+		// Was plugged in, Now taken out
+		if (ctrlrWasIn == true && ctrlrIsIn == false)
+			Game::GetInstance()->AddState(PauseState::GetInstance());
+	}
+
+
 
 	// Let the current state handle input
-
 	m_pCurrState = stateMachine.top();
 	if (m_pCurrState->Input() == false)
 		return 1;	// exit success!
