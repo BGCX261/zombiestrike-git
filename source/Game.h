@@ -121,6 +121,8 @@ public:
 	SGD::HAudio storyMusic			= SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWpnSwitch		= SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWaveChange		= SGD::INVALID_HANDLE;
+	SGD::HAudio zombie_hit_house1	= SGD::INVALID_HANDLE;
+	SGD::HAudio zombie_hit_house2	= SGD::INVALID_HANDLE;
 
 
 

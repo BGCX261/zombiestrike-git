@@ -416,7 +416,7 @@ void MapManager::CreateSandBags(SGD::Point pos, EntityManager* entities)
 {
 	SandBag* sandbag = new SandBag;
 	sandbag->SetPosition(pos);
-	sandbag->SetAnimation("testSandbag");
+	//sandbag->SetAnimation("testSandbag");
 	sandbag->SetActive(profile.sandBagStates[currSandBag]);
 	currSandBag++;
 	entities->AddEntity(sandbag, BUCKET_ENVIRO);
@@ -428,7 +428,7 @@ void MapManager::CreateBarbedWire(SGD::Point pos, EntityManager* entities)
 {
 	BarbedWire* barbedWire = new BarbedWire;
 	barbedWire->SetPosition(pos);
-	barbedWire->SetAnimation("testBarbwire");
+	//barbedWire->SetAnimation("testBarbwire");
 	barbedWire->SetActive(profile.barbWireStates[currBarbWire]);
 	currBarbWire++;
 	barbedWires.push_back(barbedWire);

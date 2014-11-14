@@ -101,6 +101,8 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/bloodExplosion.xml", "bloodExplosion");
 
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
+	pAnimationManager->Load("resource/config/animations/Sandbag_Animation.xml", "sandbag");
+	pAnimationManager->Load("resource/config/animations/Barbedwire_Animation.xml", "barbedwire");
 
 
 	// Weapons
@@ -196,6 +198,8 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	smg_fire			= pAudio->LoadAudio("resource/audio/smg_fire_1.wav");
 	rpg_fire			= pAudio->LoadAudio("resource/audio/RocketLauncher.wav");
 	vomit_fire			= pAudio->LoadAudio("resource/audio/vomit.wav");
+	zombie_hit_house1 = pAudio->LoadAudio("resource/audio/zombie_hit_house1.wav");
+	zombie_hit_house2 = pAudio->LoadAudio("resource/audio/zombie_hit_house2.wav");
 
 
 	// Setup the profiles
@@ -343,6 +347,9 @@ void Game::Terminate( void )
 	pAudio->UnloadAudio(smg_fire);
 	pAudio->UnloadAudio(rpg_fire);
 	pAudio->UnloadAudio(vomit_fire);
+	pAudio->UnloadAudio(zombie_hit_house1);
+	pAudio->UnloadAudio(zombie_hit_house2);
+
 
 	AnimationManager::GetInstance()->Shutdown();
 

@@ -51,6 +51,19 @@ public:
 	void UpdateProfile();
 	void UpdateWeaponManager();
 
+
+	void ControllerSelectionCheck(void);	// select with Dpad
+	void DPadWeaponResults(void);			//		-Dpad: weapons
+	void DPadDefenceResults(void);			//		-Dpad: defences
+
+	void JoystickWeaponResults(void);			//		-Dpad: weapons
+	void JoystickDefenceResults(void);			//		-Dpad: defences
+
+
+	void DrawControllerInput(void);			// controller input render
+	void DrawKeyboardInput(void);			// keyboard input render
+
+
 private:
 	PistolUpgrade pistolUpgrade;
 	RevolverUpgrade revolverUpgrade;
@@ -103,5 +116,14 @@ private:
 	std::vector<SandBag*> sandBags;
 	std::vector<LandMine*> landMines;
 
+
+
+
+
+
+	int numoptions = 0;
+	int buttonnum = 0;
+
+	bool isJSmoved = false;
 };
 

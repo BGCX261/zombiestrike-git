@@ -1254,7 +1254,7 @@ void HTPGameState::CreateZombie(Spawner* owner)
 
 
 /**************************************************************/
-// Factory Methods:
+// Input Methods:
 void HTPGameState::DrawControllerInput(void)
 {
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
