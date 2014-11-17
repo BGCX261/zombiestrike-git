@@ -74,6 +74,9 @@
 	//pAudio->UnloadAudio(m_hBackgroundMusic);
 
 	pAudio->UnloadAudio(m_hEmergency);
+
+	IntroTimer.AddTime(45.0f - IntroTimer.GetTime());
+	ScreenTimer.AddTime(.1f - ScreenTimer.GetTime());
 }
 
 
@@ -214,7 +217,7 @@
 	float width = Game::GetInstance()->GetScreenWidth();
 
 	// Display the mode title & its animation
-	pFont->Draw("Story Mode", { (width - (10 * 25 * 3.0f)) / 2, 10 }, 3.0f, { 255, 255, 255 });
+	//pFont->Draw("Story Mode", { (width - (10 * 25 * 3.0f)) / 2, 10 }, 3.0f, { 255, 255, 255 });
 
 	// Display skip input
 	std::string output0 = SGD::InputManager::GetInstance()->IsControllerConnected(0) == false

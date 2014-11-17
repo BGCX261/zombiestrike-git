@@ -31,8 +31,17 @@
 // IGameState Interface:
 void	ShopState::Enter(void)
 {
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
-
+	if (SpawnManager::GetInstance()->GetCurrWave() < 11)
+	{
+		if (pAudio->IsAudioPlaying(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2))== false)
+		{
+			pAudio->PlayAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2));
+		}
+		
+	}
+	
 
 	if (m_tShopTimer.GetTime() < 180.0f)
 	{
@@ -285,7 +294,7 @@ bool	ShopState::Input(void)
 	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 2) == true)
 	{
 		//m_bTimerSet = true;
-		//pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()));
+		pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()+2));
 
 		SGD::Event msg("UNPAUSE");
 		msg.SendEventNow();
@@ -5677,6 +5686,8 @@ void	ShopState::Render(void)
 
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 });
 	pGraphics->DrawRectangle(SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight()), { 200, 0, 0, 0 });
+
+	pGraphics->DrawTexture(Game::GetInstance()->m_hRadioImage, { 30, Game::GetInstance()->GetScreenHeight() - 215 }, {}, {}, {}, { .25f, .25f });
 
 	stringstream moneyCount;
 	moneyCount << "$" << profile.money;
