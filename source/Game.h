@@ -57,6 +57,7 @@ public:
 	/**********************************************************/
 	// Delta time
 	float				DeltaTime		( void ) const { return elapsedTime; }
+	bool isActive = true;
 
 
 	/**********************************************************/

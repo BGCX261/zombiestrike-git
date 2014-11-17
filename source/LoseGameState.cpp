@@ -76,12 +76,16 @@
 			float width = Game::GetInstance()->GetScreenWidth();
 			float height = Game::GetInstance()->GetScreenHeight();
 			float scale = 1.25f;
+			if (pInput->GetMouseMovement() != SGD::Vector())
+			{
+				if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(width *0.5f - (3 * 32 * scale), (height * 0.5F) + 100.0f), SGD::Size(128, 64))))
+					m_nCursor = 0;
+				else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(width *0.5f - (3 * 32 * scale), (height * 0.5F) + 200.0f), SGD::Size(128, 64))))
+					m_nCursor = 1;
 
-			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(width *0.5f - (3 * 32 * scale) , (height * 0.5F) + 100.0f), SGD::Size(128, 64))))
-				m_nCursor = 0;
-			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(width *0.5f- (3 * 32 * scale), (height * 0.5F) + 200.0f), SGD::Size(128, 64))))
-				m_nCursor = 1;
 
+			}
+			
 		
 
 			if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyPressed(SGD::Key::MouseLeft))

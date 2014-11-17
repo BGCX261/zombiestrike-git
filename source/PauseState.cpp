@@ -68,7 +68,11 @@
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
+	float width = Game::GetInstance()->GetScreenWidth();
+	float height = Game::GetInstance()->GetScreenHeight();
+	float scale = 1.25f;
 
+	SGD::Point mousePos = pInput->GetMousePosition();
 	// Press Escape to quit
 	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 2) == true)
 	{
@@ -78,8 +82,29 @@
 
 		return true;
 	}
+	if (pInput->GetMouseMovement() != SGD::Vector())
+	{
+		
 
-	if (HTPGameState::GetInstance()->GetChoiceScreen() == true)
+		if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width * 0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + (100.0f * 0) + 100.0f), SGD::Size(256, 64))))
+			m_nCursor = 0;
+		else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width * 0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + (100.0f * 1) + 100.0f), SGD::Size(256, 64))))
+			m_nCursor = 1;
+		else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width * 0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + (100.0f * 2) + 100.0f), SGD::Size(256, 64))))
+			m_nCursor = 2;
+		else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width * 0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + (100.0f * 3) + 100.0f), SGD::Size(256, 64))))
+			m_nCursor = 3;
+		if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+		{
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width * 0.25f - (2 * 32 * scale)) / 2, (height * 0.25F) + (100.0f * 4) + 100.0f), SGD::Size(256, 64))))
+				m_nCursor = 4;
+
+		}
+		
+
+	}
+
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
 	{
 		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 			m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
@@ -95,7 +120,7 @@
 	}
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
 	{
 		/*
 		switch (m_nCursor)
@@ -265,8 +290,7 @@
 // Render
 /*virtual*/ void PauseState::Render(void)
 {
-	float width = Game::GetInstance()->GetScreenWidth();
-	float height = Game::GetInstance()->GetScreenHeight();
+	
 
 	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
 
@@ -289,7 +313,8 @@
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
 
 	// Align text based on window width
-	
+	float width = Game::GetInstance()->GetScreenWidth();
+	float height = Game::GetInstance()->GetScreenHeight();
 	float scale = 1.25f;
 												
 

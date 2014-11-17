@@ -90,13 +90,13 @@ bool PickSaveSlotState::Input(void)
 	{
 		if (pInput->GetMouseMovement() != SGD::Vector())
 		{
-			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * NEW_GAME)), SGD::Size(128, 64))))
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * NEW_GAME)), SGD::Size(256, 64))))
 				m_nCursor = 0;
-			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * LOAD_GAME)), SGD::Size(128, 64))))
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * LOAD_GAME)), SGD::Size(256, 64))))
 				m_nCursor = 1;
-			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * DELETE_SAVES)), SGD::Size(128, 64))))
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * DELETE_SAVES)), SGD::Size(256, 64))))
 				m_nCursor = 2;
-			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * EXIT_1)), SGD::Size(128, 64))))
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * EXIT_1)), SGD::Size(256, 64))))
 				m_nCursor = 3;
 
 		}
@@ -142,7 +142,7 @@ bool PickSaveSlotState::Input(void)
 
 		if (pInput->GetMouseMovement() != SGD::Vector())
 		{
-			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * SAVE1)), SGD::Size(128, 64))))
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * SAVE1)), SGD::Size(256, 128))))
 				m_nCursor = 0;
 			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * SAVE2)), SGD::Size(256, 128))))
 				m_nCursor = 1;

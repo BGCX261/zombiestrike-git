@@ -144,7 +144,7 @@ private:
 	static void MessageProc(const SGD::Message* pMsg);
 
 
-
+	SGD::HTexture m_hReticleImage = SGD::INVALID_HANDLE;
 	/**********************************************************/
 	// Game Entities
 	enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_COLLIDABLE, BUCKET_PICKUPS };
