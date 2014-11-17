@@ -100,6 +100,7 @@ Player::~Player()
 	if (controller != nullptr)
 		controller->Update(dt, this, { 0, 0 });
 
+	/*
 	if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
 	{
 		profile = Game::GetInstance()->GetTutorialProfile();
@@ -119,15 +120,9 @@ Player::~Player()
 			m_fCurrHP = profile.health;
 		}
 	}
+	*/
 
 	
-		
-
-
-
-
-
-
 	// update hud
 	hud.Update(dt);
 
@@ -267,7 +262,9 @@ void Player::Render()
 			// take damage
 			if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()->GetInstance())
 			{
-				profile.health -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
+				m_fCurrHP -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
+				//profile.health -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
+				profile.health = m_fCurrHP;
 			}
 			
 			// check death
@@ -283,7 +280,9 @@ void Player::Render()
 			const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
 			
 			// take damage
-			profile.health -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			m_fCurrHP -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			//profile.health -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			profile.health = m_fCurrHP;
 			
 
 			// check death

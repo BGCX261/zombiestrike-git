@@ -12,7 +12,7 @@ PukerBlaster::PukerBlaster(MovingObject* owner)
 	ammoCapactity = 500;
 	recoilTime = .1f;
 	bulletSpread = 3.0f;
-	damage = 2.0f;
+	damage = 55.0f;
 	speed = 500.0f;
 	lifeTime = 700.0f;
 	
@@ -32,7 +32,7 @@ void PukerBlaster::Fire(float dt)
 {
 	SGD::AudioManager*	pAudio = SGD::AudioManager::GetInstance();
 
-	if (currAmmo > 0)
+	if (currAmmo > 0 && reloading == false)
 	{
 		//create bullet message
 		if (recoilTimer.GetTime() == 0)

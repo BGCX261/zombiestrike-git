@@ -8,6 +8,7 @@ public:
 	virtual ~Grenade();
 	virtual void Update(float dt);
 
-	
+	virtual void		HandleCollision(const IBase* pOther)	override;
+
 };
 

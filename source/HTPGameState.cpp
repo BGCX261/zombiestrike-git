@@ -57,6 +57,7 @@
 #include "Bullet.h"
 #include "PickUp.h"
 #include "Weapon.h"
+#include "Grenade.h"
 
 #include "BehaviorManager.h"
 #include "AnimationManager.h"
@@ -152,7 +153,7 @@
 	iTutorial[1] = "Practice your shot at the shooting range.";
 	iTutorial[2] = "If you would like to check out any"; 
 	iTutorial[3] = "merchandise feel free to press the buy ";
-	iTutorial[4] = "button If you kill a zombie... Don't"; 
+	iTutorial[4] = "button. If you kill a zombie... Don't"; 
 	iTutorial[5] = "worry we'll send out more.";
 	iTutorial[6] = "Usually these zombies are carrying money."; 
 	iTutorial[7] = "I guess they won't be needing it anymore."; 
@@ -330,15 +331,18 @@
 
 	else if (m_bIsChoiceScreen == false && m_tStartTutorial.GetTime() <= 0.0f && m_bIsTutorial == true)
 	{
-		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true || pInput->IsButtonPressed(0, 1) == true)
+		if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true || pInput->IsButtonPressed(0, 1) == true)
 		{
 			m_nCurPage++;
 		}
 
-		if (pInput->IsKeyPressed(SGD::Key::MouseRight) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true || pInput->IsButtonPressed(0, 2) == true)
+		if (pInput->IsKeyPressed(SGD::Key::Q) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true || pInput->IsButtonPressed(0, 2) == true)
 		{
 			m_nCurPage--;
 		}
+
+		if (pInput->IsKeyPressed(SGD::Key::P) == true)
+			m_bIsTutorial = !m_bIsTutorial;
 	}
 
 	else
@@ -380,6 +384,11 @@
 			Game::GetInstance()->AddState(ShopState::GetInstance());
 		}
 
+		if (pInput->IsKeyPressed(SGD::Key::P) == true)
+		{
+			m_bIsTutorial = !m_bIsTutorial;
+			m_nCurPage = 1;
+		}
 	}
 
 	return true;	// keep playing
@@ -411,9 +420,9 @@
 			m_bIsTutorial = false;
 		}
 
-		if (m_nCurPage < 0)
+		if (m_nCurPage < 1)
 		{
-			m_nCurPage = 0;
+			m_nCurPage = 1;
 		}
 	}
 
@@ -501,8 +510,8 @@
 
 	if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == false)
 	{
-		iTutorial[14] = " <   PREV";
-		iTutorial[15] = "NEXT  >        ";
+		iTutorial[14] = " Q   PREV";
+		iTutorial[15] = "NEXT  E        ";
 	}
 	else
 	{
@@ -1014,7 +1023,7 @@ void HTPGameState::CreateBullet(Weapon* owner)
 void HTPGameState::CreateGrenade(Weapon* owner)
 {
 
-	Bullet* bullet = new Bullet;
+	Grenade* bullet = new Grenade;
 	bullet->SetOwner(owner->GetOwner());
 	bullet->SetPosition(owner->GetOwner()->GetPosition());
 	SGD::Vector direction = owner->GetOwner()->GetDirection();

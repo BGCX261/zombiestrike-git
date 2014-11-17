@@ -249,7 +249,7 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 			//Game * zstrike = (Game *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			Game * zstrike = Game::GetInstance();
 
-			if (zstrike->GetCurrState() == GameplayState::GetInstance() || zstrike->GetCurrState() == HTPGameState::GetInstance())
+			if (zstrike->GetCurrState() == GameplayState::GetInstance() || (zstrike->GetCurrState() == HTPGameState::GetInstance() && HTPGameState::GetInstance()->GetChoiceScreen() == false))
 				zstrike->AddState(PauseState::GetInstance());
 		}
 		break;

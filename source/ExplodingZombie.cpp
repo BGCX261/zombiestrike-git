@@ -79,8 +79,9 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 
 			SetAnimation("bloodExplosion");
 
-			if (pAudio->IsAudioPlaying(Game::GetInstance()->zombie_pain) == false)
-				pAudio->PlayAudio(Game::GetInstance()->zombie_pain, false);
+			//if (pAudio->IsAudioPlaying(Game::GetInstance()->zombie_pain) == false)
+			//	pAudio->PlayAudio(Game::GetInstance()->zombie_pain, false);
+			pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
 
 			CreateBloodMsg* msg = new CreateBloodMsg(m_ptPosition);
 			msg->QueueMessage();
@@ -91,6 +92,7 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 			const BarbedWire* barbWire = dynamic_cast<const BarbedWire*>(pOther);
 			if (barbWire->IsActive())
 			{
+				pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
 				SetAnimation("bloodExplosion");
 				MovingObject::HandleCollision(pOther);
 			}
@@ -100,6 +102,7 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 			const SandBag* sandbag = dynamic_cast<const SandBag*>(pOther);
 			if (sandbag->IsActive())
 			{
+				pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
 				MovingObject::HandleCollision(pOther);
 				SetAnimation("bloodExplosion");
 			}
@@ -110,6 +113,7 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 			const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
 			if (landMine->IsActive())
 			{
+				pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
 				SetAnimation("bloodExplosion");
 			}
 		}
@@ -118,10 +122,14 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 			const House* house = dynamic_cast<const House*>(pOther);
 
 			if (house->IsActive() == true)
+			{
+				pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
 				SetAnimation("bloodExplosion");
+			}
 		}
 		else if (pOther->GetType() == OBJ_PLAYER)
 		{
+			pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
 			SetAnimation("bloodExplosion");
 		}
 		else if (pOther->GetType() == OBJ_BASE)

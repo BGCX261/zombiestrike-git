@@ -180,7 +180,7 @@ private:
 	Timer m_tStartTutorial;
 
 	int m_nCursor = 0;
-	int m_nCurPage = 0;
+	int m_nCurPage = 1;
 
 	string iTutorial[20];
 

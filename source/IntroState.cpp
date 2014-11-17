@@ -204,10 +204,10 @@
 		pFont->Draw("Trying to survive", { Game::GetInstance()->GetScreenWidth() / 2 - 200, Game::GetInstance()->GetScreenHeight() / 2 - 25}, 1.0f, colorText);
 	}
 
-	if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == false)
-		pFont->Draw("Press 'ESC' to continue", { Game::GetInstance()->GetScreenWidth() / 2 - 175, Game::GetInstance()->GetScreenHeight() - 25 }, .5f, { 100, 0, 0 });
-	else
-		pFont->Draw("Press 'Start' to continue", { Game::GetInstance()->GetScreenWidth() / 2 - 175, Game::GetInstance()->GetScreenHeight() - 25 }, .5f, { 100, 0, 0 });
+	//if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == false)
+	//	pFont->Draw("Press 'ESC' to continue", { Game::GetInstance()->GetScreenWidth() / 2 - 175, Game::GetInstance()->GetScreenHeight() - 25 }, .5f, { 100, 0, 0 });
+	//else
+	//	pFont->Draw("Press 'Start' to continue", { Game::GetInstance()->GetScreenWidth() / 2 - 175, Game::GetInstance()->GetScreenHeight() - 25 }, .5f, { 100, 0, 0 });
 
 
 	// Align text based on window width

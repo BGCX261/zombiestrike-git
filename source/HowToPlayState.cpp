@@ -119,14 +119,14 @@
 		#pragma region Keyboard Controls
 		num_newlines += 4;
 		std::string keycontrols1 = "Keyboard Controls:";
-		std::string keycontrols2 = "\n\n\tW\t\tMove up\n\tS\t\tMove down\n\tA\t\tMove left\n\tS\t\tMove right\n\n\tShift\t\tSprint";
-		std::string keycontrols3 = "\n\n\tQ\t\tSwitch to previous weapon\n\tE\t\tSwitch to next weapon\n\tR\t\tReload current weapon\n\tG\t\t Spawn a turret\n\n";
+		std::string keycontrols2 = "\n\n\tW\t\tMove up\n\tS\t\tMove down\n\tA\t\tMove left\n\tD\t\tMove right\n\tMouse\tAim/Rotate\n\n\tShift\t\tSprint\n\n\tLeft-click\tShoot/Place turret (in Turret Mode)";
+		std::string keycontrols3 = "\n\n\tQ\t\tSwitch to previous weapon\n\tE\t\tSwitch to next weapon\n\tR\t\tReload current weapon\n\n\tT\t\t Toggle Turret Mode";
 		
 		//string_var = keycontrols1 + keycontrols2;
 		
 		pFont->Draw(keycontrols1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 0, 0 });
 		pFont->Draw(keycontrols2.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 255, 255 });
-		pFont->Draw(keycontrols3.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 5)) }, scale, { 255, 255, 255 });
+		pFont->Draw(keycontrols3.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 7)) }, scale, { 255, 255, 255 });
 		#pragma endregion
 	}
 	else

@@ -55,6 +55,7 @@
 #include "PickUp.h"
 #include "Weapon.h"
 #include "BloodSplatter.h"
+#include "Grenade.h"
 
 #include "BehaviorManager.h"
 #include "AnimationManager.h"
@@ -815,7 +816,7 @@ void GameplayState::CreateBullet(Weapon* owner)
 void GameplayState::CreateGrenade(Weapon* owner)
 {
 
-	Bullet* bullet = new Bullet;
+	Grenade* bullet = new Grenade;
 	bullet->SetOwner(owner->GetOwner());
 	bullet->SetPosition(owner->GetOwner()->GetPosition());
 	SGD::Vector direction = owner->GetOwner()->GetDirection();

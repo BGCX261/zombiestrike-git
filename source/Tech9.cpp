@@ -31,7 +31,7 @@ void Tech9::Fire(float dt)
 	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
 	Game*		pGame	= Game::GetInstance();
 
-	if (currAmmo > 0)
+	if (currAmmo > 0 && reloading == false)
 	{
 		//create bullet message
 		if (recoilTimer.GetTime() == 0)
