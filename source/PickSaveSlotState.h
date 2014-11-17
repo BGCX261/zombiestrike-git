@@ -27,7 +27,7 @@ private:
 	PickSaveSlotState(const PickSaveSlotState&) = delete;
 	PickSaveSlotState& operator= (const PickSaveSlotState&) = delete;
 
-
+	SGD::HTexture m_hReticleImage = SGD::INVALID_HANDLE;
 	
 	bool modeChosen = false;
 	int currState = 0;

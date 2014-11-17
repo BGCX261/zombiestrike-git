@@ -1,6 +1,7 @@
 #include "SandBag.h"
 #include "Game.h"
 #include "../SGD Wrappers/SGD_Event.h"
+#include "Bullet.h"
 
 SandBag::SandBag()
 {
@@ -77,6 +78,24 @@ void SandBag::HandleCollision( const IBase* pOther )
 			// deactivate
 			this->isActive = false;
 		}
+	}
+	if (pOther->GetType() == ObjectType::OBJ_BULLET)
+	{
+		const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
+
+		if (bullet->GetOwner()->GetType() == 14)
+		{
+			m_fCurrHP -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			if (m_fCurrHP <= 0.0f)
+			{
+				// reset HP
+				m_fCurrHP = 0;
+
+				// deactivate
+				this->isActive = false;
+			}
+		}
+		
 	}
 
 }

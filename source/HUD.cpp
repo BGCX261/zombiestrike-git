@@ -58,17 +58,17 @@ void HUD::Render(void)
 	SGD::Rectangle currhealth	= { 0, 0, m_pPlayer->GetCurrHealth() / m_pPlayer->GetMaxHealth() * 200, 35 };
 	SGD::Rectangle maxhealth	= { 0, 0, 200, 35 };
 
-	pGraphics->DrawRectangle(maxhealth, { 0, 0, 255 });
+	pGraphics->DrawRectangle(maxhealth, { 0, 0, 0 });
 
 	SGD::Color healthcolor;
-	if (m_pPlayer->GetCurrHealth() == m_pPlayer->GetMaxHealth())				// 100 -> Green
+	if (m_pPlayer->GetCurrHealth() >= m_pPlayer->GetMaxHealth()* 0.75F)				// 100 -> Green
 		healthcolor = { 0, 255, 0 };
 
-	else if (m_pPlayer->GetCurrHealth() <= m_pPlayer->GetMaxHealth() * 0.5F)	// 0 - 25 -> Red
-		healthcolor = { 255, 0, 0 };
-
-	else																		// 25 - 99 -> yellow
+	else if (m_pPlayer->GetCurrHealth() <= m_pPlayer->GetMaxHealth() * 0.75F && m_pPlayer->GetCurrHealth() > m_pPlayer->GetMaxHealth() * 0.25f)	// 0 - 25 -> Red
 		healthcolor = { 255, 255, 0 };
+
+	else if (m_pPlayer->GetCurrHealth() <= m_pPlayer->GetMaxHealth() * 0.25F)															// 25 - 99 -> yellow
+		healthcolor = { 255, 0, 0 };
 
 	pGraphics->DrawRectangle(currhealth, healthcolor);
 
@@ -78,7 +78,7 @@ void HUD::Render(void)
 
 	stringstream health;
 	health << "HP: " << hp;
-	pFont->Draw(health.str().c_str(), { 0, 0 }, 1.0f, { 255, 0, 255 });
+	pFont->Draw(health.str().c_str(), { 0, 0 }, 1.0f, { 255, 255, 255 });
 
 
 }

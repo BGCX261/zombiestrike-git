@@ -132,9 +132,6 @@ void WeaponManager::Render()
 				break;
 			}
 
-			//stringstream drawIndex;
-			//drawIndex << j + 1;
-			//bFont->Draw(drawIndex.str().c_str(), { unEquip.left + 1, unEquip.top - 5 }, .5f, { 150, 155, 155 });
 
 			equipIndex++;
 		}
@@ -188,9 +185,14 @@ void WeaponManager::Render()
 			else
 				bFont->Draw(ammoCap.str().c_str(), ammoPos, 1.0f, { 0, 0, 0 });
 
-			if (m_vWeapons[curIndex]->GetCurrAmmo() == 0 && m_vWeapons[curIndex]->GetTotalAmmo() > 0)
+			//if (m_vWeapons[curIndex]->GetCurrAmmo() == 0 && m_vWeapons[curIndex]->GetTotalAmmo() > 0)
+			//{
+			//	//bFont->Draw("RELOADING", { Game::GetInstance()->GetScreenWidth() - 328, Game::GetInstance()->GetScreenHeight() - 130 }, 1.5f, { 200, 0, 0 });
+			//}
+			if (m_vWeapons[curIndex]->GetReloadTimer().GetTime() > 0)
 			{
-				bFont->Draw("RELOAD", { Game::GetInstance()->GetScreenWidth() - 328, Game::GetInstance()->GetScreenHeight() - 130 }, 1.5f, { 200, 0, 0 });
+				bFont->Draw("RELOADING", { Game::GetInstance()->GetScreenWidth() - 328, Game::GetInstance()->GetScreenHeight() - 130 }, 1.5f, { 200, 0, 0 });
+
 			}
 
 			if (m_vWeapons[curIndex]->GetTotalAmmo() == 0 && m_vWeapons[curIndex]->GetCurrAmmo() <= 0)
@@ -280,7 +282,7 @@ void WeaponManager::Input()
 	if (pInput->IsKeyPressed(SGD::Key::R) == true && m_vWeapons[curIndex]->GetCurrAmmo() < m_vWeapons[curIndex]->GetMagSize())
 	{
 		//GetSelected()->SetCurrAmmo(0);
-		//GetSelected()->GetReloadTimer().AddTime(GetSelected()->GetReloadTime());
+		GetSelected()->GetReloadTimer().AddTime(GetSelected()->GetReloadTime());
 		//m_vWeapons[curIndex]->SetCurrAmmo(0);
 		//m_vWeapons[curIndex]->GetReloadTimer().AddTime(m_vWeapons[curIndex]->GetReloadTime());
 	}

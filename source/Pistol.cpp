@@ -36,7 +36,7 @@ void Pistol::Fire(float dt)
 	SGD::AudioManager*	pAudio		= SGD::AudioManager::GetInstance();
 	Game*		pGame	= Game::GetInstance();
 
-	if (currAmmo > 0)
+	if (currAmmo > 0 && reloadTimer.GetTime() == 0)
 	{
 		//create bullet message
 		if (recoilTimer.GetTime() == 0 && pAudio->IsAudioPlaying(pGame->reload_finish) == false)

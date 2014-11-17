@@ -51,7 +51,7 @@
 
 
 	// Press Escape to quit
-	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonDown(0, 2) == true)
+	if (pInput->IsAnyKeyPressed() == true || pInput->IsButtonPressed(0,2))
 	{
 		Game::GetInstance()->RemoveState();
 		//Game::GetInstance()->AddState(MainMenuState::GetInstance());
@@ -88,6 +88,8 @@
 
 	// Align text based on window width
 	float width = Game::GetInstance()->GetScreenWidth();
+	float height = Game::GetInstance()->GetScreenHeight();
+
 
 
 	// Display the title centered at 4x scale
@@ -101,6 +103,10 @@
 	float scale				= 1.0f;
 	float newline_offset	= 31.0f;
 
+	if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == true)
+		pFont->Draw("Press 2 to Skip", { width * 0.75f, height * 0.1f }, 1.0f, { 255, 0, 0 });
+	else
+		pFont->Draw("Press Any Key To Skip", { width * 0.75f, height * 0.1f }, 1.0f, { 255, 0, 0 });
 
 
 	// variables to use as a buffer for strings on the same line

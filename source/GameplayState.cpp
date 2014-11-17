@@ -187,6 +187,8 @@
 
 	MovingObject * pPlayer = dynamic_cast<MovingObject*>(m_pPlayer);
 	
+	SGD::Event updateProfile = { "UPDATE_PROFILE", nullptr, this };
+	updateProfile.SendEventNow();
 	
 	WeaponManager::GetInstance()->Initialize(*pPlayer);
 
@@ -1148,6 +1150,8 @@ void GameplayState::UpdateWeaponManager()
 	m_pWeapons->GetWeapons()[AK47]->SetMagSize(profile.ak47.magSize.upgradedSkill.stat);
 	m_pWeapons->GetWeapons()[AK47]->SetObtained(profile.ak47.isBought);
 	m_pWeapons->GetWeapons()[AK47]->SetEquipped(profile.ak47.isEquipt);
+
+
 
 
 	m_pWeapons->GetWeapons()[M16]->SetReloadTime(profile.m16.reloadTime.upgradedSkill.stat);
