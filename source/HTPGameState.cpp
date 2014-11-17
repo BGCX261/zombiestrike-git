@@ -202,7 +202,7 @@
 	SGD::Event gameOverMsg = { "GAME_OVER", nullptr, this };
 	gameOverMsg.SendEventNow();
 
-
+	m_bIsChoiceScreen = true;
 
 	/**************************/
 	// Unload the assets

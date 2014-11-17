@@ -49,8 +49,32 @@
 
 	m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
 
-	IntroTimer.AddTime(45);
-	ScreenTimer.AddTime(.1f);
+	if (IntroTimer.GetTime() < 45.0f)
+	{
+		float newTime = 45.0f - IntroTimer.GetTime();
+
+		IntroTimer.AddTime(newTime);
+	}
+
+	else if (IntroTimer.GetTime() <= 0.0f)
+		IntroTimer.AddTime(45.0f);
+
+	if (ScreenTimer.GetTime() < .1f)
+	{
+		float newTime = .1f - ScreenTimer.GetTime();
+
+		ScreenTimer.AddTime(newTime);
+	}
+
+	else if (ScreenTimer.GetTime() <= 0.0f)
+		ScreenTimer.AddTime(.1f);
+
+	transBack = 255;
+	transTextFirst = 0;
+	transText = 0;
+
+	//IntroTimer.AddTime(45.0f - IntroTimer.GetTime());
+	//ScreenTimer.AddTime(.1f - ScreenTimer.GetTime());
 
 	pAudio->PlayAudio(m_hEmergency, false);
 
@@ -75,8 +99,7 @@
 
 	pAudio->UnloadAudio(m_hEmergency);
 
-	IntroTimer.AddTime(45.0f - IntroTimer.GetTime());
-	ScreenTimer.AddTime(.1f - ScreenTimer.GetTime());
+
 }
 
 

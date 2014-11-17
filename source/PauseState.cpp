@@ -161,12 +161,20 @@
 
 	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
 
-	if (HTPGameState::GetInstance()->GetChoiceScreen() == false)
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+	{
 		HTPGameState::GetInstance()->Render();
-	else
-		GameplayState::GetInstance()->Render();
+		pGraphics->DrawRectangle({ HTPGameState::GetInstance()->GetCamera()->GetPosition().x, HTPGameState::GetInstance()->GetCamera()->GetPosition().y, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+	}
 
-		pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+	else
+	{
+		GameplayState::GetInstance()->Render();
+		pGraphics->DrawRectangle({ GameplayState::GetInstance()->GetCamera()->GetPosition().x, GameplayState::GetInstance()->GetCamera()->GetPosition().y, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+
+	}
+		
+
 
 	// Use the game's font
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();
