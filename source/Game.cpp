@@ -185,6 +185,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
 	zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");
+	zombie_death		= pAudio->LoadAudio("resource/audio/zombie_death.wav");
 	bullet_hit_zombie	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
 	bullet_hit_house	= pAudio->LoadAudio("resource/audio/bullet_hit_house.wav");
 	out_of_ammo			= pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
@@ -207,26 +208,28 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	m_hNoBuy			= pAudio->LoadAudio("resource/audio/buzzer.wav");
 
 	////Radio
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),0);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),1);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),2);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),3);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),4);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),5);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),6);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),7);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),8);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),9);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),10);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),11);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),12);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),13);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),14);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),15);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),16);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),17);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),18);
-	//SetAudio(pAudio->LoadAudio("resource/audio/radio/rad0.wav"),19);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),0);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),1);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),2);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),3);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),4);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),5);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),6);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),7);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),8);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),9);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),10);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),11);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),12);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),13);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),14);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),15);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),16);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),17);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),18);
+	SetAudio(pAudio->LoadAudio("resource/audio/static.wav"),19);
+
+	m_hRadioImage = pGraphics->LoadTexture("resource/graphics/MenuImages/radio.png");
 
 	// Setup the profiles
 	CreateStoryProfiles();
@@ -359,6 +362,7 @@ void Game::Terminate( void )
 	// Unload assets
 	pGraphics->UnloadTexture(loadScreen);
 	pGraphics->UnloadTexture(m_hReticleImage);
+	pGraphics->UnloadTexture(m_hRadioImage);
 
 	pAudio->UnloadAudio(m_hMainTheme);
 	pAudio->UnloadAudio(m_hSurvivalTheme);
@@ -373,6 +377,7 @@ void Game::Terminate( void )
 	pAudio->UnloadAudio(footstep);
 	pAudio->UnloadAudio(m_hWpnSwitch);
 	pAudio->UnloadAudio(zombie_pain);
+	pAudio->UnloadAudio(zombie_death);
 	pAudio->UnloadAudio(bullet_hit_zombie);
 	pAudio->UnloadAudio(bullet_hit_house);
 	pAudio->UnloadAudio(out_of_ammo);

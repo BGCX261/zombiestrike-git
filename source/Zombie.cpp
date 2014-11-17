@@ -96,13 +96,17 @@ void Zombie::RetrieveBehavior(std::string name)
 		health -= bullet->GetDamage();
 		if (health <= 0.0f)
 		{
+			pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
+
 			this->SetAnimation(this->animation.m_strCurrAnimation + "Death");
 			this->RetrieveBehavior("wait");
 			//isAlive = false;
 		}
-
-		if (pAudio->IsAudioPlaying(Game::GetInstance()->zombie_pain) == false)
-			pAudio->PlayAudio(Game::GetInstance()->zombie_pain, false);
+		else
+		{
+			if (pAudio->IsAudioPlaying(Game::GetInstance()->zombie_pain) == false)
+				pAudio->PlayAudio(Game::GetInstance()->zombie_pain, false);
+		}
 
 		CreateBloodMsg* msg = new CreateBloodMsg(m_ptPosition);
 		msg->QueueMessage();
@@ -116,6 +120,8 @@ void Zombie::RetrieveBehavior(std::string name)
 
 		if (ptr->GetAnimation() == "bloodExplosion")
 		{
+			pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
+
 			this->SetAnimation(this->animation.m_strCurrAnimation + "Death");
 			this->RetrieveBehavior("wait");
 			//isAlive = false;
@@ -129,6 +135,8 @@ void Zombie::RetrieveBehavior(std::string name)
 			health -= barbWire->GetDamage() * Game::GetInstance()->DeltaTime();
 			if (health <= 0)
 			{
+				pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
+
 				this->SetAnimation(this->animation.m_strCurrAnimation + "Death");
 				this->RetrieveBehavior("wait");
 				//isAlive = false;
@@ -148,6 +156,8 @@ void Zombie::RetrieveBehavior(std::string name)
 		const LandMine* landMine = dynamic_cast<const LandMine*>(pOther);
 		if (landMine->IsActive())
 		{
+			pAudio->PlayAudio(Game::GetInstance()->zombie_death, false);
+
 			this->SetAnimation(this->animation.m_strCurrAnimation + "Death");
 			this->RetrieveBehavior("wait");
 			//isAlive = false;

@@ -14,6 +14,7 @@
 #include "CreateTurretMessage.h"
 #include "AnimationManager.h"
 #include "AnimTimeStamp.h"
+#include "GamerProfile.h"
 
 #include "Zombie.h"
 #include "Bullet.h"
@@ -59,7 +60,6 @@ Player::Player() : Listener(this)
 	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
 	{
 		profile = &Game::GetInstance()->GetTutorialProfile();
-
 	}
 	else
 	{
@@ -67,7 +67,6 @@ Player::Player() : Listener(this)
 			profile = &Game::GetInstance()->GetStoryProfile();
 		else
 			profile = &Game::GetInstance()->GetSurvivalProfile();
-
 	}
 	
 
@@ -97,11 +96,13 @@ Player::~Player()
 	if (controller != nullptr)
 		controller->Update(dt, this, { 0, 0 });
 
+	/*
 	if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
 	{
 		profile = &Game::GetInstance()->GetTutorialProfile();
 		m_fCurrHP = profile->health;
 	}
+
 	else
 	{
 		if (GameplayState::GetInstance()->GetGameMode() == true)
@@ -116,6 +117,7 @@ Player::~Player()
 			m_fCurrHP = profile->health;
 		}
 	}
+	*/
 
 	
 	m_nNumTurrets = profile->numTurrets;
@@ -274,7 +276,9 @@ void Player::Render()
 			// take damage
 			if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()->GetInstance())
 			{
-				profile->health -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
+				m_fCurrHP -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
+				//profile.health -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
+				profile->health = m_fCurrHP;
 			}
 			
 			// check death
@@ -290,7 +294,9 @@ void Player::Render()
 			const Bullet* bullet = dynamic_cast<const Bullet*>(pOther);
 			
 			// take damage
-			profile->health -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			m_fCurrHP -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			//profile.health -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
+			profile->health = m_fCurrHP;
 			
 
 			// check death

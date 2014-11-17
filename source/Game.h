@@ -106,6 +106,7 @@ public:
 	SGD::HAudio cannot_use_skill	= SGD::INVALID_HANDLE;
 	SGD::HAudio footstep			= SGD::INVALID_HANDLE;
 	SGD::HAudio zombie_pain			= SGD::INVALID_HANDLE;
+	SGD::HAudio zombie_death		= SGD::INVALID_HANDLE;
 	SGD::HAudio bullet_hit_zombie	= SGD::INVALID_HANDLE;
 	SGD::HAudio bullet_hit_house	= SGD::INVALID_HANDLE;
 	SGD::HAudio out_of_ammo			= SGD::INVALID_HANDLE;
@@ -130,6 +131,8 @@ public:
 	//Shop
 	SGD::HAudio m_hCash				= SGD::INVALID_HANDLE;
 	SGD::HAudio m_hNoBuy			= SGD::INVALID_HANDLE;
+
+	SGD::HTexture m_hRadioImage		= SGD::INVALID_HANDLE;
 
 
 	/*****************************************************
@@ -204,6 +207,7 @@ private:
 	GamerProfile		tutorialProfile;
 	
 	SGD::HAudio ssRadio[20];
+	
 };
 
 #endif //GAME_H
