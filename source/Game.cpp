@@ -185,6 +185,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	cannot_use_skill	= pAudio->LoadAudio("resource/audio/cannotUseAbility7.wav");
 	footstep			= pAudio->LoadAudio("resource/audio/FootstepsWood.wav");
 	zombie_pain			= pAudio->LoadAudio("resource/audio/zombie_howl.wav");
+	zombie_death		= pAudio->LoadAudio("resource/audio/zombie_death.wav");
 	bullet_hit_zombie	= pAudio->LoadAudio("resource/audio/bullet_hit_zombie.wav");
 	bullet_hit_house	= pAudio->LoadAudio("resource/audio/bullet_hit_house.wav");
 	out_of_ammo			= pAudio->LoadAudio("resource/audio/out_of_ammo.wav");
@@ -372,6 +373,7 @@ void Game::Terminate( void )
 	pAudio->UnloadAudio(footstep);
 	pAudio->UnloadAudio(m_hWpnSwitch);
 	pAudio->UnloadAudio(zombie_pain);
+	pAudio->UnloadAudio(zombie_death);
 	pAudio->UnloadAudio(bullet_hit_zombie);
 	pAudio->UnloadAudio(bullet_hit_house);
 	pAudio->UnloadAudio(out_of_ammo);
