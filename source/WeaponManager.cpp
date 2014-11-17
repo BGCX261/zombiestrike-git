@@ -201,7 +201,7 @@ void WeaponManager::Render()
 			//}
 			if (m_vWeapons[curIndex]->GetReloadTimer().GetTime() > 0)
 			{
-				bFont->Draw("RELOADING", { Game::GetInstance()->GetScreenWidth() - 328, Game::GetInstance()->GetScreenHeight() - 130 }, 1.5f, { 200, 0, 0 });
+				bFont->Draw("RELOADING", { equipRect.left + 5, equipRect.top + 5 }, 1.5f, { 200, 0, 0 });
 
 			}
 
