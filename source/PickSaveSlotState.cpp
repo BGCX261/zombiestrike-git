@@ -53,12 +53,16 @@ void PickSaveSlotState::Enter(void)
 
 	// Load volume levels
 	OptionsState::GetInstance()->LoadVolumes();
+	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
+
 }
 void PickSaveSlotState::Exit(void)
 {
 	modeChosen = false;
 	m_nCursor = 0;
 	currState = 0;
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hReticleImage);
+
 }
 
 bool PickSaveSlotState::Input(void)
@@ -76,20 +80,36 @@ bool PickSaveSlotState::Input(void)
 	}
 		
 	//return false;	// quit game
-
-	
+	SGD::Point mousePos = pInput->GetMousePosition();
+	float starting_y = Game::GetInstance()->GetScreenHeight() * 0.35f;
+	float offset = Game::GetInstance()->GetScreenHeight() * 0.1f;
+	float width = Game::GetInstance()->GetScreenWidth();
 
 
 	if (modeChosen == false)
 	{
+		if (pInput->GetMouseMovement() != SGD::Vector())
+		{
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * NEW_GAME)), SGD::Size(128, 64))))
+				m_nCursor = 0;
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * LOAD_GAME)), SGD::Size(128, 64))))
+				m_nCursor = 1;
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * DELETE_SAVES)), SGD::Size(128, 64))))
+				m_nCursor = 2;
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * EXIT_1)), SGD::Size(128, 64))))
+				m_nCursor = 3;
+
+		}
 		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 			m_nCursor = m_nCursor + 1 < MODE_CHOICES ? m_nCursor + 1 : 0;
 
 		else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 			m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : MODE_CHOICES - 1;
 
+		
 
-		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
+
+		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
 		{
 			if (m_nCursor == NEW_GAME)
 			{
@@ -117,6 +137,21 @@ bool PickSaveSlotState::Input(void)
 	}
 	else
 	{
+		float starting_y = Game::GetInstance()->GetScreenHeight() * 0.25f;
+		float offset = Game::GetInstance()->GetScreenHeight() * 0.2f;
+
+		if (pInput->GetMouseMovement() != SGD::Vector())
+		{
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * SAVE1)), SGD::Size(128, 64))))
+				m_nCursor = 0;
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * SAVE2)), SGD::Size(256, 128))))
+				m_nCursor = 1;
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * SAVE3)), SGD::Size(256, 128))))
+				m_nCursor = 2;
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * EXIT_2)), SGD::Size(256, 128))))
+				m_nCursor = 3;
+
+		}
 
 		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 			m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
@@ -125,7 +160,7 @@ bool PickSaveSlotState::Input(void)
 			m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
 
-		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
+		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
 		{
 			switch (m_nCursor)
 			{
@@ -196,7 +231,7 @@ bool PickSaveSlotState::Input(void)
 
 
 			case MenuItems::EXIT_2:
-				Game::GetInstance()->RemoveState();
+				modeChosen = false;
 				return true;
 
 				break;
@@ -358,7 +393,7 @@ void PickSaveSlotState::Render(void)
 			pFont->Draw(save3String.str().c_str(), { (width - (11 * 32)) / 2, starting_y + (offset * SAVE3) },			// 350
 				1.25f, { 255, 0, 0 });
 
-			pFont->Draw("Back To Menu", { (width - (12 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
+			pFont->Draw("Back", { (width - (4 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
 				1.75f, { 255, 0, 0 });
 			break;
 		case 1:
@@ -369,7 +404,7 @@ void PickSaveSlotState::Render(void)
 			pFont->Draw(save3String.str().c_str(), { (width - (11 * 32)) / 2, starting_y + (offset * SAVE3) },			// 350
 				1.25f, { 255, 0, 0 });
 
-			pFont->Draw("Back To Menu", { (width - (12 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
+			pFont->Draw("Back", { (width - (4 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
 				1.75f, { 255, 0, 0 });
 			break;
 		case 2:
@@ -380,7 +415,7 @@ void PickSaveSlotState::Render(void)
 			pFont->Draw(save3String.str().c_str(), { (width - (11 * 32)) / 2, starting_y + (offset * SAVE3) },			// 350
 				1.25f, { 255, 255, 255, 255 });
 			
-			pFont->Draw("Back To Menu", { (width - (12 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
+			pFont->Draw("Back", { (width - (4 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
 				1.75f, { 255, 0, 0 });
 			break;
 		case 3: 
@@ -391,7 +426,7 @@ void PickSaveSlotState::Render(void)
 			pFont->Draw(save3String.str().c_str(), { (width - (11 * 32)) / 2, starting_y + (offset * SAVE3) },			// 350
 				1.25f, { 255, 0, 0 });
 
-			pFont->Draw("Back To Menu", { (width - (12 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
+			pFont->Draw("Back", { (width - (4 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
 				1.75f, { 255, 255, 255, 255 });
 			break;
 		
@@ -404,5 +439,11 @@ void PickSaveSlotState::Render(void)
 		
 	}
 	
+	// Draw the reticle
+	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+	float		retscale = 0.8f;
+
+	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
+	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
 
 }

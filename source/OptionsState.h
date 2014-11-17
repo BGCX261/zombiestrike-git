@@ -41,11 +41,13 @@ private:
 	/**********************************************************/
 	// Cursor Index
 	int				m_nCursor = 0;
-	bool			m_bFullScreen			= false;
+	bool			m_bFullScreen			= true;
 
 
 	/**********************************************************/
 	// Assets
 	SGD::HAudio		m_hBackgroundSFX = SGD::INVALID_HANDLE;
+	SGD::HTexture	m_hReticleImage = SGD::INVALID_HANDLE;
+
 };
 

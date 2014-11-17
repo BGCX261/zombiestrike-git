@@ -31,7 +31,7 @@ void Revolver::Fire(float dt)
 	if (currAmmo > 0)
 	{
 		//create bullet message
-		if (recoilTimer.GetTime() == 0)
+		if (recoilTimer.GetTime() == 0 && reloadTimer.GetTime() == 0)
 		{
 			CreatePistolBullet* pMsg = new CreatePistolBullet(this);
 			pMsg->QueueMessage();

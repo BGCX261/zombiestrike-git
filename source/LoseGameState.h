@@ -3,6 +3,7 @@
 #include "IGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"			// uses HTexture & HAudio
 #include <string>
+#include "../SGD Wrappers/SGD_Geometry.h"
 class LoseGameState : public IGameState
 {
 public:
@@ -38,11 +39,12 @@ private:
 	bool scoreGiven = false;
 	std::string initials;
 
-
+	SGD::Point mousePos = SGD::Point(0,0);
 
 	/**********************************************************/
 	// Assets
 	SGD::HTexture	m_hBackgroundImage	= SGD::INVALID_HANDLE;
+	SGD::HTexture	m_hReticleImage = SGD::INVALID_HANDLE;
 
 };
 

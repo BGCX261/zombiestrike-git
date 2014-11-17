@@ -37,6 +37,8 @@
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
 	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/MenuImages/youWin.png");
+	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
+
 }
 
 
@@ -49,6 +51,8 @@
 
 	// Unload assets
 	pGraphics->UnloadTexture(m_hBackgroundImage);
+	pGraphics->UnloadTexture(m_hReticleImage);
+
 }
 
 
@@ -64,9 +68,18 @@
 	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
+	float width = Game::GetInstance()->GetScreenWidth();
+	float height = Game::GetInstance()->GetScreenHeight();
+	float scale = 1.25f;
 
+	SGD::Point mousePos = pInput->GetMousePosition();
 
-	if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
+		if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(width *0.5f - (3 * 32 * scale) , (height * 0.5F) + 100.0f), SGD::Size(128, 64))))
+				m_nCursor = 0;
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(width *0.5f- (3 * 32 * scale), (height * 0.5F) + 200.0f), SGD::Size(128, 64))))
+				m_nCursor = 1;
+
+		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
 	{
 		if (GameplayState::GetInstance()->GetGameMode() == true)
 		{
@@ -143,7 +156,16 @@
 	pFont->Draw("NO", { (width - (2 * 32 * scale)) / 2, (height * 0.5F) + 200.0f }, scale, { 0, 255, 0 });
 
 
-	const char*	output = m_nCursor == 0 ? "=    =" : "=   =";
-	int			length = m_nCursor == 0 ? 3 : 2;
-	pFont->Draw(output, { (width - (length * 32)) / 2 - 32.0F, (height * 0.5F) + (100.0f * m_nCursor) + 100.0f }, 1.0f, { 255, 0, 0 });
+	if (m_nCursor == 0)
+		pGraphics->DrawTexture(m_hReticleImage, { width * 0.5f - 125.0f, (height * 0.5F) + 100.0f }, 0.0F, {}, { 0, 255, 0 }, { .5f, .5f });
+
+	else
+		pGraphics->DrawTexture(m_hReticleImage, { width * 0.5f - 125.0f, (height * 0.5F) + 200.0f }, 0.0F, {}, { 0, 255, 0 }, { .5f, .5f });
+
+	// Draw the reticle
+	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+	float		retscale = 0.8f;
+
+	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
+	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
 }

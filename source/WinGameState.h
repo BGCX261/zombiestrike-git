@@ -41,6 +41,7 @@ private:
 	/**********************************************************/
 	// Assets
 	SGD::HTexture	m_hBackgroundImage	= SGD::INVALID_HANDLE;
+	SGD::HTexture	m_hReticleImage = SGD::INVALID_HANDLE;
 
 };
 

@@ -96,7 +96,21 @@ Bullet::~Bullet()
 	else if (this->type == ObjectType::OBJ_VOMIT)
 	{
 		// zombie
-		if (pOther->GetType() == OBJ_PLAYER)
+		if (pOther->GetType() == OBJ_SANDBAG || 
+			pOther->GetType() == OBJ_BARBEDWIRE)
+		{
+			if (GetOwner() != pOther)
+			{
+				if (pAudio->IsAudioPlaying(Game::GetInstance()->vomit_hit_player) == false)
+					pAudio->PlayAudio(Game::GetInstance()->vomit_hit_player, false);
+
+
+				DestroyObjectMessage* dMsg = new DestroyObjectMessage{ this };
+				dMsg->QueueMessage();
+				dMsg = nullptr;
+			}
+		}
+		else if (pOther->GetType() == OBJ_PLAYER)
 		{
 			if (GetOwner() != pOther)
 			{

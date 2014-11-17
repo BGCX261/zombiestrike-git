@@ -55,7 +55,6 @@ void	ShopState::Enter(void)
 	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
 	{
 		profile = Game::GetInstance()->GetTutorialProfile();
-		profile.money = 50000;
 
 	}
 	else
@@ -154,11 +153,12 @@ void	ShopState::Enter(void)
 void	ShopState::Exit(void)
 {
 
-
 	UpdateProfile();
 	SaveProfile();
+
 	if (HTPGameState::GetInstance()->GetIsCurrState() == false)
 	{
+
 
 		if (GameplayState::GetInstance()->GetGameMode())
 			Game::GetInstance()->LoadStoryProfiles();
@@ -166,7 +166,13 @@ void	ShopState::Exit(void)
 			Game::GetInstance()->LoadSurvivalProfiles();
 
 	}
+	else
+		Game::GetInstance()->LoadTutorialProfiles();
+
 	UpdateWeaponManager();
+
+	SGD::Event profileUpdate("UPDATE_PROFILE");
+	profileUpdate.SendEventNow();
 
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hReticleImage);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(upgradeButton);
@@ -317,12 +323,12 @@ bool	ShopState::Input(void)
 		currTab = 0;
 		buttonnum = 0;
 	}
-	if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
+	if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true || pInput->IsKeyPressed(SGD::Key::D) == true)
 	{
 		currTab++;
 		buttonnum = 0;
 	}
-	if (pInput->IsKeyPressed(SGD::Key::LeftArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true)
+	if (pInput->IsKeyPressed(SGD::Key::LeftArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true || pInput->IsKeyPressed(SGD::Key::A) == true)
 	{
 		currTab--;
 		buttonnum = 0;
@@ -377,6 +383,16 @@ bool	ShopState::Input(void)
 
 					if (currTab < 0)
 						currTab = 1;
+
+					if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
+					{
+						if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+							currTab = 0;
+
+						else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+							currTab = 1;
+
+					}
 
 					if (currTab == 0)
 					{
@@ -551,7 +567,7 @@ bool	ShopState::Input(void)
 									switch (currButton)
 									{
 									case 0:
-										if (revolverUpgrade.magSize.isMaxed == false)
+										if (revolverUpgrade.magSize.isMaxed == false && revolverUpgrade.isBought == true)
 										{
 											if (profile.money >= 600)
 											{
@@ -593,7 +609,7 @@ bool	ShopState::Input(void)
 
 										break;
 									case 1:
-										if (revolverUpgrade.reloadTime.isMaxed == false)
+										if (revolverUpgrade.reloadTime.isMaxed == false && revolverUpgrade.isBought == true)
 										{
 											if (profile.money >= 600)
 											{
@@ -633,7 +649,7 @@ bool	ShopState::Input(void)
 										}
 										break;
 									case 2:
-										if (revolverUpgrade.recoilTime.isMaxed == false)
+										if (revolverUpgrade.recoilTime.isMaxed == false && revolverUpgrade.isBought == true)
 										{
 											if (profile.money >= 600)
 											{
@@ -673,7 +689,7 @@ bool	ShopState::Input(void)
 										}
 										break;
 									case 3:
-										if (revolverUpgrade.penPower.isMaxed == false)
+										if (revolverUpgrade.penPower.isMaxed == false && revolverUpgrade.isBought == true)
 										{
 											if (profile.money >= 600)
 											{
@@ -713,7 +729,7 @@ bool	ShopState::Input(void)
 										}
 										break;
 									case 4:
-										if (revolverUpgrade.damage.isMaxed == false)
+										if (revolverUpgrade.damage.isMaxed == false && revolverUpgrade.isBought == true)
 										{
 											if (profile.money >= 600)
 											{
@@ -753,7 +769,7 @@ bool	ShopState::Input(void)
 										}
 										break;
 									case 5:
-										if (revolverUpgrade.ammoCap.isMaxed == false)
+										if (revolverUpgrade.ammoCap.isMaxed == false && revolverUpgrade.isBought == true)
 										{
 											if (profile.money >= 600)
 											{
@@ -793,7 +809,7 @@ bool	ShopState::Input(void)
 										}
 										break;
 									case 6:
-										if (revolverUpgrade.totalAmmo.isMaxed == false)
+										if (revolverUpgrade.totalAmmo.isMaxed == false && revolverUpgrade.isBought == true)
 										{
 											if (profile.money >= 100)
 											{
@@ -901,6 +917,20 @@ bool	ShopState::Input(void)
 		if (currTab < 0)
 			currTab = 2;
 
+
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
+		{
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 0;
+
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 1;
+
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab3.left, shotTab3.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 2;
+
+		}
+
 		if (currTab == 0)
 		{
 			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
@@ -912,7 +942,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (sawnOffUpgrade.recoilTime.isMaxed == false)
+							if (sawnOffUpgrade.recoilTime.isMaxed == false && sawnOffUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -954,7 +984,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (sawnOffUpgrade.reloadTime.isMaxed == false)
+							if (sawnOffUpgrade.reloadTime.isMaxed == false && sawnOffUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -994,7 +1024,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (sawnOffUpgrade.bulletSpread.isMaxed == false)
+							if (sawnOffUpgrade.bulletSpread.isMaxed == false && sawnOffUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1034,7 +1064,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (sawnOffUpgrade.damage.isMaxed == false)
+							if (sawnOffUpgrade.damage.isMaxed == false && sawnOffUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1074,7 +1104,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (sawnOffUpgrade.ammoCap.isMaxed == false)
+							if (sawnOffUpgrade.ammoCap.isMaxed == false && sawnOffUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1114,7 +1144,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (sawnOffUpgrade.totalAmmo.isMaxed == false)
+							if (sawnOffUpgrade.totalAmmo.isMaxed == false && sawnOffUpgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -1230,7 +1260,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (pumpShotgunUpgrade.magSize.isMaxed == false)
+							if (pumpShotgunUpgrade.magSize.isMaxed == false && pumpShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1273,7 +1303,7 @@ bool	ShopState::Input(void)
 							break;
 
 						case 1:
-							if (pumpShotgunUpgrade.recoilTime.isMaxed == false)
+							if (pumpShotgunUpgrade.recoilTime.isMaxed == false && pumpShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1313,7 +1343,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (pumpShotgunUpgrade.reloadTime.isMaxed == false)
+							if (pumpShotgunUpgrade.reloadTime.isMaxed == false && pumpShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1353,7 +1383,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (pumpShotgunUpgrade.bulletSpread.isMaxed == false)
+							if (pumpShotgunUpgrade.bulletSpread.isMaxed == false && pumpShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1393,7 +1423,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (pumpShotgunUpgrade.damage.isMaxed == false)
+							if (pumpShotgunUpgrade.damage.isMaxed == false && pumpShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1433,7 +1463,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (pumpShotgunUpgrade.ammoCap.isMaxed == false)
+							if (pumpShotgunUpgrade.ammoCap.isMaxed == false && pumpShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1473,7 +1503,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 6:
-							if (pumpShotgunUpgrade.totalAmmo.isMaxed == false)
+							if (pumpShotgunUpgrade.totalAmmo.isMaxed == false && pumpShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 150)
 								{
@@ -1587,7 +1617,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (autoShotgunUpgrade.magSize.isMaxed == false)
+							if (autoShotgunUpgrade.magSize.isMaxed == false && autoShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1630,7 +1660,7 @@ bool	ShopState::Input(void)
 							break;
 
 						case 1:
-							if (autoShotgunUpgrade.recoilTime.isMaxed == false)
+							if (autoShotgunUpgrade.recoilTime.isMaxed == false && autoShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1670,7 +1700,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (autoShotgunUpgrade.reloadTime.isMaxed == false)
+							if (autoShotgunUpgrade.reloadTime.isMaxed == false && autoShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1710,7 +1740,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (autoShotgunUpgrade.bulletSpread.isMaxed == false)
+							if (autoShotgunUpgrade.bulletSpread.isMaxed == false && autoShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1750,7 +1780,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (autoShotgunUpgrade.damage.isMaxed == false)
+							if (autoShotgunUpgrade.damage.isMaxed == false && autoShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1790,7 +1820,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (autoShotgunUpgrade.ammoCap.isMaxed == false)
+							if (autoShotgunUpgrade.ammoCap.isMaxed == false && autoShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1830,7 +1860,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 6:
-							if (autoShotgunUpgrade.totalAmmo.isMaxed == false)
+							if (autoShotgunUpgrade.totalAmmo.isMaxed == false && autoShotgunUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1943,6 +1973,21 @@ bool	ShopState::Input(void)
 			currTab = 0;
 		if (currTab < 0)
 			currTab = 2;
+
+
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
+		{
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 0;
+
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 1;
+
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab3.left, shotTab3.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 2;
+
+		}
+
 		if (currTab == 0)
 		{
 			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
@@ -1954,7 +1999,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (uziUpgrade.magSize.isMaxed == false)
+							if (uziUpgrade.magSize.isMaxed == false && uziUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -1996,7 +2041,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (uziUpgrade.reloadTime.isMaxed == false)
+							if (uziUpgrade.reloadTime.isMaxed == false && uziUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2036,7 +2081,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (uziUpgrade.bulletSpread.isMaxed == false)
+							if (uziUpgrade.bulletSpread.isMaxed == false && uziUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2076,7 +2121,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (uziUpgrade.damage.isMaxed == false)
+							if (uziUpgrade.damage.isMaxed == false && uziUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2116,7 +2161,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (uziUpgrade.ammoCap.isMaxed == false)
+							if (uziUpgrade.ammoCap.isMaxed == false && uziUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2156,7 +2201,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (uziUpgrade.totalAmmo.isMaxed == false)
+							if (uziUpgrade.totalAmmo.isMaxed == false && uziUpgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -2272,7 +2317,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (tech9Upgrade.magSize.isMaxed == false)
+							if (tech9Upgrade.magSize.isMaxed == false && tech9Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2314,7 +2359,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (tech9Upgrade.reloadTime.isMaxed == false)
+							if (tech9Upgrade.reloadTime.isMaxed == false && tech9Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2354,7 +2399,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (tech9Upgrade.bulletSpread.isMaxed == false)
+							if (tech9Upgrade.bulletSpread.isMaxed == false && tech9Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2394,7 +2439,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (tech9Upgrade.damage.isMaxed == false)
+							if (tech9Upgrade.damage.isMaxed == false && tech9Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2434,7 +2479,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (tech9Upgrade.ammoCap.isMaxed == false)
+							if (tech9Upgrade.ammoCap.isMaxed == false && tech9Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2474,7 +2519,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (tech9Upgrade.totalAmmo.isMaxed == false)
+							if (tech9Upgrade.totalAmmo.isMaxed == false && tech9Upgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -2590,7 +2635,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (p90Upgrade.magSize.isMaxed == false)
+							if (p90Upgrade.magSize.isMaxed == false && p90Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2632,7 +2677,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (p90Upgrade.reloadTime.isMaxed == false)
+							if (p90Upgrade.reloadTime.isMaxed == false && p90Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2672,7 +2717,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (p90Upgrade.bulletSpread.isMaxed == false)
+							if (p90Upgrade.bulletSpread.isMaxed == false && p90Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2712,7 +2757,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (p90Upgrade.damage.isMaxed == false)
+							if (p90Upgrade.damage.isMaxed == false && p90Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2752,7 +2797,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (p90Upgrade.ammoCap.isMaxed == false)
+							if (p90Upgrade.ammoCap.isMaxed == false && p90Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2792,7 +2837,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (p90Upgrade.totalAmmo.isMaxed == false)
+							if (p90Upgrade.totalAmmo.isMaxed == false && p90Upgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -2906,6 +2951,20 @@ bool	ShopState::Input(void)
 		if (currTab < 0)
 			currTab = 2;
 
+
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
+		{
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 0;
+
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 1;
+
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab3.left, shotTab3.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 2;
+
+		}
+
 		if (currTab == 0)
 		{
 			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
@@ -2917,7 +2976,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (ak47Upgrade.magSize.isMaxed == false)
+							if (ak47Upgrade.magSize.isMaxed == false && ak47Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2959,7 +3018,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (ak47Upgrade.reloadTime.isMaxed == false)
+							if (ak47Upgrade.reloadTime.isMaxed == false && ak47Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -2999,7 +3058,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (ak47Upgrade.recoilTime.isMaxed == false)
+							if (ak47Upgrade.recoilTime.isMaxed == false && ak47Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3039,7 +3098,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (ak47Upgrade.bulletSpread.isMaxed == false)
+							if (ak47Upgrade.bulletSpread.isMaxed == false && ak47Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3079,7 +3138,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (ak47Upgrade.damage.isMaxed == false)
+							if (ak47Upgrade.damage.isMaxed == false && ak47Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3119,7 +3178,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (ak47Upgrade.ammoCap.isMaxed == false)
+							if (ak47Upgrade.ammoCap.isMaxed == false && ak47Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3159,7 +3218,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 6:
-							if (ak47Upgrade.totalAmmo.isMaxed == false)
+							if (ak47Upgrade.totalAmmo.isMaxed == false && ak47Upgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -3274,7 +3333,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (m16Upgrade.magSize.isMaxed == false)
+							if (m16Upgrade.magSize.isMaxed == false && m16Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3316,7 +3375,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (m16Upgrade.reloadTime.isMaxed == false)
+							if (m16Upgrade.reloadTime.isMaxed == false && m16Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3356,7 +3415,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (m16Upgrade.recoilTime.isMaxed == false)
+							if (m16Upgrade.recoilTime.isMaxed == false && m16Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3396,7 +3455,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (m16Upgrade.bulletSpread.isMaxed == false)
+							if (m16Upgrade.bulletSpread.isMaxed == false && m16Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3436,7 +3495,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (m16Upgrade.damage.isMaxed == false)
+							if (m16Upgrade.damage.isMaxed == false && m16Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3476,7 +3535,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (m16Upgrade.ammoCap.isMaxed == false)
+							if (m16Upgrade.ammoCap.isMaxed == false && m16Upgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3516,7 +3575,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 6:
-							if (m16Upgrade.totalAmmo.isMaxed == false)
+							if (m16Upgrade.totalAmmo.isMaxed == false && m16Upgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -3632,7 +3691,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (lmgUpgrade.magSize.isMaxed == false)
+							if (lmgUpgrade.magSize.isMaxed == false && lmgUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3674,7 +3733,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (lmgUpgrade.reloadTime.isMaxed == false)
+							if (lmgUpgrade.reloadTime.isMaxed == false && lmgUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3714,7 +3773,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (lmgUpgrade.recoilTime.isMaxed == false)
+							if (lmgUpgrade.recoilTime.isMaxed == false && lmgUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3754,7 +3813,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (lmgUpgrade.bulletSpread.isMaxed == false)
+							if (lmgUpgrade.bulletSpread.isMaxed == false && lmgUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3794,7 +3853,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (lmgUpgrade.damage.isMaxed == false)
+							if (lmgUpgrade.damage.isMaxed == false && lmgUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3834,7 +3893,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (lmgUpgrade.ammoCap.isMaxed == false)
+							if (lmgUpgrade.ammoCap.isMaxed == false && lmgUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -3874,7 +3933,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 6:
-							if (lmgUpgrade.totalAmmo.isMaxed == false)
+							if (lmgUpgrade.totalAmmo.isMaxed == false && lmgUpgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -3988,6 +4047,20 @@ bool	ShopState::Input(void)
 		if (currTab < 0)
 			currTab = 2;
 
+
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
+		{
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 0;
+
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 1;
+
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab3.left, shotTab3.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+				currTab = 2;
+
+		}
+
 		if (currTab == 0)
 		{
 			if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true || pInput->IsButtonPressed(0, 1) == true)
@@ -3999,7 +4072,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (sniperUpgrade.magSize.isMaxed == false)
+							if (sniperUpgrade.magSize.isMaxed == false && sniperUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4041,7 +4114,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (sniperUpgrade.reloadTime.isMaxed == false)
+							if (sniperUpgrade.reloadTime.isMaxed == false && sniperUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4081,7 +4154,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 2:
-							if (sniperUpgrade.recoilTime.isMaxed == false)
+							if (sniperUpgrade.recoilTime.isMaxed == false && sniperUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4121,7 +4194,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (sniperUpgrade.bulletSpread.isMaxed == false)
+							if (sniperUpgrade.bulletSpread.isMaxed == false && sniperUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4161,7 +4234,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (sniperUpgrade.damage.isMaxed == false)
+							if (sniperUpgrade.damage.isMaxed == false && sniperUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4201,7 +4274,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (sniperUpgrade.penPower.isMaxed == false)
+							if (sniperUpgrade.penPower.isMaxed == false && sniperUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4241,7 +4314,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 6:
-							if (sniperUpgrade.ammoCap.isMaxed == false)
+							if (sniperUpgrade.ammoCap.isMaxed == false && sniperUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4283,7 +4356,7 @@ bool	ShopState::Input(void)
 
 
 						case 7:
-							if (sniperUpgrade.totalAmmo.isMaxed == false)
+							if (sniperUpgrade.totalAmmo.isMaxed == false && sniperUpgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -4398,7 +4471,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (flameUpgrade.magSize.isMaxed == false)
+							if (flameUpgrade.magSize.isMaxed == false && flameUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4440,7 +4513,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (flameUpgrade.reloadTime.isMaxed == false)
+							if (flameUpgrade.reloadTime.isMaxed == false && flameUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4481,7 +4554,7 @@ bool	ShopState::Input(void)
 							break;
 
 						case 2:
-							if (flameUpgrade.bulletSpread.isMaxed == false)
+							if (flameUpgrade.bulletSpread.isMaxed == false && flameUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4521,7 +4594,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (flameUpgrade.damage.isMaxed == false)
+							if (flameUpgrade.damage.isMaxed == false && flameUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4561,7 +4634,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (flameUpgrade.bulletVelocity.isMaxed == false)
+							if (flameUpgrade.bulletVelocity.isMaxed == false && flameUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4601,7 +4674,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (flameUpgrade.ammoCap.isMaxed == false)
+							if (flameUpgrade.ammoCap.isMaxed == false && flameUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4641,7 +4714,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 6:
-							if (flameUpgrade.totalAmmo.isMaxed == false)
+							if (flameUpgrade.totalAmmo.isMaxed == false && flameUpgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -4758,7 +4831,7 @@ bool	ShopState::Input(void)
 						switch (currButton)
 						{
 						case 0:
-							if (nadeLauncherUpgrade.magSize.isMaxed == false)
+							if (nadeLauncherUpgrade.magSize.isMaxed == false && nadeLauncherUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4800,7 +4873,7 @@ bool	ShopState::Input(void)
 
 							break;
 						case 1:
-							if (nadeLauncherUpgrade.reloadTime.isMaxed == false)
+							if (nadeLauncherUpgrade.reloadTime.isMaxed == false && nadeLauncherUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4841,7 +4914,7 @@ bool	ShopState::Input(void)
 							break;
 
 						case 2:
-							if (nadeLauncherUpgrade.damage.isMaxed == false)
+							if (nadeLauncherUpgrade.damage.isMaxed == false && nadeLauncherUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4881,7 +4954,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 3:
-							if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false)
+							if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false && nadeLauncherUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4921,7 +4994,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 4:
-							if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
+							if (nadeLauncherUpgrade.ammoCap.isMaxed == false && nadeLauncherUpgrade.isBought == true)
 							{
 								if (profile.money >= 600)
 								{
@@ -4961,7 +5034,7 @@ bool	ShopState::Input(void)
 							}
 							break;
 						case 5:
-							if (nadeLauncherUpgrade.totalAmmo.isMaxed == false)
+							if (nadeLauncherUpgrade.totalAmmo.isMaxed == false && nadeLauncherUpgrade.isBought == true)
 							{
 								if (profile.money >= 100)
 								{
@@ -5190,7 +5263,7 @@ bool	ShopState::Input(void)
 						}
 						break;
 					case 1:
-						if (sandBag.maxHealth.isMaxed == false)
+						if (sandBag.maxHealth.isMaxed == false && sandBag.isBought == true)
 						{
 							if (profile.money >= 1000)
 							{
@@ -5233,11 +5306,11 @@ bool	ShopState::Input(void)
 					case 2:
 						if (barbedwire.isBought == false)
 						{
-							if (profile.money >= 1000)
+							if (profile.money >= 4000)
 							{
 								barbedwire.isBought = true;
 
-								profile.money -= 1000;
+								profile.money -= 4000;
 
 								SGD::Event evnt("REPAIR_BARBEDWIRE");
 								evnt.SendEventNow();
@@ -5305,11 +5378,11 @@ bool	ShopState::Input(void)
 						}
 						break;
 					case 3:
-						if (barbedwire.maxHealth.isMaxed == false)
+						if (barbedwire.maxHealth.isMaxed == false && barbedwire.isBought == true)
 						{
-							if (profile.money >= 1500)
+							if (profile.money >= 2000)
 							{
-								profile.money -= 1500;
+								profile.money -= 2000;
 
 								barbedwire.maxHealth.upgradedSkill.stat += 50;
 								barbedwire.maxHealth.upgradedSkill.currTier++;
@@ -5349,11 +5422,11 @@ bool	ShopState::Input(void)
 
 						break;
 					case 4:
-						if (barbedwire.damage.isMaxed == false)
+						if (barbedwire.damage.isMaxed == false && barbedwire.isBought == true)
 						{
-							if (profile.money >= 2000)
+							if (profile.money >= 3000)
 							{
-								profile.money -= 2000;
+								profile.money -= 3000;
 
 								barbedwire.damage.upgradedSkill.stat += 5;
 								barbedwire.damage.upgradedSkill.currTier++;
@@ -5393,12 +5466,11 @@ bool	ShopState::Input(void)
 					case 5:
 						if (landMine.isBought == false)
 						{
-							if (profile.money >= 1000)
+							if (profile.money >= 10000)
 							{
 								landMine.isBought = true;
-								profile.money -= 1000;
+								profile.money -= 10000;
 
-								profile.money -= landMineRepairCost;
 								SGD::Event evnt("REPAIR_LANDMINES");
 								evnt.SendEventNow();
 
@@ -5467,8 +5539,9 @@ bool	ShopState::Input(void)
 					case 6:
 						//buy turret
 
-						if (profile.money >= 1000 && profile.numTurrets < profile.maxNumTurrets)
+						if (profile.money >= 5000 && profile.numTurrets < profile.maxNumTurrets)
 						{
+							profile.money -= 5000;
 							profile.numTurrets++;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -5493,8 +5566,10 @@ bool	ShopState::Input(void)
 						break;
 					case 7:
 						//upgrade turret capacity
-						if (profile.money >= 2000 && profile.maxNumTurrets < 10)
+						if (profile.money >= 8000 && profile.maxNumTurrets < 5)
 						{
+							profile.money -= 8000;
+
 							profile.maxNumTurrets++;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -5725,10 +5800,13 @@ void	ShopState::Render(void)
 	{
 					pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-					pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, .8f, m_cMaxed);
-					pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, .8f, m_cMaxed);
+					
+					
 					if (currTab == 0)
 					{
+						pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, .8f, { 0, 255, 0 });
+						pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, .8f, { 255, 0, 0 });
+
 						//pistol
 						stringstream pistolMagLevel;
 						stringstream pistolMagSize;
@@ -5769,14 +5847,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[0]))
 						{
 							if (pistolUpgrade.magSize.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$500", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (pistolUpgrade.magSize.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$500", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -5784,14 +5862,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[1]))
 						{
 							if (pistolUpgrade.reloadTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$500", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (pistolUpgrade.reloadTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$500", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -5799,14 +5877,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[2]))
 						{
 							if (pistolUpgrade.recoilTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$500", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (pistolUpgrade.recoilTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$500", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -5821,6 +5899,9 @@ void	ShopState::Render(void)
 					}
 					else
 					{
+						pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, .8f, { 0, 255, 0 });
+						pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, .8f, { 255, 0, 0 });
+
 
 						//revolver
 						stringstream revolverMagLevel;
@@ -5891,14 +5972,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[0]))
 						{
 							if (revolverUpgrade.magSize.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.magSize.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -5906,14 +5987,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[1]))
 						{
 							if (revolverUpgrade.reloadTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.reloadTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -5921,14 +6002,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[2]))
 						{
 							if (revolverUpgrade.recoilTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.recoilTime.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -5936,14 +6017,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[3]))
 						{
 							if (revolverUpgrade.penPower.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.penPower.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -5951,7 +6032,7 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[4]))
 						{
 							if (revolverUpgrade.damage.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
@@ -5959,7 +6040,7 @@ void	ShopState::Render(void)
 						{
 
 							if (revolverUpgrade.damage.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -5967,14 +6048,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[5]))
 						{
 							if (revolverUpgrade.ammoCap.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.ammoCap.isMaxed == false)
-								pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -5984,14 +6065,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[6]))
 						{
 							if (revolverUpgrade.ammoCap.isMaxed == false)
-								pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.ammoCap.isMaxed == false)
-								pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 						}
@@ -6015,7 +6096,11 @@ void	ShopState::Render(void)
 					}
 
 
+					if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+						pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, .8f, m_cActive);
 
+					else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+						pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, .8f, m_cActive);
 
 
 #pragma endregion
@@ -6030,15 +6115,16 @@ void	ShopState::Render(void)
 					 pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 					 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-					 pFont->Draw("Sawn Off", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
-					 pFont->Draw("P. Action", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
-					 pFont->Draw("Auto", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
-					 //Revolver
+		
+					 ////Revolver
 					 switch (currTab)
 					 {
 					 case 0:
 					 {
 
+							   pFont->Draw("Sawn Off", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 0, 255, 0 });
+							   pFont->Draw("P. Action", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 0, 0 });
+							   pFont->Draw("Auto", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 0, 0 });
 
 							   stringstream sawnOffRecoilLevel;
 							   stringstream sawnOffRecoilStat;
@@ -6090,14 +6176,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[1]))
 							   {
 								   if (sawnOffUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6105,14 +6191,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
 							   {
 								   if (sawnOffUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6121,14 +6207,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[2]))
 							   {
 								   if (sawnOffUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6136,42 +6222,42 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[3]))
 							   {
 								   if (sawnOffUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 							   if (mousePos.IsWithinRectangle(Buttons[4]))
 							   {
 								   if (sawnOffUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
 							   if (mousePos.IsWithinRectangle(Buttons[5]))
 							   {
 								   if (sawnOffUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Ammo Full", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Ammo Full", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6197,6 +6283,9 @@ void	ShopState::Render(void)
 						 break;
 					 case 1:
 					 {
+							   pFont->Draw("Sawn Off", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 0, 0 });
+							   pFont->Draw("P. Action", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 0, 255, 0 });
+							   pFont->Draw("Auto", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 0, 0 });
 
 							   stringstream pumpMagSizeLevel;
 							   stringstream pumpMagSizeStat;
@@ -6254,14 +6343,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
 							   {
 								   if (pumpShotgunUpgrade.magSize.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.magSize.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6269,14 +6358,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[1]))
 							   {
 								   if (pumpShotgunUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6284,14 +6373,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[2]))
 							   {
 								   if (pumpShotgunUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6299,14 +6388,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[3]))
 							   {
 								   if (pumpShotgunUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6314,7 +6403,7 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[4]))
 							   {
 								   if (pumpShotgunUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
@@ -6322,7 +6411,7 @@ void	ShopState::Render(void)
 							   {
 
 								   if (pumpShotgunUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6330,14 +6419,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[5]))
 							   {
 								   if (pumpShotgunUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6347,14 +6436,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[6]))
 							   {
 								   if (pumpShotgunUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6379,7 +6468,9 @@ void	ShopState::Render(void)
 						 break;
 					 case 2:
 					 {
-
+							   pFont->Draw("Sawn Off", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 0, 0 });
+							   pFont->Draw("P. Action", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 0, 0 });
+							   pFont->Draw("Auto", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 0, 255, 0 });
 
 							   stringstream autoShotgunMagSizeLevel;
 							   stringstream autoShotgunMagSizeStat;
@@ -6437,14 +6528,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
 							   {
 								   if (autoShotgunUpgrade.magSize.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.magSize.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6452,14 +6543,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[1]))
 							   {
 								   if (autoShotgunUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.recoilTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6467,14 +6558,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[2]))
 							   {
 								   if (autoShotgunUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.reloadTime.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6482,14 +6573,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[3]))
 							   {
 								   if (autoShotgunUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.bulletSpread.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6497,7 +6588,7 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[4]))
 							   {
 								   if (autoShotgunUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
@@ -6505,7 +6596,7 @@ void	ShopState::Render(void)
 							   {
 
 								   if (autoShotgunUpgrade.damage.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6513,14 +6604,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[5]))
 							   {
 								   if (autoShotgunUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.ammoCap.isMaxed == false)
-									   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6530,14 +6621,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[6]))
 							   {
 								   if (autoShotgunUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.totalAmmo.isMaxed == false)
-									   pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 							   }
@@ -6562,6 +6653,15 @@ void	ShopState::Render(void)
 
 					 }
 
+					 if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+						 pFont->Draw("Sawn Off", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 255, 255 });
+
+
+					 else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+						 pFont->Draw("P. Action", { shotTab2.left + 20, shotTab2.top + 5 }, scale,  { 255, 255, 255 });
+
+					 else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab3.left, shotTab3.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+						 pFont->Draw("Auto", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 255 });
 
 #pragma endregion
 	}
@@ -6585,6 +6685,9 @@ void	ShopState::Render(void)
 				 {
 						   //UZI
 
+						   pFont->Draw("MAC-10", { shotTab1.left + 30, shotTab1.top + 5 }, scale, { 255, 0, 255, 0 });
+						   pFont->Draw("Tech-9mm", { shotTab2.left + 15, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw("P90", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
 
 						   stringstream uziMagSizeLevel;
 						   stringstream uziMagSizeStat;
@@ -6638,14 +6741,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[0]))
 						   {
 							   if (uziUpgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6653,14 +6756,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[1]))
 						   {
 							   if (uziUpgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6668,14 +6771,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[2]))
 						   {
 							   if (uziUpgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6683,14 +6786,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[3]))
 						   {
 							   if (uziUpgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6698,7 +6801,7 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[4]))
 						   {
 							   if (uziUpgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
@@ -6706,7 +6809,7 @@ void	ShopState::Render(void)
 						   {
 
 							   if (uziUpgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6714,16 +6817,16 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[5]))
 						   {
 							   if (uziUpgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("Full Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
+								   pFont->Draw("Full Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 
@@ -6752,6 +6855,9 @@ void	ShopState::Render(void)
 				 case 1:
 				 {
 						   //Tech9
+						   pFont->Draw("MAC-10", { shotTab1.left + 30, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw("Tech-9mm", { shotTab2.left + 15, shotTab2.top + 5 }, scale, { 255, 0, 255, 0 });
+						   pFont->Draw("P90", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
 
 						   stringstream tech9MagSizeLevel;
 						   stringstream tech9MagSizeStat;
@@ -6805,14 +6911,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[0]))
 						   {
 							   if (tech9Upgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6820,14 +6926,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[1]))
 						   {
 							   if (tech9Upgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6835,14 +6941,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[2]))
 						   {
 							   if (tech9Upgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6850,14 +6956,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[3]))
 						   {
 							   if (tech9Upgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6865,7 +6971,7 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[4]))
 						   {
 							   if (tech9Upgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
@@ -6873,7 +6979,7 @@ void	ShopState::Render(void)
 						   {
 
 							   if (tech9Upgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6881,16 +6987,16 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[5]))
 						   {
 							   if (tech9Upgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("Full Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
+								   pFont->Draw("Full Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 
@@ -6916,6 +7022,11 @@ void	ShopState::Render(void)
 					 break;
 				 case 2:
 				 {
+
+						   pFont->Draw("MAC-10", { shotTab1.left + 30, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw("Tech-9mm", { shotTab2.left + 15, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
+						   pFont->Draw("P90", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 0, 255, 0 });
+
 						   stringstream p90MagSizeLevel;
 						   stringstream p90MagSizeStat;
 						   p90MagSizeLevel << "Level " << p90Upgrade.magSize.upgradedSkill.currTier;
@@ -6966,14 +7077,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[0]))
 						   {
 							   if (p90Upgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.magSize.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6981,14 +7092,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[1]))
 						   {
 							   if (p90Upgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.reloadTime.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -6996,14 +7107,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[2]))
 						   {
 							   if (p90Upgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.bulletSpread.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -7011,14 +7122,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[3]))
 						   {
 							   if (p90Upgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.damage.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -7026,7 +7137,7 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[4]))
 						   {
 							   if (p90Upgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
@@ -7034,7 +7145,7 @@ void	ShopState::Render(void)
 						   {
 
 							   if (p90Upgrade.ammoCap.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
@@ -7042,16 +7153,16 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[5]))
 						   {
 							   if (p90Upgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("Full Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.totalAmmo.isMaxed == false)
-								   pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
+								   pFont->Draw("Full Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 						   }
 
 
@@ -7077,6 +7188,18 @@ void	ShopState::Render(void)
 
 				 }
 
+				 if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+					 pFont->Draw("MAC-10", { shotTab1.left + 30, shotTab1.top + 5 }, scale, { 255, 255, 255, 255 });
+
+
+
+				 else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+					 pFont->Draw("Tech-9mm", { shotTab2.left + 15, shotTab2.top + 5 }, scale, { 255, 255, 255, 255 });
+
+
+				 else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab3.left, shotTab3.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+					 pFont->Draw("P90", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 255, 255 });
+
 
 
 
@@ -7089,14 +7212,15 @@ void	ShopState::Render(void)
 						   pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 						   pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 						   pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-						   pFont->Draw("AK-47", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
-						   pFont->Draw("M16", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
-						   pFont->Draw("LMG", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
+						  
 
 						   switch (currTab)
 						   {
 						   case 0:
 						   {
+									 pFont->Draw("AK-47", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 0, 255, 0 });
+									 pFont->Draw("M16", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw("LMG", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
 
 									 stringstream akMagSizeLevel;
 									 stringstream akMagSizeStat;
@@ -7156,14 +7280,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[0]))
 									 {
 										 if (ak47Upgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7171,14 +7295,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[1]))
 									 {
 										 if (ak47Upgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7186,14 +7310,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[2]))
 									 {
 										 if (ak47Upgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7201,14 +7325,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[3]))
 									 {
 										 if (ak47Upgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7216,7 +7340,7 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[4]))
 									 {
 										 if (ak47Upgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
@@ -7224,7 +7348,7 @@ void	ShopState::Render(void)
 									 {
 
 										 if (ak47Upgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7232,14 +7356,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[5]))
 									 {
 										 if (ak47Upgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7249,14 +7373,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[6]))
 									 {
 										 if (ak47Upgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7282,6 +7406,9 @@ void	ShopState::Render(void)
 						   case 1:
 						   {
 
+									 pFont->Draw("AK-47", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw("M16", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 0, 255, 0 });
+									 pFont->Draw("LMG", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
 
 									 stringstream m16MagSizeLevel;
 									 stringstream m16MagSizeStat;
@@ -7341,14 +7468,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[0]))
 									 {
 										 if (m16Upgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7356,14 +7483,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[1]))
 									 {
 										 if (m16Upgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7371,14 +7498,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[2]))
 									 {
 										 if (m16Upgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7386,14 +7513,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[3]))
 									 {
 										 if (m16Upgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7401,7 +7528,7 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[4]))
 									 {
 										 if (m16Upgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
@@ -7409,7 +7536,7 @@ void	ShopState::Render(void)
 									 {
 
 										 if (m16Upgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7417,14 +7544,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[5]))
 									 {
 										 if (m16Upgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7434,14 +7561,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[6]))
 									 {
 										 if (m16Upgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7465,6 +7592,9 @@ void	ShopState::Render(void)
 							   break;
 						   case 2:
 						   {
+									 pFont->Draw("AK-47", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw("M16", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
+									 pFont->Draw("LMG", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 0, 255, 0 });
 
 									 stringstream lmgMagSizeLevel;
 									 stringstream lmgMagSizeStat;
@@ -7525,14 +7655,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[0]))
 									 {
 										 if (lmgUpgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.magSize.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7540,14 +7670,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[1]))
 									 {
 										 if (lmgUpgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.reloadTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7555,14 +7685,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[2]))
 									 {
 										 if (lmgUpgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.recoilTime.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7570,14 +7700,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[3]))
 									 {
 										 if (lmgUpgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.bulletSpread.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7585,7 +7715,7 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[4]))
 									 {
 										 if (lmgUpgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
@@ -7593,7 +7723,7 @@ void	ShopState::Render(void)
 									 {
 
 										 if (lmgUpgrade.damage.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7601,14 +7731,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[5]))
 									 {
 										 if (lmgUpgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.ammoCap.isMaxed == false)
-											 pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7618,14 +7748,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[6]))
 									 {
 										 if (lmgUpgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.totalAmmo.isMaxed == false)
-											 pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 									 }
@@ -7648,6 +7778,19 @@ void	ShopState::Render(void)
 							   break;
 						   }
 
+						   if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+							   pFont->Draw("AK-47", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 255, 255, 255 });
+
+
+
+						   else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+							   pFont->Draw("M16", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 255, 255, 255 });
+
+
+						   else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab3.left, shotTab3.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+							   pFont->Draw("LMG", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 255, 255 });
+
+
 
 	}
 #pragma endregion
@@ -7658,15 +7801,16 @@ void	ShopState::Render(void)
 				  pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 				  pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 				  pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-				  pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.8f, { 255, 255, 0, 0 });
-				  pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.8f, { 255, 255, 0, 0 });
-				  pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.8f, { 255, 255, 0, 0 });
+				
 				  //Revolver
 				  switch (currTab)
 				  {
 				  case 0:
 				  {
 
+							pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.8f, { 255, 0, 255, 0 });
+							pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.8f, { 255, 255, 0, 0 });
+							pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.8f, { 255, 255, 0, 0 });
 
 							stringstream sniperMagSizeLevel;
 							stringstream sniperMagSizeStat;
@@ -7733,14 +7877,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[0]))
 							{
 								if (sniperUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7748,14 +7892,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[1]))
 							{
 								if (sniperUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7763,14 +7907,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[2]))
 							{
 								if (sniperUpgrade.recoilTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.recoilTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7778,14 +7922,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[3]))
 							{
 								if (sniperUpgrade.bulletSpread.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.bulletSpread.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7793,7 +7937,7 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[4]))
 							{
 								if (sniperUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
@@ -7801,7 +7945,7 @@ void	ShopState::Render(void)
 							{
 
 								if (sniperUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7809,14 +7953,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[5]))
 							{
 								if (sniperUpgrade.penPower.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.penPower.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7826,29 +7970,29 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[6]))
 							{
 								if (sniperUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("Maxed", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
+									pFont->Draw("Maxed", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 							if (mousePos.IsWithinRectangle(Buttons[7]))
 							{
 								if (sniperUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$100", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Ammo Full", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$100", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Ammo Full", { Buttons[7].left + xOffset, Buttons[7].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7871,6 +8015,9 @@ void	ShopState::Render(void)
 				  case 1:
 				  {
 
+							pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.8f, { 255, 255, 0, 0 });
+							pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.8f, { 255, 0, 255, 0 });
+							pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.8f, { 255, 255, 0, 0 });
 
 							stringstream flameMagSizeLevel;
 							stringstream flameMagSizeStat;
@@ -7930,14 +8077,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[0]))
 							{
 								if (flameUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7945,14 +8092,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[1]))
 							{
 								if (flameUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7960,14 +8107,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[2]))
 							{
 								if (flameUpgrade.bulletSpread.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.bulletSpread.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7975,14 +8122,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[3]))
 							{
 								if (flameUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -7990,7 +8137,7 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[4]))
 							{
 								if (flameUpgrade.bulletVelocity.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
@@ -7998,7 +8145,7 @@ void	ShopState::Render(void)
 							{
 
 								if (flameUpgrade.bulletVelocity.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -8006,14 +8153,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[5]))
 							{
 								if (flameUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -8023,14 +8170,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[6]))
 							{
 								if (flameUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Buy Ammo", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$100", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Ammo Full", { Buttons[6].left + xOffset, Buttons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -8054,6 +8201,9 @@ void	ShopState::Render(void)
 					  break;
 				  case 2:
 				  {
+							pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.8f, { 255, 255, 0, 0 });
+							pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.8f, { 255, 255, 0, 0 });
+							pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.8f, { 255, 0, 255, 0 });
 
 							stringstream nadeMagSizeLevel;
 							stringstream nadeMagSizeStat;
@@ -8106,14 +8256,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[0]))
 							{
 								if (nadeLauncherUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.magSize.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[0].left + xOffset, Buttons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -8121,14 +8271,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[1]))
 							{
 								if (nadeLauncherUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.reloadTime.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[1].left + xOffset, Buttons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -8136,14 +8286,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[2]))
 							{
 								if (nadeLauncherUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.damage.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[2].left + xOffset, Buttons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -8151,14 +8301,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[3]))
 							{
 								if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.bulletVelocity.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[3].left + xOffset, Buttons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -8166,7 +8316,7 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[4]))
 							{
 								if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
@@ -8174,7 +8324,7 @@ void	ShopState::Render(void)
 							{
 
 								if (nadeLauncherUpgrade.ammoCap.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$600", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Maxed", { Buttons[4].left + xOffset, Buttons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
@@ -8182,16 +8332,16 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[5]))
 							{
 								if (nadeLauncherUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
-									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("Full Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.totalAmmo.isMaxed == false)
-									pFont->Draw("Upgrade", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$100", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
-									pFont->Draw("Maxed", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
+									pFont->Draw("Full Ammo", { Buttons[5].left + xOffset, Buttons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 							}
 
 
@@ -8217,6 +8367,19 @@ void	ShopState::Render(void)
 				  }
 					  break;
 				  }
+
+				  if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+					  pFont->Draw("Sniper", { shotTab1.left + 20, shotTab1.top + 5 }, 0.8f, { 255, 255, 255, 255 });
+
+
+
+				  else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+					  pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.8f, { 255, 255, 255, 255 });
+
+
+				  else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab3.left, shotTab3.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
+					  pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.8f, { 255, 255, 255, 255 });
+
 
 #pragma endregion
 	}
@@ -8293,20 +8456,23 @@ void	ShopState::Render(void)
 		for (size_t i = 0; i < 8; i++)
 			pGraphics->DrawTexture(upgradeButton, { DefenseButtons[i].left, DefenseButtons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
 
-
 		if (sandBag.isBought == true)
 		{
 			if (mousePos.IsWithinRectangle(DefenseButtons[0]))
 			{
+				stringstream repair;
+				repair << "Repair - " << sandBagRepairCost;
 				if (sandBagCurrHealth < sandBagMaxHealth)
-					pFont->Draw("Repair", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
+					pFont->Draw(repair.str().c_str(), { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 255, 255 });
 			}
 			else
 			{
+				stringstream repair;
+				repair << "Repair - " << sandBagRepairCost;
 				if (sandBagCurrHealth < sandBagMaxHealth)
-					pFont->Draw("Repair", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
+					pFont->Draw(repair.str().c_str(), { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 0, 255, 0 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[0].left + xOffset, DefenseButtons[0].top + yOffset }, scale, { 255, 255, 0, 0 });
 			}
@@ -8314,14 +8480,14 @@ void	ShopState::Render(void)
 			if (mousePos.IsWithinRectangle(DefenseButtons[1]))
 			{
 				if (sandBag.maxHealth.isMaxed == false)
-					pFont->Draw("Upgrade", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
+					pFont->Draw("$1000", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 255, 255 });
 			}
 			else
 			{
 				if (sandBag.maxHealth.isMaxed == false)
-					pFont->Draw("Upgrade", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
+					pFont->Draw("$1000", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 0, 255, 0 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[1].left + xOffset, DefenseButtons[1].top + yOffset }, scale, { 255, 255, 0, 0 });
 			}
@@ -8343,15 +8509,19 @@ void	ShopState::Render(void)
 
 			if (mousePos.IsWithinRectangle(DefenseButtons[2]))
 			{
+				stringstream repair;
+				repair << "Repair - " << barbedWireRepairCost;
 				if (barbWireCurrHealth < barbWireMaxHealth)
-					pFont->Draw("Repair", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+					pFont->Draw(repair.str().c_str(), { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 			}
 			else
 			{
+				stringstream repair;
+				repair << "Repair - " << barbedWireRepairCost;
 				if (barbWireCurrHealth < barbWireMaxHealth)
-					pFont->Draw("Repair", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+					pFont->Draw(repair.str().c_str(), { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 0, 0 });
 			}
@@ -8359,14 +8529,14 @@ void	ShopState::Render(void)
 			if (mousePos.IsWithinRectangle(DefenseButtons[3]))
 			{
 				if (barbedwire.maxHealth.isMaxed == false)
-					pFont->Draw("Upgrade", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
+					pFont->Draw("$2000", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 255, 255 });
 			}
 			else
 			{
 				if (barbedwire.maxHealth.isMaxed == false)
-					pFont->Draw("Upgrade", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
+					pFont->Draw("$2000", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 0, 255, 0 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[3].left + xOffset, DefenseButtons[3].top + yOffset }, scale, { 255, 255, 0, 0 });
 			}
@@ -8374,14 +8544,14 @@ void	ShopState::Render(void)
 			if (mousePos.IsWithinRectangle(DefenseButtons[4]))
 			{
 				if (barbedwire.damage.isMaxed == false)
-					pFont->Draw("Upgrade", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
+					pFont->Draw("$3000", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 255, 255 });
 			}
 			else
 			{
 				if (barbedwire.damage.isMaxed == false)
-					pFont->Draw("Upgrade", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
+					pFont->Draw("$3000", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 0, 255, 0 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[4].left + xOffset, DefenseButtons[4].top + yOffset }, scale, { 255, 255, 0, 0 });
 			}
@@ -8391,10 +8561,10 @@ void	ShopState::Render(void)
 		else
 		{
 			if (mousePos.IsWithinRectangle(DefenseButtons[0]))
-				pFont->Draw("Buy", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
+				pFont->Draw("$4000", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 
 			else
-				pFont->Draw("Buy", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
+				pFont->Draw("$4000", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 0, 255, 0 });
 		}
 
 
@@ -8404,15 +8574,19 @@ void	ShopState::Render(void)
 		{
 			if (mousePos.IsWithinRectangle(DefenseButtons[5]))
 			{
+				stringstream repair;
+				repair << "Repair - " << landMineRepairCost;
 				if (numLandMines < landMines.size())
-					pFont->Draw("Repair", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+					pFont->Draw(repair.str().c_str(), { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 			}
 			else
 			{
+				stringstream repair;
+				repair << "Repair - " << landMineRepairCost;
 				if (numLandMines < landMines.size())
-					pFont->Draw("Repair", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+					pFont->Draw(repair.str().c_str(), { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 				else
 					pFont->Draw("Maxed", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 0, 0 });
 			}
@@ -8421,9 +8595,9 @@ void	ShopState::Render(void)
 		else
 		{
 			if (mousePos.IsWithinRectangle(DefenseButtons[5]))
-				pFont->Draw("Buy", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
+				pFont->Draw("$10000", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 255, 255, 255 });
 			else
-				pFont->Draw("Buy", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
+				pFont->Draw("$10000", { DefenseButtons[5].left + xOffset, DefenseButtons[5].top + yOffset }, scale, { 255, 0, 255, 0 });
 
 		}
 
@@ -8431,14 +8605,14 @@ void	ShopState::Render(void)
 		if (mousePos.IsWithinRectangle(DefenseButtons[6]))
 		{
 			if (profile.numTurrets < profile.maxNumTurrets)
-				pFont->Draw("Buy", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
+				pFont->Draw("$5000", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 			else
 				pFont->Draw("Full Inventory", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 255, 255 });
 		}
 		else
 		{
 			if (profile.numTurrets < profile.maxNumTurrets)
-				pFont->Draw("Buy", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
+				pFont->Draw("$5000", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 0, 255, 0 });
 			else
 				pFont->Draw("Full Inventory", { DefenseButtons[6].left + xOffset, DefenseButtons[6].top + yOffset }, scale, { 255, 255, 0, 0 });
 		}
@@ -8447,14 +8621,14 @@ void	ShopState::Render(void)
 		if (mousePos.IsWithinRectangle(DefenseButtons[7]))
 		{
 			if (profile.maxNumTurrets < 10)
-				pFont->Draw("Buy", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
+				pFont->Draw("$8000", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 			else
 				pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 		}
 		else
 		{
 			if (profile.maxNumTurrets < 10)
-				pFont->Draw("Buy", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 0, 255, 0 });
+				pFont->Draw("$8000", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 0, 255, 0 });
 			else
 				pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 0, 0 });
 		}
@@ -10278,46 +10452,92 @@ void ShopState::SaveProfile()
 
 		fout << profile.barbWire.isBought << '\n';
 
-
-		for (size_t j = 0; j < 74; j++)
+		if (HTPGameState::GetInstance()->GetIsCurrState() == true)
 		{
-			fout << profile.barbWireStates[j] << '\n';
+			for (size_t j = 0; j < 28; j++)
+			{
+				fout << profile.barbWireStates[j] << '\n';
+			}
+
+
+
+
+
+			//Sandbag
+
+			fout << profile.sandBag.maxHealth.upgradedSkill.stat << '\n';
+			fout << profile.sandBag.maxHealth.upgradedSkill.currTier << '\n';
+			fout << profile.sandBag.maxHealth.upgradedSkill.maxTier << '\n';
+			fout << profile.sandBag.isBought << '\n';
+
+			for (size_t j = 0; j < 28; j++)
+			{
+
+
+
+
+
+
+				fout << profile.sandBagStates[j] << '\n';
+
+
+			}
+
+
+
+			fout << profile.landMine.isBought << '\n';
+
+			for (size_t j = 0; j < 28; j++)
+			{
+				fout << profile.landMineStates[j] << '\n';
+
+
+			}
+		}
+		else
+		{
+			for (size_t j = 0; j < 74; j++)
+			{
+				fout << profile.barbWireStates[j] << '\n';
+			}
+
+
+
+
+
+			//Sandbag
+
+			fout << profile.sandBag.maxHealth.upgradedSkill.stat << '\n';
+			fout << profile.sandBag.maxHealth.upgradedSkill.currTier << '\n';
+			fout << profile.sandBag.maxHealth.upgradedSkill.maxTier << '\n';
+			fout << profile.sandBag.isBought << '\n';
+
+			for (size_t j = 0; j < 66; j++)
+			{
+
+
+
+
+
+
+				fout << profile.sandBagStates[j] << '\n';
+
+
+			}
+
+
+
+			fout << profile.landMine.isBought << '\n';
+
+			for (size_t j = 0; j < 55; j++)
+			{
+				fout << profile.landMineStates[j] << '\n';
+
+
+			}
 		}
 
-
-
-
-
-		//Sandbag
-
-		fout << profile.sandBag.maxHealth.upgradedSkill.stat << '\n';
-		fout << profile.sandBag.maxHealth.upgradedSkill.currTier << '\n';
-		fout << profile.sandBag.maxHealth.upgradedSkill.maxTier << '\n';
-		fout << profile.sandBag.isBought << '\n';
-
-		for (size_t j = 0; j < 66; j++)
-		{
-
-
-
-
-
-
-			fout << profile.sandBagStates[j] << '\n';
-
-
-		}
-
-
-
-		fout << profile.landMine.isBought << '\n';
-
-		for (size_t j = 0; j < 55; j++)
-		{
-			fout << profile.landMineStates[j] << '\n';
-
-
-		}
+		
 
 		fout << profile.numTurrets << '\n';
 

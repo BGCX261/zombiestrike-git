@@ -39,6 +39,8 @@
 	SGD::AudioManager* pAudio	= SGD::AudioManager::GetInstance();
 
 	m_hBackgroundSFX			= pAudio->LoadAudio(L"resource/audio/shotgun_fire.wav");
+	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
+
 
 }
 
@@ -55,6 +57,9 @@
 		pAudio->StopAudio(m_hBackgroundSFX);
 
 	pAudio->UnloadAudio(m_hBackgroundSFX);
+
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hReticleImage);
+
 }
 
 
@@ -79,13 +84,82 @@
 	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
+	SGD::Point mousePos = pInput->GetMousePosition();
+
+	//if (mousePos.IsWithinRectangle())
+	//{
+
+	//}
+
 	
 
 	int volumes[2];
 	volumes[0] = pAudio->GetMasterVolume(SGD::AudioGroup::Music);
 	volumes[1] = pAudio->GetMasterVolume(SGD::AudioGroup::SoundEffects);
 
+	float left_start = 50.0F;				// 50
+	float right_start = Game::GetInstance()->GetScreenWidth() - 224.0F;		// 800
+	float starting_y = 200.0F;
+	float offset = 50.0F;
+	float scale = 1.25f;
 	int volOffset = 10;	// int volMin = 0, volMax = 100;
+
+	if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 500.0F, 300.0F), SGD::Size(64, 64))))
+	{
+
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			volumes[0] -= volOffset;
+		m_nCursor = 0;
+	}
+	else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 650.0F, 300.0F), SGD::Size(64, 64))))
+	{
+
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			volumes[0] += volOffset;
+		m_nCursor = 0;
+
+	}
+
+
+	
+
+	if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 500.0F, 450.0F), SGD::Size(64, 64))))
+	{
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			volumes[1] -= volOffset;
+		m_nCursor = 1;
+
+	}
+	else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 650.0F, 450.0F), SGD::Size(64, 64))))
+	{
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+			volumes[1] += volOffset;
+	
+		m_nCursor = 1;
+
+	}
+	if ((mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 425.0F, 600.0F), SGD::Size(64, 64))) || mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 600.0F, 600.0F), SGD::Size(64, 64)))))
+	{
+		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		{
+			m_bFullScreen = !m_bFullScreen;
+			pGraphics->Resize(SGD::Size(Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight()), m_bFullScreen);
+		}
+		
+		m_nCursor = 2;
+
+
+	}
+	
+
+
+
+
+
+	
+	
+	
+
 	switch (m_nCursor)
 	{
 	case 0: // Music
@@ -108,19 +182,12 @@
 
 	case 2: // full screen
 		{
-			if (pInput->IsKeyPressed(SGD::Key::Right) == true || pInput->IsKeyPressed(SGD::Key::Left) == true ||
-				pInput->IsDPadPressed(0, SGD::DPad::Right) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true)
-			{
-				m_bFullScreen = !m_bFullScreen;
-
-				float screenW = Game::GetInstance()->GetScreenWidth();
-				float screenH = Game::GetInstance()->GetScreenHeight();
-
-				if (m_bFullScreen == false)
-					pGraphics->Resize(SGD::Size(screenW, screenH), true);
-				else
-					pGraphics->Resize(SGD::Size(screenW, screenH), false);
-			}
+				if (pInput->IsKeyPressed(SGD::Key::Right) == true || pInput->IsKeyPressed(SGD::Key::Left) == true ||
+					pInput->IsDPadPressed(0, SGD::DPad::Right) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true)
+				{
+					m_bFullScreen = !m_bFullScreen;
+					pGraphics->Resize(SGD::Size(Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight()), m_bFullScreen);
+				}
 		}
 		break;
 	}
@@ -190,7 +257,7 @@
 	float starting_y	= 200.0F;
 	float offset		= 50.0F;
 	float scale			=1.25f;
-
+	SGD::Point mousePos = SGD::InputManager::GetInstance()->GetMousePosition();
 
 	SGD::OStringStream volumes[2];
 	volumes[0] << pAudio->GetMasterVolume(SGD::AudioGroup::Music);
@@ -202,7 +269,18 @@
 
 	pFont->Draw("Sound Effects", { left_start, 400.0F }, scale, { 255, 0, 0 });
 	pFont->Draw("Volume", { left_start + 100.0F, 450.0F }, scale, { 255, 0, 0 });
-	pFont->Draw("Full Screen", { (width - (11 * 32 * scale)) / 2, 550.0F }, scale, { 255, 0, 0 });
+	pFont->Draw("Full Screen", { left_start + 100.0F, 550.0F }, scale, { 255, 0, 0 });
+
+	pFont->Draw(" < ", { left_start + 500.0F, 300.0F }, 1.75f, { 255, 0, 0 });
+	pFont->Draw(" > ", { left_start + 650.0F, 300.0F }, 1.75f, { 255, 0, 0 });
+
+	pFont->Draw(" < ", { left_start + 500.0F, 450.0F }, 1.75f, { 255, 0, 0 });
+	pFont->Draw(" > ", { left_start + 650.0F, 450.0F }, 1.75f, { 255, 0, 0 });
+
+	pFont->Draw(" < ", { left_start + 425.0F, 600.0F }, 1.75f, { 255, 0, 0 });
+	pFont->Draw(" > ", { left_start + 600.0F, 600.0F }, 1.75f, { 255, 0, 0 });
+
+	
 
 	switch (m_nCursor)
 	{
@@ -210,7 +288,7 @@
 		pFont->Draw(volumes[0].str().c_str(), { left_start + 600.0F, 300.0F }, scale, { 255, 255, 255 });
 		pFont->Draw(volumes[1].str().c_str(), { left_start + 600.0F, 450.0F }, scale, { 255, 0, 0 });
 
-		if (m_bFullScreen == true)
+		if (m_bFullScreen == false)
 			pFont->Draw("ON", { (width - (2 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
 		else
 			pFont->Draw("OFF", { (width - (3 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
@@ -224,7 +302,7 @@
 		pFont->Draw(volumes[0].str().c_str(), { left_start + 600.0F, 300.0F }, scale, { 255, 0, 0 });
 		pFont->Draw(volumes[1].str().c_str(), { left_start + 600.0F, 450.0F }, scale, { 255, 255, 255 });
 
-		if (m_bFullScreen == true)
+		if (m_bFullScreen == false)
 			pFont->Draw("ON", { (width - (2 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
 		else
 			pFont->Draw("OFF", { (width - (3 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
@@ -237,7 +315,7 @@
 		pFont->Draw(volumes[0].str().c_str(), { left_start + 600.0F, 300.0F }, scale, { 255, 0, 0 });
 		pFont->Draw(volumes[1].str().c_str(), { left_start + 600.0F, 450.0F }, scale, { 255, 0, 0 });
 
-		if (m_bFullScreen == true)
+		if (m_bFullScreen == false)
 			pFont->Draw("ON", { (width - (2 * 32 * scale)) / 2, 600.0F }, scale, { 255, 255, 255 });
 		else
 			pFont->Draw("OFF", { (width - (3 * 32 * scale)) / 2, 600.0F }, scale, { 255, 255, 255 });
@@ -250,7 +328,7 @@
 		pFont->Draw(volumes[0].str().c_str(), { left_start + 600.0F, 300.0F }, scale, { 255, 0, 0 });
 		pFont->Draw(volumes[1].str().c_str(), { left_start + 600.0F, 450.0F }, scale, { 255, 0, 0 });
 
-		if (m_bFullScreen == true)
+		if (m_bFullScreen == false)
 			pFont->Draw("ON", { (width - (2 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
 		else
 			pFont->Draw("OFF", { (width - (3 * 32 * scale)) / 2, 600.0F }, scale, { 255, 0, 0 });
@@ -288,6 +366,13 @@
 	//}
 
 	//pFont->Draw( output, position, 1.0f, {255, 0, 0} );
+
+	// Draw the reticle
+	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+	float		retscale = 0.8f;
+
+	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
+	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
 }
 
 

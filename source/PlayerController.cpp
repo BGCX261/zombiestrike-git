@@ -61,6 +61,10 @@ PlayerController::~PlayerController()
 
 			pInput->SetMousePosition(mpoint);
 		}*/
+
+
+	if (pInput->IsControllerConnected(0) == true)
+	{
 		if (pInput->GetRightJoystick(0).x != 0 || pInput->GetRightJoystick(0).y != 0)
 		{
 			SGD::Vector toCursor;
@@ -88,19 +92,18 @@ PlayerController::~PlayerController()
 				}
 			}
 		}
-			
-	
-	
+	}
 	else
 	{
+
 		SGD::Vector toMouse;
 		// rotate to face mouse
 		if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
-			toMouse = SGD::Point(pInput->GetMousePosition().x + HTPGameState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + HTPGameState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
+			toMouse = SGD::Point(pInput->GetMousePosition().x + HTPGameState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + HTPGameState::GetInstance()->GetCamera()->GetPosition().y) - (toUpdate->GetPosition());
 		else
 			toMouse = SGD::Point(pInput->GetMousePosition().x + GameplayState::GetInstance()->GetCamera()->GetPosition().x, pInput->GetMousePosition().y + GameplayState::GetInstance()->GetCamera()->GetPosition().y) - toUpdate->GetPosition();
 
-		
+
 		if (m_Player->m_bIsAlive == true)
 		{
 			toMouse.Normalize();
@@ -117,65 +120,71 @@ PlayerController::~PlayerController()
 				toUpdate->SetDirection(orientation);
 			}
 		}
-
 	}
+		
+			
+	
+	
+	
+
+	
 	
 
 
-	SGD::Point	mousepoint	= pInput->GetMousePosition();
-	SGD::Point	camerapos	= Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance()
-		? HTPGameState::GetInstance()->GetCamera()->GetPosition()
-		: GameplayState::GetInstance()->GetCamera()->GetPosition();
-	if (pInput->IsControllerConnected(0) == true)
-	{
-		SGD::Vector	joystick = pInput->GetRightJoystick(0);
+	//SGD::Point	mousepoint	= pInput->GetMousePosition();
+	//SGD::Point	camerapos	= Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance()
+	//	? HTPGameState::GetInstance()->GetCamera()->GetPosition()
+	//	: GameplayState::GetInstance()->GetCamera()->GetPosition();
+	//if (pInput->IsControllerConnected(0) == true)
+	//{
+	//	SGD::Vector	joystick = pInput->GetRightJoystick(0);
 
-		if (joystick.x != 0.0f || joystick.y != 0.0f)
-		{
-			float		stickmin = 0.0f;
-			float		mousevel = 20.0f;
-			//float		maxdistance = 500.0f;
+	//	if (joystick.x != 0.0f || joystick.y != 0.0f)
+	//	{
+	//		float		stickmin = 0.0f;
+	//		float		mousevel = 20.0f;
+	//		//float		maxdistance = 500.0f;
 
-			if (joystick.x > stickmin)
-				mousepoint.x += mousevel;
-			else if (joystick.x < stickmin * -1.0f)
-				mousepoint.x -= mousevel;
+	//		if (joystick.x > stickmin)
+	//			mousepoint.x += mousevel;
+	//		else if (joystick.x < stickmin * -1.0f)
+	//			mousepoint.x -= mousevel;
 
-			if (joystick.y > stickmin)
-				mousepoint.y += mousevel;
-			else if (joystick.y < stickmin * -1.0f)
-				mousepoint.y -= mousevel;
+	//		if (joystick.y > stickmin)
+	//			mousepoint.y += mousevel;
+	//		else if (joystick.y < stickmin * -1.0f)
+	//			mousepoint.y -= mousevel;
 
-			if (mousepoint.x < 0.0F)
-				mousepoint.x = 0.0F;
-			if (mousepoint.y < 0.0F)
-				mousepoint.y = 0.0F;
-			if (mousepoint.x > Game::GetInstance()->GetScreenWidth())
-				mousepoint.x = Game::GetInstance()->GetScreenWidth();
-			if (mousepoint.y > Game::GetInstance()->GetScreenHeight())
-				mousepoint.y = Game::GetInstance()->GetScreenHeight();
+	//		if (mousepoint.x < 0.0F)
+	//			mousepoint.x = 0.0F;
+	//		if (mousepoint.y < 0.0F)
+	//			mousepoint.y = 0.0F;
+	//		if (mousepoint.x > Game::GetInstance()->GetScreenWidth())
+	//			mousepoint.x = Game::GetInstance()->GetScreenWidth();
+	//		if (mousepoint.y > Game::GetInstance()->GetScreenHeight())
+	//			mousepoint.y = Game::GetInstance()->GetScreenHeight();
 
-			pInput->SetMousePosition(mousepoint);
-		}
-	}
+	//		pInput->SetMousePosition(mousepoint);
+	//	}
+	//}
 
-	SGD::Vector toMouse = SGD::Point(mousepoint.x + camerapos.x, mousepoint.y + camerapos.y) - toUpdate->GetPosition();
-	if (m_Player->m_bIsAlive == true)
-	{
-		toMouse.Normalize();
-		if (toMouse.ComputeDotProduct(toUpdate->GetDirection()) < 0.999f)
-		{
-			if (toUpdate->GetDirection().ComputeSteering(toMouse) > 0)
-				toUpdate->SetRotation(toUpdate->GetRotation() + (SGD::PI *2.0f  * dt)); //Turn left
+	//SGD::Vector toMouse = SGD::Point(mousepoint.x + camerapos.x, mousepoint.y + camerapos.y) - toUpdate->GetPosition();
+	//if (m_Player->m_bIsAlive == true)
+	//{
+	//	toMouse.Normalize();
+	//	if (toMouse.ComputeDotProduct(toUpdate->GetDirection()) < 0.999f)
+	//	{
+	//		if (toUpdate->GetDirection().ComputeSteering(toMouse) > 0)
+	//			toUpdate->SetRotation(toUpdate->GetRotation() + (SGD::PI *2.0f  * dt)); //Turn left
 
-			else if (toUpdate->GetDirection().ComputeSteering(toMouse) < 0)
-				toUpdate->SetRotation(toUpdate->GetRotation() - (SGD::PI *2.0f  * dt)); //Turn right
+	//		else if (toUpdate->GetDirection().ComputeSteering(toMouse) < 0)
+	//			toUpdate->SetRotation(toUpdate->GetRotation() - (SGD::PI *2.0f  * dt)); //Turn right
 
-			SGD::Vector orientation = { 0, -1 };
-			orientation.Rotate(toUpdate->GetRotation());
-			toUpdate->SetDirection(orientation);
-		}
-	}
+	//		SGD::Vector orientation = { 0, -1 };
+	//		orientation.Rotate(toUpdate->GetRotation());
+	//		toUpdate->SetDirection(orientation);
+	//	}
+	//}
 
 
 	std::string animation = "";
@@ -299,7 +308,7 @@ PlayerController::~PlayerController()
 
 
 	// spawning turrets
-	if (pInput->IsKeyPressed(SGD::Key::T) == true || (pInput->IsButtonPressed(0, 3) == true))
+	if ((pInput->IsKeyPressed(SGD::Key::T) == true || pInput->IsButtonPressed(0, 3) == true) && m_Player->GetNumTurrets() > 0)
 		m_Player->SetIsPlacingTurret(!m_Player->isPlacingTurret());
 	
 
