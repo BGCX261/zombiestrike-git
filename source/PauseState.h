@@ -1,6 +1,6 @@
 #pragma once
 #include "IGameState.h"
-
+#include "../SGD Wrappers/SGD_Handle.h"
 
 
 class PauseState : public IGameState
@@ -26,6 +26,7 @@ private:
 	PauseState(const PauseState&) = delete;
 	PauseState& operator= (const PauseState&) = delete;
 
+	SGD::HTexture m_hReticleImage = SGD::INVALID_HANDLE;
 
 
 

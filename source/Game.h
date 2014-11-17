@@ -82,6 +82,8 @@ public:
 	void				CreateTutorialProfile(void);
 
 	void				OverWriteProfile(GamerProfile& profile);
+	void				OverWriteTutorialProfile(GamerProfile& profile);
+
 
 
 

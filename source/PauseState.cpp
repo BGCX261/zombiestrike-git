@@ -38,6 +38,8 @@
 
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor({ 0, 0, 0 });	// black
+	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
+
 
 
 	// Load assets
@@ -56,6 +58,7 @@
 	{
 		temp++;
 	}
+		SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hReticleImage);
 }
 
 
@@ -334,7 +337,12 @@
 	}
 	*/
 
+	// Draw the reticle
+	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+	float		retscale = 0.8f;
 
+	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
+	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
 	// during gameplay
 	if (HTPGameState::GetInstance()->GetChoiceScreen() == true)
 	{

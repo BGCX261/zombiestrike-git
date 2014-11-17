@@ -27,18 +27,15 @@
 #include "HTPGameState.h"
 
 
-Player::Player()
+Player::Player() : Listener(this)
 {
 	m_Attributes.m_fCurrEnergy = 100.0f;
 	m_Attributes.m_fMaxEnergy = 100.0f;
 	//szSize = {68, 64};
 
 
-	//RegisterForEvent("PICK_UP_CORE");
-	//RegisterForEvent("PICK_UP_STIM");
-	//RegisterForEvent("CHECKPOINT");
-	//RegisterForEvent("LEVEL_COMPLETE");
-	//RegisterForEvent("HIT");
+	RegisterForEvent("UPDATE_PROFILE");
+	
 
 
 	m_hDeath	= &Game::GetInstance()->playerDeath;
@@ -60,13 +57,16 @@ Player::Player()
 	m_fCurrHP = m_fMaxHP = 100.0f;
 
 	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
-		profile = Game::GetInstance()->GetTutorialProfile();
+	{
+		profile = &Game::GetInstance()->GetTutorialProfile();
+
+	}
 	else
 	{
 		if (GameplayState::GetInstance()->GetGameMode() == true)
-			profile = Game::GetInstance()->GetStoryProfile();
+			profile = &Game::GetInstance()->GetStoryProfile();
 		else
-			profile = Game::GetInstance()->GetSurvivalProfile();
+			profile = &Game::GetInstance()->GetSurvivalProfile();
 
 	}
 	
@@ -80,11 +80,8 @@ Player::~Player()
 {
 	m_hDeath = nullptr;
 
-	//UnregisterFromEvent("PICK_UP_CORE");
-	//UnregisterFromEvent("PICK_UP_STIM");
-	//UnregisterFromEvent("CHECKPOINT");
-	//UnregisterFromEvent("LEVEL_COMPLETE");
-	//UnregisterFromEvent("HIT");
+	UnregisterFromEvent("UPDATE_PROFILE");
+	
 	//delete pistol;
 	//delete arifle;
 	//delete shotgun;
@@ -103,26 +100,33 @@ Player::~Player()
 	/*
 	if (Game::GetInstance()->GetCurrState() == HTPGameState::GetInstance())
 	{
-		profile = Game::GetInstance()->GetTutorialProfile();
-		m_fCurrHP = profile.health;
+		profile = &Game::GetInstance()->GetTutorialProfile();
+		m_fCurrHP = profile->health;
 	}
 	else
 	{
 		if (GameplayState::GetInstance()->GetGameMode() == true)
 		{
-			profile = Game::GetInstance()->GetStoryProfile();
-			m_fCurrHP = profile.health;
+		//	profile = Game::GetInstance()->GetStoryProfile();
+			m_fCurrHP = profile->health;
 		}
 
 		else
 		{
-			profile = Game::GetInstance()->GetSurvivalProfile();
-			m_fCurrHP = profile.health;
+		//	profile = Game::GetInstance()->GetSurvivalProfile();
+			m_fCurrHP = profile->health;
 		}
 	}
 	*/
 
 	
+	m_nNumTurrets = profile->numTurrets;
+
+
+
+
+
+
 	// update hud
 	hud.Update(dt);
 
@@ -140,7 +144,7 @@ void Player::Render()
 	// render good/bad turret location
 	if (m_bIsPlacingTurret)
 	{
-		if (profile.numTurrets > 0)
+		if (profile->numTurrets > 0)
 		{
 			// fake time stamp for animation
 			AnimTimeStamp ats;
@@ -169,11 +173,21 @@ void Player::Render()
 
 /*virtual*/ void Player::HandleEvent(const SGD::Event* pEvent)
 {
-	/*if (pEvent->GetEventID() == "PICK_UP_CORE")
+	if (pEvent->GetEventID() == "UPDATE_PROFILE")
 	{
-		m_Attributes.m_fMaxEnergy += m_Attributes.m_fMaxEnergy * 0.10f;
-		m_Attributes.m_fCurrEnergy = m_Attributes.m_fMaxEnergy;
+		if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+			profile = &Game::GetInstance()->GetTutorialProfile();
+
+		else
+		{
+			if (GameplayState::GetInstance()->GetGameMode() == true)
+				profile = &Game::GetInstance()->GetStoryProfile();
+			else
+				profile = &Game::GetInstance()->GetSurvivalProfile();
+
+		}
 	}
+	/*
 	else if (pEvent->GetEventID() == "PICK_UP_STIM")
 	{
 		m_Attributes.m_fMaxStamina += m_Attributes.m_fMaxStamina * 0.10f;
@@ -185,56 +199,56 @@ void Player::Render()
 	}
 	else if (pEvent->GetEventID() == "CHECKPOINT")
 	{
-		profile.CamoMultiplier		= m_Attributes.m_fCamoMultiplier;					
-		profile.CheckPointReached	= true;
-		profile.MaxEnergy			= m_Attributes.m_fMaxEnergy;
-		profile.MaxStamina			= m_Attributes.m_fCurrStamina;
-		profile.RadarMultiplier		= m_Attributes.m_fRadarMultiplier;
-		profile.SpeedMultiplier		= m_Attributes.m_fSpeedMultiplier;
+		profile->CamoMultiplier		= m_Attributes.m_fCamoMultiplier;					
+		profile->CheckPointReached	= true;
+		profile->MaxEnergy			= m_Attributes.m_fMaxEnergy;
+		profile->MaxStamina			= m_Attributes.m_fCurrStamina;
+		profile->RadarMultiplier		= m_Attributes.m_fRadarMultiplier;
+		profile->SpeedMultiplier		= m_Attributes.m_fSpeedMultiplier;
 
 		fstream file;
 
-		file.open(profile.path.c_str());
+		file.open(profile->path.c_str());
 		
 		if (file.is_open())
 		{
-			file << profile.path << '\n';
-			file << profile.MaxEnergy << '\n';
-			file << profile.MaxStamina << '\n';
-			file << profile.CamoMultiplier << '\n';
-			file << profile.SpeedMultiplier << '\n';
-			file << profile.RadarMultiplier << '\n';
-			file << profile.LevelsComplete << '\n';
-			file << profile.m_bHasKey << '\n';
-			file << profile.CheckPointReached << '\n';
+			file << profile->path << '\n';
+			file << profile->MaxEnergy << '\n';
+			file << profile->MaxStamina << '\n';
+			file << profile->CamoMultiplier << '\n';
+			file << profile->SpeedMultiplier << '\n';
+			file << profile->RadarMultiplier << '\n';
+			file << profile->LevelsComplete << '\n';
+			file << profile->m_bHasKey << '\n';
+			file << profile->CheckPointReached << '\n';
 			file.close();
 		}
 	}
 	else if (pEvent->GetEventID() == "LEVEL_COMPLETE")
 	{
-		profile.CamoMultiplier		= m_Attributes.m_fCamoMultiplier;
-		profile.CheckPointReached	= true;
-		profile.MaxEnergy			= m_Attributes.m_fMaxEnergy;
-		profile.MaxStamina			= m_Attributes.m_fCurrStamina;
-		profile.RadarMultiplier		= m_Attributes.m_fRadarMultiplier;
-		profile.SpeedMultiplier		= m_Attributes.m_fSpeedMultiplier;
+		profile->CamoMultiplier		= m_Attributes.m_fCamoMultiplier;
+		profile->CheckPointReached	= true;
+		profile->MaxEnergy			= m_Attributes.m_fMaxEnergy;
+		profile->MaxStamina			= m_Attributes.m_fCurrStamina;
+		profile->RadarMultiplier		= m_Attributes.m_fRadarMultiplier;
+		profile->SpeedMultiplier		= m_Attributes.m_fSpeedMultiplier;
 
 		Game::GetInstance()->GetProfile() = profile;
 		fstream file;
 
-		file.open(profile.path.c_str());
+		file.open(profile->path.c_str());
 
 		if (file.is_open())
 		{
-			file << profile.path << '\n';
-			file << profile.MaxEnergy << '\n';
-			file << profile.MaxStamina << '\n';
-			file << profile.CamoMultiplier << '\n';
-			file << profile.SpeedMultiplier << '\n';
-			file << profile.RadarMultiplier << '\n';
-			file << (profile.LevelsComplete+1) << '\n';
-			file << profile.m_bHasKey << '\n';
-			file << profile.CheckPointReached << '\n';
+			file << profile->path << '\n';
+			file << profile->MaxEnergy << '\n';
+			file << profile->MaxStamina << '\n';
+			file << profile->CamoMultiplier << '\n';
+			file << profile->SpeedMultiplier << '\n';
+			file << profile->RadarMultiplier << '\n';
+			file << (profile->LevelsComplete+1) << '\n';
+			file << profile->m_bHasKey << '\n';
+			file << profile->CheckPointReached << '\n';
 			file.close();
 		}
 
@@ -327,7 +341,7 @@ void Player::SpawnTurret(void)
 	Game* pGame = Game::GetInstance();
 
 
-	if (profile.numTurrets == 0 || GoodTurretPosition() == false)
+	if (profile->numTurrets == 0 || GoodTurretPosition() == false)
 	{
 		if (pAudio->IsAudioPlaying(pGame->turret_bad) == false)
 			pAudio->PlayAudio(pGame->turret_bad, false);
@@ -344,7 +358,11 @@ void Player::SpawnTurret(void)
 	pMsg->QueueMessage();
 	pMsg = nullptr;
 
-	profile.numTurrets--;
+	profile->numTurrets--;
+	if (profile->numTurrets == 0)
+	{
+		m_bIsPlacingTurret = false;
+	}
 }
 
 void Player::CheckDamage(void)
@@ -354,9 +372,9 @@ void Player::CheckDamage(void)
 
 
 	// dead, !hurt
-	if (profile.health <= 0.0f)
+	if (profile->health <= 0.0f)
 	{
-		profile.health = 0.0f;
+		profile->health = 0.0f;
 
 		if (m_hHurt != nullptr && pAudio->IsAudioPlaying(*m_hHurt) == true)
 			pAudio->StopAudio(*m_hHurt);

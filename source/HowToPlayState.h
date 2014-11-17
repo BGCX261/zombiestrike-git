@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IGameState.h"
+#include "../SGD Wrappers/SGD_Handle.h"
 
 class HowToPlayState : public IGameState
 {
@@ -30,6 +31,7 @@ private:
 	HowToPlayState( const HowToPlayState& )				= delete;	
 	HowToPlayState& operator= ( const HowToPlayState& )	= delete;
 
+	SGD::HTexture	m_hReticleImage = SGD::INVALID_HANDLE;
 
 
 };

@@ -60,7 +60,9 @@ void LandMine::HandleCollision( const IBase* pOther )
 	// zombie collision
 	if (pOther->GetType() == ObjectType::OBJ_SLOW_ZOMBIE ||
 		pOther->GetType() == ObjectType::OBJ_FAT_ZOMBIE || 
-		pOther->GetType() == ObjectType::OBJ_FAST_ZOMBIE )
+		pOther->GetType() == ObjectType::OBJ_FAST_ZOMBIE ||
+		pOther->GetType() == ObjectType::OBJ_EXPLODING_ZOMBIE || 
+		pOther->GetType() == ObjectType::OBJ_TANK_ZOMBIE )
 	{
 		// activated mine
 		if (this->GetAnimation() == "testLandmine" || this->GetAnimation() == "landmine")
@@ -85,6 +87,7 @@ void LandMine::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "REPAIR_LANDMINES")
 	{
 		isActive = true;
+		SetAnimation("landmine");
 	}
 }
 

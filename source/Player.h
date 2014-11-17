@@ -49,16 +49,12 @@ struct Attributes
 };
 
 
-class Player : public MovingObject
+class Player : public MovingObject, public SGD::Listener
 {
-	GamerProfile	profile;
+	GamerProfile*	profile = nullptr;
 	Attributes		m_Attributes;
 
-	//Weapon* pistol = nullptr;
-	//Weapon* shotgun = nullptr;
-	//Weapon* arifle = nullptr;
-	//Weapon* sniper = nullptr;
-	//Weapon* flameThrower = nullptr;
+
 
 
 
@@ -82,7 +78,7 @@ class Player : public MovingObject
 	SGD::Point		m_rectAbilityPoint;
 	SGD::Size		m_rectAbilitySize;
 
-	int				m_nNumTurrets		= 3;
+	int				m_nNumTurrets		= 0;
 
 	float			m_fCurrHP			= 0.0f;
 	float			m_fMaxHP			= 100.0f;
@@ -108,11 +104,11 @@ public:
 	const Attributes*	GetAttributes		(void) const			{ return &m_Attributes; }
 	SGD::HAudio*		GetDeathSFX			(void) const			{ return m_hDeath; }
 	SGD::HVoice			GetVoice			(void) const			{ return voice; }
-	GamerProfile&		GetProfile()		{ return profile; }
+	GamerProfile*		GetProfile()		{ return profile; }
 
 	// Mutators
 	void				RetrieveBehavior	(std::string name);
-	void				SetGamerProfile		(GamerProfile _profile)		{ profile = _profile; }
+	void				SetGamerProfile		(GamerProfile* _profile)		{ profile = _profile; }
 	void				SetAlpha			(unsigned char newAlpha)	{ alpha = newAlpha; }
 	void				SetHealth(float newHealth)				{ m_fCurrHP = newHealth; }
 
@@ -126,10 +122,10 @@ public:
 	bool				isLevelCompleted	(void) const				{ return m_bLevelCompleted; }
 
 	int					GetNumTurrets		(void) const				{ return m_nNumTurrets; }
-	void				SetNumTurrets		(int tur)					{ m_nNumTurrets = tur; }
+	void				SetNumTurrets(int tur)					{ m_nNumTurrets = tur; }
 
-	void				AddOneTurret		(void)						{ profile.numTurrets++; }
-	void				MinusOneTurrets(void)						{ profile.numTurrets--; }
+	void				AddOneTurret		(void)						{ profile->numTurrets++; }
+	void				MinusOneTurrets(void)						{ profile->numTurrets--; }
 
 	float				GetCurrHealth		(void) const				{ return m_fCurrHP; }
 	float				GetMaxHealth		(void) const				{ return m_fMaxHP; }

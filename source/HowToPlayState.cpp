@@ -26,6 +26,7 @@
 {
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor({ 0, 0, 0 });	// black
+	m_hReticleImage = SGD::GraphicsManager::GetInstance()->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
 
 }
 
@@ -34,6 +35,7 @@
 // Exit
 /*virtual*/ void HowToPlayState::Exit( void )
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hReticleImage);
 
 }
 

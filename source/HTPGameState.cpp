@@ -204,6 +204,7 @@
 	gameOverMsg.SendEventNow();
 
 
+
 	/**************************/
 	// Unload the assets
 	/**************************/
@@ -245,7 +246,7 @@
 	MapManager::GetInstance()->UnloadLevel();
 
 
-	Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetTutorialProfile());
+	Game::GetInstance()->OverWriteTutorialProfile(Game::GetInstance()->GetTutorialProfile());
 
 	isActive = false;
 
@@ -285,6 +286,7 @@
 				m_nCursor = 0;
 			}
 		}
+
 
 		if (pInput->IsKeyPressed(SGD::Key::LeftArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true)
 		{
@@ -390,6 +392,11 @@
 			m_nCurPage = 1;
 		}
 	}
+	if (pInput->IsKeyPressed(SGD::Key::I) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
+	{
+		m_bIsTutorial = !m_bIsTutorial;
+	}
+
 
 	return true;	// keep playing
 }
@@ -418,6 +425,7 @@
 		if (m_nCurPage > 3)
 		{
 			m_bIsTutorial = false;
+			m_nCurPage = 0;
 		}
 
 		if (m_nCurPage < 1)
@@ -710,12 +718,11 @@
 		}
 
 		// On screen input
-		else
-		{
+		
 			SGD::InputManager::GetInstance()->IsControllerConnected(0) == false
 				? DrawKeyboardInput()
 				: DrawControllerInput();
-		}
+		
 	}
 
 }
@@ -1227,12 +1234,12 @@ void HTPGameState::DrawKeyboardInput(void)
 	float middleoffset = 180.0f;
 
 
-	SGD::Rectangle inputbox = { (width * 0.5f) - middleoffset, 0, (width * 0.5f) + middleoffset, 35.0f };
+	SGD::Rectangle inputbox = { (width * 0.39f), 0, (width * 0.65f), 70.0f };
 	pGraphics->DrawRectangle(inputbox, { 0, 0, 0 });
 
 
-	std::string	shopinput = "B - Enter Shop";
-	pFont->Draw(shopinput.c_str(), { (width - (shopinput.length() * 13 * 1.0f)) / 2, 0.0f }, 1.0f, { 255, 0, 0 });
+	std::string	shopinput = "B - Enter Shop\nI - Toggle Instructions";
+	pFont->Draw(shopinput.c_str(), { (width * 0.4f), 0.0f }, 1.0f, { 255, 0, 0 });
 }
 
 void HTPGameState::OverWriteTutorialFile()
