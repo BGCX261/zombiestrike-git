@@ -14,6 +14,7 @@
 #include "CreateTurretMessage.h"
 #include "AnimationManager.h"
 #include "AnimTimeStamp.h"
+#include "GamerProfile.h"
 
 #include "Zombie.h"
 #include "Bullet.h"
@@ -59,7 +60,6 @@ Player::Player() : Listener(this)
 	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
 	{
 		profile = &Game::GetInstance()->GetTutorialProfile();
-
 	}
 	else
 	{
@@ -67,7 +67,6 @@ Player::Player() : Listener(this)
 			profile = &Game::GetInstance()->GetStoryProfile();
 		else
 			profile = &Game::GetInstance()->GetSurvivalProfile();
-
 	}
 	
 
@@ -278,7 +277,7 @@ void Player::Render()
 			{
 				m_fCurrHP -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
 				//profile.health -= zombie->GetDamage() * Game::GetInstance()->DeltaTime();
-				profile.health = m_fCurrHP;
+				profile->health = m_fCurrHP;
 			}
 			
 			// check death
@@ -296,7 +295,7 @@ void Player::Render()
 			// take damage
 			m_fCurrHP -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
 			//profile.health -= bullet->GetDamage() * Game::GetInstance()->DeltaTime();
-			profile.health = m_fCurrHP;
+			profile->health = m_fCurrHP;
 			
 
 			// check death
