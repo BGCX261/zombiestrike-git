@@ -65,6 +65,7 @@ void WeaponManager::Initialize(MovingObject& owner)
 
 	//m_aWpnInventory[0] = m_vWeapons[0];
 
+	equipIndex = m_vWeapons.size() - 1;
 
 	curIndex = 0;
 }
@@ -77,10 +78,10 @@ void WeaponManager::Render()
 
 	SGD::Rectangle equipRect = { Game::GetInstance()->GetScreenWidth() - 343.0f, Game::GetInstance()->GetScreenHeight() - 135.0f, Game::GetInstance()->GetScreenWidth() - 60, Game::GetInstance()->GetScreenHeight() - 10 };
 
-	int widthOffset = 10;
-	int heightOffset = 15;
-	float sWidth = Game::GetInstance()->GetScreenWidth() - 343;
-	float sHeight = Game::GetInstance()->GetScreenHeight() - 135;
+	int widthOffset = -10;
+	int heightOffset = -15;
+	float sWidth = Game::GetInstance()->GetScreenWidth() - 303;
+	float sHeight = Game::GetInstance()->GetScreenHeight() - 195;
 
 	SGD::Rectangle unEquip;
 
@@ -95,12 +96,13 @@ void WeaponManager::Render()
 	//	//}
 	//}
 
+	int index = 0;
 
 	for (unsigned int j = 0; j < 5; j++)
 	{
-		int index = j;
-
-		for (unsigned int i = equipIndex; i < m_vWeapons.size(); i++)
+		index = j;
+		
+		for (int i = equipIndex; i > -1; i--)
 		{
 			//unEquip = { sWidth + widthOffset * j, sHeight - heightOffset * j, Game::GetInstance()->GetScreenWidth() - 10 - widthOffset * j, Game::GetInstance()->GetScreenHeight() - 10 + widthOffset*j};
 			//pGraphics->DrawRectangle(unEquip, { 255, 255, 255 }, { 0, 0, 255 });
@@ -112,39 +114,47 @@ void WeaponManager::Render()
 				if (m_vWeapons[i]->GetGunType() == m_vWeapons[curIndex]->GetGunType())
 				{
 					//pGraphics->DrawTextureSection(m_hHudWpn, { sWidth + widthOffset*j, sHeight - heightOffset * j },
-						//imageRect, {}, {}, {}, { 1.0f, 1.0f });
-					index--;
+					//	imageRect, {}, {}, {}, { 1.0f, 1.0f });
+			
+					//index--;
+					//j--;
 
 					if (index < 0)
 					{
 						index = 0;
 					}
+
+					equipRect = { sWidth + widthOffset*index, sHeight - heightOffset * index, sWidth + 282 + (widthOffset * index), sHeight + 125 - (heightOffset * index)  };
 				}
 
 				else
 				{
+					pGraphics->DrawRectangle({ sWidth + widthOffset*index, sHeight - heightOffset * index, sWidth + 282 + (widthOffset * index), sHeight + 125 - (heightOffset * index) }, { 255, 255, 255 }, { 0, 0, 255 },2);
 					pGraphics->DrawTextureSection(m_hHudWpn, { sWidth + widthOffset*index, sHeight - heightOffset * index },
 						imageRect, {}, {}, {}, { 1.0f, 1.0f });
-					pGraphics->DrawRectangle({ sWidth + widthOffset*index, sHeight - heightOffset * index, sWidth + 282 + (widthOffset * index), sHeight + 125 - (heightOffset *index) }, { 175, 0, 0, 0 });
+					pGraphics->DrawRectangle({ (sWidth + widthOffset*index) - 2, (sHeight - heightOffset * index) - 2, (sWidth + 282 + (widthOffset * index)) + 2, (sHeight + 125 - (heightOffset * index)) + 2 }, { 175, 0, 0, 0 });
 				}
 
-				equipIndex++;
+				equipIndex--;
 				break;
 			}
 
 
-			equipIndex++;
+			equipIndex--;
 		}
+
 	}
 
 	pGraphics->DrawRectangle(equipRect, { 255, 255, 255 }, { 0, 0, 255 });
+
+	pGraphics->DrawTextureSection(m_hHudWpn, { equipRect.left, equipRect.top },
+		m_vWeapons[curIndex]->GetRenderRect(), {}, {}, {}, { 1.0, 1.0f });
 
 	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
 	{
 		if (m_vWeapons[curIndex]->GetGunType() == m_vWeapons[i]->GetGunType() && m_vWeapons[curIndex]->GetEquipped() == true)
 		{
-			pGraphics->DrawTextureSection(m_hHudWpn, { Game::GetInstance()->GetScreenWidth() - 343.0f, Game::GetInstance()->GetScreenHeight() - 135.0f },
-				m_vWeapons[curIndex]->GetRenderRect(), {}, {}, {}, { 1.0, 1.0f });
+
 
 			stringstream magSize;
 			magSize << m_vWeapons[curIndex]->GetCurrAmmo() << "|";
@@ -191,20 +201,20 @@ void WeaponManager::Render()
 			//}
 			if (m_vWeapons[curIndex]->GetReloadTimer().GetTime() > 0)
 			{
-				bFont->Draw("RELOADING", { Game::GetInstance()->GetScreenWidth() - 328, Game::GetInstance()->GetScreenHeight() - 130 }, 1.5f, { 200, 0, 0 });
+				bFont->Draw("RELOADING", { equipRect.left + 5, equipRect.top + 5 }, 1.5f, { 200, 0, 0 });
 
 			}
 
 			if (m_vWeapons[curIndex]->GetTotalAmmo() == 0 && m_vWeapons[curIndex]->GetCurrAmmo() <= 0)
 			{
-				bFont->Draw("OUT OF AMMO", { Game::GetInstance()->GetScreenWidth() - 328, Game::GetInstance()->GetScreenHeight() - 130 }, .75f, { 200, 0, 0 });
+				bFont->Draw("OUT OF AMMO", { equipRect.left + 5, equipRect.top + 5 }, .75f, { 200, 0, 0 });
 			}
 
 
 		}
 	}
 
-	equipIndex = 0;
+	equipIndex = m_vWeapons.size() - 1;
 
 	//for (unsigned int i = 0; i < 5; i++)
 	//{

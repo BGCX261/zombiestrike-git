@@ -49,7 +49,7 @@
 
 	m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
 
-	IntroTimer.AddTime(60);
+	IntroTimer.AddTime(45);
 	ScreenTimer.AddTime(.1f);
 
 	pAudio->PlayAudio(m_hEmergency, false);
@@ -74,6 +74,9 @@
 	//pAudio->UnloadAudio(m_hBackgroundMusic);
 
 	pAudio->UnloadAudio(m_hEmergency);
+
+	IntroTimer.AddTime(45.0f - IntroTimer.GetTime());
+	ScreenTimer.AddTime(.1f - ScreenTimer.GetTime());
 }
 
 
@@ -117,7 +120,7 @@
 		Game::GetInstance()->AddState(GameplayState::GetInstance());
 	}
 
-	if (IntroTimer.GetTime() < 25.0f)
+	if (IntroTimer.GetTime() < 30.0f)
 	{
 		if (ScreenTimer.GetTime() <= 0.0f && IntroTimer.GetTime() > 12.0f)
 		{
@@ -214,7 +217,7 @@
 	float width = Game::GetInstance()->GetScreenWidth();
 
 	// Display the mode title & its animation
-	pFont->Draw("Story Mode", { (width - (10 * 25 * 3.0f)) / 2, 10 }, 3.0f, { 255, 255, 255 });
+	//pFont->Draw("Story Mode", { (width - (10 * 25 * 3.0f)) / 2, 10 }, 3.0f, { 255, 255, 255 });
 
 	// Display skip input
 	std::string output0 = SGD::InputManager::GetInstance()->IsControllerConnected(0) == false

@@ -102,6 +102,7 @@ Player::~Player()
 		profile = &Game::GetInstance()->GetTutorialProfile();
 		m_fCurrHP = profile->health;
 	}
+
 	else
 	{
 		if (GameplayState::GetInstance()->GetGameMode() == true)
