@@ -131,6 +131,8 @@ public:
 	SGD::HAudio m_hCash				= SGD::INVALID_HANDLE;
 	SGD::HAudio m_hNoBuy			= SGD::INVALID_HANDLE;
 
+	SGD::HTexture m_hRadioImage		= SGD::INVALID_HANDLE;
+
 
 	/*****************************************************
 *****/
@@ -204,6 +206,7 @@ private:
 	GamerProfile		tutorialProfile;
 	
 	SGD::HAudio ssRadio[20];
+	
 };
 
 #endif //GAME_H
