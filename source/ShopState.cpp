@@ -11010,8 +11010,8 @@ void ShopState::DrawKeyboardInput(void)
 
 	pFont->Draw("Q:\tPrev Page", { screenSize.width * 0.7f, screenSize.height * 0.05f }, 1.0f, { 255, 0, 0 });
 	pFont->Draw("E:\tNext Page", { screenSize.width * 0.7f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("Left:\tPrev Tab", { screenSize.width * 0.7f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("Right:\tNext Tab", { screenSize.width * 0.7f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("A:\tPrev Tab", { screenSize.width * 0.7f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("D:\tNext Tab", { screenSize.width * 0.7f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
 
 
 

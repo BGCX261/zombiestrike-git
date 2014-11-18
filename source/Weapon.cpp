@@ -2,6 +2,7 @@
 #include "MovingObject.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "GameplayState.h"
+#include "WeaponManager.h"
 
 Weapon::Weapon()
 {
@@ -210,4 +211,52 @@ std::string Weapon::GetWeaponAnimType(void) const
 	}
 
 	return gun;
+}
+
+float Weapon::GetBulletStartPixelOffset(void) const
+{
+	float pixels = 0.0f;
+
+	switch (this->type)
+	{
+	case Gun::GLOCK:
+	case Gun::REVOLVER:
+	case Gun::MAC10:
+	case Gun::TECH9:
+		pixels = 40.0f;
+		break;
+
+	case Gun::SAWN:
+		pixels = 37.0f;
+		break;
+
+	case Gun::PUMP:
+	case Gun::AUTO:
+		pixels = 50.0f;
+		break;
+
+	case Gun::SP90:
+	case Gun::M16:
+	case Gun::LIGHT_MG:
+	case Gun::AK47:
+		pixels = 45.0f;
+		break;
+
+	case Gun::SNIPER:
+		pixels = 75.0f;
+		break;
+
+	case Gun::FTHROWER:
+		pixels = 70.0f;
+		break;
+
+	case Gun::GLAUNCHER:
+		pixels = 50.0f;
+		break;
+
+	default:
+		break;
+	}
+
+	return pixels;
 }

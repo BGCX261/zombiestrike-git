@@ -199,16 +199,16 @@ void WeaponManager::Render()
 			//{
 			//	//bFont->Draw("RELOADING", { Game::GetInstance()->GetScreenWidth() - 328, Game::GetInstance()->GetScreenHeight() - 130 }, 1.5f, { 200, 0, 0 });
 			//}
-			if (m_vWeapons[curIndex]->GetReloadTimer().GetTime() > 0)
+			if (m_vWeapons[curIndex]->GetReloadTimer().GetTime() > 0 && m_vWeapons[curIndex]->GetTotalAmmo() > 0)
 			{
 				bFont->Draw("RELOADING", { equipRect.left + 5, equipRect.top + 5 }, 1.5f, { 200, 0, 0 });
 				bFont->Draw("RELOADING", { (Game::GetInstance()->GetScreenWidth() * 0.5f) - 100.0f, (Game::GetInstance()->GetScreenHeight() * 0.5f) - 70.0f }, 1.5f, { 200, 0, 0 });
-				bFont->Draw("RELOADING", { (Game::GetInstance()->GetScreenWidth() * 0.5f) - 100.0f, (Game::GetInstance()->GetScreenHeight() * 0.5f) + 30.0f }, 1.5f, { 200, 0, 0 });
+				//bFont->Draw("RELOADING", { (Game::GetInstance()->GetScreenWidth() * 0.5f) - 100.0f, (Game::GetInstance()->GetScreenHeight() * 0.5f) + 30.0f }, 1.5f, { 200, 0, 0 });
 			}
-
-			if (m_vWeapons[curIndex]->GetTotalAmmo() == 0 && m_vWeapons[curIndex]->GetCurrAmmo() <= 0)
+			else if (m_vWeapons[curIndex]->GetTotalAmmo() == 0 && m_vWeapons[curIndex]->GetCurrAmmo() <= 0)
 			{
 				bFont->Draw("OUT OF AMMO", { equipRect.left + 5, equipRect.top + 5 }, .75f, { 200, 0, 0 });
+				bFont->Draw("OUT OF AMMO", { (Game::GetInstance()->GetScreenWidth() * 0.5f) - 100.0f, (Game::GetInstance()->GetScreenHeight() * 0.5f) + 30.0f }, 1.5f, { 200, 0, 0 });
 			}
 
 
@@ -238,7 +238,7 @@ void WeaponManager::Input()
 	SGD::InputManager * pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
-	if (pInput->IsKeyPressed(SGD::Key::Q) == true || pInput->IsButtonPressed(0, 4) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Q) == true || pInput->IsButtonPressed(0, 4) == true || mousewheel < 0)
 	{
 		curIndex--;
 
@@ -262,9 +262,11 @@ void WeaponManager::Input()
 				curIndex = m_vWeapons.size() - 1;
 			}
 		}
+
+		mousewheel = 0;
 	}
 
-	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsButtonPressed(0, 5) == true)
+	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsButtonPressed(0, 5) == true || mousewheel > 0)
 	{
 		curIndex++;
 
@@ -288,6 +290,8 @@ void WeaponManager::Input()
 				curIndex = 0;
 			}
 		}
+
+		mousewheel = 0;
 	}
 
 	if (pInput->IsKeyPressed(SGD::Key::R) == true && m_vWeapons[curIndex]->GetCurrAmmo() < m_vWeapons[curIndex]->GetMagSize())
@@ -305,6 +309,9 @@ void WeaponManager::Update(float dt)
 
 	for (unsigned int i = 0; i < m_vWeapons.size(); i++)
 	{
+		if (i != curIndex)
+			continue;
+
 		m_vWeapons[i]->Update(dt);
 
 		//if (m_vWeapons[i]->GetType() == PISTOL )

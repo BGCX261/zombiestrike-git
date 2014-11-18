@@ -22,8 +22,12 @@ class WeaponManager : public Weapon
 	//Image Assets
 	SGD::HTexture m_hHudWpn = SGD::INVALID_HANDLE;
 
-		//Sound Assets
+	//Sound Assets
 	SGD::HAudio m_hWpnSwitch = SGD::INVALID_HANDLE;
+
+
+	// mouse wheel
+	int mousewheel = 0;
 	
 public:
 
@@ -45,6 +49,9 @@ public:
 	//Sets currently selected weapon
 	void SelectWeapon(int type);
 	void SetCurrIndex(int index) { curIndex = index; }
+
+
+	void SetMouseWheelRotation(int wheel) { mousewheel = wheel; }
 	
 
 	//Adds weapons to weapon vector
