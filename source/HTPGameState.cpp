@@ -115,6 +115,7 @@
 	SGD::AudioManager*		pAudio = SGD::AudioManager::GetInstance();
 	SGD::InputManager*		pInput = SGD::InputManager::GetInstance();
 	//AnimationManager*		pAnimationManager = AnimationManager::GetInstance();
+	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
 
 
 	if (m_bTutorialMode == true)
@@ -203,7 +204,7 @@
 	SGD::Event gameOverMsg = { "GAME_OVER", nullptr, this };
 	gameOverMsg.SendEventNow();
 
-
+	m_bIsChoiceScreen = true;
 
 	/**************************/
 	// Unload the assets
@@ -213,6 +214,8 @@
 	SGD::InputManager*		pInput = SGD::InputManager::GetInstance();
 
 	pGraphics->UnloadTexture(MapManager::GetInstance()->GetMapTexture());
+	pGraphics->UnloadTexture(m_hReticleImage);
+
 	
 
 	camera.SetTarget(nullptr);
@@ -263,18 +266,51 @@
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	{
+		SGD::Point	mpoint = pInput->GetMousePosition();
+		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+		float		stickmin = 0.250f;
+		float		mousevel = 1.0f;
+
+
+		if (joystick.x > stickmin)
+			mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+			mpoint.x -= mousevel;
+
+		if (joystick.y > stickmin)
+			mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+			mpoint.y -= mousevel;
+
+		if (mpoint.x < 0.0F)
+			mpoint.x = 0.0F;
+		if (mpoint.y < 0.0F)
+			mpoint.y = 0.0F;
+		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+			mpoint.x = Game::GetInstance()->GetScreenWidth();
+		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+			mpoint.y = Game::GetInstance()->GetScreenHeight();
+
+		pInput->SetMousePosition(mpoint);
+	}
+
+	SGD::Point mousePos = pInput->GetMousePosition();
 
 	if (m_bIsChoiceScreen == true)
 	{
-		// mouse input
-		/*
-		SGD::Point mousepos = pInput->GetMousePosition();
-		for (size_t i = 0; i < 2; i++)
+
+		if (pInput->GetMouseMovement() != SGD::Vector() || (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0))
 		{
-			if (mousepos.IsWithinRectangle(selectionrects[i]) == true)
-				m_nCursor = i;
+		
+			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 + 75), SGD::Size(128, 64))))
+				m_nCursor = 0;
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(Game::GetInstance()->GetScreenWidth() / 2 + 210, Game::GetInstance()->GetScreenHeight() / 2 + 75), SGD::Size(128, 64))))
+				m_nCursor = 1;
+
+
 		}
-		*/
 
 
 		if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true || pInput->IsKeyPressed(SGD::Key::D) == true)
@@ -298,7 +334,7 @@
 			}
 		}
 
-		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true)
+		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
 		{
 			switch (m_nCursor)
 			{
@@ -461,7 +497,17 @@
 			SGD::Point playerpos = m_pPlayer->GetPosition();
 			playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.5f;
 			playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.5f;
-			camera.SetPostion(playerpos);
+			camera.SetPosition(playerpos);
+
+			if (camera.GetPosition().x < 0)
+				camera.SetPosition({ 0.0f, camera.GetPosition().y });
+			else if (camera.GetPosition().x + camera.GetSize().width > m_szWorldSize.width)
+				camera.SetPosition({ m_szWorldSize.width - camera.GetSize().width, camera.GetPosition().y });
+
+			if (camera.GetPosition().y < 0)
+				camera.SetPosition({ camera.GetPosition().x, 0.0f });
+			else if (camera.GetPosition().y + camera.GetSize().height > m_szWorldSize.height)
+				camera.SetPosition({ camera.GetPosition().x, m_szWorldSize.height - camera.GetSize().height });
 
 
 			// Process the events & messages
@@ -550,12 +596,12 @@
 
 
 		// Draw the reticle
-		/*
+		
 		SGD::Point	retpos = pInput->GetMousePosition();
 		float		retscale = 0.8f;
 		retpos.Offset(-32.0F * retscale, -32.0F * retscale);
 		pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
-		*/
+		
 	}
 
 	else
@@ -628,23 +674,8 @@
 		pFont->Draw(moneyCount.str().c_str(), { 20, Game::GetInstance()->GetScreenHeight() - 75 }, 2.0f, { 0, 255, 0 });
 
 
-		Player* player = dynamic_cast<Player*>(m_pPlayer);
 
-		// Draw the reticle
-		SGD::Point retpos = { 0, 0 };
-
-		if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == true)
-		{
-			retpos = { (player->GetPosition().x + (player->GetDirection().x * 300.0f)), (player->GetPosition().y + (player->GetDirection().y * 300.0f)) };
-			retpos.Offset(-camera.GetPosition().x, -camera.GetPosition().y);
-		}
-
-		else
-			retpos = SGD::InputManager::GetInstance()->GetMousePosition();
-		float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
-
-		retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
-		pGraphics->DrawTexture(Game::GetInstance()->m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 0 }, { retscale, retscale });
+		
 
 		if (m_bIsTutorial == true)
 		{
@@ -723,8 +754,26 @@
 				? DrawKeyboardInput()
 				: DrawControllerInput();
 		
-	}
+			
+			// Draw the reticle
+			SGD::Point retpos = { 0, 0 };
+			Player* player = dynamic_cast<Player*>(m_pPlayer);
 
+			if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == true)
+			{
+				retpos = { (player->GetPosition().x + (player->GetDirection().x * 300.0f)), (player->GetPosition().y + (player->GetDirection().y * 300.0f)) };
+				retpos.Offset(-camera.GetPosition().x, -camera.GetPosition().y);
+			}
+
+			else
+				retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+			float		retscale = 1.0f + (WeaponManager::GetInstance()->GetSelected()->GetRecoilTimer().GetTime());
+
+			retpos.Offset((-11 * retscale)*0.5f, (-11 * retscale)*0.5f);
+			pGraphics->DrawTexture(Game::GetInstance()->m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 0 }, { retscale, retscale });
+
+	}
+	
 }
 
 

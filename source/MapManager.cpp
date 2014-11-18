@@ -21,7 +21,8 @@
 //#include "../resource/config/"
 
 
-enum EntityBucket { BUCKET_BLOOD, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_ENVIRO, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_COLLIDABLE, BUCKET_PICKUPS };
+enum EntityBucket { BUCKET_BLOOD, BUCKET_ENVIRO, BUCKET_PLAYER, BUCKET_ENEMIES, BUCKET_TURRETS, BUCKET_BULLETS, BUCKET_PUKE, BUCKET_COLLIDABLE, BUCKET_PICKUPS };
+
 
 /*static*/ MapManager * MapManager::GetInstance()
 {
@@ -317,7 +318,7 @@ void MapManager::Render()
 		{
 			SGD::Point point = tStruct.layers.m_vTiles[currRow][currCol].worldPos;
 
-			Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
+			HTPGameState::GetInstance()->GetIsCurrState() == false
 				? point.Offset({ -GameplayState::GetInstance()->GetCamera()->GetPosition().x, -GameplayState::GetInstance()->GetCamera()->GetPosition().y })
 				: point.Offset({ -HTPGameState::GetInstance()->GetCamera()->GetPosition().x, -HTPGameState::GetInstance()->GetCamera()->GetPosition().y });
 
@@ -332,7 +333,7 @@ void MapManager::Update(float elapsedTime)
 {
 	SGD::Rectangle cameraRect;
 
-	Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
+	HTPGameState::GetInstance()->GetIsCurrState() == false
 		? cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect()
 		: cameraRect = HTPGameState::GetInstance()->GetCamera()->GetRect();
 

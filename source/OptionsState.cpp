@@ -84,6 +84,37 @@
 	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
+	if ((pInput->GetLeftJoystick(0).x != 0 && pInput->GetLeftJoystick(0).x <= 1.0f && pInput->GetLeftJoystick(0).x >= -1.0f)
+		|| (pInput->GetLeftJoystick(0).y != 0 && pInput->GetLeftJoystick(0).y <= 1.0f && pInput->GetLeftJoystick(0).y >= -1.0f))
+	{
+	
+		SGD::Point	mpoint = pInput->GetMousePosition();
+		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+		float		stickmin = 0.250f;
+		float		mousevel = 1.0f;
+
+
+		if (joystick.x > stickmin)
+			mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+			mpoint.x -= mousevel;
+
+		if (joystick.y > stickmin)
+			mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+			mpoint.y -= mousevel;
+
+		if (mpoint.x < 0.0F)
+			mpoint.x = 0.0F;
+		if (mpoint.y < 0.0F)
+			mpoint.y = 0.0F;
+		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+			mpoint.x = Game::GetInstance()->GetScreenWidth();
+		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+			mpoint.y = Game::GetInstance()->GetScreenHeight();
+
+		pInput->SetMousePosition(mpoint);
+	}
 	SGD::Point mousePos = pInput->GetMousePosition();
 
 	//if (mousePos.IsWithinRectangle())
@@ -164,7 +195,7 @@
 	{
 	case 0: // Music
 		{
-			if (pInput->IsKeyPressed(SGD::Key::Right) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
+				if (pInput->IsKeyPressed(SGD::Key::Right) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true )
 				volumes[0] += volOffset;
 			else if (pInput->IsKeyPressed(SGD::Key::Left) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true)
 				volumes[0] -= volOffset;
@@ -187,6 +218,7 @@
 				{
 					m_bFullScreen = !m_bFullScreen;
 					pGraphics->Resize(SGD::Size(Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight()), m_bFullScreen);
+					pInput->SetMousePosition({ Game::GetInstance()->GetScreenWidth() * 0.5f, Game::GetInstance()->GetScreenHeight() * 0.5f });
 				}
 		}
 		break;

@@ -40,12 +40,13 @@ public:
 	bool Initialize	( float width, float height, const wchar_t* title );
 	int	 Update		( void );
 	void Terminate	( void );
-	
+	void ClearStateMachine(void);
 	
 	/**********************************************************/
 	// Screen Size Accessors:
 	float				GetScreenWidth	( void ) const	{	return m_fScreenWidth;	}
 	float				GetScreenHeight ( void ) const	{	return m_fScreenHeight;	} 
+	
 
 
 	/**********************************************************/
@@ -57,6 +58,7 @@ public:
 	/**********************************************************/
 	// Delta time
 	float				DeltaTime		( void ) const { return elapsedTime; }
+	bool isActive = true;
 
 
 	/**********************************************************/

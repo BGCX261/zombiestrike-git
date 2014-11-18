@@ -18,6 +18,7 @@
 #include "Game.h"			// Our Game class
 #include "GameplayState.h"	// Our GameplayState class
 #include "HTPGameState.h"	// Our HTPGameState class
+#include "ShopState.h"
 #include "PauseState.h"		// Our PauseState class
 #include "WeaponManager.h"	// Our WeaponManager class
 #include "../resource.h"
@@ -240,8 +241,8 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 	case WM_ACTIVATE:		// Window activated / deactivated
 		if( LOWORD( wParam ) != WA_INACTIVE )	//	gaining focus (unpause)
 		{
-			//Game * zstrike = Game::GetInstance();
-
+			Game * zstrike = Game::GetInstance();
+			zstrike->isActive = true;
 			//if (zstrike->GetCurrState() == PauseState::GetInstance())
 			//	zstrike->RemoveState();
 		}
@@ -250,8 +251,13 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 			//Game * zstrike = (Game *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			Game * zstrike = Game::GetInstance();
 
-			if (zstrike->GetCurrState() == GameplayState::GetInstance() || (zstrike->GetCurrState() == HTPGameState::GetInstance() && HTPGameState::GetInstance()->GetChoiceScreen() == false))
+			if (zstrike->GetCurrState() == GameplayState::GetInstance() 
+				|| (zstrike->GetCurrState() == HTPGameState::GetInstance() && HTPGameState::GetInstance()->GetChoiceScreen() == false)
+				|| zstrike->GetCurrState() == ShopState::GetInstance())
 				zstrike->AddState(PauseState::GetInstance());
+
+			zstrike->isActive = false;
+
 		}
 		break;
 

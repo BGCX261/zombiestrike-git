@@ -1,5 +1,6 @@
 #include "ShopState.h"
 #include "WeaponManager.h"
+#include "PauseState.h"
 #include "HTPGameState.h"
 #include "Weapon.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
@@ -93,13 +94,13 @@ void	ShopState::Enter(void)
 
 	for (unsigned int currWeapon = 0; currWeapon < 8; currWeapon++)
 	{
-		Buttons[currWeapon] = SGD::Rectangle(SGD::Point(screenSize.width * 0.5f, (float)startY), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
+		Buttons[currWeapon] = SGD::Rectangle(SGD::Point(screenSize.width * 0.55f, (float)startY), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
 		startY += BUTTON_HEIGHT + 5;
 	}
 	Buttons[8] = SGD::Rectangle({ screenSize.width* 0.7f, screenSize.height * 0.7f }, SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
 
 	startY = screenSize.height * .15f;
-	DefenseButtons[0] = SGD::Rectangle(SGD::Point(screenSize.width * 0.5f, (float)startY), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
+	DefenseButtons[0] = SGD::Rectangle(SGD::Point(screenSize.width * 0.55f, (float)startY), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT));
 	DefenseButtons[1] = DefenseButtons[0];
 	DefenseButtons[1].bottom += BUTTON_HEIGHT + 5.0f;
 	DefenseButtons[1].top += BUTTON_HEIGHT + 5.0f;
@@ -297,10 +298,19 @@ bool	ShopState::Input(void)
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
-	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0, 2) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true )
 	{
 		//m_bTimerSet = true;
 		pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()+2));
+
+		SGD::Event msg("PAUSE");
+		msg.SendEventNow();
+		Game::GetInstance()->AddState(PauseState::GetInstance());
+	}
+	if (pInput->IsKeyPressed(SGD::Key::B) == true || pInput->IsButtonPressed(0, 2) == true)
+	{
+		//m_bTimerSet = true;
+		pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2));
 
 		SGD::Event msg("UNPAUSE");
 		msg.SendEventNow();
@@ -546,8 +556,12 @@ bool	ShopState::Input(void)
 											{
 												//pWeapons->GetWeapons()[i]->SetEquipped(false);
 												pistolUpgrade.isEquipt = false;
+											
+
 
 											}
+											WeaponManager::GetInstance()->SetCurrIndex(0);
+
 										}
 									}
 								}
@@ -893,6 +907,8 @@ bool	ShopState::Input(void)
 										{
 											//pWeapons->GetWeapons()[i]->SetEquipped(false);
 											pistolUpgrade.isEquipt = false;
+											
+
 										}
 
 										if (pWeapons->GetWeapons()[i]->GetGunType() == REVOLVER)
@@ -901,6 +917,7 @@ bool	ShopState::Input(void)
 											revolverUpgrade.isEquipt = true;
 
 										}
+										WeaponManager::GetInstance()->SetCurrIndex(1);
 									}
 								}
 
@@ -1242,6 +1259,8 @@ bool	ShopState::Input(void)
 								autoShotgunUpgrade.isEquipt = false;
 
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(2);
+
 						}
 					}
 
@@ -1600,6 +1619,8 @@ bool	ShopState::Input(void)
 								autoShotgunUpgrade.isEquipt = false;
 
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(3);
+
 						}
 					}
 
@@ -1958,6 +1979,8 @@ bool	ShopState::Input(void)
 								autoShotgunUpgrade.isEquipt = true;
 
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(4);
+
 						}
 					}
 
@@ -2300,6 +2323,8 @@ bool	ShopState::Input(void)
 								p90Upgrade.isEquipt = false;
 
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(5);
+
 						}
 					}
 
@@ -2617,6 +2642,8 @@ bool	ShopState::Input(void)
 								p90Upgrade.isEquipt = false;
 
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(6);
+
 						}
 
 					}
@@ -2936,6 +2963,8 @@ bool	ShopState::Input(void)
 								p90Upgrade.isEquipt = true;
 
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(7);
+
 						}
 					}
 
@@ -3316,6 +3345,8 @@ bool	ShopState::Input(void)
 								//pWeapons->GetWeapons()[i]->SetEquipped(false);
 								lmgUpgrade.isEquipt = false;
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(8);
+
 						}
 					}
 
@@ -3673,6 +3704,8 @@ bool	ShopState::Input(void)
 								//pWeapons->GetWeapons()[i]->SetEquipped(false);
 								lmgUpgrade.isEquipt = false;
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(9);
+
 						}
 					}
 
@@ -4031,6 +4064,8 @@ bool	ShopState::Input(void)
 								//pWeapons->GetWeapons()[i]->SetEquipped(false);
 								lmgUpgrade.isEquipt = true;
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(10);
+
 						}
 					}
 
@@ -4454,6 +4489,8 @@ bool	ShopState::Input(void)
 								//pWeapons->GetWeapons()[i]->SetEquipped(false);
 								nadeLauncherUpgrade.isEquipt = false;
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(11);
+
 						}
 					}
 
@@ -4781,6 +4818,8 @@ bool	ShopState::Input(void)
 							{
 								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
 							}
+						
+
 						}
 
 						else
@@ -4814,6 +4853,8 @@ bool	ShopState::Input(void)
 								//pWeapons->GetWeapons()[i]->SetEquipped(false);
 								nadeLauncherUpgrade.isEquipt = false;
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(12);
+
 						}
 					}
 
@@ -5135,6 +5176,8 @@ bool	ShopState::Input(void)
 							{
 								pAudio->PlayAudio(Game::GetInstance()->m_hCash, false);
 							}
+							
+
 						}
 
 						else
@@ -5168,6 +5211,8 @@ bool	ShopState::Input(void)
 								//pWeapons->GetWeapons()[i]->SetEquipped(false);
 								nadeLauncherUpgrade.isEquipt = true;
 							}
+							WeaponManager::GetInstance()->SetCurrIndex(13);
+
 						}
 					}
 
@@ -5788,9 +5833,9 @@ void	ShopState::Render(void)
 	pFont->Draw(wave.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 175, Game::GetInstance()->GetScreenHeight() - 150 }, .5f, { 155, 0, 0 });
 	pFont->Draw(timer.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 150, Game::GetInstance()->GetScreenHeight() - 100 }, 2.0f, { 155, 0, 0 });
 
-	float scale = .8f;
-	int xOffset = 25;
-	int yOffset = 3;
+	float scale = 1.0f;
+	int xOffset = 10;
+	int yOffset = 6;
 
 
 	switch (currPage)
@@ -5798,14 +5843,14 @@ void	ShopState::Render(void)
 	case PISTOLS:
 #pragma region Pistols
 	{
-					pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+					pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+					pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 					
 					
 					if (currTab == 0)
 					{
-						pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, .8f, { 0, 255, 0 });
-						pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, .8f, { 255, 0, 0 });
+						pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 0, 255, 0 });
+						pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 0, 0 });
 
 						//pistol
 						stringstream pistolMagLevel;
@@ -5840,8 +5885,8 @@ void	ShopState::Render(void)
 						pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
 
 						for (size_t i = 0; i < 3; i++)
-							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-						pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+						pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 						if (mousePos.IsWithinRectangle(Buttons[0]))
@@ -5899,8 +5944,8 @@ void	ShopState::Render(void)
 					}
 					else
 					{
-						pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, .8f, { 0, 255, 0 });
-						pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, .8f, { 255, 0, 0 });
+						pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 0, 255, 0 });
+						pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, scale, { 255, 0, 0 });
 
 
 						//revolver
@@ -5964,8 +6009,8 @@ void	ShopState::Render(void)
 						pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(315.0f, 560.0f), SGD::Size(180.0f, 95.0f)));
 
 						for (size_t i = 0; i < 7; i++)
-							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-						pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+						pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 
@@ -6089,7 +6134,7 @@ void	ShopState::Render(void)
 							if (revolverUpgrade.isBought == false)
 								pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
-								pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
+								pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 						}
 
 
@@ -6110,10 +6155,10 @@ void	ShopState::Render(void)
 	case SHOTGUNS:
 #pragma region Shotguns
 	{
-					 pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-					 pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-					 pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-					 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+					 pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+					 pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+					 pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+					 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 		
 					 ////Revolver
@@ -6169,7 +6214,7 @@ void	ShopState::Render(void)
 							   pFont->Draw(sawnOffAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[5].top }, scale, { 255, 255, 0, 0 });
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(515.0f, 575.0f), SGD::Size(240.0f, 75.0f)));
 							   for (size_t i = 0; i < 6; i++)
-								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 
@@ -6275,7 +6320,7 @@ void	ShopState::Render(void)
 								   if (sawnOffUpgrade.isBought == false)
 									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + 5 }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + 5 }, scale, { 255, 0, 0, 255 });
+									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + 5 }, scale, { 255, 0, 255, 0 });
 							   }
 
 
@@ -6337,7 +6382,7 @@ void	ShopState::Render(void)
 							   pFont->Draw(pumpAmmoStat.str().c_str(), { screenSize.width *.3f, Buttons[6].top }, scale, { 255, 255, 0, 0 });
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(15.0f, 225.0f), SGD::Size(218.0f, 70.0f)));
 							   for (size_t i = 0; i < 7; i++)
-								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
@@ -6523,7 +6568,7 @@ void	ShopState::Render(void)
 							   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(514.0f, 228.0f), SGD::Size(228.0f, 82.0f)));
 
 							   for (size_t i = 0; i < 7; i++)
-								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+								   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 							   if (mousePos.IsWithinRectangle(Buttons[0]))
 							   {
@@ -6645,7 +6690,7 @@ void	ShopState::Render(void)
 								   if (autoShotgunUpgrade.isBought == false)
 									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
-									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
+									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   }
 
 					 }
@@ -6669,12 +6714,10 @@ void	ShopState::Render(void)
 	case SMGS:
 	{
 #pragma region SMGS
-				 pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-				 pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-				 pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-				 pFont->Draw("MAC-10", { shotTab1.left + 30, shotTab1.top + 5 }, scale, { 255, 255, 0, 0 });
-				 pFont->Draw("Tech-9mm", { shotTab2.left + 15, shotTab2.top + 5 }, scale, { 255, 255, 0, 0 });
-				 pFont->Draw("P90", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 0, 0 });
+				 pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+				 pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+				 pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+		
 
 
 
@@ -6733,8 +6776,8 @@ void	ShopState::Render(void)
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(725.0f, 65.0f), SGD::Size(125.0f, 110.0f)));
 
 						   for (size_t i = 0; i < 6; i++)
-							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 
@@ -6845,7 +6888,7 @@ void	ShopState::Render(void)
 							   if (uziUpgrade.isBought == false)
 								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
+								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 						   }
 
 
@@ -6902,9 +6945,9 @@ void	ShopState::Render(void)
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(335.0f, 670.0f), SGD::Size(165.0f, 100.0f)));
 
 						   for (size_t i = 0; i < 6; i++)
-							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
-						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 
@@ -7015,7 +7058,7 @@ void	ShopState::Render(void)
 							   if (tech9Upgrade.isBought == false)
 								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
-								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 0, 255 });
+								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 						   }
 
 				 }
@@ -7070,9 +7113,9 @@ void	ShopState::Render(void)
 						   pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(315.0f, 130.0f), SGD::Size(240.0f, 90.0f)));
 
 						   for (size_t i = 0; i < 6; i++)
-							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+							   pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
-						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+						   pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 						   if (mousePos.IsWithinRectangle(Buttons[0]))
 						   {
@@ -7180,8 +7223,8 @@ void	ShopState::Render(void)
 						   {
 							   if (p90Upgrade.isBought == false)
 								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
-							   else
-								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 0, 0 });
+							   else 
+								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0 , 255, 0 });
 						   }
 				 }
 					 break;
@@ -7209,9 +7252,9 @@ void	ShopState::Render(void)
 	case ASSAULT_RIFLES:
 #pragma region Assault Rifle
 	{
-						   pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-						   pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-						   pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+						   pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+						   pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+						   pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 						  
 
 						   switch (currTab)
@@ -7272,9 +7315,9 @@ void	ShopState::Render(void)
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(225.0f, 300.0f), SGD::Size(244.0f, 73.0f)));
 
 									 for (size_t i = 0; i < 7; i++)
-										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
-									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 									 if (mousePos.IsWithinRectangle(Buttons[0]))
@@ -7460,9 +7503,9 @@ void	ShopState::Render(void)
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(468.0f, 312.0f), SGD::Size(256.0f, 88.0f)));
 
 									 for (size_t i = 0; i < 7; i++)
-										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
-									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 									 if (mousePos.IsWithinRectangle(Buttons[0]))
@@ -7646,9 +7689,9 @@ void	ShopState::Render(void)
 									 pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(16.0f, 368.0f), SGD::Size(260.0f, 85.0f)));
 
 									 for (size_t i = 0; i < 7; i++)
-										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+										 pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
-									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+									 pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 
@@ -7798,9 +7841,9 @@ void	ShopState::Render(void)
 	case HEAVY:
 	{
 #pragma region Heavy
-				  pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-				  pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
-				  pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+				  pGraphics->DrawTexture(upgradeButton, { shotTab1.left, shotTab1.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+				  pGraphics->DrawTexture(upgradeButton, { shotTab2.left, shotTab2.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
+				  pGraphics->DrawTexture(upgradeButton, { shotTab3.left, shotTab3.top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 				
 				  //Revolver
 				  switch (currTab)
@@ -7869,9 +7912,9 @@ void	ShopState::Render(void)
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(530.0f, 400.0f), SGD::Size(230.0f, 63.0f)));
 
 							for (size_t i = 0; i < 8; i++)
-								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
-							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 							if (mousePos.IsWithinRectangle(Buttons[0]))
@@ -8069,9 +8112,9 @@ void	ShopState::Render(void)
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(8.0f, 550.0f), SGD::Size(274.0f, 142.0f)));
 
 							for (size_t i = 0; i < 7; i++)
-								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
-							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 
 							if (mousePos.IsWithinRectangle(Buttons[0]))
@@ -8249,9 +8292,9 @@ void	ShopState::Render(void)
 							pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(330.0f, 455.0f), SGD::Size(265.0f, 82.0f)));
 
 							for (size_t i = 0; i < 6; i++)
-								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+								pGraphics->DrawTexture(upgradeButton, { Buttons[i].left, Buttons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
-							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+							pGraphics->DrawTexture(upgradeButton, { Buttons[8].left, Buttons[8].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 							if (mousePos.IsWithinRectangle(Buttons[0]))
 							{
@@ -8454,7 +8497,7 @@ void	ShopState::Render(void)
 
 
 		for (size_t i = 0; i < 8; i++)
-			pGraphics->DrawTexture(upgradeButton, { DefenseButtons[i].left, DefenseButtons[i].top }, {}, {}, { 155, 155, 155 }, { 0.5f, 0.5f });
+			pGraphics->DrawTexture(upgradeButton, { DefenseButtons[i].left, DefenseButtons[i].top }, {}, {}, { 155, 155, 155 }, { 0.75f, 0.75f });
 
 		if (sandBag.isBought == true)
 		{
@@ -8560,7 +8603,7 @@ void	ShopState::Render(void)
 		}
 		else
 		{
-			if (mousePos.IsWithinRectangle(DefenseButtons[0]))
+			if (mousePos.IsWithinRectangle(DefenseButtons[2]))
 				pFont->Draw("$4000", { DefenseButtons[2].left + xOffset, DefenseButtons[2].top + yOffset }, scale, { 255, 255, 255, 255 });
 
 			else
@@ -8620,14 +8663,14 @@ void	ShopState::Render(void)
 
 		if (mousePos.IsWithinRectangle(DefenseButtons[7]))
 		{
-			if (profile.maxNumTurrets < 10)
+			if (profile.maxNumTurrets < 5)
 				pFont->Draw("$8000", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 			else
 				pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 255, 255 });
 		}
 		else
 		{
-			if (profile.maxNumTurrets < 10)
+			if (profile.maxNumTurrets < 5)
 				pFont->Draw("$8000", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 0, 255, 0 });
 			else
 				pFont->Draw("Maxed", { DefenseButtons[7].left + xOffset, DefenseButtons[7].top + yOffset }, scale, { 255, 255, 0, 0 });

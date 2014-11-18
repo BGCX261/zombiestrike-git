@@ -50,6 +50,12 @@
 	s_pInstance = nullptr;
 }
 
+void Game::ClearStateMachine(void)
+{
+	while (stateMachine.empty() == false)
+		Game::GetInstance()->RemoveState();
+}
+
 
 /**************************************************************/
 // Initialize
@@ -305,8 +311,12 @@ int Game::Update( void )
 
 	// Let the current state handle input
 	m_pCurrState = stateMachine.top();
-	if (m_pCurrState->Input() == false)
-		return 1;	// exit success!
+	if (isActive == true)
+	{
+		if (m_pCurrState->Input() == false)
+			return 1;	// exit success!
+	}
+	
 
 
 	// Update & render the current state if it was not changed
@@ -352,8 +362,7 @@ void Game::Terminate( void )
 
 	// Exit the current state
 	
-	while (stateMachine.empty() == false)
-		Game::GetInstance()->RemoveState();
+	ClearStateMachine();
 
 	// Unload assets
 	pGraphics->UnloadTexture(loadScreen);

@@ -21,7 +21,8 @@ BaseObject::~BaseObject()
 
 	SGD::Point renderPos;
 
-	if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance())
+	
+	if (HTPGameState::GetInstance()->GetIsCurrState() == false)
 	{
 		renderPos = SGD::Point(m_ptPosition.x
 			- GameplayState::GetInstance()->GetCamera()->GetPosition().x,

@@ -51,12 +51,11 @@
 
 
 	// Press Escape to quit
-	if (pInput->IsAnyKeyPressed() == true || pInput->IsButtonPressed(0,2))
+	if (pInput->IsAnyKeyPressed() == true || pInput->IsButtonPressed(0,2) == true)
 	{
 		Game::GetInstance()->RemoveState();
 		//Game::GetInstance()->AddState(MainMenuState::GetInstance());
 	}
-
 
 	return true;
 }

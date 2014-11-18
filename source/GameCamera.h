@@ -14,7 +14,7 @@ public:
 	~GameCamera() = default;
 
 	SGD::Point GetPosition(void) const { return m_ptPostion; }
-	void SetPostion(SGD::Point newPos) { m_ptPostion = newPos; }
+	void SetPosition(SGD::Point newPos) { m_ptPostion = newPos; }
 	SGD::Size GetSize(void) const { return m_szSize; }
 	void SetSize(SGD::Size newSize) { m_szSize = newSize; }
 	void SetTarget(BaseObject* newTarget);

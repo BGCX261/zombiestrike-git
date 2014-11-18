@@ -89,6 +89,7 @@
 
 	SpawnManager::GetInstance()->ShutDown();
 	HTPGameState::GetInstance()->SetChoiceScreen(true);
+	HTPGameState::GetInstance()->SetIsCurrState(false);
 
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor( {0, 0, 0} );	// black
@@ -214,6 +215,7 @@
 	SGD::Event gameOverMsg = { "GAME_OVER", nullptr, this };
 	gameOverMsg.SendEventNow();
 
+	HTPGameState::GetInstance()->SetChoiceScreen(true);
 
 	/**************************/
 	// Unload the assets
@@ -375,7 +377,16 @@
 		SGD::Point playerpos = m_pPlayer->GetPosition();
 		playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.50f;
 		playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.50f;
-		camera.SetPostion(playerpos);
+		camera.SetPosition(playerpos);
+		if (camera.GetPosition().x < 0)
+			camera.SetPosition({ 0.0f, camera.GetPosition().y });
+		else if (camera.GetPosition().x > m_szWorldSize.width)
+			camera.SetPosition({ m_szWorldSize.width - camera.GetSize().width, camera.GetPosition().y });
+
+		if (camera.GetPosition().y < 0)
+			camera.SetPosition({ camera.GetPosition().x, 0.0f });
+		else if (camera.GetPosition().y > m_szWorldSize.height)
+			camera.SetPosition({ camera.GetPosition().x, m_szWorldSize.height - camera.GetSize().height });
 
 		
 		// Process the events & messages
