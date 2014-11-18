@@ -71,7 +71,7 @@
 	float width = Game::GetInstance()->GetScreenWidth();
 	float height = Game::GetInstance()->GetScreenHeight();
 	float scale = 1.25f;
-	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	/*if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
 		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
@@ -99,7 +99,7 @@
 			mpoint.y = Game::GetInstance()->GetScreenHeight();
 
 		pInput->SetMousePosition(mpoint);
-	}
+	}*/
 
 
 	SGD::Point mousePos = pInput->GetMousePosition();

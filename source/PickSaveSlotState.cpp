@@ -85,7 +85,7 @@ bool PickSaveSlotState::Input(void)
 	float offset = Game::GetInstance()->GetScreenHeight() * 0.1f;
 	float width = Game::GetInstance()->GetScreenWidth();
 
-	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	/*if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
 		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
@@ -113,7 +113,7 @@ bool PickSaveSlotState::Input(void)
 			mpoint.y = Game::GetInstance()->GetScreenHeight();
 
 		pInput->SetMousePosition(mpoint);
-	}
+	}*/
 
 	if (modeChosen == false)
 	{
@@ -127,8 +127,8 @@ bool PickSaveSlotState::Input(void)
 				m_nCursor = 2;
 			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * EXIT_1)), SGD::Size(256, 64))))
 				m_nCursor = 3;
-
 		}
+
 		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsKeyPressed(SGD::Key::S) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 			m_nCursor = m_nCursor + 1 < MODE_CHOICES ? m_nCursor + 1 : 0;
 

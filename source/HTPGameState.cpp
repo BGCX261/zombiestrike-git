@@ -166,7 +166,7 @@
 	iTutorial[13] = "     Previous to go to last page      ";
 	
 
-	m_tStartTutorial.AddTime(1.0f);
+	m_tStartTutorial.AddTime(2.0f);
 
 
 
@@ -266,6 +266,7 @@
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	/*
 	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
@@ -295,6 +296,7 @@
 
 		pInput->SetMousePosition(mpoint);
 	}
+	*/
 
 	SGD::Point mousePos = pInput->GetMousePosition();
 
@@ -342,7 +344,6 @@
 				{
 						  m_bIsChoiceScreen = false;
 						  return true;
-						
 				}
 					break;
 
@@ -428,7 +429,7 @@
 			m_nCurPage = 1;
 		}
 	}
-	if (pInput->IsKeyPressed(SGD::Key::I) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
+	if (pInput->IsKeyPressed(SGD::Key::I) == true)
 	{
 		m_bIsTutorial = !m_bIsTutorial;
 	}

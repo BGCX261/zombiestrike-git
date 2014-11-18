@@ -157,17 +157,18 @@
 		m_mPrevious = m_nCursor;
 		m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
 		
-		pInput->SetMousePosition(selectonrects[m_nCursor - 1].GetTopRight());
+		//pInput->SetMousePosition(selectonrects[m_nCursor - 1].GetTopRight());
 	}
 	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 	{
 		m_mPrevious = m_nCursor;
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
-		pInput->SetMousePosition(selectonrects[m_nCursor - 1].GetTopRight());
+		//pInput->SetMousePosition(selectonrects[m_nCursor - 1].GetTopRight());
 	}
 
 	// Input: L1 - Left Joystick
+	/*
 	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
@@ -197,6 +198,7 @@
 
 		pInput->SetMousePosition(mpoint);
 	}
+	*/
 	
 
 	// Input: Mouse
@@ -245,7 +247,6 @@
 		case MenuItems::STORY_MODE:
 		{
 									  GameplayState::GetInstance()->SetGameMode(true);
-
 									  Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
 									  return true;
 		}

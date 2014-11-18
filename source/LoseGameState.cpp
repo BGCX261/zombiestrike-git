@@ -62,7 +62,7 @@
 /*virtual*/ bool LoseGameState::Input( void )
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	/*if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
 		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
@@ -90,7 +90,7 @@
 			mpoint.y = Game::GetInstance()->GetScreenHeight();
 
 		pInput->SetMousePosition(mpoint);
-	}
+	}*/
 	mousePos = pInput->GetMousePosition();
 
 	if (GameplayState::GetInstance()->GetGameMode() == true)
