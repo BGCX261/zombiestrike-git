@@ -5,8 +5,8 @@
 #include "Timer.h"
 #include <vector>
 
-#define BUTTON_WIDTH 123.0f
-#define BUTTON_HEIGHT 27.0f
+#define BUTTON_WIDTH 184.5f
+#define BUTTON_HEIGHT 40.5f
 
 class BarbedWire;
 class LandMine;

@@ -32,12 +32,12 @@ namespace SGD
 		MouseMiddle			= 4,	MButton				= 4,	// Middle Mouse Button
 		MouseX1				= 5,	XButton1			= 5,	// X1 Mouse Button (back?)
 		MouseX2				= 6,	XButton2			= 6,	// X2 Mouse Button (forward?)
-		Backspace			= 8,	Back				= 8,
-		Tab					= 9,
 		Clear				= 12,
 		Enter				= 13,	Return				= 13,
 		Shift				= 16,								// Either Shift Key
 		Control				= 17,								// Either Ctrl Key
+		Backspace			= 8,	Back				= 8,
+		Tab					= 9,
 		Alt					= 18,	Menu				= 18,	// Either Alt / Menu Key
 		Pause				= 19,
 		CapsLock			= 20,	Capital				= 20,

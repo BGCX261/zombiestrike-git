@@ -266,11 +266,42 @@
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	{
+		SGD::Point	mpoint = pInput->GetMousePosition();
+		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+		float		stickmin = 0.250f;
+		float		mousevel = 1.0f;
+
+
+		if (joystick.x > stickmin)
+			mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+			mpoint.x -= mousevel;
+
+		if (joystick.y > stickmin)
+			mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+			mpoint.y -= mousevel;
+
+		if (mpoint.x < 0.0F)
+			mpoint.x = 0.0F;
+		if (mpoint.y < 0.0F)
+			mpoint.y = 0.0F;
+		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+			mpoint.x = Game::GetInstance()->GetScreenWidth();
+		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+			mpoint.y = Game::GetInstance()->GetScreenHeight();
+
+		pInput->SetMousePosition(mpoint);
+	}
+
 	SGD::Point mousePos = pInput->GetMousePosition();
 
 	if (m_bIsChoiceScreen == true)
 	{
-		if (pInput->GetMouseMovement() != SGD::Vector())
+
+		if (pInput->GetMouseMovement() != SGD::Vector() || (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0))
 		{
 		
 			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 + 75), SGD::Size(128, 64))))
@@ -466,7 +497,17 @@
 			SGD::Point playerpos = m_pPlayer->GetPosition();
 			playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.5f;
 			playerpos.y -= Game::GetInstance()->GetScreenHeight() * 0.5f;
-			camera.SetPostion(playerpos);
+			camera.SetPosition(playerpos);
+
+			if (camera.GetPosition().x < 0)
+				camera.SetPosition({ 0.0f, camera.GetPosition().y });
+			else if (camera.GetPosition().x + camera.GetSize().width > m_szWorldSize.width)
+				camera.SetPosition({ m_szWorldSize.width - camera.GetSize().width, camera.GetPosition().y });
+
+			if (camera.GetPosition().y < 0)
+				camera.SetPosition({ camera.GetPosition().x, 0.0f });
+			else if (camera.GetPosition().y + camera.GetSize().height > m_szWorldSize.height)
+				camera.SetPosition({ camera.GetPosition().x, m_szWorldSize.height - camera.GetSize().height });
 
 
 			// Process the events & messages
