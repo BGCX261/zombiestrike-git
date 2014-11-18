@@ -80,10 +80,10 @@ PlayerController::~PlayerController()
 				if (toCursor.ComputeDotProduct(toUpdate->GetDirection()) < 0.999f)
 				{
 					if (toUpdate->GetDirection().ComputeSteering(toCursor) > 0)
-						toUpdate->SetRotation(toUpdate->GetRotation() + (SGD::PI*2.0f  * dt)); //Turn left
+						toUpdate->SetRotation(toUpdate->GetRotation() + (SGD::PI*1.5f  * dt)); //Turn left
 
 					else if (toUpdate->GetDirection().ComputeSteering(toCursor) < 0)
-						toUpdate->SetRotation(toUpdate->GetRotation() - (SGD::PI*2.0f  * dt)); //Turn right
+						toUpdate->SetRotation(toUpdate->GetRotation() - (SGD::PI*1.5f  * dt)); //Turn right
 
 					SGD::Vector orientation = { 0, -1 };
 					orientation.Rotate(toUpdate->GetRotation());

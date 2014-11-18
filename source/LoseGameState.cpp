@@ -62,7 +62,35 @@
 /*virtual*/ bool LoseGameState::Input( void )
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	{
+		SGD::Point	mpoint = pInput->GetMousePosition();
+		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+		float		stickmin = 0.250f;
+		float		mousevel = 1.0f;
 
+
+		if (joystick.x > stickmin)
+			mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+			mpoint.x -= mousevel;
+
+		if (joystick.y > stickmin)
+			mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+			mpoint.y -= mousevel;
+
+		if (mpoint.x < 0.0F)
+			mpoint.x = 0.0F;
+		if (mpoint.y < 0.0F)
+			mpoint.y = 0.0F;
+		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+			mpoint.x = Game::GetInstance()->GetScreenWidth();
+		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+			mpoint.y = Game::GetInstance()->GetScreenHeight();
+
+		pInput->SetMousePosition(mpoint);
+	}
 	mousePos = pInput->GetMousePosition();
 
 	if (GameplayState::GetInstance()->GetGameMode() == true)
@@ -76,7 +104,7 @@
 			float width = Game::GetInstance()->GetScreenWidth();
 			float height = Game::GetInstance()->GetScreenHeight();
 			float scale = 1.25f;
-			if (pInput->GetMouseMovement() != SGD::Vector())
+			if (pInput->GetMouseMovement() != SGD::Vector() || (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0))
 			{
 				if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(width *0.5f - (3 * 32 * scale), (height * 0.5F) + 100.0f), SGD::Size(128, 64))))
 					m_nCursor = 0;

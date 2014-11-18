@@ -50,6 +50,12 @@
 	s_pInstance = nullptr;
 }
 
+void Game::ClearStateMachine(void)
+{
+	while (stateMachine.empty() == false)
+		Game::GetInstance()->RemoveState();
+}
+
 
 /**************************************************************/
 // Initialize
@@ -356,8 +362,7 @@ void Game::Terminate( void )
 
 	// Exit the current state
 	
-	while (stateMachine.empty() == false)
-		Game::GetInstance()->RemoveState();
+	ClearStateMachine();
 
 	// Unload assets
 	pGraphics->UnloadTexture(loadScreen);

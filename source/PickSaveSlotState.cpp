@@ -85,10 +85,39 @@ bool PickSaveSlotState::Input(void)
 	float offset = Game::GetInstance()->GetScreenHeight() * 0.1f;
 	float width = Game::GetInstance()->GetScreenWidth();
 
+	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	{
+		SGD::Point	mpoint = pInput->GetMousePosition();
+		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+		float		stickmin = 0.250f;
+		float		mousevel = 1.0f;
+
+
+		if (joystick.x > stickmin)
+			mpoint.x += mousevel;
+		else if (joystick.x < stickmin * -1.0f)
+			mpoint.x -= mousevel;
+
+		if (joystick.y > stickmin)
+			mpoint.y += mousevel;
+		else if (joystick.y < stickmin * -1.0f)
+			mpoint.y -= mousevel;
+
+		if (mpoint.x < 0.0F)
+			mpoint.x = 0.0F;
+		if (mpoint.y < 0.0F)
+			mpoint.y = 0.0F;
+		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
+			mpoint.x = Game::GetInstance()->GetScreenWidth();
+		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
+			mpoint.y = Game::GetInstance()->GetScreenHeight();
+
+		pInput->SetMousePosition(mpoint);
+	}
 
 	if (modeChosen == false)
 	{
-		if (pInput->GetMouseMovement() != SGD::Vector())
+		if (pInput->GetMouseMovement() != SGD::Vector() || (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0))
 		{
 			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * NEW_GAME)), SGD::Size(256, 64))))
 				m_nCursor = 0;
@@ -140,7 +169,7 @@ bool PickSaveSlotState::Input(void)
 		float starting_y = Game::GetInstance()->GetScreenHeight() * 0.25f;
 		float offset = Game::GetInstance()->GetScreenHeight() * 0.2f;
 
-		if (pInput->GetMouseMovement() != SGD::Vector())
+		if (pInput->GetMouseMovement() != SGD::Vector() || (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0))
 		{
 			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * SAVE1)), SGD::Size(256, 128))))
 				m_nCursor = 0;
@@ -351,7 +380,7 @@ void PickSaveSlotState::Render(void)
 			<< ':'
 			<< profiles[0].time.tm_sec
 			<< '\n'
-			<< "Wave: " << profiles[0].wavesComplete;
+			<< "Wavess Complete: " << profiles[0].wavesComplete;
 
 
 		save2String << "Save Slot 2\n"
@@ -367,7 +396,7 @@ void PickSaveSlotState::Render(void)
 			<< ':'
 			<< profiles[1].time.tm_sec
 			<< '\n'
-			<< "Wave: "<< profiles[1].wavesComplete;
+			<< "Waves Complete: "<< profiles[1].wavesComplete;
 		save3String << "Save Slot 3\n"
 			<< profiles[2].time.tm_mon 
 			<< '-'
@@ -381,7 +410,7 @@ void PickSaveSlotState::Render(void)
 			<< ':'
 			<< profiles[2].time.tm_sec
 			<< '\n'
-			<< "Wave: " << profiles[2].wavesComplete;
+			<< "Wave Complete: " << profiles[2].wavesComplete;
 
 		switch (m_nCursor)
 		{

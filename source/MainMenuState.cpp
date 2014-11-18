@@ -152,32 +152,32 @@
 
 
 	// Input: keyboard & D-pad
-	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true || pInput->IsKeyPressed(SGD::Key::S) == true)
 	{
 		m_mPrevious = m_nCursor;
 		m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
 	}
-	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
+	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true)
 	{
 		m_mPrevious = m_nCursor;
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 	}
 
-
 	// Input: L1 - Left Joystick
 	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
-		SGD::Point	mpoint		= pInput->GetMousePosition();
-		SGD::Vector	joystick	= pInput->GetLeftJoystick(0);
-		float		stickmin	= 0.250f;
-		float		mousevel	= 1.0f;
+		SGD::Point	mpoint = pInput->GetMousePosition();
+		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+		
+		float		stickmin = 0.250f;
+		float		mousevel = 1.0f;
 
 
 		if (joystick.x > stickmin)
 			mpoint.x += mousevel;
 		else if (joystick.x < stickmin * -1.0f)
 			mpoint.x -= mousevel;
-		
+
 		if (joystick.y > stickmin)
 			mpoint.y += mousevel;
 		else if (joystick.y < stickmin * -1.0f)
@@ -194,22 +194,25 @@
 
 		pInput->SetMousePosition(mpoint);
 	}
-
-
+	
 	// Input: Mouse
-	SGD::Point mousepos = pInput->GetMousePosition();
-	bool collided = false;
-	for (size_t i = 0; i < NUM_CHOICES; i++)
+	if (pInput->GetMouseMovement() != SGD::Vector() || (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0))
 	{
-		if (mousepos.IsWithinRectangle(selectonrects[i]) == true)
+		SGD::Point mousepos = pInput->GetMousePosition();
+		bool collided = false;
+		for (size_t i = 0; i < NUM_CHOICES; i++)
 		{
-			m_mPrevious	= m_nCursor;
-			m_nCursor	= i;
-			collided	= true;
+			if (mousepos.IsWithinRectangle(selectonrects[i]) == true)
+			{
+				m_mPrevious = m_nCursor;
+				m_nCursor = i;
+				collided = true;
+			}
 		}
+
+		selected = collided;
 	}
 
-	selected = collided;
 
 	clicked = pInput->IsKeyDown(SGD::Key::LButton) == true ? true : false;
 	/*
