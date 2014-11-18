@@ -89,6 +89,7 @@
 
 	SpawnManager::GetInstance()->ShutDown();
 	HTPGameState::GetInstance()->SetChoiceScreen(true);
+	HTPGameState::GetInstance()->SetIsCurrState(false);
 
 	// Set background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor( {0, 0, 0} );	// black
@@ -214,6 +215,7 @@
 	SGD::Event gameOverMsg = { "GAME_OVER", nullptr, this };
 	gameOverMsg.SendEventNow();
 
+	HTPGameState::GetInstance()->SetChoiceScreen(true);
 
 	/**************************/
 	// Unload the assets

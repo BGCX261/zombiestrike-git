@@ -275,7 +275,7 @@ void AnimationManager::Render(AnimTimeStamp& ats, SGD::Point position, float rot
 
 	SGD::Point renderPos;
 	
-	if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance())
+	if (HTPGameState::GetInstance()->GetIsCurrState() == false)
 	{
 		renderPos = SGD::Point(position.x - anchor.x - GameplayState::GetInstance()->GetCamera()->GetPosition().x, position.y - anchor.y - GameplayState::GetInstance()->GetCamera()->GetPosition().y);
 	}

@@ -202,8 +202,6 @@ void WeaponManager::Render()
 			if (m_vWeapons[curIndex]->GetReloadTimer().GetTime() > 0)
 			{
 				bFont->Draw("RELOADING", { equipRect.left + 5, equipRect.top + 5 }, 1.5f, { 200, 0, 0 });
-				bFont->Draw("RELOADING", { (Game::GetInstance()->GetScreenWidth() * 0.5f) - 100.0f, (Game::GetInstance()->GetScreenHeight() * 0.5f) - 70.0f }, 1.5f, { 200, 0, 0 });
-				bFont->Draw("RELOADING", { (Game::GetInstance()->GetScreenWidth() * 0.5f) - 100.0f, (Game::GetInstance()->GetScreenHeight() * 0.5f) + 30.0f }, 1.5f, { 200, 0, 0 });
 			}
 
 			if (m_vWeapons[curIndex]->GetTotalAmmo() == 0 && m_vWeapons[curIndex]->GetCurrAmmo() <= 0)

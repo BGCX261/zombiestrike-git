@@ -104,7 +104,7 @@
 
 	}
 
-	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+	if (HTPGameState::GetInstance()->GetIsCurrState() == false)
 	{
 		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 			m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
@@ -297,16 +297,18 @@
 	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
 	{
 		HTPGameState::GetInstance()->Render();
-		pGraphics->DrawRectangle({ HTPGameState::GetInstance()->GetCamera()->GetPosition().x, HTPGameState::GetInstance()->GetCamera()->GetPosition().y, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+		pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
 	}
 
-	else
+	else if (HTPGameState::GetInstance()->GetIsCurrState() == false)
 	{
-		GameplayState::GetInstance()->Render();
-		pGraphics->DrawRectangle({ GameplayState::GetInstance()->GetCamera()->GetPosition().x, GameplayState::GetInstance()->GetCamera()->GetPosition().y, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+		//HTPGameState::GetInstance()->SetIsCurrState(false);
 
-	pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
-}
+		GameplayState::GetInstance()->Render();
+		pGraphics->DrawRectangle({0,0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+
+		//pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+	}
 
 
 	// Use the game's font

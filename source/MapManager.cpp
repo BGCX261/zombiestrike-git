@@ -317,7 +317,7 @@ void MapManager::Render()
 		{
 			SGD::Point point = tStruct.layers.m_vTiles[currRow][currCol].worldPos;
 
-			Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
+			HTPGameState::GetInstance()->GetIsCurrState() == false
 				? point.Offset({ -GameplayState::GetInstance()->GetCamera()->GetPosition().x, -GameplayState::GetInstance()->GetCamera()->GetPosition().y })
 				: point.Offset({ -HTPGameState::GetInstance()->GetCamera()->GetPosition().x, -HTPGameState::GetInstance()->GetCamera()->GetPosition().y });
 
@@ -332,7 +332,7 @@ void MapManager::Update(float elapsedTime)
 {
 	SGD::Rectangle cameraRect;
 
-	Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
+	HTPGameState::GetInstance()->GetIsCurrState() == false
 		? cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect()
 		: cameraRect = HTPGameState::GetInstance()->GetCamera()->GetRect();
 
