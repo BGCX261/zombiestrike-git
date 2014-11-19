@@ -1,10 +1,16 @@
 #include "HUD.h"
+#include "Game.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_String.h"
 #include "Player.h"
 #include "BitmapFont.h"
 #include <sstream>
+#include "AnimationManager.h"
+#include "GameplayState.h"
+#include "HTPGameState.h"
+
 using std::stringstream;
+
 
 void HUD::Initialize(Player* player)
 {
@@ -48,28 +54,34 @@ void HUD::Render(void)
 
 
 	// Draw the HUD image
-	float	screenheight	= Game::GetInstance()->GetScreenHeight();
+	float	width	= Game::GetInstance()->GetScreenWidth();
+	float	height	= Game::GetInstance()->GetScreenHeight();
 	float	screenwidth = Game::GetInstance()->GetScreenWidth();
 
+	SGD::Point camerapos = Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
+		? GameplayState::GetInstance()->GetCamera()->GetPosition()
+		: HTPGameState::GetInstance()->GetCamera()->GetPosition();
 
-	//pGraphics->DrawTextureSection(m_hBackgroundImage, { 1.5f, screenheight - 112.0f }, SGD::Rectangle(4.0f, 694.0f, 708.0f, 806.0f));
-	//pGraphics->DrawTexture(m_hBackgroundImage, { 1.5f, screenheight - 112.0f });
 
 
 	// draw health bars
 	SGD::Rectangle currhealth = { screenwidth * 0.05f, screenheight * 0.05f, m_pPlayer->GetCurrHealth() / m_pPlayer->GetMaxHealth() * 200 + screenwidth * 0.05f, screenheight * 0.05f + 35 };
 	SGD::Rectangle maxhealth = { screenwidth * 0.05f, screenheight * 0.05f, screenwidth * 0.05f + 200, screenheight * 0.05f + 35 };
-
 	pGraphics->DrawRectangle(maxhealth, { 0, 0, 0 });
 
+
 	SGD::Color healthcolor;
-	if (m_pPlayer->GetCurrHealth() >= m_pPlayer->GetMaxHealth()* 0.75F)				// 100 -> Green
+
+	// 76 - 100 -> Green
+	if (m_pPlayer->GetCurrHealth() > m_pPlayer->GetMaxHealth()* 0.75F)
 		healthcolor = { 0, 255, 0 };
 
-	else if (m_pPlayer->GetCurrHealth() <= m_pPlayer->GetMaxHealth() * 0.75F && m_pPlayer->GetCurrHealth() > m_pPlayer->GetMaxHealth() * 0.25f)	// 0 - 25 -> Red
+	// 26 - 75 -> Yellow
+	else if (m_pPlayer->GetCurrHealth() <= m_pPlayer->GetMaxHealth() * 0.75F && m_pPlayer->GetCurrHealth() > m_pPlayer->GetMaxHealth() * 0.25f)
 		healthcolor = { 255, 255, 0 };
 
-	else if (m_pPlayer->GetCurrHealth() <= m_pPlayer->GetMaxHealth() * 0.25F)															// 25 - 99 -> yellow
+	// 0 - 25 -> Red
+	else if (m_pPlayer->GetCurrHealth() <= m_pPlayer->GetMaxHealth() * 0.25F)
 		healthcolor = { 255, 0, 0 };
 
 	pGraphics->DrawRectangle(currhealth, healthcolor);
@@ -81,6 +93,23 @@ void HUD::Render(void)
 	stringstream health;
 	health << "HP: " << hp;
 	pFont->Draw(health.str().c_str(), { screenwidth * 0.05f, screenheight * 0.05f }, 1.0f, { 255, 255, 255 });
+
+
+
+	// # of turrets
+	AnimTimeStamp ats;
+	ats.m_strCurrAnimation = "turret";
+	ats.m_nCurrFrame = 0;
+	ats.m_fCurrDuration = 0.0f;
+	AnimationManager::GetInstance()->Render(ats, { m_pPlayer->m_ptPosition.x - 590.0f, m_pPlayer->m_ptPosition.y }, 0.0f, { 255, 255, 255 }, { 1.3f, 1.3f });
+
+	int numturrets = m_pPlayer->m_nNumTurrets;
+	stringstream turrets;
+	turrets << "x" << numturrets;
+
+	SGD::Point numberpos = { m_pPlayer->m_ptPosition.x - 560.0f, m_pPlayer->m_ptPosition.y };
+	numberpos.Offset(-camerapos.x, -camerapos.y);
+	pFont->Draw(turrets.str().c_str(), numberpos, 1.3f, { 255, 0, 0 });
 
 
 }

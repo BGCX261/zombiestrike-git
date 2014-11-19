@@ -11051,10 +11051,10 @@ void ShopState::DrawKeyboardInput(void)
 
 	//pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
 
-	pFont->Draw("Q:\tPrev Page", { screenSize.width * 0.75f, screenSize.height * 0.05f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("E:\tNext Page", { screenSize.width * 0.75f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("Left:\tPrev Tab", { screenSize.width * 0.75f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("Right:\tNext Tab", { screenSize.width * 0.75f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Q:\tPrev Page", { screenSize.width * 0.7f, screenSize.height * 0.05f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("E:\tNext Page", { screenSize.width * 0.7f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("A:\tPrev Tab", { screenSize.width * 0.7f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("D:\tNext Tab", { screenSize.width * 0.7f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
 
 
 

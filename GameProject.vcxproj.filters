@@ -43,9 +43,6 @@
     <Filter Include="Objects\Player">
       <UniqueIdentifier>{d2e298ab-3cb7-42ec-a7f9-d20210be9d2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Objects\Enemies">
-      <UniqueIdentifier>{4d9dfe3b-e161-437b-a886-1e0098e58480}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Objects\Environment">
       <UniqueIdentifier>{7c10acfb-eddc-4a7d-a60b-329e56ce1ba4}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,9 @@
     </Filter>
     <Filter Include="Weapons\Handguns">
       <UniqueIdentifier>{2f10e010-9e91-4cd4-abc1-757ec5c78319}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Environment\Enemies">
+      <UniqueIdentifier>{4d9dfe3b-e161-437b-a886-1e0098e58480}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -238,19 +238,19 @@
       <Filter>Messages</Filter>
     </ClCompile>
     <ClCompile Include="source\ExplodingZombie.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="source\FastZombie.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="source\FatZombie.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="source\TankZombie.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="source\Zombie.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="source\BarbedWire.cpp">
       <Filter>Objects\Environment</Filter>
@@ -571,19 +571,19 @@
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="source\ExplodingZombie.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="source\FastZombie.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="source\FatZombie.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="source\TankZombie.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="source\Zombie.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Objects\Environment\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="source\BarbedWire.h">
       <Filter>Objects\Environment</Filter>

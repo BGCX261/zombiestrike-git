@@ -89,7 +89,7 @@
 
 	// Align text based on window width
 	float left_start	= width * 0.1F;
-	float starting_y	= height * 0.3f;
+	float starting_y	= height * 0.25f;
 	float y_offset			= 210.0f;
 	float scale				= 1.0f;
 	float newline_offset	= 31.0f;
@@ -121,14 +121,14 @@
 		#pragma region Keyboard Controls
 		num_newlines += 4;
 		std::string keycontrols1 = "Keyboard Controls:";
-		std::string keycontrols2 = "\n\n\tW\t\tMove up\n\tS\t\tMove down\n\tA\t\tMove left\n\tD\t\tMove right\n\tMouse\tAim/Rotate\n\n\tShift\t\tSprint\n\n\tLeft-click\tShoot/Place turret (in Turret Mode)";
-		std::string keycontrols3 = "\n\n\tQ\t\tSwitch to previous weapon\n\tE\t\tSwitch to next weapon\n\tR\t\tReload current weapon\n\n\tT\t\t Toggle Turret Mode";
+		std::string keycontrols2 = "\n\n\tW\t\t\tMove up\n\tS\t\t\tMove down\n\tA\t\t\tMove left\n\tD\t\t\tMove right\n\tMouse\t\tAim/Rotate\n\n\tShift\t\t\tSprint\n\n\tLeft-click\t\tShoot/Place turret (in Turret Mode)\n\tRight-click\t\tReload current weapon";
+		std::string keycontrols3 = "\n\n\tMouse wheel\tCycle through weapons\n\tQ\t\t\tSwitch to previous weapon\n\tE\t\t\tSwitch to next weapon\n\tR\t\t\tReload current weapon\n\n\tT\t\t\t Toggle Turret Mode";
 		
 		//string_var = keycontrols1 + keycontrols2;
 		
 		pFont->Draw(keycontrols1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 0, 0 });
 		pFont->Draw(keycontrols2.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 255, 255 });
-		pFont->Draw(keycontrols3.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 7)) }, scale, { 255, 255, 255 });
+		pFont->Draw(keycontrols3.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 8)) }, scale, { 255, 255, 255 });
 		#pragma endregion
 	}
 	else

@@ -63,15 +63,15 @@
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsKeyPressed(SGD::Key::S) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 		m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
-	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
+	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
 	float width = Game::GetInstance()->GetScreenWidth();
 	float height = Game::GetInstance()->GetScreenHeight();
 	float scale = 1.25f;
-	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	/*if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
 		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
@@ -99,7 +99,7 @@
 			mpoint.y = Game::GetInstance()->GetScreenHeight();
 
 		pInput->SetMousePosition(mpoint);
-	}
+	}*/
 
 
 	SGD::Point mousePos = pInput->GetMousePosition();
@@ -120,14 +120,11 @@
 		{
 			Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetStoryProfile());
 			Game::GetInstance()->LoadStoryProfiles();
-
 		}
-
 		else
 		{
 			Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetSurvivalProfile());
 			Game::GetInstance()->LoadSurvivalProfiles();
-
 		}
 
 		switch (m_nCursor)

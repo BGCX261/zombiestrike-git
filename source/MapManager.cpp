@@ -353,7 +353,7 @@ void MapManager::Update(float elapsedTime)
 {
 	SGD::Rectangle cameraRect;
 
-	Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
+	HTPGameState::GetInstance()->GetIsCurrState() == false
 		? cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect()
 		: cameraRect = HTPGameState::GetInstance()->GetCamera()->GetRect();
 

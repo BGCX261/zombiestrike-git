@@ -57,7 +57,6 @@
 		//Game::GetInstance()->AddState(MainMenuState::GetInstance());
 	}
 
-
 	return true;
 }
 

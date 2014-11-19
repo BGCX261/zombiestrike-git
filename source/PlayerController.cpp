@@ -218,7 +218,7 @@ PlayerController::~PlayerController()
 		newVelocity += {0, -1};
 		m_Player->m_bMoving = true;
 	}
-	if ((pInput->IsKeyDown(SGD::Key::S) == true || pInput->GetLeftJoystick(0).y > 0) && m_Player->m_bIsAlive == true)
+	else if ((pInput->IsKeyDown(SGD::Key::S) == true || pInput->GetLeftJoystick(0).y > 0) && m_Player->m_bIsAlive == true)
 	{
 		newVelocity += {0, 1};
 		m_Player->m_bMoving = true;
@@ -231,7 +231,7 @@ PlayerController::~PlayerController()
 		newVelocity += {-1, 0};
 		m_Player->m_bMoving = true;
 	}
-	if ((pInput->IsKeyDown(SGD::Key::D) == true || pInput->GetLeftJoystick(0).x > 0) && m_Player->m_bIsAlive == true)
+	else if((pInput->IsKeyDown(SGD::Key::D) == true || pInput->GetLeftJoystick(0).x > 0) && m_Player->m_bIsAlive == true)
 	{	
 		newVelocity += {1, 0};
 		m_Player->m_bMoving = true;
@@ -295,7 +295,8 @@ PlayerController::~PlayerController()
 		}
 
 
-		if ((pInput->IsKeyPressed(SGD::Key::R) == true || (pInput->IsButtonPressed(0, 0) == true)) && pWeaponManager->GetSelected()->IsReloading() == false)
+		if ((pInput->IsKeyPressed(SGD::Key::R) == true || (pInput->IsButtonPressed(0, 0) == true) || (pInput->IsKeyPressed(SGD::Key::MouseRight) == true))
+			&& pWeaponManager->GetSelected()->IsReloading() == false)
 			pWeaponManager->GetSelected()->ReloadNeeded();
 	}
 	else
@@ -362,6 +363,13 @@ PlayerController::~PlayerController()
 		m_Player->SetAnimation(animation);
 	}
 	
+
+
+	// cheat #1 -> Restore HP
+	if (pInput->IsKeyDown(SGD::Key::Shift) == true && pInput->IsKeyPressed(SGD::Key::M) == true)
+	{
+		m_Player->profile->health = m_Player->m_fCurrHP = m_Player->m_fMaxHP;
+	}
 
 
 	return true;

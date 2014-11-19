@@ -72,7 +72,7 @@
 	float width = Game::GetInstance()->GetScreenWidth();
 	float height = Game::GetInstance()->GetScreenHeight();
 	float scale = 1.25f;
-	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+	/*if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
 		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
@@ -100,7 +100,7 @@
 			mpoint.y = Game::GetInstance()->GetScreenHeight();
 
 		pInput->SetMousePosition(mpoint);
-	}
+	}*/
 
 	SGD::Point mousePos = pInput->GetMousePosition();
 	// Press Escape to quit
@@ -133,7 +133,8 @@
 		
 
 	}
-	if (Game::GetInstance()->GetCurrState() == ShopState::GetInstance())
+
+	if (HTPGameState::GetInstance()->GetIsCurrState() == false)
 	{
 		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 			m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
@@ -142,16 +143,16 @@
 	}
 	else if (HTPGameState::GetInstance()->GetIsCurrState() == false)
 	{
-		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
+		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsKeyPressed(SGD::Key::S) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 			m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
-		else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
+		else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 			m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 	}
 	else
 	{
-		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
+		if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsKeyPressed(SGD::Key::S) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 			m_nCursor = m_nCursor + 1 < (NUM_CHOICES + 1) ? m_nCursor + 1 : 0;
-		else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
+		else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 			m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : (NUM_CHOICES + 1) - 1;
 	}
 
@@ -329,12 +330,22 @@
 
 	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
 
-	if (HTPGameState::GetInstance()->GetChoiceScreen() == false)
+	if (HTPGameState::GetInstance()->GetIsCurrState() == true)
+	{
 		HTPGameState::GetInstance()->Render();
-	else
-		GameplayState::GetInstance()->Render();
+		pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+	}
 
-	pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+	else if (HTPGameState::GetInstance()->GetIsCurrState() == false)
+	{
+		//HTPGameState::GetInstance()->SetIsCurrState(false);
+
+		GameplayState::GetInstance()->Render();
+		pGraphics->DrawRectangle({0,0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+
+		//pGraphics->DrawRectangle({ 0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight() }, { 210, 0, 0, 0 });
+	}
+
 
 	// Use the game's font
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();

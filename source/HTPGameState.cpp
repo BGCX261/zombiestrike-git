@@ -166,7 +166,7 @@
 	iTutorial[13] = "     Previous to go to last page      ";
 	
 
-	m_tStartTutorial.AddTime(1.0f);
+	m_tStartTutorial.AddTime(2.0f);
 
 
 
@@ -204,7 +204,7 @@
 	SGD::Event gameOverMsg = { "GAME_OVER", nullptr, this };
 	gameOverMsg.SendEventNow();
 
-
+	m_bIsChoiceScreen = true;
 
 	/**************************/
 	// Unload the assets
@@ -274,7 +274,7 @@
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
-
+	
 	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
@@ -304,6 +304,7 @@
 
 		pInput->SetMousePosition(mpoint);
 	}
+	*/
 
 	SGD::Point mousePos = pInput->GetMousePosition();
 
@@ -322,7 +323,7 @@
 		}
 
 
-		if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
+		if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true || pInput->IsKeyPressed(SGD::Key::D) == true)
 		{
 			m_nCursor++;
 
@@ -333,7 +334,7 @@
 		}
 
 
-		if (pInput->IsKeyPressed(SGD::Key::LeftArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true)
+		if (pInput->IsKeyPressed(SGD::Key::LeftArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true || pInput->IsKeyPressed(SGD::Key::A) == true)
 		{
 			m_nCursor--;
 
@@ -351,7 +352,6 @@
 				{
 						  m_bIsChoiceScreen = false;
 						  return true;
-						
 				}
 					break;
 
@@ -437,7 +437,7 @@
 			m_nCurPage = 1;
 		}
 	}
-	if (pInput->IsKeyPressed(SGD::Key::I) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true)
+	if (pInput->IsKeyPressed(SGD::Key::I) == true)
 	{
 		m_bIsTutorial = !m_bIsTutorial;
 	}
@@ -1070,7 +1070,17 @@ void HTPGameState::CreateBullet(Weapon* owner)
 
 	Bullet* bullet = new Bullet;
 	bullet->SetOwner(owner->GetOwner());
-	bullet->SetPosition(owner->GetOwner()->GetPosition());
+
+
+	float		pixel_offset = owner->GetBulletStartPixelOffset();
+	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
+	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
+	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
+
+	//bullet->SetPosition(owner->GetOwner()->GetPosition());
+	bullet->SetPosition(bulletposP);
+
+
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
 	float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
 
@@ -1094,7 +1104,17 @@ void HTPGameState::CreateGrenade(Weapon* owner)
 
 	Grenade* bullet = new Grenade;
 	bullet->SetOwner(owner->GetOwner());
-	bullet->SetPosition(owner->GetOwner()->GetPosition());
+
+
+	float		pixel_offset = owner->GetBulletStartPixelOffset();
+	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
+	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
+	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
+
+	//bullet->SetPosition(owner->GetOwner()->GetPosition());
+	bullet->SetPosition(bulletposP);
+
+
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
 
 
@@ -1117,7 +1137,17 @@ void HTPGameState::CreateFireBullet(Weapon* owner)
 
 	Bullet* bullet = new Bullet;
 	bullet->SetOwner(owner->GetOwner());
-	bullet->SetPosition(owner->GetOwner()->GetPosition());
+
+
+	float		pixel_offset = owner->GetBulletStartPixelOffset();
+	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
+	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
+	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
+
+	//bullet->SetPosition(owner->GetOwner()->GetPosition());
+	bullet->SetPosition(bulletposP);
+
+
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
 	float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
 
@@ -1165,7 +1195,17 @@ void HTPGameState::CreateShotGunBullet(Weapon* owner)
 	{
 		Bullet* bullet = new Bullet;
 		bullet->SetOwner(owner->GetOwner());
-		bullet->SetPosition(owner->GetOwner()->GetPosition());
+
+
+		float		pixel_offset = owner->GetBulletStartPixelOffset();
+		SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
+		SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
+		SGD::Point	bulletposP = { turretposV.x, turretposV.y };
+
+		//bullet->SetPosition(owner->GetOwner()->GetPosition());
+		bullet->SetPosition(bulletposP);
+
+
 		SGD::Vector direction = owner->GetOwner()->GetDirection();
 		float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
 
@@ -1189,7 +1229,17 @@ void HTPGameState::CreateARBullet(Weapon* owner)
 	Bullet* bullet = new Bullet;
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
 	bullet->SetOwner(owner->GetOwner());
-	bullet->SetPosition(owner->GetOwner()->GetPosition());
+
+
+	float		pixel_offset = owner->GetBulletStartPixelOffset();
+	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
+	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
+	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
+
+	//bullet->SetPosition(owner->GetOwner()->GetPosition());
+	bullet->SetPosition(bulletposP);
+
+
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
 	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
 
@@ -1208,7 +1258,17 @@ void HTPGameState::CreateSnipeBullet(Weapon* owner)
 	Bullet* bullet = new Bullet;
 	bullet->SetRotation(owner->GetOwner()->GetRotation());
 	bullet->SetOwner(owner->GetOwner());
-	bullet->SetPosition(owner->GetOwner()->GetPosition());
+
+
+	float		pixel_offset = owner->GetBulletStartPixelOffset();
+	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
+	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
+	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
+
+	//bullet->SetPosition(owner->GetOwner()->GetPosition());
+	bullet->SetPosition(bulletposP);
+
+
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
 	direction.Rotate(owner->GetRecoilTimer().GetTime()*Game::GetInstance()->DeltaTime());
 	bullet->SetDamage(owner->GetDamage());

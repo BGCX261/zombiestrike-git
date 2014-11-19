@@ -23,7 +23,7 @@
 // GetInstance
 //	- store the ONLY instance in global memory
 //	- return the only instance by pointer
-/*static*/ MainMenuState* MainMenuState::GetInstance( void )
+/*static*/ MainMenuState* MainMenuState::GetInstance(void)
 {
 	static MainMenuState s_Instance;
 
@@ -34,17 +34,17 @@
 /**************************************************************/
 // Enter
 //	- reset the game & load resources
-/*virtual*/ void MainMenuState::Enter( void )
+/*virtual*/ void MainMenuState::Enter(void)
 {
-	SGD::GraphicsManager*	pGraphics	= SGD::GraphicsManager::GetInstance();
-	SGD::AudioManager*		pAudio		= SGD::AudioManager::GetInstance();
-	SGD::InputManager*		pInput		= SGD::InputManager::GetInstance();
+	SGD::GraphicsManager*	pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager*		pAudio = SGD::AudioManager::GetInstance();
+	SGD::InputManager*		pInput = SGD::InputManager::GetInstance();
 
 
 	// Reset the cursor to the top (comment out to keep the last cursor position)
 	//m_nCursor = 0;
-	clicked		= false;
-	selected	= false;
+	clicked = false;
+	selected = false;
 	//pInput->CheckForNewControllers();
 
 	starting_x = Game::GetInstance()->GetScreenWidth() * .10f;
@@ -52,15 +52,15 @@
 
 
 	// Load assets
-	m_hBackgroundImage	= pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_image.png");
-	m_hTitleImage		= pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_title.png");
-	m_hReticleImage		= pGraphics->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
+	m_hBackgroundImage = pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_image.png");
+	m_hTitleImage = pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_title.png");
+	m_hReticleImage = pGraphics->LoadTexture("resource/graphics/MenuImages/Reticle3.png", { 0, 0, 0 });
 
-	m_hButton2			= pGraphics->LoadTexture("resource/graphics/MenuImages/rectangle2.png");
-	m_hLightning		= pGraphics->LoadTexture("resource/graphics/MenuImages/lightning2.png");
+	m_hButton2 = pGraphics->LoadTexture("resource/graphics/MenuImages/rectangle2.png");
+	m_hLightning = pGraphics->LoadTexture("resource/graphics/MenuImages/lightning2.png");
 
-	m_hButtonSwitchSFX	= pAudio->LoadAudio("resource/audio/button_switch.wav");
-	m_hMenuChangeSFX	= pAudio->LoadAudio("resource/audio/menu_change.wav");
+	m_hButtonSwitchSFX = pAudio->LoadAudio("resource/audio/button_switch.wav");
+	m_hMenuChangeSFX = pAudio->LoadAudio("resource/audio/menu_change.wav");
 
 	//COMMENT BACK IN WHEN FILES ARE ADDED
 	//m_hMainTheme = pAudio->LoadAudio("resource/audio/zstrikemain.xwm");
@@ -71,8 +71,8 @@
 
 
 	// setup selection rects
-	selectonrects	= new SGD::Rectangle[NUM_CHOICES];
-	stringlengths	= new int[NUM_CHOICES];
+	selectonrects = new SGD::Rectangle[NUM_CHOICES];
+	stringlengths = new int[NUM_CHOICES];
 
 	int lengths[NUM_CHOICES] = { 9, 11, 7, 7, 4 };
 
@@ -84,17 +84,17 @@
 
 	for (size_t i = 0; i < NUM_CHOICES; i++)
 	{
-		selectonrects[i].left	= starting_x;
-		selectonrects[i].left	-= x_offset;
+		selectonrects[i].left = starting_x;
+		selectonrects[i].left -= x_offset;
 
-		selectonrects[i].top	= starting_y + (vertical_offset * i);
-		selectonrects[i].top	-= y_offset;
+		selectonrects[i].top = starting_y + (vertical_offset * i);
+		selectonrects[i].top -= y_offset;
 
-		selectonrects[i].right	= selectonrects[i].left + 256.0f;
+		selectonrects[i].right = selectonrects[i].left + 256.0f;
 		//selectonrects[i].right	+= x_offset;
 
 		selectonrects[i].bottom = selectonrects[i].top + 32.0f;
-		selectonrects[i].bottom	+= y_offset * 2;
+		selectonrects[i].bottom += y_offset * 2;
 	}
 
 	fadeTime.AddTime(.25f);
@@ -106,10 +106,10 @@
 /**************************************************************/
 // Exit
 //	- deallocate / unload resources
-/*virtual*/ void MainMenuState::Exit( void )
+/*virtual*/ void MainMenuState::Exit(void)
 {
-	SGD::GraphicsManager* pGraphics	= SGD::GraphicsManager::GetInstance();
-	SGD::AudioManager*	  pAudio	= SGD::AudioManager::GetInstance();
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager*	  pAudio = SGD::AudioManager::GetInstance();
 
 	// Unload assets
 	pGraphics->UnloadTexture(m_hBackgroundImage);
@@ -138,16 +138,16 @@
 /**************************************************************/
 // Input
 //	- handle user input
-/*virtual*/ bool MainMenuState::Input( void )
+/*virtual*/ bool MainMenuState::Input(void)
 {
-	SGD::InputManager*	pInput	= SGD::InputManager::GetInstance();
-	SGD::AudioManager*	pAudio	= SGD::AudioManager::GetInstance();
+	SGD::InputManager*	pInput = SGD::InputManager::GetInstance();
+	SGD::AudioManager*	pAudio = SGD::AudioManager::GetInstance();
 
 	m_mPrevious = m_nCursor;
 
 
 	// Press Escape to quit
-	if( pInput->IsKeyPressed( SGD::Key::Escape ) == true/* || pInput->IsButtonPressed(0, 2) == true */)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true/* || pInput->IsButtonPressed(0, 2) == true */)
 		m_nCursor = MenuItems::EXIT;
 
 
@@ -156,19 +156,23 @@
 	{
 		m_mPrevious = m_nCursor;
 		m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
+		
+		//pInput->SetMousePosition(selectonrects[m_nCursor - 1].GetTopRight());
 	}
-	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true)
+	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 	{
 		m_mPrevious = m_nCursor;
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
+
+		//pInput->SetMousePosition(selectonrects[m_nCursor - 1].GetTopRight());
 	}
 
 	// Input: L1 - Left Joystick
+	/*
 	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
 		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
-		
 		float		stickmin = 0.250f;
 		float		mousevel = 1.0f;
 
@@ -194,7 +198,9 @@
 
 		pInput->SetMousePosition(mpoint);
 	}
+	*/
 	
+
 	// Input: Mouse
 	if (pInput->GetMouseMovement() != SGD::Vector() || (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0))
 	{
@@ -217,9 +223,9 @@
 	clicked = pInput->IsKeyDown(SGD::Key::LButton) == true ? true : false;
 	/*
 	if (pInput->IsKeyDown(SGD::Key::LButton) == true)
-		clicked = true;
+	clicked = true;
 	else
-		clicked = false;
+	clicked = false;
 	*/
 
 	if (m_mPrevious != m_nCursor)
@@ -239,83 +245,82 @@
 		switch (m_nCursor)
 		{
 		case MenuItems::STORY_MODE:
-			{
-				GameplayState::GetInstance()->SetGameMode(true);
-
-				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
-				return true;
-			}
+		{
+									  GameplayState::GetInstance()->SetGameMode(true);
+									  Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
+									  return true;
+		}
 			break;
 
 
 		case MenuItems::SURVIVAL_MODE:
-			{
-				GameplayState::GetInstance()->SetGameMode(false);
-				Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
-				return true;
-			}
+		{
+										 GameplayState::GetInstance()->SetGameMode(false);
+										 Game::GetInstance()->AddState(PickSaveSlotState::GetInstance());
+										 return true;
+		}
 			break;
 
 
 		case MenuItems::HOW_TO_PLAY:
-			{
-				Game::GetInstance()->AddState(HowToPlayState::GetInstance());
-				return true;
-			}
+		{
+									   Game::GetInstance()->AddState(HowToPlayState::GetInstance());
+									   return true;
+		}
 			break;
 
 
 		case MenuItems::OPTIONS:
-			{
-				Game::GetInstance()->AddState(OptionsState::GetInstance());
-				return true;
-			}
+		{
+								   Game::GetInstance()->AddState(OptionsState::GetInstance());
+								   return true;
+		}
 			break;
 
 
 		case MenuItems::CREDITS:
-			{
-				Game::GetInstance()->AddState(CreditsState::GetInstance());
-				return true;
-			}
+		{
+								   Game::GetInstance()->AddState(CreditsState::GetInstance());
+								   return true;
+		}
 			break;
 
 
 		case MenuItems::EXIT:
-			{
-				return false;	// quit the game
-			}
+		{
+								return false;	// quit the game
+		}
 			break;
 		}
 	}
 	/*
 	if (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::LButton) == true)
 	{
-		if (m_nCursor == MenuItems::PLAY_GAME)
-		{
-			Game::GetInstance()->RemoveState();
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
-			return true;
-		}
-		else if (m_nCursor == MenuItems::PLAY_GAME)
-		{
-			Game::GetInstance()->AddState(HowToPlayState::GetInstance());
-			return true;
-		}
-		else if (mousepos.IsWithinRectangle(selectonrects[MenuItems::OPTIONS]) == true)
-		{
-			Game::GetInstance()->AddState(OptionsState::GetInstance());
-			return true;
-		}
-		else if (mousepos.IsWithinRectangle(selectonrects[MenuItems::CREDITS]) == true)
-		{
-			Game::GetInstance()->AddState(CreditsState::GetInstance());
-			return true;
-		}
-		else if (mousepos.IsWithinRectangle(selectonrects[MenuItems::EXIT]) == true)
-		{
-			return false;	// quit the game
-		}
+	if (m_nCursor == MenuItems::PLAY_GAME)
+	{
+	Game::GetInstance()->RemoveState();
+	Game::GetInstance()->AddState(GameplayState::GetInstance());
+	return true;
+	}
+	else if (m_nCursor == MenuItems::PLAY_GAME)
+	{
+	Game::GetInstance()->AddState(HowToPlayState::GetInstance());
+	return true;
+	}
+	else if (mousepos.IsWithinRectangle(selectonrects[MenuItems::OPTIONS]) == true)
+	{
+	Game::GetInstance()->AddState(OptionsState::GetInstance());
+	return true;
+	}
+	else if (mousepos.IsWithinRectangle(selectonrects[MenuItems::CREDITS]) == true)
+	{
+	Game::GetInstance()->AddState(CreditsState::GetInstance());
+	return true;
+	}
+	else if (mousepos.IsWithinRectangle(selectonrects[MenuItems::EXIT]) == true)
+	{
+	return false;	// quit the game
+	}
 	}
 	*/
 
@@ -331,7 +336,7 @@
 /**************************************************************/
 // Update
 //	- update entities / animations
-/*virtual*/ void MainMenuState::Update( float elapsedTime )
+/*virtual*/ void MainMenuState::Update(float elapsedTime)
 {
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
@@ -387,7 +392,7 @@
 	if (lightningTime.GetTime() <= 0.0f)
 	{
 		rand();
-		lightningTime.AddTime((float)(rand()% 5 + 3));
+		lightningTime.AddTime((float)(rand() % 5 + 3));
 		lTrans = 0;
 
 	}
@@ -404,10 +409,10 @@
 /**************************************************************/
 // Render
 //	- render entities / menu options
-/*virtual*/ void MainMenuState::Render( void )
+/*virtual*/ void MainMenuState::Render(void)
 {
-	SGD::GraphicsManager*	pGraphics	= SGD::GraphicsManager::GetInstance();
-	SGD::InputManager*		pInput		= SGD::InputManager::GetInstance();
+	SGD::GraphicsManager*	pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::InputManager*		pInput = SGD::InputManager::GetInstance();
 
 
 	// Draw the background image
@@ -415,7 +420,7 @@
 
 	if (lTrans > 0)
 	{
-		pGraphics->DrawTexture(m_hLightning, { 375, 0 }, 0.0f, {},{100,200,200,200}, {-1.0f,.5f});
+		pGraphics->DrawTexture(m_hLightning, { 375, 0 }, 0.0f, {}, { 100, 200, 200, 200 }, { -1.0f, .5f });
 		pGraphics->DrawTexture(m_hLightning, { Game::GetInstance()->GetScreenWidth() * .65f, 0 }, 0.0f, {}, { 100, 200, 200, 200 }, { 1.0f, .5f });
 	}
 
@@ -429,7 +434,7 @@
 
 	// Draw the buttons
 	for (size_t i = 0; i < NUM_CHOICES; i++)
-		pGraphics->DrawTexture(m_hButton2, selectonrects[i].GetTopLeft(), 0.0f, {}, {155,155,155}, { 1.0f, 1.0f });
+		pGraphics->DrawTexture(m_hButton2, selectonrects[i].GetTopLeft(), 0.0f, {}, { 155, 155, 155 }, { 1.0f, 1.0f });
 
 
 	// Use the game's font
@@ -440,11 +445,11 @@
 
 	// Draw the game title
 	// Align text based on window width
-	float screenWidth			= Game::GetInstance()->GetScreenWidth();
+	float screenWidth = Game::GetInstance()->GetScreenWidth();
 	float screenHeight = Game::GetInstance()->GetScreenHeight();
 
-	float titlescale	= .75f;
-	pGraphics->DrawTexture(m_hTitleImage, { screenWidth * 0.2f, -(screenHeight * 0.09375f)* titlescale }, 0.0f, {},{ 200, 150, 0, 150 }, { titlescale, titlescale });
+	float titlescale = .75f;
+	pGraphics->DrawTexture(m_hTitleImage, { screenWidth * 0.2f, -(screenHeight * 0.09375f)* titlescale }, 0.0f, {}, { 200, 150, 0, 150 }, { titlescale, titlescale });
 
 	// Display the menu options centered at 1x scale
 	std::string menuitems[NUM_CHOICES] = { "Story Mode", "Survival Mode", "How to Play", "Options", "Credits", "Exit" };
@@ -453,9 +458,9 @@
 
 	for (size_t i = 0; i < NUM_CHOICES; i++)
 	{
-		SGD::Color clr_normal	= { 255, 255, 0, 0 };		// red
+		SGD::Color clr_normal = { 255, 255, 0, 0 };		// red
 		SGD::Color clr_selected = { 255, 255, 255, 255 };	// white
-		SGD::Color clr_held		= { 255, 0, 0, 0 };			// black
+		SGD::Color clr_held = { 255, 0, 0, 0 };			// black
 
 
 		// not selected or colliding
@@ -487,8 +492,8 @@
 
 
 	// Draw the reticle
-	SGD::Point	retpos		= pInput->GetMousePosition();
-	float		retscale	= 0.8f;
+	SGD::Point	retpos = pInput->GetMousePosition();
+	float		retscale = 0.8f;
 
 	retpos.Offset(-32.0F * retscale, -32.0F * retscale);
 	pGraphics->DrawTexture(m_hReticleImage, retpos, 0.0F, {}, { 255, 255, 255 }, { retscale, retscale });
