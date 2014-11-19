@@ -16,6 +16,7 @@
 #include "HTPGameState.h"
 #include "IntroState.h"
 #include "GamerProfile.h"
+#include "SpawnManager.h"
 
 
 /*static*/ PickSaveSlotState* PickSaveSlotState::GetInstance(void)
@@ -78,7 +79,7 @@ bool PickSaveSlotState::Input(void)
 			m_nCursor = States::EXIT_1;
 
 	}
-		
+
 	//return false;	// quit game
 	SGD::Point mousePos = pInput->GetMousePosition();
 	float starting_y = Game::GetInstance()->GetScreenHeight() * 0.35f;
@@ -121,11 +122,11 @@ bool PickSaveSlotState::Input(void)
 		{
 			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * NEW_GAME)), SGD::Size(256, 64))))
 				m_nCursor = 0;
-			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * LOAD_GAME)), SGD::Size(256, 64))))
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * LOAD_GAME)), SGD::Size(256, 64))))
 				m_nCursor = 1;
-			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * DELETE_SAVES)), SGD::Size(256, 64))))
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * DELETE_SAVES)), SGD::Size(256, 64))))
 				m_nCursor = 2;
-			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f ), starting_y + (offset * EXIT_1)), SGD::Size(256, 64))))
+			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point((width *0.4f), starting_y + (offset * EXIT_1)), SGD::Size(256, 64))))
 				m_nCursor = 3;
 		}
 
@@ -135,17 +136,17 @@ bool PickSaveSlotState::Input(void)
 		else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 			m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : MODE_CHOICES - 1;
 
-		
 
 
-		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+
+		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 		{
 			if (m_nCursor == NEW_GAME)
 			{
 				currState = NEW_GAME;
 				modeChosen = true;
 			}
-			
+
 			else if (m_nCursor == LOAD_GAME)
 			{
 				currState = LOAD_GAME;
@@ -161,7 +162,7 @@ bool PickSaveSlotState::Input(void)
 				Game::GetInstance()->RemoveState();
 
 			m_nCursor = 0;
-			
+
 		}
 	}
 	else
@@ -189,7 +190,7 @@ bool PickSaveSlotState::Input(void)
 			m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
 
-		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 		{
 			switch (m_nCursor)
 			{
@@ -201,38 +202,39 @@ bool PickSaveSlotState::Input(void)
 
 									 if (currState == NEW_GAME || currState == DELETE_SAVES)
 									 {
-										
-											 if (GameplayState::GetInstance()->GetGameMode() == true)
+
+										 if (GameplayState::GetInstance()->GetGameMode() == true)
+										 {
+											 Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetStoryProfile());
+											 Game::GetInstance()->LoadStoryProfiles();
+										 }
+
+										 else
+										 {
+											 Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetSurvivalProfile());
+											 Game::GetInstance()->LoadSurvivalProfiles();
+										 }
+
+										 if (currState == DELETE_SAVES)
+										 {
+											 // Load assets
+											 if (GameplayState::GetInstance()->GetGameMode())
 											 {
-												 Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetStoryProfile());
-												 Game::GetInstance()->LoadStoryProfiles();
+												 for (unsigned int i = 0; i < 3; i++)
+												 {
+													 profiles[i] = Game::GetInstance()->GetSpecStoryProfile(i);
+												 }
+
 											 }
 											 else
 											 {
-												 Game::GetInstance()->OverWriteProfile(Game::GetInstance()->GetSurvivalProfile());
-												 Game::GetInstance()->LoadSurvivalProfiles();
-											 }
-
-											 if (currState == DELETE_SAVES)
-											 {
-												 // Load assets
-												 if (GameplayState::GetInstance()->GetGameMode())
+												 for (unsigned int i = 0; i < 3; i++)
 												 {
-													 for (unsigned int i = 0; i < 3; i++)
-													 {
-														 profiles[i] = Game::GetInstance()->GetSpecStoryProfile(i);
-													 }
-
-												 }
-												 else
-												 {
-													 for (unsigned int i = 0; i < 3; i++)
-													 {
-														 profiles[i] = Game::GetInstance()->GetSpecSurvialProfile(i);
-													 }
+													 profiles[i] = Game::GetInstance()->GetSpecSurvialProfile(i);
 												 }
 											 }
-										 
+										 }
+
 
 									 }
 									 if (currState == NEW_GAME || currState == LOAD_GAME)
@@ -240,27 +242,46 @@ bool PickSaveSlotState::Input(void)
 										 Game::GetInstance()->RemoveState();
 										 Game::GetInstance()->RemoveState();
 										 //			Game::GetInstance()->AddState(GameplayState::GetInstance());
-
 										 if (GameplayState::GetInstance()->GetGameMode() == true)
-											 Game::GetInstance()->AddState(HTPGameState::GetInstance());
+										 {
+											 if (Game::GetInstance()->GetStoryProfile().wavesComplete > 0)
+											 {
+												Game::GetInstance()->AddState(GameplayState::GetInstance());
+											 }
+
+											 else
+												Game::GetInstance()->AddState(HTPGameState::GetInstance());
+											
+										 }
+											 
+										 else if (GameplayState::GetInstance()->GetGameMode() == false)
+										 {									
+											 if (Game::GetInstance()->GetSurvivalProfile().wavesComplete > 0)
+											 {
+												 Game::GetInstance()->AddState(GameplayState::GetInstance());
+											 }
+											 else
+												 Game::GetInstance()->AddState(HTPGameState::GetInstance());
+										 }
 										 else
 											 Game::GetInstance()->AddState(GameplayState::GetInstance());
 
 										 return true;
 									 }
-										
-									 
-									
+
+
+
 									 return true;
-									 
-									
-									
+
+
+
 			}
 				break;
 
 
 			case MenuItems::EXIT_2:
 				modeChosen = false;
+
 				return true;
 
 				break;
@@ -290,7 +311,7 @@ void PickSaveSlotState::Render(void)
 	pFont->Draw(title1, { (width - (10 * 40)) / 2, 100 }, 2.5f, { 255, 255, 255 });
 
 
-	
+
 
 	if (modeChosen == false)
 	{
@@ -319,7 +340,7 @@ void PickSaveSlotState::Render(void)
 			pFont->Draw("Back To Menu", { (width - (12 * 32)) / 2, starting_y + (offset * EXIT_1) },			// 450
 				1.75f, { 255, 0, 0 });
 			break;
-		case 2: 
+		case 2:
 			pFont->Draw("New Game", { (width - (8 * 32)) / 2, starting_y + (offset * NEW_GAME) },			// 300
 				1.75f, { 255, 0, 0 });
 			pFont->Draw("Load Game", { (width - (9 * 32)) / 2, starting_y + (offset * LOAD_GAME) },			// 350
@@ -329,7 +350,7 @@ void PickSaveSlotState::Render(void)
 			pFont->Draw("Back To Menu", { (width - (12 * 32)) / 2, starting_y + (offset * EXIT_1) },			// 450
 				1.75f, { 255, 0, 0 });
 			break;
-		case 3: 
+		case 3:
 			pFont->Draw("New Game", { (width - (8 * 32)) / 2, starting_y + (offset * NEW_GAME) },			// 300
 				1.75f, { 255, 0, 0 });
 			pFont->Draw("Load Game", { (width - (9 * 32)) / 2, starting_y + (offset * LOAD_GAME) },			// 350
@@ -340,7 +361,7 @@ void PickSaveSlotState::Render(void)
 				1.75f, { 255, 255, 255, 255 });
 			break;
 		}
-		
+
 
 
 
@@ -368,7 +389,7 @@ void PickSaveSlotState::Render(void)
 		stringstream save3String;
 
 		save1String << "Save Slot 1\n"
-			<< profiles[0].time.tm_mon 
+			<< profiles[0].time.tm_mon
 			<< '-'
 			<< profiles[0].time.tm_mday
 			<< '-'
@@ -396,9 +417,9 @@ void PickSaveSlotState::Render(void)
 			<< ':'
 			<< profiles[1].time.tm_sec
 			<< '\n'
-			<< "Waves Complete: "<< profiles[1].wavesComplete;
+			<< "Waves Complete: " << profiles[1].wavesComplete;
 		save3String << "Save Slot 3\n"
-			<< profiles[2].time.tm_mon 
+			<< profiles[2].time.tm_mon
 			<< '-'
 			<< profiles[2].time.tm_mday
 			<< '-'
@@ -443,11 +464,11 @@ void PickSaveSlotState::Render(void)
 				1.25f, { 255, 0, 0 });
 			pFont->Draw(save3String.str().c_str(), { (width - (11 * 32)) / 2, starting_y + (offset * SAVE3) },			// 350
 				1.25f, { 255, 255, 255, 255 });
-			
+
 			pFont->Draw("Back", { (width - (4 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
 				1.75f, { 255, 0, 0 });
 			break;
-		case 3: 
+		case 3:
 			pFont->Draw(save1String.str().c_str(), { (width - (10 * 32)) / 2, starting_y + (offset * SAVE1) },			// 300
 				1.25f, { 255, 0, 0 });
 			pFont->Draw(save2String.str().c_str(), { (width - (11 * 32)) / 2, starting_y + (offset * SAVE2) },			// 300
@@ -458,16 +479,16 @@ void PickSaveSlotState::Render(void)
 			pFont->Draw("Back", { (width - (4 * 32)) / 2, starting_y + (offset * EXIT_2) },			// 450
 				1.75f, { 255, 255, 255, 255 });
 			break;
-		
+
 		}
 
-		
 
 
 
-		
+
+
 	}
-	
+
 	// Draw the reticle
 	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
 	float		retscale = 0.8f;

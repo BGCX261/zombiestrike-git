@@ -142,7 +142,13 @@
 	//storyMusic		= pAudio->LoadAudio("resource/audio/AmbienceDrama.xwm");
 	survivalMusic	= pAudio->LoadAudio("resource/audio/AmbienceDungeon.xwm");
 	//m_bStoryMode == true ? pAudio->PlayAudio(storyMusic, true) : pAudio->PlayAudio(survivalMusic, true);
-	pAudio->PlayAudio(m_bStoryMode == true ? Game::GetInstance()->storyMusic : survivalMusic, true);
+	//pAudio->PlayAudio(m_bStoryMode == true ? Game::GetInstance()->storyMusic : survivalMusic, true);
+
+	if (m_bStoryMode == false && pAudio->IsAudioPlaying(Game::GetInstance()->m_hMainTheme) == true)
+	{
+		pAudio->StopAudio(Game::GetInstance()->m_hMainTheme);
+		Game::GetInstance()->m_hSurviveVoice = pAudio->PlayAudio(Game::GetInstance()->m_hSurvivalTheme,true);
+	}
 
 
 	// SFX

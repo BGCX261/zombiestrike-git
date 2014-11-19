@@ -45,6 +45,8 @@
 	//pAnimationManager->Load("resource/config/animations/Zombie_Animation_New.xml", "zombie");
 	//animation.m_strCurrAnimation = "zombie";
 
+	pAudio->SetVoiceVolume(Game::GetInstance()->m_hMainVoice, 35);
+
 	m_hBackgroundImage = pGraphics->LoadTexture("resource/graphics/MenuImages/emergencybroadcast.png");
 
 	m_hEmergency = pAudio->LoadAudio("resource/audio/zombieemergency.wav");
@@ -99,7 +101,7 @@
 
 	pAudio->UnloadAudio(m_hEmergency);
 
-
+	pAudio->SetVoiceVolume(Game::GetInstance()->m_hMainVoice, 100);
 }
 
 

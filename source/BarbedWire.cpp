@@ -3,7 +3,7 @@
 
 BarbedWire::BarbedWire()
 {
-	this->SetType(ObjectType::OBJ_BARBEDWIRE);
+	SetType(BaseObject::OBJ_BARBEDWIRE);
 	this->SetAnimation("barbedwire");
 
 	m_fCurrHP = m_fMaxHP = 100.0f;

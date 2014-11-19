@@ -35,8 +35,8 @@ protected:
 	
 	string m_szTilePath;
 
-	unsigned int m_nMapWidth = 0;
-	unsigned int m_nMapHeight = 0;
+	float m_nMapWidth = 0.0f;
+	float m_nMapHeight = 0.0f;
 	SGD::Size tileSize;
 	
 public:
@@ -47,14 +47,14 @@ public:
 	//Accessors
 	SGD::HTexture GetTexture() { return m_hPalleteTexture; }
 	string GetTilePath() { return m_szTilePath; }
-	unsigned int GetMapWidth() { return m_nMapWidth; }
-	unsigned int GetMapHeight() { return m_nMapHeight; }
+	float GetMapWidth() { return m_nMapWidth; }
+	float GetMapHeight() { return m_nMapHeight; }
 
 	//Mutators
 	void SetTexture(SGD::HTexture bgImage) { m_hPalleteTexture = bgImage; }
 	void SetTilePath(string path)	{ m_szTilePath = path; }
-	void SetMapWidth(unsigned int mapW) { m_nMapWidth = mapW; }
-	void SetMapHeight(unsigned int mapH) { m_nMapHeight = mapH; }
+	void SetMapWidth(float mapW) { m_nMapWidth = mapW; }
+	void SetMapHeight(float mapH) { m_nMapHeight = mapH; }
 
 	map<SGD::Point, Tile> tileMap;
 };

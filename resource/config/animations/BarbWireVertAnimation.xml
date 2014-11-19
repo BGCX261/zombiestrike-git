@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation looping="0">barbedwire6.png<Frame sx="30" sy="30" sw="62" sh="62" cx="0" cy="0" cw="32" ch="32" px="16" py="17" rx="16" ry="15" duration="0.25">NONE</Frame><Sheet path="C:\Users\fullsail\Desktop\Zombie_StrikeNEW\zombiestrike\resource\graphics\barbedwire6.png" /></Animation>
+</Animations>
