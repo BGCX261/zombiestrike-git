@@ -306,7 +306,7 @@ bool	ShopState::Input(void)
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
-	if (pInput->IsKeyPressed(SGD::Key::Escape) == true )
+	if (pInput->IsKeyPressed(SGD::Key::Escape) == true || pInput->IsButtonPressed(0,9) == true)
 	{
 		//m_bTimerSet = true;
 		//pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()+2));
@@ -11052,10 +11052,9 @@ void ShopState::DrawControllerInput(void)
 	pFont->Draw("R1:\tNext Page", { screenSize.width * 0.75f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
 	pFont->Draw("Dpad-Left:\tPrev Tab", { screenSize.width * 0.75f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
 	pFont->Draw("Dpad-Right:\tNext Tab", { screenSize.width * 0.75f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
-
-
-
+	pFont->Draw("Press Start:\tExit Shop", { screenSize.width * 0.75f, screenSize.height * 0.30f }, 1.0f, { 255, 0, 0 });
 }
+
 void ShopState::DrawKeyboardInput(void)
 {
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -11068,7 +11067,6 @@ void ShopState::DrawKeyboardInput(void)
 	pFont->Draw("E:\tNext Page", { screenSize.width * 0.7f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
 	pFont->Draw("A:\tPrev Tab", { screenSize.width * 0.7f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
 	pFont->Draw("D:\tNext Tab", { screenSize.width * 0.7f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
-
-
+	pFont->Draw("B:\tExit Shop", { screenSize.width * 0.7f, screenSize.height * 0.30f }, 1.0f, { 255, 0, 0 });
 
 }
