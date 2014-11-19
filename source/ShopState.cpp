@@ -5842,11 +5842,9 @@ void	ShopState::Render(void)
 		pFont->Draw(timer.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 150, Game::GetInstance()->GetScreenHeight() - 100 }, 2.0f, { 155, 0, 0 });
 	}
 
-	stringstream timer;
-	timer << (int)GetShopTimer().GetTime();
 
-	pFont->Draw(wave.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 325, Game::GetInstance()->GetScreenHeight() - 150 }, 1.5f, { 155, 0, 0 });
-	pFont->Draw(timer.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 150, Game::GetInstance()->GetScreenHeight() - 100 }, 2.0f, { 155, 0, 0 });
+
+	
 
 	float scale = 1.0f;
 	int xOffset = 10;
