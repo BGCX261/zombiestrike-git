@@ -36,6 +36,8 @@ Player::Player() : Listener(this)
 
 
 	RegisterForEvent("UPDATE_PROFILE");
+	RegisterForEvent("RESET_COLLIDED");
+
 	
 
 
@@ -80,7 +82,8 @@ Player::~Player()
 	m_hDeath = nullptr;
 
 	UnregisterFromEvent("UPDATE_PROFILE");
-	
+	UnregisterFromEvent("RESET_COLLIDED");
+
 	//delete pistol;
 	//delete arifle;
 	//delete shotgun;
@@ -133,6 +136,11 @@ Player::~Player()
 
 	// update movement
 	MovingObject::Update(dt);
+
+	SGD::Rectangle rect = GetRect();
+	if (rect.left < 0 || rect.top < 0 || rect.right > GameplayState::GetInstance()->GetWorldSize().width || rect.bottom > GameplayState::GetInstance()->GetWorldSize().width)
+		m_ptPosition -= m_vtVelocity * Game::GetInstance()->DeltaTime();
+
 }
 
 void Player::Render()
@@ -187,6 +195,11 @@ void Player::Render()
 
 		}
 	}
+	if (pEvent->GetEventID() == "RESET_COLLIDED")
+	{
+		hasCollided = false;
+	}
+
 	/*
 	else if (pEvent->GetEventID() == "PICK_UP_STIM")
 	{
@@ -306,15 +319,21 @@ void Player::Render()
 
 
 		// environment
-		case OBJ_BARBEDWIRE:
+		case OBJ_BARBEDWIRE_V:
+		case OBJ_BARBEDWIRE_H:
 		case OBJ_SANDBAG:
 		case OBJ_WALL:
 		case OBJ_BASE:
-		{
-			const EnvironmentalObject* temp = dynamic_cast<const EnvironmentalObject*>(pOther);
-			if (temp->IsActive())
-				MovingObject::HandleCollision(pOther);
-		}
+
+		//if (hasCollided == false)
+		//{
+	
+						 const EnvironmentalObject* temp = dynamic_cast<const EnvironmentalObject*>(pOther);
+						 if (temp->IsActive())
+							 MovingObject::HandleCollision(pOther);
+					//	 hasCollided = true;
+		//}
+	
 		break;
 	}
 }

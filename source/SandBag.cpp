@@ -5,8 +5,7 @@
 
 SandBag::SandBag()
 {
-	this->SetType(ObjectType::OBJ_SANDBAG);
-	this->SetAnimation("sandbag");
+	
 
 	m_fCurrHP = m_fMaxHP = 250.0f;
 	RegisterForEvent("REPAIR_SANDBAGS");

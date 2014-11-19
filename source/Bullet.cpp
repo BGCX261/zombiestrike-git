@@ -96,8 +96,8 @@ Bullet::~Bullet()
 	else if (this->type == ObjectType::OBJ_VOMIT)
 	{
 		// zombie
-		if (pOther->GetType() == OBJ_SANDBAG || 
-			pOther->GetType() == OBJ_BARBEDWIRE)
+		if (pOther->GetType() == OBJ_SANDBAG || pOther->GetType() == OBJ_SANDBAG_L || pOther->GetType() == OBJ_SANDBAG_R ||
+			pOther->GetType() == OBJ_BARBEDWIRE_V || pOther->GetType() == OBJ_BARBEDWIRE_H)
 		{
 			if (GetOwner() != pOther)
 			{

@@ -1211,9 +1211,9 @@ bool	ShopState::Input(void)
 				{
 					if (sawnOffUpgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 2500)
 						{
-							profile.money -= 2000;
+							profile.money -= 2500;
 							sawnOffUpgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -1571,9 +1571,9 @@ bool	ShopState::Input(void)
 				{
 					if (pumpShotgunUpgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 3000)
 						{
-							profile.money -= 2000;
+							profile.money -= 3000;
 							pumpShotgunUpgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -1930,9 +1930,9 @@ bool	ShopState::Input(void)
 				{
 					if (autoShotgunUpgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 3500)
 						{
-							profile.money -= 2000;
+							profile.money -= 3500;
 							autoShotgunUpgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -2275,9 +2275,9 @@ bool	ShopState::Input(void)
 				{
 					if (uziUpgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 3000)
 						{
-							profile.money -= 2000;
+							profile.money -= 3000;
 							uziUpgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -2594,9 +2594,9 @@ bool	ShopState::Input(void)
 				{
 					if (tech9Upgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 3500)
 						{
-							profile.money -= 2000;
+							profile.money -= 3500;
 							tech9Upgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -2915,9 +2915,9 @@ bool	ShopState::Input(void)
 				{
 					if (p90Upgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 4000)
 						{
-							profile.money -= 2000;
+							profile.money -= 4000;
 							p90Upgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -3298,9 +3298,9 @@ bool	ShopState::Input(void)
 				{
 					if (ak47Upgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 3500)
 						{
-							profile.money -= 2000;
+							profile.money -= 3500;
 							ak47Upgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -3657,9 +3657,9 @@ bool	ShopState::Input(void)
 				{
 					if (m16Upgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 4000)
 						{
-							profile.money -= 2000;
+							profile.money -= 4000;
 							m16Upgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -4017,9 +4017,9 @@ bool	ShopState::Input(void)
 				{
 					if (lmgUpgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 4500)
 						{
-							profile.money -= 2000;
+							profile.money -= 4500;
 							lmgUpgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -4442,9 +4442,9 @@ bool	ShopState::Input(void)
 				{
 					if (sniperUpgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 6000)
 						{
-							profile.money -= 2000;
+							profile.money -= 6000;
 							sniperUpgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -4804,9 +4804,9 @@ bool	ShopState::Input(void)
 				{
 					if (flameUpgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 7000)
 						{
-							profile.money -= 2000;
+							profile.money -= 7000;
 							flameUpgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -5162,9 +5162,9 @@ bool	ShopState::Input(void)
 				{
 					if (nadeLauncherUpgrade.isBought == false)
 					{
-						if (profile.money >= 2000)
+						if (profile.money >= 7000)
 						{
-							profile.money -= 2000;
+							profile.money -= 7000;
 							nadeLauncherUpgrade.isBought = true;
 
 							if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hCash) == true)
@@ -5429,7 +5429,7 @@ bool	ShopState::Input(void)
 							{
 								profile.money -= 2000;
 
-								barbedwire.maxHealth.upgradedSkill.stat += 50;
+								barbedwire.maxHealth.upgradedSkill.stat += 25;
 								barbedwire.maxHealth.upgradedSkill.currTier++;
 								SGD::Event evnt("UPGRADE_BARBEDWIRE_HEALTH");
 								evnt.SendEventNow();
@@ -5473,7 +5473,7 @@ bool	ShopState::Input(void)
 							{
 								profile.money -= 3000;
 
-								barbedwire.damage.upgradedSkill.stat += 5;
+								barbedwire.damage.upgradedSkill.stat += 2.5;
 								barbedwire.damage.upgradedSkill.currTier++;
 								SGD::Event evnt("UPGRADE_BARBEDWIRE_DAMAGE");
 								evnt.SendEventNow();
@@ -5830,7 +5830,7 @@ void	ShopState::Render(void)
 	stringstream timer;
 	timer << (int)GetShopTimer().GetTime();
 
-	pFont->Draw(wave.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 175, Game::GetInstance()->GetScreenHeight() - 150 }, .5f, { 155, 0, 0 });
+	pFont->Draw(wave.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 325, Game::GetInstance()->GetScreenHeight() - 150 }, 1.5f, { 155, 0, 0 });
 	pFont->Draw(timer.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 150, Game::GetInstance()->GetScreenHeight() - 100 }, 2.0f, { 155, 0, 0 });
 
 	float scale = 1.0f;
@@ -5874,7 +5874,7 @@ void	ShopState::Render(void)
 
 
 
-						pFont->Draw("Pistol: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
+						pFont->Draw("Pistol: ", { screenSize.width *.1f, screenSize.height * 0.2f }, 1.0f, { 255, 255, 0, 0 });
 						pFont->Draw(pistolMagLevel.str().c_str(), { screenSize.width *.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
 						pFont->Draw(pistolMagSize.str().c_str(), { screenSize.width *.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
 						pFont->Draw(pistolReloadLevel.str().c_str(), { screenSize.width *.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
@@ -5990,7 +5990,7 @@ void	ShopState::Render(void)
 
 
 
-						pFont->Draw("Revolver: ", { screenSize.width *.1f, screenSize.height * 0.3f }, 1.0f, { 255, 255, 0, 0 });
+						pFont->Draw("Revolver: ", { screenSize.width *.1f, screenSize.height * 0.2f }, 1.0f, { 255, 255, 0, 0 });
 						pFont->Draw(revolverMagLevel.str().c_str(), { screenSize.width *0.1f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
 						pFont->Draw(revolverMagStat.str().c_str(), { screenSize.width *0.3f, Buttons[0].top }, scale, { 255, 255, 0, 0 });
 						pFont->Draw(revolverReloadLevel.str().c_str(), { screenSize.width *0.1f, Buttons[1].top }, scale, { 255, 255, 0, 0 });
@@ -6125,14 +6125,14 @@ void	ShopState::Render(void)
 						if (mousePos.IsWithinRectangle(Buttons[8]))
 						{
 							if (revolverUpgrade.isBought == false)
-								pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+								pFont->Draw("$2000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							else
 								pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						}
 						else
 						{
 							if (revolverUpgrade.isBought == false)
-								pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+								pFont->Draw("$2000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							else
 								pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 						}
@@ -6142,10 +6142,10 @@ void	ShopState::Render(void)
 
 
 					if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab1.left, shotTab1.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
-						pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, .8f, m_cActive);
+						pFont->Draw("Glock", { shotTab1.left + 20, shotTab1.top + 5 }, scale, m_cActive);
 
 					else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
-						pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, .8f, m_cActive);
+						pFont->Draw("Revolver", { shotTab2.left + 20, shotTab2.top + 5 }, scale, m_cActive);
 
 
 #pragma endregion
@@ -6311,14 +6311,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[8]))
 							   {
 								   if (sawnOffUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$2500", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (sawnOffUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + 5 }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$2500", { Buttons[8].left + xOffset, Buttons[8].top + 5 }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + 5 }, scale, { 255, 0, 255, 0 });
 							   }
@@ -6496,14 +6496,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[8]))
 							   {
 								   if (pumpShotgunUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$3000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (pumpShotgunUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$3000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   }
@@ -6681,14 +6681,14 @@ void	ShopState::Render(void)
 							   if (mousePos.IsWithinRectangle(Buttons[8]))
 							   {
 								   if (autoShotgunUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+									   pFont->Draw("$3500", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								   else
 									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   }
 							   else
 							   {
 								   if (autoShotgunUpgrade.isBought == false)
-									   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+									   pFont->Draw("$3500", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								   else
 									   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   }
@@ -6879,14 +6879,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[8]))
 						   {
 							   if (uziUpgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$3000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (uziUpgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$3000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 						   }
@@ -7049,14 +7049,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[8]))
 						   {
 							   if (tech9Upgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$3500", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (tech9Upgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$3500", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else
 								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 						   }
@@ -7215,14 +7215,14 @@ void	ShopState::Render(void)
 						   if (mousePos.IsWithinRectangle(Buttons[8]))
 						   {
 							   if (p90Upgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+								   pFont->Draw("$4000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							   else
 								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 						   }
 						   else
 						   {
 							   if (p90Upgrade.isBought == false)
-								   pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+								   pFont->Draw("$4000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							   else 
 								   pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0 , 255, 0 });
 						   }
@@ -7431,14 +7431,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[8]))
 									 {
 										 if (ak47Upgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$3500", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (ak47Upgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$3500", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 									 }
@@ -7619,14 +7619,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[8]))
 									 {
 										 if (m16Upgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$4000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (m16Upgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$4000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 									 }
@@ -7806,14 +7806,14 @@ void	ShopState::Render(void)
 									 if (mousePos.IsWithinRectangle(Buttons[8]))
 									 {
 										 if (lmgUpgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+											 pFont->Draw("$4500", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 										 else
 											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 									 }
 									 else
 									 {
 										 if (lmgUpgrade.isBought == false)
-											 pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+											 pFont->Draw("$4500", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 										 else
 											 pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 									 }
@@ -8042,14 +8042,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[8]))
 							{
 								if (sniperUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$6000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (sniperUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$6000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							}
@@ -8229,14 +8229,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[8]))
 							{
 								if (flameUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$7000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (flameUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$7000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							}
@@ -8395,14 +8395,14 @@ void	ShopState::Render(void)
 							if (mousePos.IsWithinRectangle(Buttons[8]))
 							{
 								if (nadeLauncherUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
+									pFont->Draw("$7000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 								else
 									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 255, 255, 255 });
 							}
 							else
 							{
 								if (nadeLauncherUpgrade.isBought == false)
-									pFont->Draw("Buy Gun", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
+									pFont->Draw("$7000", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 								else
 									pFont->Draw("Equipt", { Buttons[8].left + xOffset, Buttons[8].top + yOffset }, scale, { 255, 0, 255, 0 });
 							}
@@ -8417,11 +8417,11 @@ void	ShopState::Render(void)
 
 
 				  else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab2.left, shotTab2.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
-					  pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, 0.8f, { 255, 255, 255, 255 });
+					  pFont->Draw("F. Thrower", { shotTab2.left + 20, shotTab2.top + 5 }, scale, { 255, 255, 255, 255 });
 
 
 				  else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(shotTab3.left, shotTab3.top), SGD::Size(BUTTON_WIDTH, BUTTON_HEIGHT))))
-					  pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, 0.8f, { 255, 255, 255, 255 });
+					  pFont->Draw("G.Launcher", { shotTab3.left + 45, shotTab3.top + 5 }, scale, { 255, 255, 255, 255 });
 
 
 #pragma endregion
@@ -11035,10 +11035,10 @@ void ShopState::DrawControllerInput(void)
 
 	//pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
 
-	pFont->Draw("L1:\tPrev Page", { screenSize.width * 0.7f, screenSize.height * 0.05f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("R1:\tNext Page", { screenSize.width * 0.7f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("Dpad-Left:\tPrev Tab", { screenSize.width * 0.7f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("Dpad-Right:\tNext Tab", { screenSize.width * 0.7f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("L1:\tPrev Page", { screenSize.width * 0.75f, screenSize.height * 0.05f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("R1:\tNext Page", { screenSize.width * 0.75f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Dpad-Left:\tPrev Tab", { screenSize.width * 0.75f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Dpad-Right:\tNext Tab", { screenSize.width * 0.75f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
 
 
 
@@ -11051,10 +11051,10 @@ void ShopState::DrawKeyboardInput(void)
 
 	//pGraphics->DrawTextureSection(weaponsImage, { screenSize.width * .70f, screenSize.height * 0.45f }, SGD::Rectangle(SGD::Point(103.0f, 47.0f), SGD::Size(140.0f, 86.0f)));
 
-	pFont->Draw("Q:\tPrev Page", { screenSize.width * 0.7f, screenSize.height * 0.05f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("E:\tNext Page", { screenSize.width * 0.7f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("Left:\tPrev Tab", { screenSize.width * 0.7f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
-	pFont->Draw("Right:\tNext Tab", { screenSize.width * 0.7f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Q:\tPrev Page", { screenSize.width * 0.75f, screenSize.height * 0.05f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("E:\tNext Page", { screenSize.width * 0.75f, screenSize.height * 0.10f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Left:\tPrev Tab", { screenSize.width * 0.75f, screenSize.height * 0.20f }, 1.0f, { 255, 0, 0 });
+	pFont->Draw("Right:\tNext Tab", { screenSize.width * 0.75f, screenSize.height * 0.25f }, 1.0f, { 255, 0, 0 });
 
 
 

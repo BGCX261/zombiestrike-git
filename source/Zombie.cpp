@@ -127,7 +127,7 @@ void Zombie::RetrieveBehavior(std::string name)
 			//isAlive = false;
 		}
 	}
-	if (pOther->GetType() == OBJ_BARBEDWIRE)
+	if (pOther->GetType() == OBJ_BARBEDWIRE_V || pOther->GetType() == OBJ_BARBEDWIRE_H)
 	{
 		const BarbedWire* barbWire = dynamic_cast<const BarbedWire*>(pOther);
 		if (barbWire->IsActive())
@@ -144,7 +144,7 @@ void Zombie::RetrieveBehavior(std::string name)
 			MovingObject::HandleCollision(pOther);
 		}
 	}
-	if (pOther->GetType() == OBJ_SANDBAG)
+	if (pOther->GetType() == OBJ_SANDBAG || pOther->GetType() == OBJ_SANDBAG_L || pOther->GetType() == OBJ_SANDBAG_R)
 	{
 		const SandBag* sandbag = dynamic_cast<const SandBag*>(pOther);
 		if (sandbag->IsActive())

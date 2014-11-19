@@ -136,7 +136,7 @@ public:
 	SGD::Point			GetTurretPosition	(void) const;
 
 
-
+	bool hasCollided = false; 
 
 	friend class BaseBehavior;
 	friend class PlayerController;

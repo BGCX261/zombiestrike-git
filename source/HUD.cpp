@@ -49,14 +49,16 @@ void HUD::Render(void)
 
 	// Draw the HUD image
 	float	screenheight	= Game::GetInstance()->GetScreenHeight();
+	float	screenwidth = Game::GetInstance()->GetScreenWidth();
+
 
 	//pGraphics->DrawTextureSection(m_hBackgroundImage, { 1.5f, screenheight - 112.0f }, SGD::Rectangle(4.0f, 694.0f, 708.0f, 806.0f));
 	//pGraphics->DrawTexture(m_hBackgroundImage, { 1.5f, screenheight - 112.0f });
 
 
 	// draw health bars
-	SGD::Rectangle currhealth	= { 0, 0, m_pPlayer->GetCurrHealth() / m_pPlayer->GetMaxHealth() * 200, 35 };
-	SGD::Rectangle maxhealth	= { 0, 0, 200, 35 };
+	SGD::Rectangle currhealth = { screenwidth * 0.05f, screenheight * 0.05f, m_pPlayer->GetCurrHealth() / m_pPlayer->GetMaxHealth() * 200 + screenwidth * 0.05f, screenheight * 0.05f + 35 };
+	SGD::Rectangle maxhealth = { screenwidth * 0.05f, screenheight * 0.05f, screenwidth * 0.05f + 200, screenheight * 0.05f + 35 };
 
 	pGraphics->DrawRectangle(maxhealth, { 0, 0, 0 });
 
@@ -78,7 +80,7 @@ void HUD::Render(void)
 
 	stringstream health;
 	health << "HP: " << hp;
-	pFont->Draw(health.str().c_str(), { 0, 0 }, 1.0f, { 255, 255, 255 });
+	pFont->Draw(health.str().c_str(), { screenwidth * 0.05f, screenheight * 0.05f }, 1.0f, { 255, 255, 255 });
 
 
 }

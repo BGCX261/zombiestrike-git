@@ -110,8 +110,14 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/Player_Death2.xml", "playerDeath");
 
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
-	pAnimationManager->Load("resource/config/animations/Sandbag_Animation.xml", "sandbag");
+	pAnimationManager->Load("resource/config/animations/Sandbag_Animation.xml", "sandBag");
+	pAnimationManager->Load("resource/config/animations/sandBagLeft.xml", "sandBagLeft");
+	pAnimationManager->Load("resource/config/animations/sandBagRight.xml", "sandBagRight");
+
+
 	pAnimationManager->Load("resource/config/animations/Barbedwire_Animation.xml", "barbedwire");
+	pAnimationManager->Load("resource/config/animations/BarbWireVertAnimation.xml", "barbedwirevert");
+
 
 
 	// Weapons
@@ -323,10 +329,10 @@ int Game::Update( void )
 	if (m_pCurrState == stateMachine.top())
 	{
 	
-		if (m_pCurrState != nullptr)
+		if (m_pCurrState != nullptr && isActive == true)
 			m_pCurrState->Update(elapsedTime);
 
-		if (m_pCurrState != nullptr)
+		if (m_pCurrState != nullptr && isActive == true)
 			m_pCurrState->Render();
 	}
 
@@ -2578,11 +2584,11 @@ void Game::CreateStoryProfiles()
 
 
 				//barbedwire
-				fout << 100 << '\n';
+				fout << 50 << '\n';
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 
-				fout << 10 << '\n';
+				fout << 2 << '\n';
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 
@@ -3050,11 +3056,11 @@ void Game::CreateSurvivalProfiles()
 
 
 				//barbedwire
-				fout << 100 << '\n';
+				fout << 50 << '\n';
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 
-				fout << 10 << '\n';
+				fout << 2 << '\n';
 				fout << 1 << '\n';
 				fout << 3 << '\n';
 
@@ -3476,11 +3482,11 @@ void Game::OverWriteTutorialProfile(GamerProfile& profile)
 
 
 		//barbedwire
-		fout << 100 << '\n';
+		fout << 50 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 
-		fout << 10 << '\n';
+		fout << 2 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 
@@ -3935,11 +3941,11 @@ SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 
 
 		//barbedwire
-		fout << 100 << '\n';
+		fout << 50 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 
-		fout << 10 << '\n';
+		fout << 2 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 
@@ -4363,11 +4369,11 @@ void Game::OverWriteProfile(GamerProfile& profile)
 
 
 		//barbedwire
-		fout << 100 << '\n';
+		fout << 50 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 
-		fout << 10 << '\n';
+		fout << 2 << '\n';
 		fout << 1 << '\n';
 		fout << 3 << '\n';
 

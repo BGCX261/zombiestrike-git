@@ -250,8 +250,16 @@
 
 
 	Game::GetInstance()->OverWriteTutorialProfile(Game::GetInstance()->GetTutorialProfile());
+	Game::GetInstance()->LoadTutorialProfiles();
 
 	isActive = false;
+	m_bStoryMode = true;
+	m_bTutorialMode = true;
+
+	m_bShopState = false;
+	m_bIsChoiceScreen = true;
+	m_bIsHowToPlay = false;
+	m_bIsTutorial = false;
 
 
 	//pGraphics->UnloadTexture(m_hReticleImage);
@@ -266,6 +274,7 @@
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
 	if (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
 	{
 		SGD::Point	mpoint = pInput->GetMousePosition();
@@ -334,7 +343,7 @@
 			}
 		}
 
-		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonReleased(0, 1) == true || pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 		{
 			switch (m_nCursor)
 			{
@@ -481,10 +490,13 @@
 			SpawnManager::GetInstance()->Update(dt);
 			m_pEntities->UpdateAll(dt);
 
-
+			SGD::Event hasCollided("RESET_COLLIDED");
 			
 			m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_COLLIDABLE);
+			hasCollided.SendEventNow();
+
 			m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENVIRO);
+			hasCollided.SendEventNow();
 
 			m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENVIRO);
 			m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_COLLIDABLE);
@@ -492,6 +504,7 @@
 			m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_BULLETS);
 
 
+	
 
 			// Center camera on the player
 			SGD::Point playerpos = m_pPlayer->GetPosition();

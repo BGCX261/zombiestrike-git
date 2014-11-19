@@ -358,9 +358,9 @@
 
 		// Check collisions
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENEMIES);
-		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_COLLIDABLE);
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_PUKE);
 		m_pEntities->CheckCollisions(BUCKET_PLAYER, BUCKET_ENVIRO);
+
 
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENVIRO);
 		m_pEntities->CheckCollisions(BUCKET_ENEMIES, BUCKET_ENEMIES);
@@ -370,7 +370,10 @@
 		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_ENEMIES);	// house + zombies
 		m_pEntities->CheckCollisions(BUCKET_PICKUPS, BUCKET_PLAYER);	// house + player
 
+	/*	SGD::Event hasCollided("RESET_COLLIDED");
+		hasCollided.SendEventNow();*/
 
+		
 		// Center camera on the player
 		SGD::Point playerpos = m_pPlayer->GetPosition();
 		playerpos.x -= Game::GetInstance()->GetScreenWidth() * 0.50f;

@@ -775,12 +775,16 @@ namespace SGD
 			if( m_eStatus != E_INITIALIZED )
 				return false;
 
-
-			// Attempt to move the Windows cursor
 			POINT mouse = { (LONG)position.x, (LONG)position.y };
+
+			RECT clip = {};
+			GetClipCursor(&clip);
+
+			mouse.x += clip.left;
+			mouse.y += clip.top;
+			// Attempt to move the Windows cursor
 			ClientToScreen( m_hWnd, &mouse );
 			BOOL result = SetCursorPos( (int)mouse.x, (int)mouse.y );
-
 			if( result == FALSE )
 			{
 				// MESSAGE
@@ -793,10 +797,8 @@ namespace SGD
 
 			
 			// Store updated mouse position
-			RECT clip = { };
-			GetCursorPos( &mouse );
+			GetCursorPos(&mouse);
 			ScreenToClient( m_hWnd, &mouse );
-			GetClipCursor( &clip );
 			mouse.x -= clip.left;
 			mouse.y -= clip.top;
 
