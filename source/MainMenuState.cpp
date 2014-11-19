@@ -50,7 +50,7 @@
 	starting_x = Game::GetInstance()->GetScreenWidth() * .10f;
 	starting_y = Game::GetInstance()->GetScreenHeight() * .2f;
 
-
+	vertical_offset = Game::GetInstance()->GetScreenHeight() * 0.1f;
 	// Load assets
 	m_hBackgroundImage = pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_image.png");
 	m_hTitleImage = pGraphics->LoadTexture("resource/graphics/MenuImages/Zombie_Strike_menu_title.png");
@@ -61,6 +61,16 @@
 
 	m_hButtonSwitchSFX = pAudio->LoadAudio("resource/audio/button_switch.wav");
 	m_hMenuChangeSFX = pAudio->LoadAudio("resource/audio/menu_change.wav");
+
+	if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hMainTheme) == false)
+	{
+		if (pAudio->IsAudioPlaying(Game::GetInstance()->m_hSurvivalTheme) == true)
+		{
+			pAudio->StopAudio(Game::GetInstance()->m_hSurvivalTheme);
+		}
+
+		Game::GetInstance()->m_hMainVoice = pAudio->PlayAudio(Game::GetInstance()->m_hMainTheme, true);
+	}
 
 	//COMMENT BACK IN WHEN FILES ARE ADDED
 	//m_hMainTheme = pAudio->LoadAudio("resource/audio/zstrikemain.xwm");
@@ -100,6 +110,8 @@
 	fadeTime.AddTime(.25f);
 	lightningTime.AddTime(3);
 	lFlashTime.AddTime(.01f);
+
+	
 }
 
 
@@ -157,7 +169,7 @@
 		m_mPrevious = m_nCursor;
 		m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
 		
-		pInput->SetMousePosition(selectonrects[m_nCursor - 1].GetTopRight());
+		pInput->SetMousePosition(selectonrects[m_nCursor].GetTopRight());
 	}
 
 	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
@@ -165,7 +177,7 @@
 		m_mPrevious = m_nCursor;
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
-		pInput->SetMousePosition(selectonrects[m_nCursor - 1].GetTopRight());
+		pInput->SetMousePosition(selectonrects[m_nCursor].GetTopRight());
 	}
 
 	// Input: L1 - Left Joystick
@@ -341,16 +353,13 @@
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
 	//COMMENT BACK IN WHEN AUDIO IS ADDED
-	if (m_nCursor == 1 && pAudio->IsAudioPlaying(Game::GetInstance()->m_hSurvivalTheme) == false)
-	{
-		pAudio->StopAudio(Game::GetInstance()->m_hMainTheme);
-		pAudio->PlayAudio(Game::GetInstance()->m_hSurvivalTheme, true);
-	}
-	if (m_nCursor != 1 && pAudio->IsAudioPlaying(Game::GetInstance()->m_hMainTheme) == false)
-	{
-		pAudio->StopAudio(Game::GetInstance()->m_hSurvivalTheme);
-		pAudio->PlayAudio(Game::GetInstance()->m_hMainTheme, true);
-	}
+	//if (m_nCursor == 1 && pAudio->IsAudioPlaying(Game::GetInstance()->m_hSurvivalTheme) == false)
+	//{
+	//	pAudio->StopAudio(Game::GetInstance()->m_hMainTheme);
+	//	pAudio->PlayAudio(Game::GetInstance()->m_hSurvivalTheme, true);
+	//}
+
+
 
 	if (m_nCursor == 1)
 	{
@@ -454,7 +463,7 @@
 	// Display the menu options centered at 1x scale
 	std::string menuitems[NUM_CHOICES] = { "Story Mode", "Survival Mode", "How to Play", "Options", "Credits", "Exit" };
 
-	float offset = 100.0F;
+	float offset = screenHeight * 0.1f;
 
 	for (size_t i = 0; i < NUM_CHOICES; i++)
 	{

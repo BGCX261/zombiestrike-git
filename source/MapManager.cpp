@@ -87,16 +87,16 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 
 	tStruct.tileSize.width = (float)tileWidth;
 	tStruct.tileSize.height = (float)tileHeight;
-	tStruct.map.SetMapWidth(mapWidth);
-	tStruct.map.SetMapHeight(mapHeight);
-	const int cMapWidth = tStruct.map.GetMapWidth();
-	const int cMaHeight = tStruct.map.GetMapHeight();
+	tStruct.map.SetMapWidth((float)mapWidth);
+	tStruct.map.SetMapHeight((float)mapHeight);
+	const float cMapWidth = tStruct.map.GetMapWidth();
+	const float cMaHeight = tStruct.map.GetMapHeight();
 
 
-	tStruct.layers.m_vTiles = new Tile*[cMaHeight];
+	tStruct.layers.m_vTiles = new Tile*[(int)cMaHeight];
 
 	for (int i = 0; i < cMaHeight; i++)
-		tStruct.layers.m_vTiles[i] = new Tile[cMapWidth];
+		tStruct.layers.m_vTiles[i] = new Tile[(int)cMapWidth];
 
 
 
@@ -263,7 +263,7 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 				CreateSandBags({ (float)posX * tileWidth + 16, (float)posY * tileHeight+16 }, m_pEntities);
 				break;
 			case BaseObject::OBJ_BARBEDWIRE:
-				CreateBarbedWire({ (float)posX * tileWidth + 16, (float)posY * tileHeight+16 }, m_pEntities);
+				CreateBarbedWire({ (float)posX * tileWidth + 16, (float)posY * tileHeight+16 }, m_pEntities,tileid);
 				break;
 			case BaseObject::OBJ_LANDMINE:
 				CreateLandMine({ (float)posX * tileWidth +16, (float)posY * tileHeight+16 }, m_pEntities);
@@ -312,15 +312,15 @@ void MapManager::Render()
 {
 	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
 	
-	for (int currRow = startRow; currRow < endRow; currRow++)
+	for (int currRow = (int)startRow; currRow < (int)(endRow + m_fRound); currRow++)
 	{
-		for (int currCol = startCol; currCol < endCol; currCol++)
+		for (int currCol = (int)startCol; currCol < (int)(endCol + m_fRound); currCol++)
 		{
 			SGD::Point point = tStruct.layers.m_vTiles[currRow][currCol].worldPos;
 
 			HTPGameState::GetInstance()->GetIsCurrState() == false
-				? point.Offset({ -GameplayState::GetInstance()->GetCamera()->GetPosition().x, -GameplayState::GetInstance()->GetCamera()->GetPosition().y })
-				: point.Offset({ -HTPGameState::GetInstance()->GetCamera()->GetPosition().x, -HTPGameState::GetInstance()->GetCamera()->GetPosition().y });
+				? point.Offset({ -GameplayState::GetInstance()->GetCamera()->GetPosition().x + m_fRound, -GameplayState::GetInstance()->GetCamera()->GetPosition().y + m_fRound })
+				: point.Offset({ -HTPGameState::GetInstance()->GetCamera()->GetPosition().x + m_fRound, -HTPGameState::GetInstance()->GetCamera()->GetPosition().y + m_fRound });
 
 			pGraphics->DrawTextureSection(tileTexture,
 			 point,
@@ -337,31 +337,31 @@ void MapManager::Update(float elapsedTime)
 		? cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect()
 		: cameraRect = HTPGameState::GetInstance()->GetCamera()->GetRect();
 
-	startCol = (int)cameraRect.left / (int)tStruct.tileSize.width;
-	startRow = (int)cameraRect.top / (int)tStruct.tileSize.height;
-	endCol = (int)(Game::GetInstance()->GetScreenWidth() + cameraRect.left) / (int)tStruct.tileSize.width;
-	endRow = (int)(Game::GetInstance()->GetScreenHeight() + cameraRect.top) / (int)tStruct.tileSize.height;
+	startCol = (cameraRect.left + m_fRound) / tStruct.tileSize.width;
+	startRow = (cameraRect.top + m_fRound)  / tStruct.tileSize.height;
+	endCol = ((Game::GetInstance()->GetScreenWidth() + cameraRect.left) / tStruct.tileSize.width);
+	endRow = ((Game::GetInstance()->GetScreenHeight() + cameraRect.top)  / tStruct.tileSize.height);
 	endRow++;
 	endCol++;
 
-	if (startCol < 0)
+	if (startCol < 0.0f)
 	{
-		startCol = 0;
+		startCol = 0.0f + m_fRound;
 	}
 
-	if (startRow < 0)
+	if (startRow < 0.0f)
 	{
-		startRow = 0;
+		startRow = 0.0f + m_fRound;
 	}
 
-	if (endCol > (int)tStruct.map.GetMapWidth())
+	if (endCol > tStruct.map.GetMapWidth())
 	{
-		endCol = (int)tStruct.map.GetMapWidth();
+		endCol = tStruct.map.GetMapWidth();
 	}
 
-	if (endRow > (int)tStruct.map.GetMapHeight())
+	if (endRow > tStruct.map.GetMapHeight())
 	{
-		endRow = (int)tStruct.map.GetMapHeight();
+		endRow = tStruct.map.GetMapHeight();
 	}
 
 
@@ -425,14 +425,14 @@ void MapManager::CreateSandBags(SGD::Point pos, EntityManager* entities)
 	sandbag->Release();
 	sandbag = nullptr;
 }
-void MapManager::CreateBarbedWire(SGD::Point pos, EntityManager* entities)
+void MapManager::CreateBarbedWire(SGD::Point pos, EntityManager* entities, int type)
 {
 	BarbedWire* barbedWire = new BarbedWire;
 	barbedWire->SetPosition(pos);
 	//barbedWire->SetAnimation("testBarbwire");
 	barbedWire->SetActive(profile.barbWireStates[currBarbWire]);
 	currBarbWire++;
-	barbedWires.push_back(barbedWire);
+	barbedWires.push_back(barbedWire);	
 	entities->AddEntity(barbedWire, BUCKET_ENVIRO);
 	barbedWire->Release();
 	barbedWire = nullptr;

@@ -34,6 +34,14 @@ void	ShopState::Enter(void)
 {
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
+	//if (GameplayState::GetInstance()->GetGameMode() == false)
+	//{
+	//	pAudio->SetVoiceVolume(Game::GetInstance()->m_hSurviveVoice, 50);
+	//}
+	//else
+	//	pAudio->SetVoiceVolume(Game::GetInstance()->m_hMainVoice, 50);
+	
+
 	if (SpawnManager::GetInstance()->GetCurrWave() < 11)
 	{
 		if (pAudio->IsAudioPlaying(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2))== false)
@@ -5775,7 +5783,7 @@ void	ShopState::Update(float elapsedTime)
 	else
 		nadeLauncherUpgrade.totalAmmo.isMaxed = false;
 
-	if (GetShopTimer().GetTime() <= 0.0f)
+	if (GetShopTimer().GetTime() <= 0.0f && HTPGameState::GetInstance()->GetIsCurrState() == false)
 	{
 		m_bTimerSet = true;
 
@@ -5822,16 +5830,17 @@ void	ShopState::Render(void)
 		? DrawControllerInput()
 		: DrawKeyboardInput();
 
+	if (HTPGameState::GetInstance()->GetIsCurrState() == false)
+	{
+		stringstream wave;
+		wave << "NEXT WAVE IN";
 
+		stringstream timer;
+		timer << (int)GetShopTimer().GetTime();
 
-	stringstream wave;
-	wave << "NEXT WAVE IN";
-
-	stringstream timer;
-	timer << (int)GetShopTimer().GetTime();
-
-	pFont->Draw(wave.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 175, Game::GetInstance()->GetScreenHeight() - 150 }, .5f, { 155, 0, 0 });
-	pFont->Draw(timer.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 150, Game::GetInstance()->GetScreenHeight() - 100 }, 2.0f, { 155, 0, 0 });
+		pFont->Draw(wave.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 175, Game::GetInstance()->GetScreenHeight() - 150 }, .5f, { 155, 0, 0 });
+		pFont->Draw(timer.str().c_str(), { Game::GetInstance()->GetScreenWidth() - 150, Game::GetInstance()->GetScreenHeight() - 100 }, 2.0f, { 155, 0, 0 });
+	}
 
 	float scale = 1.0f;
 	int xOffset = 10;

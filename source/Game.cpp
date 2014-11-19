@@ -112,6 +112,7 @@ bool Game::Initialize( float width, float height, const wchar_t* title )
 	pAnimationManager->Load("resource/config/animations/Landmine_Animation.xml", "landmine");
 	pAnimationManager->Load("resource/config/animations/Sandbag_Animation.xml", "sandbag");
 	pAnimationManager->Load("resource/config/animations/Barbedwire_Animation.xml", "barbedwire");
+	//pAnimationManager->Load("resource/config/animations/BarbWireVertAnimation.xml", "barbedwirevert");
 
 
 	// Weapons
