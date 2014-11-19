@@ -61,7 +61,7 @@ public:
 
 	std::string GetWeaponAnimType(void) const;
 
-	float GetBulletStartPixelOffset(void) const;
+	SGD::Vector GetBulletStartPixelOffsets(void) const;
 
 
 	//Accessors

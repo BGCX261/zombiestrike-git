@@ -18,7 +18,7 @@ struct NotificationBar
 
 class HUD
 {
-	SGD::HTexture	m_hBackgroundImage	= SGD::INVALID_HANDLE;
+	SGD::HTexture	m_hTurret	= SGD::INVALID_HANDLE;
 
 	Player*			m_pPlayer			= nullptr;
 

@@ -213,9 +213,9 @@ std::string Weapon::GetWeaponAnimType(void) const
 	return gun;
 }
 
-float Weapon::GetBulletStartPixelOffset(void) const
+SGD::Vector Weapon::GetBulletStartPixelOffsets(void) const
 {
-	float pixels = 0.0f;
+	SGD::Vector pixels = { 14.0f, 0.0f };
 
 	switch (this->type)
 	{
@@ -223,40 +223,51 @@ float Weapon::GetBulletStartPixelOffset(void) const
 	case Gun::REVOLVER:
 	case Gun::MAC10:
 	case Gun::TECH9:
-		pixels = 40.0f;
+		pixels.x = 13.0f;
+		pixels.y = 40.0f;
 		break;
 
 	case Gun::SAWN:
-		pixels = 37.0f;
+		pixels.x = 13.0f;
+		pixels.y = 37.0f;
 		break;
 
 	case Gun::PUMP:
 	case Gun::AUTO:
-		pixels = 50.0f;
+		pixels.x = 13.0f;
+		pixels.y = 50.0f;
 		break;
 
 	case Gun::SP90:
 	case Gun::M16:
 	case Gun::LIGHT_MG:
 	case Gun::AK47:
-		pixels = 45.0f;
+		pixels.x = 16.0f;
+		pixels.y = 48.0f;
 		break;
 
 	case Gun::SNIPER:
-		pixels = 75.0f;
+		pixels.x = 17.0f;
+		pixels.y = 79.0f;
 		break;
 
 	case Gun::FTHROWER:
-		pixels = 70.0f;
+		pixels.x = 13.0f;
+		pixels.y = 70.0f;
 		break;
 
 	case Gun::GLAUNCHER:
-		pixels = 50.0f;
+		pixels.x = 13.0f;
+		pixels.y = 50.0f;
 		break;
 
 	default:
 		break;
 	}
+
+
+	pixels.y *= -1.0f;
+
 
 	return pixels;
 }

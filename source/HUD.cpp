@@ -19,14 +19,14 @@ void HUD::Initialize(Player* player)
 	m_pPlayer = player;
 
 	// Load assets
-	//m_hBackgroundImage = pGraphics->LoadTexture("resource/graphics/HUD_clear3.png");
+	m_hTurret = pGraphics->LoadTexture("resource/graphics/0908-Robots2.png");
 }
 void HUD::Shutdown(void)
 {
 	SGD::GraphicsManager* pGraphics	= SGD::GraphicsManager::GetInstance();
 
 	// Unload assets
-	//pGraphics->UnloadTexture(m_hBackgroundImage);
+	pGraphics->UnloadTexture(m_hTurret);
 }
 
 
@@ -96,18 +96,16 @@ void HUD::Render(void)
 
 
 	// # of turrets
-	AnimTimeStamp ats;
-	ats.m_strCurrAnimation = "turret";
-	ats.m_nCurrFrame = 0;
-	ats.m_fCurrDuration = 0.0f;
-	AnimationManager::GetInstance()->Render(ats, { m_pPlayer->m_ptPosition.x - 590.0f, m_pPlayer->m_ptPosition.y }, 0.0f, { 255, 255, 255 }, { 1.3f, 1.3f });
+	SGD::Point turretpos = { width * 0.3f, height * 0.9f - 20.0f };
+	//turretpos.Offset(-camerapos.x, -camerapos.y);
+	pGraphics->DrawTextureSection(m_hTurret, turretpos, SGD::Rectangle(123, 387, 160, 450), 0.0f, {}, {}, { 1.3f, 1.3f });
 
 	int numturrets = m_pPlayer->m_nNumTurrets;
 	stringstream turrets;
-	turrets << "x" << numturrets;
+	turrets << "x " << numturrets;
 
-	SGD::Point numberpos = { m_pPlayer->m_ptPosition.x - 560.0f, m_pPlayer->m_ptPosition.y };
-	numberpos.Offset(-camerapos.x, -camerapos.y);
+	SGD::Point numberpos = { width * 0.35f, height * 0.95f - 20.0f };
+	//numberpos.Offset(-camerapos.x, -camerapos.y);
 	pFont->Draw(turrets.str().c_str(), numberpos, 1.3f, { 255, 0, 0 });
 
 

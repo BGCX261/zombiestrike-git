@@ -1060,13 +1060,14 @@ void HTPGameState::CreateBullet(Weapon* owner)
 	bullet->SetOwner(owner->GetOwner());
 
 
-	float		pixel_offset = owner->GetBulletStartPixelOffset();
-	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
-	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
-	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
-
+	//where the bullet should render relative to player direction
+	SGD::Vector	pixel_offset	= owner->GetBulletStartPixelOffsets();
+	SGD::Point	ownerposP		= owner->GetOwner()->GetPosition();
+	SGD::Point	bulletPosP		= owner->GetOwner()->GetPosition() + pixel_offset;
+	SGD::Vector	bulletstartposV	= bulletPosP - ownerposP;
+	bulletstartposV.Rotate(owner->GetOwner()->GetRotation());
+	bullet->SetPosition(ownerposP + bulletstartposV);
 	//bullet->SetPosition(owner->GetOwner()->GetPosition());
-	bullet->SetPosition(bulletposP);
 
 
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
@@ -1094,13 +1095,14 @@ void HTPGameState::CreateGrenade(Weapon* owner)
 	bullet->SetOwner(owner->GetOwner());
 
 
-	float		pixel_offset = owner->GetBulletStartPixelOffset();
-	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
-	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
-	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
-
+	//where the bullet should render relative to player direction
+	SGD::Vector	pixel_offset	= owner->GetBulletStartPixelOffsets();
+	SGD::Point	ownerposP		= owner->GetOwner()->GetPosition();
+	SGD::Point	bulletPosP		= owner->GetOwner()->GetPosition() + pixel_offset;
+	SGD::Vector	bulletstartposV	= bulletPosP - ownerposP;
+	bulletstartposV.Rotate(owner->GetOwner()->GetRotation());
+	bullet->SetPosition(ownerposP + bulletstartposV);
 	//bullet->SetPosition(owner->GetOwner()->GetPosition());
-	bullet->SetPosition(bulletposP);
 
 
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
@@ -1127,13 +1129,14 @@ void HTPGameState::CreateFireBullet(Weapon* owner)
 	bullet->SetOwner(owner->GetOwner());
 
 
-	float		pixel_offset = owner->GetBulletStartPixelOffset();
-	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
-	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
-	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
-
+	//where the bullet should render relative to player direction
+	SGD::Vector	pixel_offset	= owner->GetBulletStartPixelOffsets();
+	SGD::Point	ownerposP		= owner->GetOwner()->GetPosition();
+	SGD::Point	bulletPosP		= owner->GetOwner()->GetPosition() + pixel_offset;
+	SGD::Vector	bulletstartposV	= bulletPosP - ownerposP;
+	bulletstartposV.Rotate(owner->GetOwner()->GetRotation());
+	bullet->SetPosition(ownerposP + bulletstartposV);
 	//bullet->SetPosition(owner->GetOwner()->GetPosition());
-	bullet->SetPosition(bulletposP);
 
 
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
@@ -1185,13 +1188,14 @@ void HTPGameState::CreateShotGunBullet(Weapon* owner)
 		bullet->SetOwner(owner->GetOwner());
 
 
-		float		pixel_offset = owner->GetBulletStartPixelOffset();
-		SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
-		SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
-		SGD::Point	bulletposP = { turretposV.x, turretposV.y };
-
+		//where the bullet should render relative to player direction
+		SGD::Vector	pixel_offset	= owner->GetBulletStartPixelOffsets();
+		SGD::Point	ownerposP		= owner->GetOwner()->GetPosition();
+		SGD::Point	bulletPosP		= owner->GetOwner()->GetPosition() + pixel_offset;
+		SGD::Vector	bulletstartposV	= bulletPosP - ownerposP;
+		bulletstartposV.Rotate(owner->GetOwner()->GetRotation());
+		bullet->SetPosition(ownerposP + bulletstartposV);
 		//bullet->SetPosition(owner->GetOwner()->GetPosition());
-		bullet->SetPosition(bulletposP);
 
 
 		SGD::Vector direction = owner->GetOwner()->GetDirection();
@@ -1219,13 +1223,14 @@ void HTPGameState::CreateARBullet(Weapon* owner)
 	bullet->SetOwner(owner->GetOwner());
 
 
-	float		pixel_offset = owner->GetBulletStartPixelOffset();
-	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
-	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
-	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
-
+	//where the bullet should render relative to player direction
+	SGD::Vector	pixel_offset	= owner->GetBulletStartPixelOffsets();
+	SGD::Point	ownerposP		= owner->GetOwner()->GetPosition();
+	SGD::Point	bulletPosP		= owner->GetOwner()->GetPosition() + pixel_offset;
+	SGD::Vector	bulletstartposV	= bulletPosP - ownerposP;
+	bulletstartposV.Rotate(owner->GetOwner()->GetRotation());
+	bullet->SetPosition(ownerposP + bulletstartposV);
 	//bullet->SetPosition(owner->GetOwner()->GetPosition());
-	bullet->SetPosition(bulletposP);
 
 
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
@@ -1248,13 +1253,14 @@ void HTPGameState::CreateSnipeBullet(Weapon* owner)
 	bullet->SetOwner(owner->GetOwner());
 
 
-	float		pixel_offset = owner->GetBulletStartPixelOffset();
-	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
-	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
-	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
-
+	//where the bullet should render relative to player direction
+	SGD::Vector	pixel_offset	= owner->GetBulletStartPixelOffsets();
+	SGD::Point	ownerposP		= owner->GetOwner()->GetPosition();
+	SGD::Point	bulletPosP		= owner->GetOwner()->GetPosition() + pixel_offset;
+	SGD::Vector	bulletstartposV	= bulletPosP - ownerposP;
+	bulletstartposV.Rotate(owner->GetOwner()->GetRotation());
+	bullet->SetPosition(ownerposP + bulletstartposV);
 	//bullet->SetPosition(owner->GetOwner()->GetPosition());
-	bullet->SetPosition(bulletposP);
 
 
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
