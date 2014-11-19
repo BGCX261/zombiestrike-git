@@ -364,24 +364,24 @@ void MapManager::Update(float elapsedTime)
 	endRow++;
 	endCol++;
 
-	if (startCol < 0.0f)
+	if (startCol < 0)
 	{
-		startCol = 0.0f + m_fRound;
+		startCol = 0;
 	}
 
-	if (startRow < 0.0f)
+	if (startRow < 0)
 	{
-		startRow = 0.0f + m_fRound;
+		startRow = 0;
 	}
 
-	if (endCol > tStruct.map.GetMapWidth())
+	if (endCol > (int)tStruct.map.GetMapWidth())
 	{
-		endCol = tStruct.map.GetMapWidth();
+		endCol = (int)tStruct.map.GetMapWidth();
 	}
 
-	if (endRow > tStruct.map.GetMapHeight())
+	if (endRow > (int)tStruct.map.GetMapHeight())
 	{
-		endRow = tStruct.map.GetMapHeight();
+		endRow = (int)tStruct.map.GetMapHeight();
 	}
 
 

@@ -36,7 +36,7 @@ class MapManager : public IBase
 	TileSets tStruct;
 	SGD::HTexture tileTexture = SGD::INVALID_HANDLE;
 	std::string levels[NUM_LEVELS];
-	float startRow, startCol, endRow, endCol;
+	int startRow, startCol, endRow, endCol;
 
 	std::vector<SandBag*> sandBags;
 	std::vector<BarbedWire*> barbedWires;
