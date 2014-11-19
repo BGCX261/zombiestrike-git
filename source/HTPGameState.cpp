@@ -304,7 +304,7 @@
 
 		pInput->SetMousePosition(mpoint);
 	}
-	*/
+	
 
 	SGD::Point mousePos = pInput->GetMousePosition();
 
