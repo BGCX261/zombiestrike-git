@@ -136,7 +136,7 @@
 	//storyMusic = pAudio->LoadAudio("resource/audio/AmbienceDrama.xwm");
 	//survivalMusic = pAudio->LoadAudio("resource/audio/AmbienceDungeon.xwm");
 	//m_bStoryMode == true ? pAudio->PlayAudio(storyMusic, true) : pAudio->PlayAudio(survivalMusic, true);
-	pAudio->PlayAudio(Game::GetInstance()->storyMusic, true);
+	
 
 	
 	// Setup the camera
@@ -310,18 +310,13 @@
 
 	if (m_bIsChoiceScreen == true)
 	{
-
 		if (pInput->GetMouseMovement() != SGD::Vector() || (pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0))
 		{
-		
 			if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(Game::GetInstance()->GetScreenWidth() / 2 - 320, Game::GetInstance()->GetScreenHeight() / 2 + 75), SGD::Size(128, 64))))
 				m_nCursor = 0;
 			else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(Game::GetInstance()->GetScreenWidth() / 2 + 210, Game::GetInstance()->GetScreenHeight() / 2 + 75), SGD::Size(128, 64))))
 				m_nCursor = 1;
-
-
 		}
-
 
 		if (pInput->IsKeyPressed(SGD::Key::RightArrow) == true || pInput->IsDPadPressed(0, SGD::DPad::Right) == true || pInput->IsKeyPressed(SGD::Key::D) == true)
 		{
@@ -378,6 +373,8 @@
 
 	else if (m_bIsChoiceScreen == false && m_tStartTutorial.GetTime() <= 0.0f && m_bIsTutorial == true)
 	{
+		SGD::Point mousePos = pInput->GetMousePosition();
+
 		if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsDPadPressed(0, SGD::DPad::Left) == true || pInput->IsButtonPressed(0, 1) == true)
 		{
 			m_nCurPage++;
@@ -390,6 +387,22 @@
 
 		if (pInput->IsKeyPressed(SGD::Key::P) == true)
 			m_bIsTutorial = !m_bIsTutorial;
+
+		if (mousePos.IsWithinRectangle(SGD::Rectangle(tutRect.left + 105.0f, tutRect.bottom - 10 - 35, tutRect.left + 185.0f, tutRect.bottom - 10)))
+		{
+			if (pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
+			{
+				m_nCurPage--;
+			}
+		}
+
+		if (mousePos.IsWithinRectangle(SGD::Rectangle(tutRect.right - 155.0f, tutRect.bottom - 10 - 35, tutRect.right - 70.0f, tutRect.bottom - 10)))
+		{
+			if (pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
+			{
+				m_nCurPage++;
+			}
+		}
 	}
 
 	else
@@ -574,7 +587,6 @@
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	const BitmapFont * pFont = Game::GetInstance()->GetFont();
 
-
 	if (SGD::InputManager::GetInstance()->IsControllerConnected(0) == false)
 	{
 		iTutorial[14] = " Q   PREV";
@@ -619,8 +631,11 @@
 
 	else
 	{
-
-
+		if (pAudio->IsAudioPlaying(Game::GetInstance()->storyMusic) == false)
+		{
+			pAudio->PlayAudio(Game::GetInstance()->storyMusic, true);
+		}
+		
 		SGD::Point textPos({ Game::GetInstance()->GetScreenWidth() / 2, Game::GetInstance()->GetScreenHeight() / 2 });
 
 		// Draw background
@@ -628,6 +643,8 @@
 
 		// Render the entities
 		m_pEntities->RenderAll();
+
+		
 
 		// Draw status bars
 		float top = 450;

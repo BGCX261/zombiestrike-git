@@ -87,16 +87,16 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 
 	tStruct.tileSize.width = (float)tileWidth;
 	tStruct.tileSize.height = (float)tileHeight;
-	tStruct.map.SetMapWidth(mapWidth);
-	tStruct.map.SetMapHeight(mapHeight);
-	const int cMapWidth = tStruct.map.GetMapWidth();
-	const int cMaHeight = tStruct.map.GetMapHeight();
+	tStruct.map.SetMapWidth((float)mapWidth);
+	tStruct.map.SetMapHeight((float)mapHeight);
+	const float cMapWidth = tStruct.map.GetMapWidth();
+	const float cMaHeight = tStruct.map.GetMapHeight();
 
 
-	tStruct.layers.m_vTiles = new Tile*[cMaHeight];
+	tStruct.layers.m_vTiles = new Tile*[(int)cMaHeight];
 
 	for (int i = 0; i < cMaHeight; i++)
-		tStruct.layers.m_vTiles[i] = new Tile[cMapWidth];
+		tStruct.layers.m_vTiles[i] = new Tile[(int)cMapWidth];
 
 
 
@@ -323,9 +323,9 @@ void MapManager::Render()
 {
 	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
 	
-	for (int currRow = startRow; currRow < endRow; currRow++)
+	for (int currRow = (int)startRow; currRow < (int)(endRow + m_fRound); currRow++)
 	{
-		for (int currCol = startCol; currCol < endCol; currCol++)
+		for (int currCol = (int)startCol; currCol < (int)(endCol + m_fRound); currCol++)
 		{
 			int pointX = (int)tStruct.layers.m_vTiles[currRow][currCol].worldPos.x;
 			int pointY = (int)tStruct.layers.m_vTiles[currRow][currCol].worldPos.y;
@@ -364,24 +364,24 @@ void MapManager::Update(float elapsedTime)
 	endRow++;
 	endCol++;
 
-	if (startCol < 0)
+	if (startCol < 0.0f)
 	{
-		startCol = 0;
+		startCol = 0.0f + m_fRound;
 	}
 
-	if (startRow < 0)
+	if (startRow < 0.0f)
 	{
-		startRow = 0;
+		startRow = 0.0f + m_fRound;
 	}
 
-	if (endCol > (int)tStruct.map.GetMapWidth())
+	if (endCol > tStruct.map.GetMapWidth())
 	{
-		endCol = (int)tStruct.map.GetMapWidth();
+		endCol = tStruct.map.GetMapWidth();
 	}
 
-	if (endRow > (int)tStruct.map.GetMapHeight())
+	if (endRow > tStruct.map.GetMapHeight())
 	{
-		endRow = (int)tStruct.map.GetMapHeight();
+		endRow = tStruct.map.GetMapHeight();
 	}
 
 

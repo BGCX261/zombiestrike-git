@@ -34,6 +34,10 @@ public:
 	
 	SGD::HTexture m_hLightning = SGD::INVALID_HANDLE;
 
+	bool GetFromMainMenu() const { return m_bFromMainMenu; }
+
+	void SetFromMainMenu(bool bMenu) { m_bFromMainMenu = bMenu; }
+
 	//SGD::HAudio m_hMainTheme = SGD::INVALID_HANDLE;
 	//SGD::HAudio m_hSurvivalTheme = SGD::INVALID_HANDLE;
 
@@ -57,7 +61,7 @@ private:
 	int		m_mPrevious		= 0;
 	bool	clicked			= false;
 	bool	selected		= false;
-
+	bool	m_bFromMainMenu = false;
 
 
 	/**********************************************************/
@@ -80,7 +84,7 @@ private:
 	float			starting_x;
 	float			starting_y;
 
-	float			vertical_offset	= 100.0F;
+	float			vertical_offset;
 	float			text_scale		= 1.0F;
 
 	Timer fadeTime;

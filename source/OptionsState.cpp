@@ -12,7 +12,8 @@
 #include "BitmapFont.h"
 #include "MainMenuState.h"
 #include <sstream>
-
+#include "GameplayState.h"
+#include "HTPGameState.h"
 
 /**************************************************************/
 // GetInstance
@@ -133,6 +134,7 @@
 	volumes[0] = pAudio->GetMasterVolume(SGD::AudioGroup::Music);
 	volumes[1] = pAudio->GetMasterVolume(SGD::AudioGroup::SoundEffects);
 
+	float back_start = 25.0f;
 	float left_start = 50.0F;				// 50
 	float right_start = Game::GetInstance()->GetScreenWidth() - 224.0F;		// 800
 	float starting_y = 200.0F;
@@ -153,10 +155,7 @@
 		m_nCursor = 0;
 
 	}
-
-
 	
-
 	if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 500.0F, 450.0F), SGD::Size(64, 64))))
 	{
 		if (pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
@@ -185,7 +184,13 @@
 		m_nCursor = 2;
 	}
 
+	if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(50.0f, Game::GetInstance()->GetScreenHeight() - 100.0f), SGD::Size(64, 30))))
+	{
+		if (pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
+			Game::GetInstance()->RemoveState();
 
+		m_nCursor = 3;
+	}
 
 	switch (m_nCursor)
 	{
@@ -265,6 +270,7 @@
 {
 	SGD::AudioManager*		pAudio		= SGD::AudioManager::GetInstance();
 
+	//SGD::GraphicsManager::GetInstance()->DrawRectangle(SGD::Rectangle(SGD::Point(50.0f, Game::GetInstance()->GetScreenHeight() - 100.0f), SGD::Size(64, 30)), {}, { 0, 255, 0 }, 2);
 
 	// Use the game's font
 	const BitmapFont* pFont = Game::GetInstance()->GetFont();

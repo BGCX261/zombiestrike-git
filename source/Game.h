@@ -95,6 +95,10 @@ public:
 
 	/**********************************************************/
 	// Music
+	SGD::HVoice			m_hMainVoice = SGD::INVALID_HANDLE;
+	SGD::HVoice			m_hSurviveVoice = SGD::INVALID_HANDLE;
+	SGD::HVoice			m_hStoryVoice = SGD::INVALID_HANDLE;
+
 	SGD::HAudio			m_hMainTheme		= SGD::INVALID_HANDLE;
 	SGD::HAudio			m_hSurvivalTheme	= SGD::INVALID_HANDLE;
 
@@ -128,6 +132,8 @@ public:
 	SGD::HAudio m_hWaveChange		= SGD::INVALID_HANDLE;
 	SGD::HAudio zombie_hit_house1	= SGD::INVALID_HANDLE;
 	SGD::HAudio zombie_hit_house2	= SGD::INVALID_HANDLE;
+
+	
 
 	//Shop
 	SGD::HAudio m_hCash				= SGD::INVALID_HANDLE;

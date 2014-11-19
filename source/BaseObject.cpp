@@ -44,6 +44,7 @@ BaseObject::~BaseObject()
 	//return SGD::Rectangle(renderPos - m_szSize / 2, m_szSize);
 	
 }
+
 /*virtual*/ void BaseObject::Render(void) /*override*/
 {
 	AnimationManager::GetInstance()->Render(animation, this->m_ptPosition, this->m_fRotation, { alpha, 255, 255, 255 }, m_szScale);
