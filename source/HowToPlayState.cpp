@@ -137,14 +137,14 @@
 		#pragma region PS3 Controls
 		num_newlines += 4;
 		std::string ps3controls1 = "Play Station Controls:";
-		std::string ps3controls2 = "\n\n\tLeft Stick\t\tMove player\n\tRight Stick\t\t Rotate player\n\tR2\t\t\tFire weapon\n\tL2\t\t\tSprint";
+		std::string ps3controls2 = "\n\n\tLeft Stick\t\tMove player\n\tRight Stick\t\t Rotate player\n\tR2\t\t\tFire weapon\n\tL2\t\t\tSprint\n\n\tL1/R1\t\tCycle through weapons";
 		std::string ps3controls3 = "\n\n\tSquare\t\tReload weapon\n\tTriangle\t\tToggle Turret mode\n\tX\t\t\tSpawn turret (in Turret Mode)\n\n";
 		
 		//string_var = pscontrols1 + pscontrols2;
 		
 		pFont->Draw(ps3controls1.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 0, 0 });
 		pFont->Draw(ps3controls2.c_str(), { left_start, starting_y + (newline_offset * num_newlines) }, scale, { 255, 255, 255 });
-		pFont->Draw(ps3controls3.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 4)) }, scale, { 255, 255, 255 });
+		pFont->Draw(ps3controls3.c_str(), { left_start, starting_y + (newline_offset * (num_newlines + 6)) }, scale, { 255, 255, 255 });
 		#pragma endregion
 	}
 
