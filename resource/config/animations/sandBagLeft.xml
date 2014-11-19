@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations>
+  <Animation looping="0">sandbag.png<Frame sx="38" sy="0" sw="64" sh="33" cx="2" cy="2" cw="20" ch="30" px="11" py="17" rx="11" ry="17" duration="0.25">NONE</Frame><Sheet path="C:\Users\fullsail\Desktop\ZombieStrike\resource\graphics\sandbag.png" /></Animation>
+</Animations>

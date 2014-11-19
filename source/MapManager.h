@@ -80,7 +80,7 @@ public:
 
 	Player* CreatePlayer(int type, SGD::Point pos, EntityManager*);
 	void CreateLandMine(SGD::Point pos,  EntityManager* entities);
-	void CreateSandBags(SGD::Point pos, EntityManager* entities);
+	void CreateSandBags(SGD::Point pos, EntityManager* entities, int type);
 	void CreateBarbedWire(SGD::Point pos, EntityManager* entities, int type);
 	void CreateEnvironment(SGD::Point pos, EntityManager* entities, int type);
 	void CreateSpawner(SGD::Point pos, EntityManager* entities);

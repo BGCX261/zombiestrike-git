@@ -13,6 +13,13 @@
 
 /*virtual*/ void MovingObject::HandleCollision(const IBase* pOther) /*override*/
 {
+	SGD::Rectangle rect1 = GetRect();
+	SGD::Rectangle rect2 = pOther->GetRect();
+
+
 	m_ptPosition -= m_vtVelocity * Game::GetInstance()->DeltaTime();
-	m_vtVelocity = { 0, 0 };
+
+	m_vtVelocity = SGD::Vector();
+
+	
 }

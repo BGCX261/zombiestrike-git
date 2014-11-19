@@ -11,6 +11,7 @@
 #include "Game.h"
 #include "BitmapFont.h"
 #include "MainMenuState.h"
+#include <sstream>
 #include "GameplayState.h"
 #include "HTPGameState.h"
 
@@ -79,51 +80,53 @@
 		Game::GetInstance()->RemoveState();
 
 
+			mousePos = pInput->GetMousePosition();
 
 	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsKeyPressed(SGD::Key::S) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 		m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
 	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
-	/*
-	if ((pInput->GetLeftJoystick(0).x != 0 && pInput->GetLeftJoystick(0).x <= 1.0f && pInput->GetLeftJoystick(0).x >= -1.0f)
-		|| (pInput->GetLeftJoystick(0).y != 0 && pInput->GetLeftJoystick(0).y <= 1.0f && pInput->GetLeftJoystick(0).y >= -1.0f))
-	{
+		if ((pInput->GetLeftJoystick(0).x != 0 || pInput->GetLeftJoystick(0).y != 0)
+			&& (pInput->GetLeftJoystick(0).x <= 1.0f
+			&& pInput->GetLeftJoystick(0).y <= 1.0f
+			&& pInput->GetLeftJoystick(0).x >= -1.0f
+			&& pInput->GetLeftJoystick(0).y >= -1.0f))
+		{
+
+
+			SGD::Vector	joystick = pInput->GetLeftJoystick(0);
+			float		stickmin = 0.250f;
+			float		mousevel = 1.0f;
+
+			mousePos += joystick;
+			//if (joystick.x > stickmin)
+			//	mousePos.x += mousevel;
+			//else if (joystick.x < stickmin * -1.0f)
+			//	mousePos.x -= mousevel;
+
+			//if (joystick.y > stickmin)
+			//	mousePos.y += mousevel;
+			//else if (joystick.y < stickmin * -1.0f)
+			//	mousePos.y -= mousevel;
+
+			//if (mousePos.x < 0.0F)
+			//	mousePos.x = 0.0F;
+			//if (mousePos.y < 0.0F)
+			//	mousePos.y = 0.0F;
+			//if (mousePos.x > Game::GetInstance()->GetScreenWidth())
+			//	mousePos.x = Game::GetInstance()->GetScreenWidth();
+			//if (mousePos.y > Game::GetInstance()->GetScreenHeight())
+			//	mousePos.y = Game::GetInstance()->GetScreenHeight();
+
+				pInput->SetMousePosition(mousePos);
+		}
+
+		mousePos = pInput->GetMousePosition();
+
 	
-		SGD::Point	mpoint = pInput->GetMousePosition();
-		SGD::Vector	joystick = pInput->GetLeftJoystick(0);
-		float		stickmin = 0.250f;
-		float		mousevel = 1.0f;
 
-
-		if (joystick.x > stickmin)
-			mpoint.x += mousevel;
-		else if (joystick.x < stickmin * -1.0f)
-			mpoint.x -= mousevel;
-
-		if (joystick.y > stickmin)
-			mpoint.y += mousevel;
-		else if (joystick.y < stickmin * -1.0f)
-			mpoint.y -= mousevel;
-
-		if (mpoint.x < 0.0F)
-			mpoint.x = 0.0F;
-		if (mpoint.y < 0.0F)
-			mpoint.y = 0.0F;
-		if (mpoint.x > Game::GetInstance()->GetScreenWidth())
-			mpoint.x = Game::GetInstance()->GetScreenWidth();
-		if (mpoint.y > Game::GetInstance()->GetScreenHeight())
-			mpoint.y = Game::GetInstance()->GetScreenHeight();
-
-		pInput->SetMousePosition(mpoint);
-	}
-	*/
-	SGD::Point mousePos = pInput->GetMousePosition();
-
-	//if (mousePos.IsWithinRectangle())
-	//{
-
-	//}
+	
 
 	
 
@@ -141,13 +144,13 @@
 
 	if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 500.0F, 300.0F), SGD::Size(64, 64))))
 	{
-		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		if (pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 			volumes[0] -= volOffset;
 		m_nCursor = 0;
 	}
 	else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 650.0F, 300.0F), SGD::Size(64, 64))))
 	{
-		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		if (pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 			volumes[0] += volOffset;
 		m_nCursor = 0;
 
@@ -155,14 +158,14 @@
 	
 	if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 500.0F, 450.0F), SGD::Size(64, 64))))
 	{
-		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		if (pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 			volumes[1] -= volOffset;
 		m_nCursor = 1;
 
 	}
 	else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 650.0F, 450.0F), SGD::Size(64, 64))))
 	{
-		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		if (pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 			volumes[1] += volOffset;
 	
 		m_nCursor = 1;
@@ -170,10 +173,12 @@
 	}
 	if ((mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 425.0F, 600.0F), SGD::Size(64, 64))) || mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 600.0F, 600.0F), SGD::Size(64, 64)))))
 	{
-		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
+		if (pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 		{
 			m_bFullScreen = !m_bFullScreen;
 			pGraphics->Resize(SGD::Size(Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight()), m_bFullScreen);
+			pInput->SetMousePosition({ Game::GetInstance()->GetScreenWidth() * 0.5f, Game::GetInstance()->GetScreenHeight() * 0.5f });
+
 		}
 		
 		m_nCursor = 2;
@@ -214,7 +219,6 @@
 				{
 					m_bFullScreen = !m_bFullScreen;
 					pGraphics->Resize(SGD::Size(Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight()), m_bFullScreen);
-					pInput->SetMousePosition({ Game::GetInstance()->GetScreenWidth() * 0.5f, Game::GetInstance()->GetScreenHeight() * 0.5f });
 				}
 		}
 		break;
@@ -286,7 +290,7 @@
 	float starting_y	= 200.0F;
 	float offset		= 50.0F;
 	float scale			=1.25f;
-	SGD::Point mousePos = SGD::InputManager::GetInstance()->GetMousePosition();
+	
 
 	SGD::OStringStream volumes[2];
 	volumes[0] << pAudio->GetMasterVolume(SGD::AudioGroup::Music);
@@ -309,7 +313,11 @@
 	pFont->Draw(" < ", { left_start + 425.0F, 600.0F }, 1.75f, { 255, 0, 0 });
 	pFont->Draw(" > ", { left_start + 600.0F, 600.0F }, 1.75f, { 255, 0, 0 });
 
-	
+	std::stringstream testString;
+	testString << mousePos.x << ", " << mousePos.y << "   " << SGD::InputManager::GetInstance()->GetLeftJoystick(0).x << ", " << SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
+	pFont->Draw(testString.str().c_str(), { 20, 20 }, 1.25f, { 255, 255, 255 });
+
+
 
 	switch (m_nCursor)
 	{
@@ -397,7 +405,7 @@
 	//pFont->Draw( output, position, 1.0f, {255, 0, 0} );
 
 	// Draw the reticle
-	SGD::Point	retpos = SGD::InputManager::GetInstance()->GetMousePosition();
+	SGD::Point	retpos = mousePos;
 	float		retscale = 0.8f;
 
 	retpos.Offset(-32.0F * retscale, -32.0F * retscale);

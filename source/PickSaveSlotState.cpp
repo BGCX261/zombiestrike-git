@@ -138,7 +138,6 @@ bool PickSaveSlotState::Input(void)
 
 
 
-
 		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 		{
 			if (m_nCursor == NEW_GAME)
@@ -190,7 +189,7 @@ bool PickSaveSlotState::Input(void)
 			m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
 
-		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonPressed(0, 1) == true || pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
+		if (pInput->IsKeyPressed(SGD::Key::Enter) == true || pInput->IsButtonReleased(0, 1) == true || pInput->IsKeyReleased(SGD::Key::MouseLeft) == true)
 		{
 			switch (m_nCursor)
 			{

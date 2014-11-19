@@ -258,12 +258,23 @@ BaseObject* MapManager::LoadLevel(GamerProfile& currProfile, EntityManager* m_pE
 			case BaseObject::OBJ_WALL:
 				CreateHouse({ (float)posX * tileWidth, (float)posY * tileHeight }, m_pEntities);
 				break;
-			case BaseObject::OBJ_SANDBAG:
-				
-				CreateSandBags({ (float)posX * tileWidth + 16, (float)posY * tileHeight+16 }, m_pEntities);
+			case BaseObject::OBJ_SANDBAG_L:
+				CreateSandBags({ (float)posX * tileWidth + 16, (float)posY * tileHeight + 16 }, m_pEntities, tileid);
+
 				break;
-			case BaseObject::OBJ_BARBEDWIRE:
-				CreateBarbedWire({ (float)posX * tileWidth + 16, (float)posY * tileHeight+16 }, m_pEntities,tileid);
+			case BaseObject::OBJ_SANDBAG_R:
+				CreateSandBags({ (float)posX * tileWidth + 16, (float)posY * tileHeight + 16 }, m_pEntities, tileid);
+
+				break;
+			case BaseObject::OBJ_SANDBAG:
+				CreateSandBags({ (float)posX * tileWidth + 16, (float)posY * tileHeight + 16 }, m_pEntities, tileid);
+
+				break;
+			case BaseObject::OBJ_BARBEDWIRE_V:
+				CreateBarbedWire({ (float)posX * tileWidth + 16, (float)posY * tileHeight + 16 }, m_pEntities, tileid);
+				break;
+			case BaseObject::OBJ_BARBEDWIRE_H:
+				CreateBarbedWire({ (float)posX * tileWidth + 16, (float)posY * tileHeight + 16 }, m_pEntities, tileid);
 				break;
 			case BaseObject::OBJ_LANDMINE:
 				CreateLandMine({ (float)posX * tileWidth +16, (float)posY * tileHeight+16 }, m_pEntities);
@@ -316,14 +327,23 @@ void MapManager::Render()
 	{
 		for (int currCol = (int)startCol; currCol < (int)(endCol + m_fRound); currCol++)
 		{
-			SGD::Point point = tStruct.layers.m_vTiles[currRow][currCol].worldPos;
-
-			HTPGameState::GetInstance()->GetIsCurrState() == false
-				? point.Offset({ -GameplayState::GetInstance()->GetCamera()->GetPosition().x + m_fRound, -GameplayState::GetInstance()->GetCamera()->GetPosition().y + m_fRound })
-				: point.Offset({ -HTPGameState::GetInstance()->GetCamera()->GetPosition().x + m_fRound, -HTPGameState::GetInstance()->GetCamera()->GetPosition().y + m_fRound });
+			int pointX = (int)tStruct.layers.m_vTiles[currRow][currCol].worldPos.x;
+			int pointY = (int)tStruct.layers.m_vTiles[currRow][currCol].worldPos.y;
+			
+			if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance())
+			{
+				pointX -= (int)GameplayState::GetInstance()->GetCamera()->GetPosition().x;
+				pointY -= (int)GameplayState::GetInstance()->GetCamera()->GetPosition().y;
+			}
+			else
+			{
+				pointX -= (int)HTPGameState::GetInstance()->GetCamera()->GetPosition().x;
+				pointY -= (int)HTPGameState::GetInstance()->GetCamera()->GetPosition().y;
+			}
+				
 
 			pGraphics->DrawTextureSection(tileTexture,
-			 point,
+			{ (float)pointX, (float)pointY },
 				SGD::Rectangle(tStruct.layers.m_vTiles[currRow][currCol].renderPos, tStruct.tileSize));
 		}
 	}
@@ -337,10 +357,10 @@ void MapManager::Update(float elapsedTime)
 		? cameraRect = GameplayState::GetInstance()->GetCamera()->GetRect()
 		: cameraRect = HTPGameState::GetInstance()->GetCamera()->GetRect();
 
-	startCol = (cameraRect.left + m_fRound) / tStruct.tileSize.width;
-	startRow = (cameraRect.top + m_fRound)  / tStruct.tileSize.height;
-	endCol = ((Game::GetInstance()->GetScreenWidth() + cameraRect.left) / tStruct.tileSize.width);
-	endRow = ((Game::GetInstance()->GetScreenHeight() + cameraRect.top)  / tStruct.tileSize.height);
+	startCol = (int)cameraRect.left / (int)tStruct.tileSize.width;
+	startRow = (int)cameraRect.top /(int) tStruct.tileSize.height;
+	endCol = (int)(Game::GetInstance()->GetScreenWidth() + cameraRect.left) / (int)tStruct.tileSize.width;
+	endRow = (int)(Game::GetInstance()->GetScreenHeight() + cameraRect.top) / (int)tStruct.tileSize.height;
 	endRow++;
 	endCol++;
 
@@ -413,10 +433,30 @@ void MapManager::CreateLandMine(SGD::Point pos, EntityManager* entities)
 	landmine = nullptr;
 	
 }
-void MapManager::CreateSandBags(SGD::Point pos, EntityManager* entities)
+void MapManager::CreateSandBags(SGD::Point pos, EntityManager* entities, int type)
 {
 	SandBag* sandbag = new SandBag;
 	sandbag->SetPosition(pos);
+
+	if (type == BaseObject::OBJ_SANDBAG)
+	{
+		sandbag->SetType(BaseObject::OBJ_SANDBAG);
+		sandbag->SetAnimation("sandBag");
+
+	}
+	else if (type == BaseObject::OBJ_SANDBAG_L)
+	{
+		sandbag->SetType(BaseObject::OBJ_SANDBAG_L);
+		sandbag->SetAnimation("sandBagLeft");
+
+	}
+	else
+	{
+		sandbag->SetType(BaseObject::OBJ_SANDBAG_R);
+
+		sandbag->SetAnimation("sandBagRight");
+
+	}
 	//sandbag->SetAnimation("testSandbag");
 	sandbag->SetActive(profile.sandBagStates[currSandBag]);
 	currSandBag++;
@@ -432,8 +472,20 @@ void MapManager::CreateBarbedWire(SGD::Point pos, EntityManager* entities, int t
 	//barbedWire->SetAnimation("testBarbwire");
 	barbedWire->SetActive(profile.barbWireStates[currBarbWire]);
 	currBarbWire++;
-	barbedWires.push_back(barbedWire);	
+	if (type == BaseObject::OBJ_BARBEDWIRE_H)
+	{
+		barbedWire->SetType(BaseObject::OBJ_BARBEDWIRE_H);
+		barbedWire->SetAnimation("barbedwire");
+	}
+	else if (BaseObject::OBJ_BARBEDWIRE_V)
+	{
+		barbedWire->SetType(BaseObject::OBJ_BARBEDWIRE_V);
+		barbedWire->SetAnimation("barbedwirevert");
+	}
+	barbedWires.push_back(barbedWire);
 	entities->AddEntity(barbedWire, BUCKET_ENVIRO);
+
+
 	barbedWire->Release();
 	barbedWire = nullptr;
 }

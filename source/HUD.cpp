@@ -57,6 +57,7 @@ void HUD::Render(void)
 	float	width	= Game::GetInstance()->GetScreenWidth();
 	float	height	= Game::GetInstance()->GetScreenHeight();
 
+
 	SGD::Point camerapos = Game::GetInstance()->GetCurrState() == GameplayState::GetInstance()
 		? GameplayState::GetInstance()->GetCamera()->GetPosition()
 		: HTPGameState::GetInstance()->GetCamera()->GetPosition();
@@ -64,8 +65,8 @@ void HUD::Render(void)
 
 
 	// draw health bars
-	SGD::Rectangle currhealth	= { 0, 0, m_pPlayer->GetCurrHealth() / m_pPlayer->GetMaxHealth() * 200, 35 };
-	SGD::Rectangle maxhealth	= { 0, 0, 200, 35 };
+	SGD::Rectangle currhealth = { width * 0.05f, height * 0.05f, m_pPlayer->GetCurrHealth() / m_pPlayer->GetMaxHealth() * 200 + width * 0.05f, height * 0.05f + 35 };
+	SGD::Rectangle maxhealth = { width * 0.05f, height * 0.05f, width * 0.05f + 200, height * 0.05f + 35 };
 	pGraphics->DrawRectangle(maxhealth, { 0, 0, 0 });
 
 
@@ -91,7 +92,7 @@ void HUD::Render(void)
 
 	stringstream health;
 	health << "HP: " << hp;
-	pFont->Draw(health.str().c_str(), { 0, 0 }, 1.0f, { 255, 255, 255 });
+	pFont->Draw(health.str().c_str(), { width * 0.05f, height * 0.05f }, 1.0f, { 255, 255, 255 });
 
 
 

@@ -87,7 +87,7 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 			msg->QueueMessage();
 			msg = nullptr;
 		}
-		else if (pOther->GetType() == OBJ_BARBEDWIRE)
+		else if (pOther->GetType() == OBJ_BARBEDWIRE_V || pOther->GetType() == OBJ_BARBEDWIRE_H)
 		{
 			const BarbedWire* barbWire = dynamic_cast<const BarbedWire*>(pOther);
 			if (barbWire->IsActive())
@@ -97,7 +97,7 @@ void ExplodingZombie::HandleEvent(const SGD::Event* pEvent)
 				MovingObject::HandleCollision(pOther);
 			}
 		}
-		else if (pOther->GetType() == OBJ_SANDBAG)
+		else if (pOther->GetType() == OBJ_SANDBAG || pOther->GetType() == OBJ_SANDBAG_L || pOther->GetType() == OBJ_SANDBAG_R)
 		{
 			const SandBag* sandbag = dynamic_cast<const SandBag*>(pOther);
 			if (sandbag->IsActive())
