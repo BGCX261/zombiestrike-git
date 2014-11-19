@@ -324,6 +324,8 @@ void Player::Render()
 		// environment
 		case OBJ_BARBEDWIRE_V:
 		case OBJ_BARBEDWIRE_H:
+		case OBJ_SANDBAG_R:
+		case OBJ_SANDBAG_L:
 		case OBJ_SANDBAG:
 		case OBJ_WALL:
 		case OBJ_BASE:
