@@ -139,6 +139,9 @@ void Player::Render()
 {
 	// render player
 	BaseObject::Render();
+	//SGD::Point newpos = this->m_ptPosition;
+	//newpos.Offset(-14.2f, 0.0f);
+	//AnimationManager::GetInstance()->Render(animation, newpos, this->m_fRotation, { alpha, 255, 255, 255 }, m_szScale);
 
 
 	// render good/bad turret location

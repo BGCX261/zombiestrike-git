@@ -61,6 +61,8 @@ public:
 
 	std::string GetWeaponAnimType(void) const;
 
+	float GetBulletStartPixelOffset(void) const;
+
 
 	//Accessors
 	int GetCurrAmmo() const { return currAmmo; }

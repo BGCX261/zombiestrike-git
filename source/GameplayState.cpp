@@ -815,7 +815,17 @@ void GameplayState::CreateBullet(Weapon* owner)
 {
 	Bullet* bullet = new Bullet;
 	bullet->SetOwner(owner->GetOwner());
-	bullet->SetPosition(owner->GetOwner()->GetPosition());
+
+
+	float		pixel_offset = owner->GetBulletStartPixelOffset();
+	SGD::Vector	ownerpos = { owner->GetOwner()->GetPosition().x, owner->GetOwner()->GetPosition().y };
+	SGD::Vector	turretposV = (owner->GetOwner()->GetDirection() * pixel_offset) + ownerpos;
+	SGD::Point	bulletposP = { turretposV.x, turretposV.y };
+
+	//bullet->SetPosition(owner->GetOwner()->GetPosition());
+	bullet->SetPosition(bulletposP);
+
+
 	SGD::Vector direction = owner->GetOwner()->GetDirection();
 	float angle = ((rand() % (int)owner->GetBulletSpread() * 2) - (int)owner->GetBulletSpread()) *SGD::PI / 180.0f;
 	

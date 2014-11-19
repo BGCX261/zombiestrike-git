@@ -80,11 +80,12 @@
 
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
+	if (pInput->IsKeyPressed(SGD::Key::Down) == true || pInput->IsKeyPressed(SGD::Key::S) == true || pInput->IsDPadPressed(0, SGD::DPad::Down) == true)
 		m_nCursor = m_nCursor + 1 < NUM_CHOICES ? m_nCursor + 1 : 0;
-	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
+	else if (pInput->IsKeyPressed(SGD::Key::Up) == true || pInput->IsKeyPressed(SGD::Key::W) == true || pInput->IsDPadPressed(0, SGD::DPad::Up) == true)
 		m_nCursor = m_nCursor - 1 >= 0 ? m_nCursor - 1 : NUM_CHOICES - 1;
 
+	/*
 	if ((pInput->GetLeftJoystick(0).x != 0 && pInput->GetLeftJoystick(0).x <= 1.0f && pInput->GetLeftJoystick(0).x >= -1.0f)
 		|| (pInput->GetLeftJoystick(0).y != 0 && pInput->GetLeftJoystick(0).y <= 1.0f && pInput->GetLeftJoystick(0).y >= -1.0f))
 	{
@@ -116,6 +117,7 @@
 
 		pInput->SetMousePosition(mpoint);
 	}
+	*/
 	SGD::Point mousePos = pInput->GetMousePosition();
 
 	//if (mousePos.IsWithinRectangle())
@@ -139,14 +141,12 @@
 
 	if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 500.0F, 300.0F), SGD::Size(64, 64))))
 	{
-
 		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
 			volumes[0] -= volOffset;
 		m_nCursor = 0;
 	}
 	else if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(left_start + 650.0F, 300.0F), SGD::Size(64, 64))))
 	{
-
 		if (pInput->IsKeyPressed(SGD::Key::MouseLeft) == true)
 			volumes[0] += volOffset;
 		m_nCursor = 0;
@@ -177,8 +177,6 @@
 		}
 		
 		m_nCursor = 2;
-
-
 	}
 
 	if (mousePos.IsWithinRectangle(SGD::Rectangle(SGD::Point(50.0f, Game::GetInstance()->GetScreenHeight() - 100.0f), SGD::Size(64, 30))))

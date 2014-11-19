@@ -20,6 +20,7 @@
 #include "HTPGameState.h"	// Our HTPGameState class
 #include "ShopState.h"
 #include "PauseState.h"		// Our PauseState class
+#include "WeaponManager.h"	// Our WeaponManager class
 #include "../resource.h"
 
 //*********************************************************************//
@@ -262,6 +263,21 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 
 	case WM_PAINT:			// Window needs repainting
 		ValidateRect( hWnd, nullptr );	// ignore painting
+		break;
+
+	case WM_MOUSEWHEEL:
+		{
+			WeaponManager * zstrike = WeaponManager::GetInstance();
+
+
+			// if owner == nullptr, weapon manager wasn't initialized
+			if (zstrike->GetOwner() != nullptr)
+			{
+				int wheel = GET_WHEEL_DELTA_WPARAM(wParam);
+				zstrike->SetMouseWheelRotation(wheel);
+			}
+		}
+		//OnMouseWheel(hWnd, wParam, lParam);
 		break;
 
 	
