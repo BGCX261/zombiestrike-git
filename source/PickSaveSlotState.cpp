@@ -400,7 +400,7 @@ void PickSaveSlotState::Render(void)
 			<< ':'
 			<< profiles[0].time.tm_sec
 			<< '\n'
-			<< "Wavess Complete: " << profiles[0].wavesComplete;
+			<< "Waves Complete: " << profiles[0].wavesComplete;
 
 
 		save2String << "Save Slot 2\n"
@@ -430,7 +430,7 @@ void PickSaveSlotState::Render(void)
 			<< ':'
 			<< profiles[2].time.tm_sec
 			<< '\n'
-			<< "Wave Complete: " << profiles[2].wavesComplete;
+			<< "Waves Complete: " << profiles[2].wavesComplete;
 
 		switch (m_nCursor)
 		{
