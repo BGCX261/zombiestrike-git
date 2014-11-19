@@ -315,7 +315,7 @@
 
 	std::stringstream testString;
 	testString << mousePos.x << ", " << mousePos.y << "   " << SGD::InputManager::GetInstance()->GetLeftJoystick(0).x << ", " << SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
-	pFont->Draw(testString.str().c_str(), { 20, 20 }, 1.25f, { 255, 255, 255 });
+	//pFont->Draw(testString.str().c_str(), { 20, 20 }, 1.25f, { 255, 255, 255 });
 
 
 

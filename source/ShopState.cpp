@@ -42,14 +42,14 @@ void	ShopState::Enter(void)
 	//	pAudio->SetVoiceVolume(Game::GetInstance()->m_hMainVoice, 50);
 	
 
-	if (SpawnManager::GetInstance()->GetCurrWave() < 11)
-	{
-		if (pAudio->IsAudioPlaying(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2))== false)
-		{
-			pAudio->PlayAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2));
-		}
-		
-	}
+	//if (SpawnManager::GetInstance()->GetCurrWave() < 11)
+	//{
+	//	if (pAudio->IsAudioPlaying(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2))== false)
+	//	{
+	//		pAudio->PlayAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2));
+	//	}
+	//	
+	//}
 	
 
 	if (m_tShopTimer.GetTime() < 180.0f)
@@ -309,7 +309,7 @@ bool	ShopState::Input(void)
 	if (pInput->IsKeyPressed(SGD::Key::Escape) == true )
 	{
 		//m_bTimerSet = true;
-		pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()+2));
+		//pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()+2));
 
 		SGD::Event msg("PAUSE");
 		msg.SendEventNow();
@@ -318,7 +318,7 @@ bool	ShopState::Input(void)
 	if (pInput->IsKeyPressed(SGD::Key::B) == true || pInput->IsButtonPressed(0, 2) == true)
 	{
 		//m_bTimerSet = true;
-		pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2));
+		//pAudio->StopAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave() + 2));
 
 		SGD::Event msg("UNPAUSE");
 		msg.SendEventNow();
@@ -5797,13 +5797,13 @@ void	ShopState::Update(float elapsedTime)
 	UpdateProfile();
 	UpdateWeaponManager();
 
-	if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance() && GameplayState::GetInstance()->GetGameMode())
-	{
-		if (pAudio->IsAudioPlaying(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave())) == false)
-		{
-			pAudio->PlayAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()));
-		}
-	}
+	//if (Game::GetInstance()->GetCurrState() == GameplayState::GetInstance() && GameplayState::GetInstance()->GetGameMode())
+	//{
+	//	if (pAudio->IsAudioPlaying(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave())) == false)
+	//	{
+	//		pAudio->PlayAudio(Game::GetInstance()->GetAudio(SpawnManager::GetInstance()->GetCurrWave()));
+	//	}
+	//}
 }
 void	ShopState::Render(void)
 {
